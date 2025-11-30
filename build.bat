@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 rem read build version
 set /p version=<unity\Assets\Resources\version.txt
 
@@ -22,7 +23,7 @@ rem is steam needed for building?
 goto comment
 IF "%steampath%"=="" SET steampath=%programfiles(x86)%\Steam
 IF NOT EXIST "%steampath%" ( 
-echo [31m--- ERROR --- Steam path not set : please set Steam path in build.bat [0m
+echo  [31m--- ERROR --- Steam path not set : please set Steam path in build.bat  [0m
 exit /B 1
 )
 :comment
@@ -33,21 +34,21 @@ if "%BUILD_ANDROID%"=="true" (
     IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
     IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
     IF NOT EXIST "%JDK_HOME%" ( 
-    echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
+    echo  [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable [0m
     exit /B 1
     )
 
     rem set android sdk path. You can get it from https://developer.android.com/studio/.
     IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
     IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
-    echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
+    echo  [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable [0m
     exit /B 1
     )
 
     rem set android build tools. The come with the android sdk. Don't use the latest 29.0.0-rc3 as the unity build will fail (if the build tools folder for it exists, manually delete it).
     IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
     IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
-    echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
+    echo  [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable [0m
     exit /B 1
     )
     echo [%TIME%] Android Environment OK.
@@ -56,7 +57,7 @@ if "%BUILD_ANDROID%"=="true" (
 rem set unity editor location
 IF "%UNITY_EDITOR_HOME%"=="" SET UNITY_EDITOR_HOME=%ProgramFiles%\Unity\Editor
 IF NOT EXIST "%UNITY_EDITOR_HOME%" (
-echo [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor path in build.bat or create a similar environment variable[0m
+echo  [31m--- ERROR --- UNITY_EDITOR_HOME path not set : please set unity editor path in build.bat or create a similar environment variable [0m
 exit /B 1
 )
 
@@ -128,33 +129,52 @@ echo [%TIME%] --- Starting Unity Builds ---
 if "%BUILD_WINDOWS%"=="true" (
     echo [%TIME%] Building for Windows...
     Unity -batchmode -quit -projectPath "%~dp0unity" -buildWindowsPlayer ..\build\win\valkyrie.exe
+    set BUILD_STATUS=!ERRORLEVEL!
     copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-windows.log
+    if !BUILD_STATUS! NEQ 0 (
+        echo [31m--- ERROR --- Unity Windows Build Failed [0m
+        type .\build\Editor_valkyrie-windows.log
+        exit /b 1
+    )
     echo [%TIME%] Windows build complete. Log: .\build\Editor_valkyrie-windows.log
 )
 
 if "%BUILD_MAC%"=="true" (
     echo [%TIME%] Building for macOS...
     Unity -batchmode -quit -projectPath "%~dp0unity" -buildTarget OSXUniversal -buildOSXUniversalPlayer ..\build\macos\Valkyrie.app
+    set BUILD_STATUS=!ERRORLEVEL!
     copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-macos.log
+    if !BUILD_STATUS! NEQ 0 (
+        echo [31m--- ERROR --- Unity macOS Build Failed [0m
+        type .\build\Editor_valkyrie-macos.log
+        exit /b 1
+    )
     echo [%TIME%] macOS build complete. Log: .\build\Editor_valkyrie-macos.log
 )
 
 if "%BUILD_LINUX%"=="true" (
     echo [%TIME%] Building for Linux...
     Unity -batchmode -quit -projectPath "%~dp0unity" -buildLinux64Player ..\build\linux\valkyrie
+    set BUILD_STATUS=!ERRORLEVEL!
     copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-linux.log
+    if !BUILD_STATUS! NEQ 0 (
+        echo [31m--- ERROR --- Unity Linux Build Failed [0m
+        type .\build\Editor_valkyrie-linux.log
+        exit /b 1
+    )
     echo [%TIME%] Linux build complete. Log: .\build\Editor_valkyrie-linux.log
 )
 
 if "%BUILD_ANDROID%"=="true" (
     echo [%TIME%] Building for Android...
     Unity -batchmode -quit -projectPath "%~dp0unity" -executeMethod PerformBuild.CommandLineBuildAndroid +buildlocation "%~dp0build\android\Valkyrie-android.apk"
-    set BUILD_STATUS=%ERRORLEVEL%
+    set BUILD_STATUS=!ERRORLEVEL!
     copy %LOCALAPPDATA%\Unity\Editor\Editor.log .\build\Editor_valkyrie-android.log
-    echo [%TIME%] Android build finished with status: %BUILD_STATUS%. Log: .\build\Editor_valkyrie-android.log
+    echo [%TIME%] Android build finished with status: !BUILD_STATUS!. Log: .\build\Editor_valkyrie-android.log
     
-    if %BUILD_STATUS% NEQ 0 (
-        echo [31m--- ERROR --- Unity Build Failed[0m
+    if !BUILD_STATUS! NEQ 0 (
+        echo  [31m--- ERROR --- Unity Build Failed [0m
+        type .\build\Editor_valkyrie-android.log
         exit /b 1
     )
 
