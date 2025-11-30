@@ -18,7 +18,7 @@ exit /B 1
 )
 :comment
 
-IF BUILD_ANDROID=="true" (
+if "%BUILD_ANDROID%"=="true" (
     rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
     IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
     IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
