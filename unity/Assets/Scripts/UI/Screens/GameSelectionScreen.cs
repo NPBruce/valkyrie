@@ -632,7 +632,7 @@ namespace Assets.Scripts.UI.Screens
 #endif
                 }));
                 importThread.Start();
-            }, null);
+            }, NativeFilePicker.ConvertExtensionToFileType("zip"));
         }
 
         // Start game as MoM
