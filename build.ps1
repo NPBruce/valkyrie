@@ -97,12 +97,26 @@ function Build-Unity {
 
     $Process = Start-Process -FilePath $UnityExe -ArgumentList $Args -Wait -NoNewWindow -PassThru
 
+    Start-Sleep -Seconds 3.0
+
+    #see speed up idea for unity process: https://stackoverflow.com/questions/65225251/unity-exe-takes-10-minutes-for-command-line-build-but-less-a-minute-from-editor
+    # wait for all other sub-processes to complete
+    while ((Get-CimInstance -Class Win32_Process | Where-Object { $_.ParentProcessID -eq $unity.Id -and $_.Name -ne 'VBCSCompiler.exe' }).count -gt 0) {
+        Start-Sleep -Seconds 1.0
+    }
+    if (!$unity.HasExited) {
+        Wait-Process -Id $unity.Id
+    }
+    exit $unity.ExitCode
+
+
     if ($Process.ExitCode -ne 0) {
         Write-Log "Unity $PlatformName Build Failed (Exit Code: $($Process.ExitCode))" -Level "ERROR" -Color "Red"
         if (Test-Path $LogFile) {
             Write-Log "Dumping log file: $LogFile" -Level "ERROR" -Color "Yellow"
             Get-Content $LogFile | Write-Host
-        } else {
+        }
+        else {
             Write-Log "Log file not found at $LogFile" -Level "ERROR" -Color "Red"
         }
         exit 1
