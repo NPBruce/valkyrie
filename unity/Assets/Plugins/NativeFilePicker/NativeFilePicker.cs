@@ -93,7 +93,7 @@ public static class NativeFilePicker
 	public static void RequestPermissionAsync( PermissionCallback callback, bool readPermissionOnly = false )
 	{
 #if !UNITY_EDITOR && UNITY_ANDROID
-		FPPermissionCallbackAndroid nativeCallback = new( callback );
+		FPPermissionCallbackAndroid nativeCallback = new FPPermissionCallbackAndroid( callback );
 		AJC.CallStatic( "RequestPermission", Context, nativeCallback, readPermissionOnly );
 #else
 		callback( Permission.Granted );
