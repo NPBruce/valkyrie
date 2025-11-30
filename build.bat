@@ -18,26 +18,28 @@ exit /B 1
 )
 :comment
 
-rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
-IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
-IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
-IF NOT EXIST "%JDK_HOME%" ( 
-echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
-exit /B 1
-)
+IF BUILD_ANDROID=="true" (
+    rem set open java development kit path. You can get it from https://developers.redhat.com/products/openjdk/download/
+    IF "%JDK_HOME%"=="" SET JDK_HOME=%JAVA_HOME%
+    IF "%JDK_HOME%"=="" SET JDK_HOME=%ProgramFiles%\RedHat\java-1.8.0-openjdk-1.8.0.212-3
+    IF NOT EXIST "%JDK_HOME%" ( 
+    echo [31m--- ERROR --- JDK_HOME path not set : please set Java JDK home path in build.bat or create a similar environment variable[0m
+    exit /B 1
+    )
 
-rem set android sdk path. You can get it from https://developer.android.com/studio/.
-IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
-IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
-echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
-exit /B 1
-)
+    rem set android sdk path. You can get it from https://developer.android.com/studio/.
+    IF "%ANDROID_SDK_ROOT%"=="" SET ANDROID_SDK_ROOT=%LOCALAPPDATA%\Android\Sdk
+    IF NOT EXIST "%ANDROID_SDK_ROOT%" ( 
+    echo [31m--- ERROR --- ANDROID_SDK_ROOT path not set : please set android sdk path in build.bat or create a similar environment variable[0m
+    exit /B 1
+    )
 
-rem set android build tools. The come with the android sdk. Don't use the latest 29.0.0-rc3 as the unity build will fail (if the build tools folder for it exists, manually delete it).
-IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
-IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
-echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
-exit /B 1
+    rem set android build tools. The come with the android sdk. Don't use the latest 29.0.0-rc3 as the unity build will fail (if the build tools folder for it exists, manually delete it).
+    IF "%ANDROID_BUILD_TOOLS%"=="" SET ANDROID_BUILD_TOOLS=%ANDROID_SDK_ROOT%\build-tools\28.0.3
+    IF NOT EXIST "%ANDROID_BUILD_TOOLS%" (
+    echo [31m--- ERROR --- ANDROID_BUILD_TOOLS path not set : please set android build tool path in build.bat or create a similar environment variable[0m
+    exit /B 1
+    )
 )
 
 rem set unity editor location
