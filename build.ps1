@@ -95,7 +95,7 @@ function Build-Unity {
 
     Write-Log "Running Unity with args: $Args"
 
-    $UnityProcess = Start-Process -FilePath $UnityExe -ArgumentList $Args -Wait -NoNewWindow -PassThru
+    $UnityProcess = Start-Process -FilePath $UnityExe -ArgumentList $Args -NoNewWindow -PassThru
 
     Start-Sleep -Seconds 3.0
 
