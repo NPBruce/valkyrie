@@ -109,7 +109,7 @@ function Build-Unity {
         exit 1
     }
 
-    Write-Log "$PlatformName build complete. Log: $LogFile"
+    Write-Log "$PlatformName build completed. Log: $LogFile"
 }
 
 # -----------------------------------------------------------------------------
