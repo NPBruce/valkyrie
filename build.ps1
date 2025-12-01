@@ -95,14 +95,15 @@ function Build-Unity {
 
     Write-Log "Running Unity with args: $Args"
 
-    $Process = Start-Process -FilePath $UnityExe -ArgumentList $Args -Wait -NoNewWindow -PassThru
+    $UnityProcess = Start-Process -FilePath $UnityExe -ArgumentList $Args -Wait -NoNewWindow -PassThru
 
-    if ($Process.ExitCode -ne 0) {
-        Write-Log "Unity $PlatformName Build Failed (Exit Code: $($Process.ExitCode))" -Level "ERROR" -Color "Red"
+    if ($UnityProcess.ExitCode -ne 0) {
+        Write-Log "Unity $PlatformName Build Failed (Exit Code: $($UnityProcess.ExitCode))" -Level "ERROR" -Color "Red"
         if (Test-Path $LogFile) {
             Write-Log "Dumping log file: $LogFile" -Level "ERROR" -Color "Yellow"
             Get-Content $LogFile | Write-Host
-        } else {
+        }
+        else {
             Write-Log "Log file not found at $LogFile" -Level "ERROR" -Color "Red"
         }
         exit 1
