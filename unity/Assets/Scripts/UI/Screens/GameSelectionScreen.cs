@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using Assets.Scripts.Content;
 using FFGAppImport;
+using SFB;
 using UnityEngine;
 using UnityEngine.UI;
 using ValkyrieTools;
