@@ -494,3 +494,4 @@ TEXT_ALIGNMENT,Aligner
 TOP,Haut
 CENTER,Centre
 BOTTOM,Bas
+RESTART_TO_APPLY,Redémarrage requis

@@ -490,3 +490,4 @@ TEXT_ALIGNMENT,Ausrichten
 TOP,Oben
 CENTER,Mitte
 BOTTOM,Unten
+RESTART_TO_APPLY,Neustart erforderlich

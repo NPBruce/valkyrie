@@ -665,3 +665,4 @@ TEXT_ALIGNMENT,Zarovnání
 TOP,Nahoru
 CENTER,Na střed
 BOTTOM,Dole
+RESTART_TO_APPLY,Vyžadován restart

@@ -498,3 +498,4 @@ TEXT_ALIGNMENT,Alinhar
 TOP,Topo
 CENTER,Centro
 BOTTOM,Fundo
+RESTART_TO_APPLY,Reiniciar para aplicar

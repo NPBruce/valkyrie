@@ -663,3 +663,4 @@ TEXT_ALIGNMENT,Align
 TOP,Top
 CENTER,Center
 BOTTOM,Bottom
+RESTART_TO_APPLY,Takes effect on restart

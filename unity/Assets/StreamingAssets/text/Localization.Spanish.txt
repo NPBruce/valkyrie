@@ -490,3 +490,4 @@ TEXT_ALIGNMENT,Alineación
 TOP,Arriba
 CENTER,Centro
 BOTTOM,Abajo
+RESTART_TO_APPLY,Reiniciar para aplicar

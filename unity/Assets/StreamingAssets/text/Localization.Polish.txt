@@ -465,3 +465,4 @@ STATS_NB_USER_REVIEWS,({0} ocen graczy)
 STATS_AVERAGE_DURATION,Średni czas trwania: {0} min
 STATS_NO_AVERAGE_DURATION,Średni czas trwania niedostępny
 STATS_NO_AVERAGE_WIN_RATIO,Średnia wygranych niedostępna
+RESTART_TO_APPLY,Wymagany restart

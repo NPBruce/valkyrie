@@ -493,3 +493,4 @@ TEXT_ALIGNMENT,Выравнивание
 TOP,Верхний
 CENTER,Центр
 BOTTOM,Внизу
+RESTART_TO_APPLY,Требуется перезапуск

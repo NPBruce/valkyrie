@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -215,6 +216,28 @@ public class Game : MonoBehaviour
                 debugTests = true;
         }
 
+        // Apply saved resolution and fullscreen settings
+        string savedRes = config.data.Get("UserConfig", "resolution");
+        string savedFs = config.data.Get("UserConfig", "fullscreen");
+        if (!string.IsNullOrEmpty(savedRes))
+        {
+            string[] parts = savedRes.Split('x');
+            if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h))
+            {
+                bool fs = Screen.fullScreen;
+                if (!string.IsNullOrEmpty(savedFs))
+                {
+                    fs = savedFs == "1";
+                }
+                ResolutionManager.SetResolution(w, h, fs);
+            }
+        }
+        else if (!string.IsNullOrEmpty(savedFs))
+        {
+            // Only fullscreen change saved?
+            ResolutionManager.SetFullscreen(savedFs == "1");
+        }
+
         // On android extract streaming assets for use
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -250,6 +273,27 @@ public class Game : MonoBehaviour
 #if UNITY_STANDALONE_WIN
         SetScreenOrientationToLandscape();
 #endif
+
+        // Bring up the Game selector
+        // gameSelect = new GameSelectionScreen(); // Moved to Start
+    }
+
+    void Start()
+    {
+        StartCoroutine(Startup());
+    }
+
+    IEnumerator Startup()
+    {
+        // Wait for resolution change to apply
+        yield return null; 
+        yield return null;
+
+        // Ensure scaler is up to date
+        if (uiScaler != null)
+        {
+            uiScaler.UpdateResolution(uICanvas);
+        }
 
         // Bring up the Game selector
         gameSelect = new GameSelectionScreen();
@@ -418,6 +462,13 @@ public class Game : MonoBehaviour
                 iul.Click();
             }
         }
+
+        // Check if resolution has changed and update UI Scaler
+        if (uiScaler != null && (Mathf.RoundToInt(uICanvas.transform.position.x * 2) != uiScaler.widthPx || Mathf.RoundToInt(uICanvas.transform.position.y * 2) != uiScaler.heightPx))
+        {
+            uiScaler.UpdateResolution(uICanvas);
+        }
+
         // 0 is the left mouse button
         if (qed != null && Input.GetMouseButtonDown(0))
         {

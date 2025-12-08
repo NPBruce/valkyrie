@@ -430,3 +430,4 @@ TEXT_ALIGNMENT, Allineamento
 TOP,In alto
 CENTER,Centro
 BOTTOM,In basso
+RESTART_TO_APPLY,Riavvio richiesto

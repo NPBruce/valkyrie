@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    internal static class ResolutionManager
+    public static class ResolutionManager
     {
         // Return a list of unique resolutions (width x height). Sorted ascending.
         public static List<Resolution> GetAvailableResolutions()

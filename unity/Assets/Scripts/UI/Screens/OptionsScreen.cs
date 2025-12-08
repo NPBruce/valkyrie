@@ -23,6 +23,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
         private readonly StringKey SET_EDITOR_ALPHA = new StringKey("val", "SET_EDITOR_ALPHA");
+        private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
 
         Game game = Game.Get();
 
@@ -96,7 +97,24 @@ namespace Assets.Scripts.UI.Screens
 
             // Prepare resolutions and find current index
             var resolutions = ResolutionManager.GetAvailableResolutions();
-            int currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
+            int currentIndex = -1;
+
+            // Check config for pending resolution
+            string configRes = game.config.data.Get("UserConfig", "resolution");
+            if (!string.IsNullOrEmpty(configRes))
+            {
+                string[] parts = configRes.Split('x');
+                if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h))
+                {
+                    currentIndex = resolutions.FindIndex(r => r.width == w && r.height == h);
+                }
+            }
+
+            // Fallback to current screen resolution if config is missing or invalid
+            if (currentIndex < 0)
+            {
+                currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
+            }
             if (currentIndex < 0) currentIndex = 0;
 
             // Prev button
@@ -127,21 +145,38 @@ namespace Assets.Scripts.UI.Screens
             });
             new UIElementBorder(ui);
 
+            // Restart warning
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 8, 21.5f, 18, 2);
+            ui.SetText(RESTART_TO_APPLY, Color.red);
+            ui.SetFontSize(UIScaler.GetSmallFont());
+
             // Fullscreen toggle label
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 22, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 24, 10, 2);
             ui.SetText(new StringKey("val", "FULLSCREEN"));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Fullscreen toggle button (On / Off)
-            bool isFs = ResolutionManager.IsFullscreen();
+            // Check config for pending fullscreen state
+            string configFs = game.config.data.Get("UserConfig", "fullscreen");
+            bool isFs;
+            if (!string.IsNullOrEmpty(configFs))
+            {
+                isFs = configFs == "1";
+            }
+            else
+            {
+                isFs = ResolutionManager.IsFullscreen();
+            }
+
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 2, 25, 6, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 2, 27, 6, 2);
             ui.SetText(isFs ? "On" : "Off");
             ui.SetButton(delegate
             {
-                bool newFs = !ResolutionManager.IsFullscreen();
+                bool newFs = !isFs;
                 ResolutionManager.SetFullscreen(newFs);
                 game.config.data.Add("UserConfig", "fullscreen", newFs ? "1" : "0");
                 game.config.Save();
@@ -157,7 +192,7 @@ namespace Assets.Scripts.UI.Screens
         {
             int idx = (currentIndex + 1) % resolutions.Count;
             var r = resolutions[idx];
-            ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
+            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
             game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
             game.config.Save();
             ScheduleOptionsScreenReload();
@@ -167,7 +202,7 @@ namespace Assets.Scripts.UI.Screens
         {
             int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
             var r = resolutions[idx];
-            ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen());
+            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
             // persist choice to config (optional)
             game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
             game.config.Save();
@@ -464,6 +499,7 @@ namespace Assets.Scripts.UI.Screens
             // clear list of local quests to make sure we take the latest changes
             Game.Get().questsList.UnloadLocalQuests();
         }
+
 
         private static void ScheduleOptionsScreenReload()
         {
