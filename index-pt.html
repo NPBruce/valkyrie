@@ -332,17 +332,17 @@
           <div class="col-lg-9">
             <div class="text-container">
               <h3>Windows</h3>
-              <p>Rode o instalador e instale na pasta de sua preferência, e então, inicie o Valkyrie. A importação pode
-                levar alguns minutes, então não fique ansioso. Se a importação não terminar ou não funcionar verifique a
-                seção de <a href="https://github.com/NPBruce/valkyrie/wiki/Troubleshooting"
-                  target="_blank">Troubleshooting</a> (em inglês).</p>
-              <p>É necessário instalar o App da FFG correspondente ao boardgame que você quer jogar:
+              <p>Rode o instalador e instale na pasta de sua preferência, e então, inicie o Valkyrie.</p>
+              <p>Você pode importar os dados usando um dos dois métodos abaixo:</p>
               <ul>
-                <li>Mansions of Madness Second Edition precisa do <a href="http://store.steampowered.com/app/478980/"
-                    target="_blank">Mansions of Madness</a> app.</li>
-                <li>Descent: Journeys in the Dark (Second Edition) precisa do <a
-                    href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Road to Legend</a> app.
+                <li><b>Importar do aplicativo oficial</b>: Permite que você importe diretamente dos aplicativos oficiais
+                  <a href="http://store.steampowered.com/app/478980/" target="_blank">Mansions of Madness</a> ou <a
+                    href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Road to Legend</a>.
                 </li>
+                <li><b>Importar de ZIP</b>: Permite importar de um arquivo zip baixado. O arquivo zip deve ser baixado
+                  das
+                  URLs listadas no <a href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">ZIP
+                    Import Guide</a> para o seu sistema operacional.</li>
               </ul>
 
               <a id="valkyrieWindowsZip" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último
@@ -369,23 +369,20 @@
                   para detalhes.</b>
                 << /p>
                   <p>Se você já tem uma versão do Valkyrie instalada, por favor desinstale primeiro.</p>
-                  <p>Instale o App Oficial usando a Google Play Store:</p>
-                  <ul>
-                    <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom"
-                        target="_blank">Mansions Of Madness Second Edition</a></li>
-                    <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl"
-                        target="_blank">Descent: Road to Legend</a></li>
-                  </ul>
-                  <p>1. Inicie o App Oficial e espere até que o carregamento esteja completo (o cursor dentro do menu
-                    principal ira desaparecer).</p>
-                  <p>2. Habilite "Unknown Sources" (Fontes desconhecidas) em Settings → Security → Unknown Sources
+                  <p><b>Nota</b>: A importação de aplicativos oficiais não é possível devido a restrições de acesso do
+                    Android.</p>
+                  <p>1. Habilite "Unknown Sources" (Fontes desconhecidas) em Settings → Security → Unknown Sources
                     (Configurações → Segurança → Fontes Desconhecidas). Copie o APK do Valkyrie para seu dispositivo.
                   </p>
-                  <p>3. Rode o APK do Valkyrie para instalar. Após instalar você vai encontrar um App chamado "Valkyrie"
+                  <p>2. Rode o APK do Valkyrie para instalar. Após instalar você vai encontrar um App chamado "Valkyrie"
                     entre seus aplicativos. </p>
-                  <p>4. Rode. Permita todas as permissões que o App peça.</p>
-
-                  <p>5. Em seguida, verifique o <a href="https://github.com/NPBruce/valkyrie/wiki/Android-installation-manual">Manual de instalação do Android</a>.</p>
+                  <p>3. Rode. Permita todas as permissões que o App peça.</p>
+                  <p>4. Use o botão <b>Importar ZIP</b> para importar conteúdo. O arquivo zip deve ser baixado das URLs
+                    listadas no <a href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">ZIP Import
+                      Guide</a>.</p>
+                  <p>5. Em seguida, verifique o <a
+                      href="https://github.com/NPBruce/valkyrie/wiki/Android-installation-manual">Manual de instalação
+                      do Android</a>.</p>
                   <a id="valkyrieAndroid" class="btn-solid-reg" rel="external nofollow" target="_blank">Download
                     Último</a>
 
@@ -416,7 +413,15 @@
                 Clique Abrir.</p>
               <p>2. O app está salvo como uma exceção em suas configurações de segurança, e você pode abrir no futuro
                 clicando duas vezes, como qualquer outro aplicativo.</p>
-              <p>Se a importação não for completa tente rodar Valkyrie como mais permissões.</p>
+              <p>Você pode importar os dados usando um dos dois métodos abaixo:</p>
+              <ul>
+                <li><b>Importar do aplicativo oficial</b>: Permite que você importe diretamente dos aplicativos
+                  oficiais.</li>
+                <li><b>Importar de ZIP</b>: Permite importar de um arquivo zip baixado. O arquivo zip deve ser baixado
+                  das
+                  URLs listadas no <a href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">ZIP
+                    Import Guide</a>.</li>
+              </ul>
               <p>Além disso, garanta que você não tem nenhuma permissão na pasta. Mova seu download fo Valkyrie para a
                 pasta Applications dentro do Finder. Então execute no terminal "chmod +x
                 /Applications/Valkyrie.app/Contents/MacOS/Valkyrie"</p>
@@ -437,11 +442,17 @@
           <div class="col-lg-9">
             <div class="text-container">
               <h3>Linux</h3>
-              <p>Para o Linux também não há importação automática:</p>
-              <p>1. Copie content/&lt;type&gt;/ffg para outra instalação or</p>
-              <p>2. Rode com -import &lt;location&gt; where &lt;location&gt; é Road to Legend ou Mansions of Madness
-                data. Exemplo /home/&lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend for
-                Road to Legend.</p>
+              <p>Para Linux não há importação automática:</p>
+              <ul>
+                <li>Você pode rodar com <code>-import &lt;location&gt;</code> onde <code>&lt;location&gt;</code> são os
+                  dados de Road to Legend ou Mansions of Madness. Por exemplo
+                  <code>/home/ &lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend</code> para
+                  Road to Legend.</li>
+                <li>Alternativamente você pode usar <b>Importar de ZIP</b>: Permite importar de um arquivo zip baixado.
+                  O arquivo zip deve ser baixado das URLs listadas no <a
+                    href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">ZIP Import Guide</a>.
+                </li>
+              </ul>
 
               <a id="valkyrieLinux" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Último</a>
 
@@ -490,16 +501,21 @@
     </div> <!-- end of basic-2 -->
 
     <!-- iOS -->
-<div id="download-ios" class="basic-3">
+    <div id="download-ios" class="basic-3">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
             <div class="text-container">
               <h3>iOS</h3>
- <p>Embora não enviemos um cliente devido aos requisitos forçados da App Store da Apple, podes transmitir o Valkyrie para
- iOS a partir do teu PC Windows usando <a href="https://play.google.com/store/apps/details?id=com.valvesoftware.steamlink" target="_blank">Steam Link</a>.
+              <p>Embora não enviemos um cliente devido aos requisitos forçados da App Store da Apple, podes transmitir o
+                Valkyrie para
+                iOS a partir do teu PC Windows usando <a
+                  href="https://play.google.com/store/apps/details?id=com.valvesoftware.steamlink" target="_blank">Steam
+                  Link</a>.
               </p>
- <p>Para mais informações, consulta o <a href="https://help.steampowered.com/en/faqs/view/4C03-C8BA-3EA1-B26A">Manual da aplicação Steam Link</a></p>
+              <p>Para mais informações, consulta o <a
+                  href="https://help.steampowered.com/en/faqs/view/4C03-C8BA-3EA1-B26A">Manual da aplicação Steam
+                  Link</a></p>
             </div> <!-- end of text-container -->
           </div> <!-- end of col -->
         </div> <!-- end of row -->

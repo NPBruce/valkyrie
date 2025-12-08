@@ -2101,3 +2101,17 @@ a:hover.back-to-top {
 	/* end of extra pages */
 }
 /* end of min-width width 1200px */
+
+/****************************/
+/*     19. OS Icons         */
+/****************************/
+#download-windows img,
+#download-android img,
+#download-macos img,
+#download-linux img,
+#download-fireos img,
+#download-ios img {
+    max-width: 156px;
+    display: block;
+    margin-bottom: 20px; /* Space below icon */
+}
