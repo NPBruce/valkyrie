@@ -2222,3 +2222,24 @@ a:hover.back-to-top {
 #download-ios .container .row {
 	align-items: center;
 }
+/****************************/
+/*     20. Visual Improvements */
+/****************************/
+/* Custom Alert for Notes */
+.custom-alert {
+    background-color: rgba(255, 193, 7, 0.1); /* Light yellow/warning tint */
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+/* Custom Code Block for Linux command lines */
+#download-linux code {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
