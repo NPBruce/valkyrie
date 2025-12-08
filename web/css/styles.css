@@ -2243,3 +2243,30 @@ a:hover.back-to-top {
     font-family: 'Consolas', 'Courier New', monospace;
 }
 
+
+/****************************/
+/*     21. No-JS Support    */
+/****************************/
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure mobile menu shows when toggled */
+.navbar-collapse.show {
+    display: block;
+}
+
+/* Ensure dropdowns show when toggled */
+.dropdown-menu.show {
+    display: block;
+}
+
+/* Ensure tabs show when active */
+.tab-pane.active {
+    display: block;
+    opacity: 1;
+}
+.tab-pane.fade.show.active {
+    opacity: 1;
+}
+
