@@ -491,6 +491,8 @@ TEXT_ALIGNMENT,Выравнивание
 TOP,Верхний
 CENTER,Центр
 BOTTOM,Внизу
+RESTART_TO_APPLY,Требуется перезапуск
+
 CONTENT_IMPORT_OFFICIAL,Импорт из официального приложения
 CONTENT_IMPORT_ZIP,Импорт из ZIP
 CONTENT_REIMPORT_OFFICIAL,Повторный импорт из официального приложения

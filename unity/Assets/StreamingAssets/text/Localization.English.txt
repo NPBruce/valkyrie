@@ -661,6 +661,8 @@ TEXT_ALIGNMENT,Align
 TOP,Top
 CENTER,Center
 BOTTOM,Bottom
+RESTART_TO_APPLY,Takes effect on restart
+
 CONTENT_IMPORT_OFFICIAL,Import from official app
 CONTENT_IMPORT_ZIP,Import from ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimport from official app

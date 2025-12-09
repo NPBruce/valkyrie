@@ -496,6 +496,8 @@ TEXT_ALIGNMENT,Alinhar
 TOP,Topo
 CENTER,Centro
 BOTTOM,Fundo
+RESTART_TO_APPLY,Reiniciar para aplicar
+
 CONTENT_IMPORT_OFFICIAL,Importar do aplicativo oficial
 CONTENT_IMPORT_ZIP,Importar de ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimportar do aplicativo oficial

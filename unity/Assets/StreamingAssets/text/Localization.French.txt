@@ -492,6 +492,8 @@ TEXT_ALIGNMENT,Aligner
 TOP,Haut
 CENTER,Centre
 BOTTOM,Bas
+RESTART_TO_APPLY,Redémarrage requis
+
 CONTENT_IMPORT_OFFICIAL,Importer depuis l'app officielle
 CONTENT_IMPORT_ZIP,Importer depuis ZIP
 CONTENT_REIMPORT_OFFICIAL,Réimporter depuis l'app officielle

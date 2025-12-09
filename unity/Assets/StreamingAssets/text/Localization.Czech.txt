@@ -663,6 +663,8 @@ TEXT_ALIGNMENT,Zarovnání
 TOP,Nahoru
 CENTER,Na střed
 BOTTOM,Dole
+RESTART_TO_APPLY,Vy�adov�n restart
+
 CONTENT_IMPORT_OFFICIAL,Importovat z oficiální aplikace
 CONTENT_IMPORT_ZIP,Importovat ze ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
