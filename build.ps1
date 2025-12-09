@@ -222,11 +222,6 @@ function Initialize-BuildDirectories {
 function Install-Dependencies {
     param ([string]$ScriptRoot)
 
-    Write-Log "Downloading Android dependencies..."
-    $FsafUrl = "https://github.com/seinsinnes/FSAF/releases/latest/download/fsaf-release.aar"
-    $FsafOut = Join-Path $ScriptRoot "unity\Assets\Plugins\Android\fsaf-release.aar"
-    Invoke-WebRequest -Uri $FsafUrl -OutFile $FsafOut
-
     Write-Log "Restoring NuGet packages..."
     Invoke-CommandChecked { winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements } "Winget install failed"
     Invoke-CommandChecked { nuget restore "$ScriptRoot\libraries\libraries.sln" } "NuGet restore failed"
