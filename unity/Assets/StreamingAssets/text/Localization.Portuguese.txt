@@ -47,9 +47,7 @@ CLEAR_FIRE,Apagar Incêndio
 COLOR,Cor
 COMPONENT_NAME,Nome do Componente:
 COMPONENT_TO_DELETE,Deletar Componente:
-CONTENT_IMPORT,Importar conteúdo
 CONTENT_IMPORTING,Importando...\nIsso pode levar alguns minutos
-CONTENT_REIMPORT,Reimportar Componente
 CONTENT_LOCATE,Localizar o jogo
 CONTENT_INSTALL_VIA_STEAM,Instalar via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar via Google Play
@@ -499,3 +497,8 @@ TOP,Topo
 CENTER,Centro
 BOTTOM,Fundo
 RESTART_TO_APPLY,Reiniciar para aplicar
+
+CONTENT_IMPORT_OFFICIAL,Importar do aplicativo oficial
+CONTENT_IMPORT_ZIP,Importar de ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimportar do aplicativo oficial
+CONTENT_REIMPORT_ZIP,Reimportar de ZIP

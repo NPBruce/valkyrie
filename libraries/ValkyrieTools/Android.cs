@@ -29,66 +29,7 @@ namespace ValkyrieTools
             return "";
         }
 
-        public static bool CopyOfficialAppData(string packageName)
-        {
-             
-            try
-            {
 
-                if (!Directory.Exists(GetStorage() + "/Valkyrie"))
-                {
-                    Directory.CreateDirectory(GetStorage() + "/Valkyrie");
-                }
-
-                if (Directory.Exists(GetStorage() + "/Valkyrie/" + packageName))
-                {
-                    Directory.Delete(GetStorage() + "/Valkyrie/" + packageName, true);
-                }
-
-                Directory.CreateDirectory(GetStorage() + "/Valkyrie/" + packageName);
-                
-                // we import in a thread, we have to attach JNI, otherwise we would crash
-                string andriodDataDir = "data";
-                int ret = AndroidJNI.AttachCurrentThread();
-                var activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                var appContext = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity").Call<AndroidJavaObject>("getApplicationContext");
-                AndroidJavaClass jc = new AndroidJavaClass("com.android.accessmomdata.AccessActivity");
-
-                if(packageName.Equals("com.fantasyflightgames.rtl"))
-                {
-                    andriodDataDir = "obb";
-                }
-
-                jc.CallStatic("makeActivity", activity, appContext, packageName, andriodDataDir);
-                if (ret != 0)
-                    AndroidJNI.DetachCurrentThread();
-
-                //Block until android MoM data copy completed.
-                string doneIndicatorFilePath = GetStorage() + "/Valkyrie/" + packageName + "/done";
-                string failedIndicatorFilePath = GetStorage() + "/Valkyrie/" + packageName + "/failed";
-                while (!File.Exists(doneIndicatorFilePath) && !File.Exists(failedIndicatorFilePath))
-                {
-                    Thread.Sleep(1000);
-                }
-                if(File.Exists(failedIndicatorFilePath))
-                {
-                    ValkyrieDebug.Log("Failed copy with indicator");
-                    return false;
-                }
-
-                if (File.Exists(doneIndicatorFilePath))
-                {
-                    ValkyrieDebug.Log("Done copy with indicator");
-                }
-            }
-            catch (System.Exception e)
-            {
-                ValkyrieDebug.Log(e.ToString());
-                ValkyrieDebug.Log("Exception in copy");
-                return false;
-            }
-            return true;
-        }
 
         public static int GetSDKLevel()
         {

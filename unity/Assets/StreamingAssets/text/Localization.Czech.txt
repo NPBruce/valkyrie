@@ -1,4 +1,4 @@
-﻿.,Czech
+.,Czech
 // Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
 // ICONS
 ICON_SKILL_STRENGTH,ïˆ€
@@ -70,9 +70,7 @@ CLEAR_FIRE,ÄŒistÃ½ oheÅˆ
 COLOR,Barva
 COMPONENT_NAME,JmÃ©no dÃ­lu:
 COMPONENT_TO_DELETE,DÃ­l ke smazÃ¡nÃ­:
-CONTENT_IMPORT,Importovat obsah
 CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
-CONTENT_REIMPORT,Znovu imporovat obsah
 CONTENT_LOCATE,NajÃ­t hru
 CONTENT_INSTALL_VIA_STEAM,Instalovat ze Steamu
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalovat z Google Play
@@ -665,4 +663,9 @@ TEXT_ALIGNMENT,Zarovnání
 TOP,Nahoru
 CENTER,Na střed
 BOTTOM,Dole
-RESTART_TO_APPLY,Vyžadován restart
+RESTART_TO_APPLY,Vy�adov�n restart
+
+CONTENT_IMPORT_OFFICIAL,Importovat z oficiální aplikace
+CONTENT_IMPORT_ZIP,Importovat ze ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
+CONTENT_REIMPORT_ZIP,Reimportovat ze ZIP

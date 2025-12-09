@@ -46,9 +46,7 @@ CLEAR_FIRE,Quitar fuego
 COLOR,Color
 COMPONENT_NAME,Nombre del Componente:
 COMPONENT_TO_DELETE,Componente a Eliminar:
-CONTENT_IMPORT,Importar Contenido
 CONTENT_IMPORTING,Importando...
-CONTENT_REIMPORT,Reimportar Contenido
 CONTENT_INSTALL_VIA_STEAM,Instalar desde Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar desde Google Play
 CONTINUE,Continuar
@@ -491,3 +489,8 @@ TOP,Arriba
 CENTER,Centro
 BOTTOM,Abajo
 RESTART_TO_APPLY,Reiniciar para aplicar
+
+CONTENT_IMPORT_OFFICIAL,Importar de la aplicación oficial
+CONTENT_IMPORT_ZIP,Importar desde ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimportar de la aplicación oficial
+CONTENT_REIMPORT_ZIP,Reimportar desde ZIP

@@ -11,7 +11,7 @@ class SaveManager
     public static string minValkyieVersion = "0.7.3";
 
     // This gets the path to the save game file.  Only one file is used/supported per game type.
-    public static string SaveFile(int num = 0)
+    public static string GetSaveFilePath(int num = 0)
     {
         string number = num.ToString();
         if (num == 0) number = "Auto";
@@ -23,7 +23,11 @@ class SaveManager
     {
         // wait to not overwrite save.ini and screen capture
         ZipManager.Wait4PreviousSave();
-        Game.Get().cc.TakeScreenshot(delegate { SaveWithScreen(num, quit); });
+        Game.Get().cc.TakeScreenshot(
+                delegate { 
+                    SaveWithScreen(num, quit); 
+                }
+            );
     }
 
     private static void SaveWithScreen(int num, bool quit = false)
@@ -57,13 +61,13 @@ class SaveManager
             var targetSizeX = Mathf.RoundToInt(screenSize.x * scale);
             var targetSizeY = Mathf.RoundToInt(screenSize.y * scale);
             var outTex = ResizeScreenShotTexture(game.cc.screenShot, targetSizeX, targetSizeY);
-            
+
             File.WriteAllBytes(Path.Combine(tempValkyriePath, "image.png"), outTex.EncodeToPNG());
 
             // Check if we should update the zip file or write a new one with quest content
             // first autosave is a new zip file, following autosave just update the zip
             bool zip_update = false;
-            if (num==0 && game.CurrentQuest.firstAutoSaveDone)
+            if (num == 0 && game.CurrentQuest.firstAutoSaveDone)
             {
                 zip_update = true;
             }
@@ -74,7 +78,7 @@ class SaveManager
 
             // Quest content can be in original path, or savegame path
             string quest_content_path;
-            if(game.CurrentQuest.fromSavegame)
+            if (game.CurrentQuest.fromSavegame)
             {
                 quest_content_path = ContentData.ValkyrieLoadQuestPath;
             }
@@ -84,15 +88,28 @@ class SaveManager
             }
 
             // zip in a separate thread
-            ZipManager.WriteZipAsync(tempValkyriePath, quest_content_path, SaveFile(num), zip_update);
+            ZipManager.WriteZipAsync(tempValkyriePath, quest_content_path, GetSaveFilePath(num), zip_update);
         }
         catch (IOException e)
         {
             ValkyrieDebug.Log("Warning: Unable to write to save file. " + e.Message);
         }
+        catch (Exception e)
+        {
+            ValkyrieDebug.Log("Warning: Unable to save game. " + e.Message);
+        }
+
         if (quit)
         {
-            ZipManager.Wait4PreviousSave();
+            try
+            {
+                ZipManager.Wait4PreviousSave();
+            }
+            catch (Exception e)
+            {
+                ValkyrieDebug.Log("Warning: Unable to finalize save file before quitting. " + e.Message);
+            }
+
             GameStateManager.MainMenu();
         }
     }
@@ -100,7 +117,7 @@ class SaveManager
     private static Texture2D ResizeScreenShotTexture(Texture2D source, int targetSizeX, int targetSizeY)
     {
         var currentTarget = RenderTexture.active;
-        Texture2D result = new Texture2D(targetSizeX,targetSizeY);
+        Texture2D result = new Texture2D(targetSizeX, targetSizeY);
         try
         {
             RenderTexture helper = new RenderTexture(targetSizeX, targetSizeY, 24);
@@ -113,7 +130,7 @@ class SaveManager
         {
             ValkyrieDebug.Log($"Failed to resize screenshot: {e.Message}");
             ValkyrieDebug.Log(e.StackTrace);
-            
+
         }
         finally
         {
@@ -127,7 +144,7 @@ class SaveManager
     {
         for (int i = 0; i < 4; i++)
         {
-            if (File.Exists(SaveFile(i)))
+            if (File.Exists(GetSaveFilePath(i)))
             {
                 return true;
             }
@@ -141,7 +158,7 @@ class SaveManager
         Game game = Game.Get();
         try
         {
-            if (File.Exists(SaveFile(num)))
+            if (File.Exists(GetSaveFilePath(num)))
             {
                 if (!Directory.Exists(ContentData.TempValkyriePath))
                 {
@@ -155,7 +172,7 @@ class SaveManager
                 }
 
                 Directory.Delete(valkyrieLoadPath, true);
-                ZipManager.Extract(valkyrieLoadPath, SaveFile(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
+                ZipManager.Extract(valkyrieLoadPath, GetSaveFilePath(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
 
                 string savefile_content = File.ReadAllText(Path.Combine(valkyrieLoadPath, "save.ini"));
                 IniData saveData = IniRead.ReadFromString(savefile_content);
@@ -170,7 +187,7 @@ class SaveManager
                 {
                     questLoadPath = questLoadPath.Replace(questOriginalPath, ContentData.ValkyrieLoadQuestPath);
                 }
-                
+
                 // Check that quest in save is valid
                 QuestData.Quest q = new QuestData.Quest(questLoadPath);
                 if (!q.valid)
@@ -253,7 +270,12 @@ class SaveManager
         }
         catch (IOException e)
         {
-            ValkyrieDebug.Log("Error: Unable to open save file: " + SaveFile(num) + " " + e.Message);
+            ValkyrieDebug.Log("Error: Unable to open save file: " + GetSaveFilePath(num) + " " + e.Message);
+            Application.Quit();
+        }
+        catch(Exception e)
+        {
+            ValkyrieDebug.Log("Error: Unable to load save game: " + e.Message);
             Application.Quit();
         }
     }
@@ -278,7 +300,12 @@ class SaveManager
         public SaveData(int num = 0)
         {
             Game game = Game.Get();
-            if (!File.Exists(SaveFile(num))) return;
+            var saveFilePath = GetSaveFilePath(num);
+            if (!File.Exists(saveFilePath))
+            {
+                return;
+            }
+
             try
             {
                 if (!Directory.Exists(ContentData.TempValkyriePath))
@@ -291,7 +318,7 @@ class SaveManager
                     Directory.CreateDirectory(valkyrieLoadPath);
                 }
 
-                ZipManager.Extract(valkyrieLoadPath, SaveFile(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_SAVE_INI_PIC);
+                ZipManager.Extract(valkyrieLoadPath, GetSaveFilePath(num), ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_SAVE_INI_PIC);
 
                 image = ContentData.FileToTexture(Path.Combine(valkyrieLoadPath, "image.png"));
 
@@ -338,7 +365,7 @@ class SaveManager
             }
             catch (Exception e)
             {
-                ValkyrieDebug.Log("Warning: Unable to open save file: " + SaveFile(num) + "\nException: " + e.ToString());
+                ValkyrieDebug.Log("Warning: Unable to open save file: " + GetSaveFilePath(num) + "\nException: " + e.ToString());
             }
         }
     }

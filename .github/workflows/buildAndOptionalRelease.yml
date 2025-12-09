@@ -23,6 +23,27 @@ on:
         required: false
         default: false
         type: boolean
+      buildWindows:
+        description: 'Build Windows'
+        required: false
+        default: true
+        type: boolean
+      buildMac:
+        description: 'Build Mac'
+        required: false
+        default: true
+        type: boolean
+      buildLinux:
+        description: 'Build Linux'
+        required: false
+        default: true
+        type: boolean
+      buildAndroid:
+        description: 'Build Android'
+        required: false
+        default: true
+        type: boolean
+
 jobs:
   Build:
     runs-on: windows-latest
@@ -55,30 +76,34 @@ jobs:
       #It should be possible to install more than one module at a time
       #but it doesn't seem to work so the action has to be repeated for
       #each module.
-      - name: Setup Unity and Linux Module
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: 2019.4.41f1
+          install-path: "C:/Program Files"
+
+      - name: Setup Unity Linux Module
+        if: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
           unity-version: 2019.4.41f1
           unity-modules: "linux-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Mac Module
+        if: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
           unity-version: 2019.4.41f1
           unity-modules: "mac-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Android Module
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
           unity-version: 2019.4.41f1
           unity-modules: "android"
           install-path: "C:/Program Files"
-      - name: Setup Unity IOS Module
-        uses: seinsinnes/setup-unity@v1.1.0
-        with:
-          unity-version: 2019.4.41f1
-          unity-modules: "ios"
-          install-path: "C:/Program Files"
+
       #Activate requires unity account creds for unity license checkout.
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
@@ -93,6 +118,7 @@ jobs:
       #Remove all pre-installed android sdk build tool versions except 28.0.3
       #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk build tool versions
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         run: |
               Move-Item -Path C:/Android/android-sdk/build-tools/* -Destination c:/windows/temp
               Get-ChildItem -Path "C:/Android/android-sdk/build-tools"
@@ -100,6 +126,7 @@ jobs:
       #Remove all pre-installed android sdk platform versions except 29
       #Get-ChildItem -Path "C:/Android/android-sdk/platforms" -Exclude android-29 | Remove-Item -Recurse -Force
       - name: Remove unwanted android sdk platform versions
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         run: |
               Move-Item -Path C:/Android/android-sdk/platforms/* -Destination c:/windows/temp
               Get-ChildItem -Path "C:/Android/android-sdk/platforms"
@@ -109,7 +136,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       #Download and extract android sdk platform and build tools
+      #Download and extract android sdk platform and build tools
       - name: Install android sdk platform and build tools
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         run: |
               C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "platforms;android-29"
               C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "build-tools;28.0.3" "build-tools;29.0.2" "cmdline-tools;latest" "tools"
@@ -117,64 +146,81 @@ jobs:
         with:
           nsis-version: '3.10'
       #Run build script
-      - name: Run build batch script
-        run: ${{ github.workspace }}/build.bat
+      #Run build script
+      - name: Run build PowerShell script
+        run: pwsh -File ${{ github.workspace }}/build.ps1
+        env:
+          BUILD_WINDOWS: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
+          BUILD_MAC: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
+          BUILD_LINUX: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
+          BUILD_ANDROID: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
+
 
       - name: Archive windows unity build log
+        if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-windows.log
 
       - name: Archive macos unity build log
+        if: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: macos-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-macos.log
 
       - name: Archive linux unity build log
+        if: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: linux-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-linux.log
 
       - name: Archive android unity build log
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: android-unity-build-log
           path: ${{ github.workspace }}/build/Editor_valkyrie-android.log
 
       - name: Archive windows zip build
+        if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.zip
 
       - name: Archive windows 7zip build
+        if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-7zip
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.7z
 
       - name: Archive windows installer exe build
+        if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-exe
           path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.exe
 
       - name: Archive macos build
+        if: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: macos-unity-build
           path: ${{ github.workspace }}/build/valkyrie-macos-${{ env.Build_Version }}.tar.gz
 
       - name: Archive linux build
+        if: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: linux-unity-build
           path: ${{ github.workspace }}/build/valkyrie-linux-${{ env.Build_Version }}.tar.gz
 
       - name: Archive android build
+        if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: android-unity-build

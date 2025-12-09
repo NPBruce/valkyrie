@@ -44,9 +44,7 @@ CLEAR_FIRE,Éteindre le feu
 COLOR,Couleur
 COMPONENT_NAME,Nom de l'élément :
 COMPONENT_TO_DELETE,Élément à supprimer
-CONTENT_IMPORT,Importer contenu
 CONTENT_IMPORTING,Import...\nL'opération peut prendre quelques minutes
-CONTENT_REIMPORT,Réimporter contenu
 CONTENT_LOCATE,Localiser le jeu
 CONTENT_INSTALL_VIA_STEAM,Installer via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Installer via Google Play
@@ -495,3 +493,8 @@ TOP,Haut
 CENTER,Centre
 BOTTOM,Bas
 RESTART_TO_APPLY,Redémarrage requis
+
+CONTENT_IMPORT_OFFICIAL,Importer depuis l'app officielle
+CONTENT_IMPORT_ZIP,Importer depuis ZIP
+CONTENT_REIMPORT_OFFICIAL,Réimporter depuis l'app officielle
+CONTENT_REIMPORT_ZIP,Réimporter depuis ZIP

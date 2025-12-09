@@ -18,5 +18,6 @@ unity/Assets/Plugins/Editor/JetBrains.meta
 unity/Assets/TextMesh Pro/Examples & Extras/
 unity/Assets/Plugins/Editor.meta
 unity/Assets/TextMesh Pro/Examples & Extras.meta
-/unity/.vsconfig
 /unity/Packages/packages-lock.json
+/unity/ProjectSettings/PackageManagerSettings.asset
+/unity/.vsconfig
