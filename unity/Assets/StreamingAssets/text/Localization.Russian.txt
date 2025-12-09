@@ -45,9 +45,7 @@ CLEAR_FIRE,Потушить
 COLOR,Цвет
 COMPONENT_NAME,Имя компонента:
 COMPONENT_TO_DELETE,Удалить компонент:
-CONTENT_IMPORT,Добавить
 CONTENT_IMPORTING,Добавление...
-CONTENT_REIMPORT,Переподключить
 CONTENT_INSTALL_VIA_STEAM,установите из Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,установите из Google Play
 CONTINUE,Далее
@@ -493,3 +491,7 @@ TEXT_ALIGNMENT,Выравнивание
 TOP,Верхний
 CENTER,Центр
 BOTTOM,Внизу
+CONTENT_IMPORT_OFFICIAL,Импорт из официального приложения
+CONTENT_IMPORT_ZIP,Импорт из ZIP
+CONTENT_REIMPORT_OFFICIAL,Повторный импорт из официального приложения
+CONTENT_REIMPORT_ZIP,Повторный импорт из ZIP

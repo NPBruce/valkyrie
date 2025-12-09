@@ -26,8 +26,6 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i" rel="stylesheet">
   <link href="web/css/bootstrap.css" rel="stylesheet">
   <link href="web/css/fontawesome-all.css" rel="stylesheet">
-  <link href="web/css/swiper.css" rel="stylesheet">
-  <link href="web/css/magnific-popup.css" rel="stylesheet">
   <link href="web/css/styles.css" rel="stylesheet">
 
   <!-- Favicon  -->
@@ -130,7 +128,7 @@
           <div class="col-lg-6">
             <div class="text-container">
               <h2>QUEST CREATOR FOR<br></h2>
-              <h3><span id="js-rotating">MANSIONS OF MADNESS, DESCENT</span></h3>
+              <h3>MANSIONS OF MADNESS & DESCENT</h3>
               <p class="p-large">Valkyrie is an App to users built scenarios/quests for Fantasy Flight Board Games.</p>
               <a class="btn-solid-lg page-scroll" href="#download-windows"><i class="fab fa-windows"></i>WINDOWS</a>
               <a class="btn-solid-lg page-scroll" href="#download-android"><i class="fab fa-android"></i>ANDROID</a>
@@ -301,7 +299,8 @@
           <!-- Video Preview -->
           <div class="image-container">
             <div class="video-wrapper">
-              <a class="popup-youtube" href="https://www.youtube.com/watch?v=NGMZqCx6YoA" data-effect="fadeIn">
+              <a class="popup-youtube" href="https://www.youtube.com/watch?v=NGMZqCx6YoA" target="_blank"
+                rel="noopener noreferrer" data-effect="fadeIn">
                 <img class="img-fluid" src="web/images/thumb.png" alt="alternative">
                 <span class="video-play-button">
                   <span></span>
@@ -330,17 +329,21 @@
           <div class="col-lg-9">
             <div class="text-container">
               <h3>Windows</h3>
-              <p>Run the installer and install to desired location, then start Valkyrie. The import might take a minute,
-                so don't be too hasty. If import does not complete or is not working, please check out the <a
-                  href="https://github.com/NPBruce/valkyrie/wiki/Troubleshooting" target="_blank">Troubleshooting</a>
-                section.</p>
-              <p>Requires the install of the FGG app related to the boardgame you want to play:</p>
+              <p>Exécutez le programme d'installation et installez Valkyries à l'emplacement souhaité, puis démarrez
+                Valkyrie.</p>
+              <p>Vous pouvez importer des données en utilisant l'une des deux méthodes suivantes :</p>
               <ul>
-                <li>Mansions of Madness Second Edition requires the <a href="http://store.steampowered.com/app/478980/"
-                    target="_blank">Mansions of Madness</a> app.</li>
-                <li>Descent: Journeys in the Dark (Second Edition) requires the <a
-                    href="http://store.steampowered.com/app/477200/" target="_blank">Descent: Road to Legend</a> app.
+                <li><b>Importer depuis l'app officielle</b> : Permet d'importer directement depuis les applications
+                  officielles <a href="http://store.steampowered.com/app/478980/" target="_blank">Les Demeures de
+                    l'Épouvante</a> ou
+                  <a href="http://store.steampowered.com/app/477200/" target="_blank">Descent : La Voie des
+                    Légendes</a>.
                 </li>
+                <li><b>Importer depuis ZIP</b> : Permet d'importer à partir d'un fichier zip téléchargé. Le fichier zip
+                  doit
+                  être téléchargé à partir des URL indiquées dans le <a
+                    href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">Guide d'importation
+                    ZIP</a> spécifique à votre système d'exploitation.</li>
               </ul>
 
               <a id="valkyrieWindowsZip" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Latest
@@ -366,22 +369,21 @@
                     href="https://github.com/NPBruce/valkyrie/wiki/Troubleshooting#blackscreen-on-startup-android">dépannage</a>
                   pour plus de détails.</b></p>.
               <p>If you already have a version of Valkyrie installed, please uninstall it first.</p>
-              <p>Install the official app using the Google Play Store:</p>
-              <ul>
-                <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom"
-                    target="_blank">Mansions Of Madness Second Edition</a></li>
-                <li><a href="https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl"
-                    target="_blank">Descent: Road to Legend</a></li>
-              </ul>
-              <p>1. Start the official app and wait until the loading is complete (the wait cursor inside the main menu
-                is gone).</p>
-              <p>2. Enable "Unknown Sources" under Settings → Security → Unknown Sources. Copy the Valkyrie APK file to
-                your device.</p>
-              <p>3. Run the valkyrie APK to install. After the install, you will find an app named "Valkyrie" in your
-                list of apps. </p>
-              <p>4. Run it. Allow all permissions the app requests.</p>
+              <p class="custom-alert"><b>Remarque</b> : L'importation depuis les applications officielles n'est pas
+                possible en raison des restrictions d'accès d'Android.</p>
+              <p>1. Activez "Sources inconnues" dans Paramètres → Sécurité → Sources inconnues. Copiez le fichier APK
+                Valkyrie sur votre appareil.</p>
+              <p>2. Exécutez l'APK Valkyrie pour installer. Après l'installation, vous trouverez une application nommée
+                "Valkyrie" dans votre liste d'applications.</p>
+              <p>3. Lancez-la. Autorisez toutes les permissions demandées par l'application.</p>
+              <p>4. Utilisez le bouton <b>Importer depuis ZIP</b> pour importer du contenu. Le fichier zip doit être
+                téléchargé à partir des URL indiquées dans le <a
+                  href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">Guide d'importation
+                  ZIP</a>.</p>
 
-             <p>5. Vérifiez ensuite le <a href="https://github.com/NPBruce/valkyrie/wiki/Android-installation-manual">manuel d'installation d'Android</a>.</p>
+              <p>5. Vérifiez ensuite le <a href="https://github.com/NPBruce/valkyrie/wiki/Android-installation-manual"
+                  target="_blank">manuel d'installation
+                  d'Android</a>.</p>
 
               <a id="valkyrieAndroid" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Latest</a>
 
@@ -412,7 +414,17 @@
                 Click Open.</p>
               <p>2. The app is saved as an exception to your security settings, and you can open it in the future by
                 double-clicking it just as you can any registered app.</p>
-              <p>If importing does not complete, please attempt to run Valkyrie at elevated privileges.</p>
+              <p>Vous pouvez importer des données en utilisant l'une des deux méthodes suivantes :</p>
+              <ul>
+                <li><b>Importer depuis l'app officielle</b> : Permet d'importer directement depuis les applications
+                  officielles.
+                </li>
+                <li><b>Importer depuis ZIP</b> : Permet d'importer à partir d'un fichier zip téléchargé. Le fichier zip
+                  doit
+                  être téléchargé à partir des URL indiquées dans le <a
+                    href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">Guide d'importation
+                    ZIP</a>.</li>
+              </ul>
               <p>Also make sure, you have folder permissions. Move your Valkyrie download to the folder Applications
                 inside the Finder app. Then run chmod +x /Applications/Valkyrie.app/Contents/MacOS/Valkyrie in the
                 Terminal app.</p>
@@ -433,12 +445,18 @@
           <div class="col-lg-9">
             <div class="text-container">
               <h3>Linux</h3>
-              <p>For Linux there is no automatic import either:</p>
-              <p>1. Copy content/&lt;type&gt;/ffg from another imported installation or</p>
-              <p>2. Run with -import &lt;location&gt; where &lt;location&gt; is Road to Legend or Mansions of Madness
-                data.</p>
-              <p>For example /home/ &lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend for
-                Road to Legend.</p>
+              <p>Pour Linux, il n'y a pas d'importation automatique :</p>
+              <ul>
+                <li>Vous pouvez soit exécuter avec <code>-import &lt;location&gt;</code> où
+                  <code>&lt;location&gt;</code> est les données de Road to Legend ou Mansions of Madness. Par exemple
+                  <code>/home/ &lt;username&gt; /.local/share/Steam/steamapps/common/Descent Road to Legend</code> pour
+                  Road to Legend.
+                </li>
+                <li>Alternativement, vous pouvez utiliser <b>Importer depuis ZIP</b> : Permet d'importer à partir d'un
+                  fichier zip téléchargé. Le fichier zip doit être téléchargé à partir des URL indiquées dans le <a
+                    href="https://github.com/NPBruce/valkyrie/wiki/ZIP-Import" target="_blank">Guide d'importation
+                    ZIP</a>.</li>
+              </ul>
 
               <a id="valkyrieLinux" class="btn-solid-reg" rel="external nofollow" target="_blank">Download Latest</a>
 
@@ -493,10 +511,15 @@
           <div class="col-lg-12">
             <div class="text-container">
               <h3>iOS</h3>
- <p>Bien que nous ne fournissions pas de client en raison des exigences de l'App Store d'Apple, vous pouvez diffuser Valkyrie sur
- iOS depuis votre PC Windows en utilisant <a href="https://play.google.com/store/apps/details?id=com.valvesoftware.steamlink" target="_blank">Steam Link</a>.
+              <p>Bien que nous ne fournissions pas de client en raison des exigences de l'App Store d'Apple, vous pouvez
+                diffuser Valkyrie sur
+                iOS depuis votre PC Windows en utilisant <a
+                  href="https://play.google.com/store/apps/details?id=com.valvesoftware.steamlink" target="_blank">Steam
+                  Link</a>.
               </p>
- <p>Pour plus d'informations, consultez le <a href="https://help.steampowered.com/en/faqs/view/4C03-C8BA-3EA1-B26A">Manuel de l'application Steam Link</a></p>
+              <p>Pour plus d'informations, consultez le <a
+                  href="https://help.steampowered.com/en/faqs/view/4C03-C8BA-3EA1-B26A">Manuel de l'application Steam
+                  Link</a></p>
             </div> <!-- end of text-container -->
           </div> <!-- end of col -->
         </div> <!-- end of row -->
@@ -509,16 +532,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="web/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
-  <script src="web/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
-  <script src="web/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
-  <script src="web/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
-  <script src="web/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
-  <script src="web/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
-  <script src="web/js/morphext.min.js"></script> <!-- Morphtext rotating text in the header -->
-  <script src="web/js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
-  <script src="web/js/scripts.js"></script> <!-- Custom scripts -->
-  <script src="web/js/indexScripts.js"></script>
+  <!-- Scripts -->
+  <script src="web/js/vanilla-scripts.js" defer></script>
   <!-- additional scripts for this page (e.g. for generating download links) -->
 </body>
 
