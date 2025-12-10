@@ -496,3 +496,6 @@ CONTENT_REIMPORT_OFFICIAL,Reimportar de la aplicación oficial
 CONTENT_REIMPORT_ZIP,Reimportar desde ZIP
 RESOLUTION,Resolución
 FULLSCREEN,Pantalla completa
+
+ON,Activado
+OFF,Desactivado

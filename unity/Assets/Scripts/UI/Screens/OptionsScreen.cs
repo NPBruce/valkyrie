@@ -26,6 +26,8 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
         private readonly StringKey RESOLUTION = new StringKey("val", "RESOLUTION");
         private readonly StringKey FULLSCREEN = new StringKey("val", "FULLSCREEN");
+        private readonly StringKey OptionON = new StringKey("val", "ON");
+        private readonly StringKey OptionOff = new StringKey("val", "OFF");
 
         Game game = Game.Get();
 
@@ -176,7 +178,7 @@ namespace Assets.Scripts.UI.Screens
 
             ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 2, 27, 6, 2);
-            ui.SetText(isFs ? "On" : "Off");
+            ui.SetText(isFs ? OptionON : OptionOff);
             ui.SetButton(delegate
             {
                 bool newFs = !isFs;

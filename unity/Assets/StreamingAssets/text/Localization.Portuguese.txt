@@ -504,3 +504,6 @@ CONTENT_REIMPORT_OFFICIAL,Reimportar do aplicativo oficial
 CONTENT_REIMPORT_ZIP,Reimportar de ZIP
 RESOLUTION,Resolução
 FULLSCREEN,Tela cheia
+
+ON,Ligado
+OFF,Desligado

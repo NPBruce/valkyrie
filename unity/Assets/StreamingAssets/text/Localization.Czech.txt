@@ -672,3 +672,6 @@ CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
 CONTENT_REIMPORT_ZIP,Reimportovat ze ZIP
 RESOLUTION,Rozlišení
 FULLSCREEN,Celá obrazovka
+
+ON,Zapnuto
+OFF,Vypnuto

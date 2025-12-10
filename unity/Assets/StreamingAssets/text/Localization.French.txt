@@ -500,3 +500,6 @@ CONTENT_REIMPORT_OFFICIAL,Réimporter depuis l'app officielle
 CONTENT_REIMPORT_ZIP,Réimporter depuis ZIP
 RESOLUTION,Résolution
 FULLSCREEN,Plein écran
+
+ON,Activé
+OFF,Désactivé

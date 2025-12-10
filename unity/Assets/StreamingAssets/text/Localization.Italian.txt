@@ -436,3 +436,6 @@ CONTENT_REIMPORT_OFFICIAL,Reimporta da app ufficiale
 CONTENT_REIMPORT_ZIP,Reimporta da ZIP
 RESOLUTION,Risoluzione
 FULLSCREEN,Schermo intero
+
+ON,Attivo
+OFF,Disattivo

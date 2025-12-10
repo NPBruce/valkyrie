@@ -669,3 +669,6 @@ CONTENT_REIMPORT_OFFICIAL,Reimport from official app
 CONTENT_REIMPORT_ZIP,Reimport from ZIP
 RESOLUTION,Resolution
 FULLSCREEN,Fullscreen
+
+ON,ON
+OFF,OFF
