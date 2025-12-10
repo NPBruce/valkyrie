@@ -1,133 +1,135 @@
 .,Czech
 // Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
 // ICONS
-ICON_SKILL_STRENGTH,ïˆ€
-ICON_SKILL_AGILITY,ïˆ
-ICON_SKILL_OBSERVATION,ïˆ‚
-ICON_SKILL_LORE,ïˆƒ
-ICON_SKILL_INFLUENCE,ïˆ„
-ICON_SKILL_WILL,ïˆ…
-ICON_ACTION,ïˆˆ
-ICON_SUCCESS_RESULT,ïˆ†
-ICON_INVESTIGATION_RESULT,ïˆ‡
-ICON_TENTACLE,ïˆ‰
-ICON_PRODUCT_MAD01,ïˆŠ
-ICON_PRODUCT_MAD06,ïˆ‹
-ICON_PRODUCT_MAD09,ïˆŒ
-ICON_PRODUCT_MAD20,ïˆ‰
-ICON_PRODUCT_MAD21,ïˆŠ
-ICON_PRODUCT_MAD22,ïˆ‹ïˆŒ
-ICON_PRODUCT_MAD23,ïˆ
-ICON_PRODUCT_MAD25,ïˆŽ
-ICON_PRODUCT_MAD26,ïˆ
-ICON_PRODUCT_MAD27,ï’€
-ICON_PRODUCT_MAD28,ï’
+ICON_SKILL_STRENGTH,
+ICON_SKILL_AGILITY,
+ICON_SKILL_OBSERVATION,
+ICON_SKILL_LORE,
+ICON_SKILL_INFLUENCE,
+ICON_SKILL_WILL,
+ICON_ACTION,
+ICON_SUCCESS_RESULT,
+ICON_INVESTIGATION_RESULT,
+ICON_TENTACLE,
+ICON_PRODUCT_MAD01,
+ICON_PRODUCT_MAD06,
+ICON_PRODUCT_MAD09,
+ICON_PRODUCT_MAD20,
+ICON_PRODUCT_MAD21,
+ICON_PRODUCT_MAD22,
+ICON_PRODUCT_MAD23,
+ICON_PRODUCT_MAD25,
+ICON_PRODUCT_MAD26,
+ICON_PRODUCT_MAD27,
+ICON_PRODUCT_MAD28,
 
 // TEXTS
 ABILITY,Schopnost
 ABOUT,O aplikaci
-ABOUT_FFG,Valkyrie je pomocnÃ¡ aplikace PÃ¡na Zla, inspirovÃ¡na hrou od Fantasy Flight Games, Descent: Road to Legend.  VÄ›tÅ¡ina obrÃ¡zkÅ¯ je importovÃ¡na z FFG aplikace a pod copyrightem FFG a dalÅ¡Ã­ch drÅ¾itelÅ¯ prÃ¡v a ochrannÃ½ch znÃ¡mek. VlajeÄky jazykÅ¯ pochÃ¡zejÃ­ od Freepik z www.flaticon.com.
-ABOUT_LIBS,Valkyrie vyuÅ¾Ã­vÃ¡ DotNetZip-For-Unity,  UnityStandaloneFileBrowser z gkngkc a mÃ¡ kÃ³d vychÃ¡zejÃ­cÃ­ z Unity Studio a .NET Ogg Vorbis Encoder.
+ABOUT_FFG,Valkyrie je pomocná aplikace Pána Zla, inspirována hrou od Fantasy Flight Games, Descent: Road to Legend.  Většina obrázků je importována z FFG aplikace a pod copyrightem FFG a dalších držitelů práv a ochranných známek. Vlaječky jazyků pocházejí od Freepik z www.flaticon.com.
+ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity,  UnityStandaloneFileBrowser z gkngkc a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
 ACTIONS,Akce
-ACTIVATED,AktivovÃ¡n
+ACTIVATED,Aktivován
 ACTIVATION,Aktivace
 ACTIVATIONS,Aktivace
-ADD_COMPONENTS,PÅ™idat komponenty
+ADD_COMPONENTS,Přidat komponenty
 COMPONENTS,Komponenty
-RENAME,PÅ™ejmenovÃ¡nÃ­
-SAVE_TEST,UloÅ¾it a vyzkouÅ¡et
+RENAME,Přejmenování
+SAVE_TEST,Uložit a vyzkoušet
 SOURCE,Zdroj
-COMMENT,KomentÃ¡Å™
+COMMENT,Komentář
 TRUE,Ano
 FALSE,Ne
 SNAP,Chytit
-FREE,VolnÃ½
+FREE,Volný
 CONFIRM,Potvrdit
-INSPECT,ProhlÃ©dnout
-DURATION,TrvÃ¡nÃ­
+INSPECT,Prohlédnout
+DURATION,Trvání
 DESCRIPTION,Popis
-AUTHORS,AutoÅ™i
-DIFFICULTY,ObtÃ­Å¾nost
-VALIDATE_SCENARIO,OvÄ›Å™it
+AUTHORS,Autoři
+DIFFICULTY,Obtížnost
+VALIDATE_SCENARIO,Ověřit
 FILE,Soubor
-OPTIMIZE_LOCALIZATION,Optimalizovat pÅ™eklad
-CREATE_PACKAGE,VytvoÅ™it balÃ­Äek
-REORDER_COMPONENTS,PÅ™esklÃ¡dat dÃ­ly
-POSITION_SNAP,â•³ {val:SNAP}
-POSITION_FREE,ã€œ {val:FREE}
-ASSIGN,Nastavit promÄ›nnou
-ATTACK,ZaÃºtoÄit
-ATTACK_MESSAGE,ZprÃ¡va Ãºtoku:
+OPTIMIZE_LOCALIZATION,Optimalizovat překlad
+CREATE_PACKAGE,Vytvořit balíček
+REORDER_COMPONENTS,Přeskládat díly
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
+ASSIGN,Nastavit proměnnou
+ATTACK,Zaútočit
+ATTACK_MESSAGE,Zpráva útoku:
 AUDIO,Zvuk
-BACK,ZpÄ›t
-BASE,ZÃ¡klad
-BUTTON,TlaÄÃ­tko
-BUTTONS,TlaÄÃ­tka
+BACK,Zpět
+BASE,Základ
+BUTTON,Tlačítko
+BUTTONS,Tlačítka
 CAMERA,Kamera
-CANCEL,ZruÅ¡it
-CHOOSE_LANG,VÃ½bÄ›r jazyka
-CLEAR_FIRE,ÄŒistÃ½ oheÅˆ
+CANCEL,Zrušit
+CHOOSE_LANG,Výběr jazyka
+CLEAR_FIRE,Čistý oheň
 COLOR,Barva
-COMPONENT_NAME,JmÃ©no dÃ­lu:
-COMPONENT_TO_DELETE,DÃ­l ke smazÃ¡nÃ­:
+COMPONENT_NAME,Jméno dílu:
+COMPONENT_TO_DELETE,Díl ke smazání:
+CONTENT_IMPORT,Importovat obsah
 CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
-CONTENT_LOCATE,NajÃ­t hru
+CONTENT_REIMPORT,Znovu imporovat obsah
+CONTENT_LOCATE,Najít hru
 CONTENT_INSTALL_VIA_STEAM,Instalovat ze Steamu
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalovat z Google Play
-CONTINUE,PokraÄovat
-COPY,KopÃ­rovat
-CUSTOMMONSTER,VlastnÃ­ monstrum
-DEFAULTMUSICON,Zapnout zÃ¡kladni hudbu
-D2E_APP_NOT_FOUND,Nelze najÃ­t Road to Legend
-D2E_HEROES_NAME,HrdinovÃ©
+CONTINUE,Pokračovat
+COPY,Kopírovat
+CUSTOMMONSTER,Vlastní monstrum
+DEFAULTMUSICON,Zapnout základni hudbu
+D2E_APP_NOT_FOUND,Nelze najít Road to Legend
+D2E_HEROES_NAME,Hrdinové
 D2E_HERO_NAME,Hrdina
-D2E_NAME,Descent: VÃ½prava do temnot (DruhÃ¡ edice)
-D2E_QUEST_NAME,Ãškol
-DEFEATED,PoraÅ¾en
+D2E_NAME,Descent: Výprava do temnot (Druhá edice)
+D2E_QUEST_NAME,Úkol
+DEFEATED,Poražen
 DELETE,Smazat
 UPDATE,Aktualizovat
 DIALOG,Dialog
-DOOR,DveÅ™e
-DOWNLOAD,StÃ¡hnout
-DOWNLOAD_LIST,Stahuji seznam balÃ­ÄkÅ¯
-DOWNLOAD_PACKAGE,Stahuji balÃ­Äek
+DOOR,Dveře
+DOWNLOAD,Stáhnout
+DOWNLOAD_LIST,Stahuji seznam balíčků
+DOWNLOAD_PACKAGE,Stahuji balíček
 E,E
 EFFECTS,Efekty
 EMPTY,
 END_TURN,Konec kola
 ROUND,kolo {0}
-EVADE,Ãšhyb
-EVENT,UdÃ¡lost
+EVADE,Úhyb
+EVENT,Událost
 EXIT,Konec
-FINISHED,DokonÄeno
-FIRST,PrvnÃ­
+FINISHED,Dokončeno
+FIRST,První
 FORCE_ACTIVATE,Vynutit aktivaci
 
-HEALTH,ZdravÃ­
+HEALTH,Zdraví
 HEALTH_HERO,za hrdinu
-HIGHLIGHT,ZvÃ½raznit
-HORROR_CHECK,Kontrola hrÅ¯zy
-AWARENESS,OstraÅ¾itost
-IA_APP_NOT_FOUND,Nelze nalÃ©zt Legends of the Alliance, Instalovat ze Steamu
-IA_APP_NOT_FOUND_ANDROID,Nelze nalÃ©zt Legends of the Alliance, Instalovat z Google Play
-IA_HEROES_NAME,HrdinovÃ©
+HIGHLIGHT,Zvýraznit
+HORROR_CHECK,Kontrola hrůzy
+AWARENESS,Ostražitost
+IA_APP_NOT_FOUND,Nelze nalézt Legends of the Alliance, Instalovat ze Steamu
+IA_APP_NOT_FOUND_ANDROID,Nelze nalézt Legends of the Alliance, Instalovat z Google Play
+IA_HEROES_NAME,Hrdinové
 IA_HERO_NAME,Hrdina
 IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
 IA_QUEST_NAME,Mise
 INDENT,  {0}
 INFO,Info
 INFORMATION,Informace
-INITIAL_MESSAGE,ÃšvodnÃ­ zprÃ¡va:
-ITEM,PÅ™edmÄ›t
-QITEM,ÃškolovÃ½ pÅ™edmÄ›t
+INITIAL_MESSAGE,Úvodní zpráva:
+ITEM,Předmět
+QITEM,Úkolový předmět
 KO,KO
-LOAD_QUEST,PokraÄovat
-LOG,DenÃ­k
+LOAD_QUEST,Pokračovat
+LOG,Deník
 SKILLS,Talent
-ITEMS,VÄ›ci
-ITEMS_SMALL,vÄ›ci
+ITEMS,Věci
+ITEMS_SMALL,věci
 GOLD,Zlato
-MAIN_MENU,HlavnÃ­ menu
+MAIN_MENU,Hlavní menu
 MAX,Max
 MAX_X,Max {0}
 MAX_CAM,Horni okraj
@@ -135,210 +137,210 @@ MENU,Menu
 MIN,Min
 MIN_X,Min {0}
 MIN_CAM,Spodni okraj
-MOM_APP_NOT_FOUND,Nelze nalÃ©zt PanstvÃ­ dÄ›su
-MOM_HEROES_NAME,VyÅ¡etÅ™ovatelÃ©
-MOM_HERO_NAME,VyÅ¡etÅ™ovatel
-MOM_NAME,PanstvÃ­ dÄ›su (DruhÃ¡ edice)
-MOM_QUEST_NAME,ScÃ©nÃ¡Å™
+MOM_APP_NOT_FOUND,Nelze nalézt Panství děsu
+MOM_HEROES_NAME,Vyšetřovatelé
+MOM_HERO_NAME,Vyšetřovatel
+MOM_NAME,Panství děsu (Druhá edice)
+MOM_QUEST_NAME,Scénář
 MONSTER,Monstrum
-MONSTER_ATTACKS,Monstrum ÃºtoÄÃ­.
+MONSTER_ATTACKS,Monstrum útočí.
 MONSTER_MASTER,Lord
 MONSTER_MASTER_X,Lord {0}
-MONSTER_MINION,BÄ›Å¾nÃ¡
-MONSTER_NORMAL,NormÃ¡lnÃ­
+MONSTER_MINION,Běžná
+MONSTER_NORMAL,Normální
 
-MONSTER_UNIQUE,UnikÃ¡tnÃ­
+MONSTER_UNIQUE,Unikátní
 MOVES,Pohyby
-MPLACE,UmÃ­stÄ›nÃ­
+MPLACE,Umístění
 MUSIC,Hudba
-NAME,JmÃ©no
-NEW,NovÃ½
-NEW_X,{NovÃ½ {0}}
-NONE,{Å½Ã¡dnÃ½}
+NAME,Jméno
+NEW,Nový
+NEW_X,{Nový {0}}
+NONE,{Žádný}
 
-NEXT_EVENTS,DalÅ¡Ã­ udÃ¡losti
-NOT_FIRST,Ne prvnÃ­
-NO_ATTACK_MESSAGE,ZprÃ¡va bez Ãºtoku
+NEXT_EVENTS,Další události
+NOT_FIRST,Ne první
+NO_ATTACK_MESSAGE,Zpráva bez útoku
 
-NUMBER,ÄŒÃ­slo
+NUMBER,Číslo
 NUMBER_HEROS,{0} Hrdiny:
 OK,Ok
 OP,Op
 OPTIONS,Volby
-PLACEMENT,UmÃ­stÄ›nÃ­
+PLACEMENT,Umístění
 
-PLACE_IMG,UmÃ­stit obrÃ¡zek:
-POOL_TRAITS,VÃ½bÄ›r vlastnostÃ­:
+PLACE_IMG,Umístit obrázek:
+POOL_TRAITS,Výběr vlastností:
 POSITION,Pozice
-POSITION_TYPE_HIGHLIGHT,ZvÃ½raznÄ›nÃ­
-POSITION_TYPE_UNUSED,NepouÅ¾itÃ©
-PUZZLE,HÃ¡danka
-PUZZLE_ALT_LEVEL,AlternativnÃ­ uroveÅˆ
-PUZZLE_SOLUTION,Å˜eÅ¡enÃ­
-PUZZLE_CLASS,TÅ™Ã­da
-PUZZLE_CLASS_SELECT,VÃ½bÄ›r tÅ™Ã­dy
-IMAGE,ObrÃ¡zek
+POSITION_TYPE_HIGHLIGHT,Zvýraznění
+POSITION_TYPE_UNUSED,Nepoužité
+PUZZLE,Hádanka
+PUZZLE_ALT_LEVEL,Alternativní uroveň
+PUZZLE_SOLUTION,Řešení
+PUZZLE_CLASS,Třída
+PUZZLE_CLASS_SELECT,Výběr třídy
+IMAGE,Obrázek
 
-PUZZLE_LEVEL,ÃšroveÅˆ hÃ¡danky
-PUZZLE_SELECT_SKILL,VÃ½bÄ›r talentu:
-PUZZLE_IMAGE_CLASS,obrÃ¡zek
-PUZZLE_CODE_CLASS,kÃ³d
+PUZZLE_LEVEL,Úroveň hádanky
+PUZZLE_SELECT_SKILL,Výběr talentu:
+PUZZLE_IMAGE_CLASS,obrázek
+PUZZLE_CODE_CLASS,kód
 PUZZLE_SLIDE_CLASS,slide
-QUEST,Ãškol
-QUEST_NAME_DOWNLOAD,StÃ¡hnout {0}
-QUEST_NAME_EDITOR,Editor ÃºkolÅ¯
+QUEST,Úkol
+QUEST_NAME_DOWNLOAD,Stáhnout {0}
+QUEST_NAME_EDITOR,Editor úkolů
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Aktualizace] {0}
-QUOTA,KvÃ³ta
+QUOTA,Kvóta
 RECOVER,Obnovit
-INVESTIGATOR_ATTACKS,VyÅ¡etÅ™ovatel ÃºtoÄÃ­
+INVESTIGATOR_ATTACKS,Vyšetřovatel útočí
 
 
-RELOAD,Znovu naÄÃ­st
-REMOVE_COMPONENTS,Odebrat dÃ­ly:
-REQUIRED_EXPANSIONS,VyÅ¾adovanÃ© rozÅ¡Ã­renÃ­:
-REQUIRES_EXPANSION, VyÅ¾aduje:  {0}
+RELOAD,Znovu načíst
+REMOVE_COMPONENTS,Odebrat díly:
+REQUIRED_EXPANSIONS,Vyžadované rozšírení:
+REQUIRES_EXPANSION, Vyžaduje:  {0}
 
-REQ_TRAITS,VyÅ¾. vlastnosti:
+REQ_TRAITS,Vyž. vlastnosti:
 RESET,Reset
-ROTATE_TO,OtoÄit: {0}
-ROTATION,OtoÄenÃ­
-SAVE,UloÅ¾it
-AUTOSAVE,AutomatickÃ© uloÅ¾enÃ­
-SELECT_SAVE,VÃ½bÄ›r uloÅ¾enÃ­:
-SELECT,VÃ½bÄ›r {0}
-SELECT_CLASS,VÃ½bÄ›r tÅ™Ã­dy
-SELECTION,VÃ½bÄ›r
-SELECT_CONTENT,VÃ½bÄ›r obsahu
-SELECT_EXPANSION,VÃ½bÄ›r obsahu rozÅ¡Ã­Å™enÃ­:
-SELECT_IMAGE,VÃ½bÄ›r obrazu:
-SELECT_ITEM,VÃ½bÄ›r pÅ™edmÄ›tu
-SELECT_PACK,VÃ½bÄ›r balÃ­Äku
-SELECT_TO_COPY,Vyber {0} ke kopÃ­rovÃ¡nÃ­:
-SELECT_TO_DELETE,Vyber {0} ke smazÃ¡ni:
-DISABLE,ZakÃ¡zat
-HIDE,SkrÃ½t
+ROTATE_TO,Otočit: {0}
+ROTATION,Otočení
+SAVE,Uložit
+AUTOSAVE,Automatické uložení
+SELECT_SAVE,Výběr uložení:
+SELECT,Výběr {0}
+SELECT_CLASS,Výběr třídy
+SELECTION,Výběr
+SELECT_CONTENT,Výběr obsahu
+SELECT_EXPANSION,Výběr obsahu rozšíření:
+SELECT_IMAGE,Výběr obrazu:
+SELECT_ITEM,Výběr předmětu
+SELECT_PACK,Výběr balíčku
+SELECT_TO_COPY,Vyber {0} ke kopírování:
+SELECT_TO_DELETE,Vyber {0} ke smazáni:
+DISABLE,Zakázat
+HIDE,Skrýt
 HIDDEN,Skryto
-ACTIVE,AktivnÃ­
+ACTIVE,Aktivní
 SET,Nastavit
-SET_EDITOR_ALPHA,PrÅ¯hlednost editoru
+SET_EDITOR_ALPHA,Průhlednost editoru
 SKILL,Talent
 SELECT_SKILLS,Vyber talenty:
 SPAWN,Monstrum
-STARTING_ITEM,StartovnÃ­ pÅ™edmÄ›t
-STARTING_ITEMS,StartovnÃ­ pÅ™edmÄ›ty
-START_QUEST,NovÃ¡ hra
-START,ZaÄÃ¡tek
+STARTING_ITEM,Startovní předmět
+STARTING_ITEMS,Startovní předměty
+START_QUEST,Nová hra
+START,Začátek
 
-TESTS,ZkouÅ¡ky
-TILE,DÃ­l
+TESTS,Zkoušky
+TILE,Díl
 
 AND,A
 OR,Nebo
 
-TOKEN,Å½eton
-TOOLS,NÃ¡stroje
-TOTAL_MOVES,CelkovÃ© pohyby
+TOKEN,Žeton
+TOOLS,Nástroje
+TOTAL_MOVES,Celkové pohyby
 TRAITS,Vlastnosti
-TRIGGER,SpouÅ¡tÄ›Ä
+TRIGGER,Spouštěč
 TYPE,Typ
 TYPES,Typy
-UNABLE_BUTTON,TlaÄitko nedostupnÃ©:
+UNABLE_BUTTON,Tlačitko nedostupné:
 
 UI,UI
 UNITS,Jednotky
-HORIZONTAL,HorizontÃ¡lnÃ­
-VERTICAL,VertikÃ¡lnÃ­
+HORIZONTAL,Horizontální
+VERTICAL,Vertikální
 ALIGN,Zarovnat
 SIZE,Velikost
 TEXT_SIZE,Velikost textu
-BACKGROUND_COLOUR,Barva pozadÃ­
-ASPECT,PomÄ›r
+BACKGROUND_COLOUR,Barva pozadí
+ASPECT,Poměr
 BORDER,Okraj
 NO_BORDER,Bez okraje
-UNDO,ZpÄ›t
-UNIQUE_DEFEATED,UnikÃ¡tnÃ­\nporaÅ¾en(a)
-UNIQUE_INFO,UnikÃ¡tnÃ­ informace
-UNIQUE_MONSTER,UnikÃ¡tnÃ­ monstrum
-UNIQUE_TITLE,UnikÃ¡tnÃ­ dÃ­l
-UNUSED,NepouÅ¾itÃ©
+UNDO,Zpět
+UNIQUE_DEFEATED,Unikátní\nporažen(a)
+UNIQUE_INFO,Unikátní informace
+UNIQUE_MONSTER,Unikátní monstrum
+UNIQUE_TITLE,Unikátní díl
+UNUSED,Nepoužité
 VALUE,Hodnota
-VAR,PromÄ›nnÃ¡
-VARS,PromÄ›nnÃ©
-VAR_NAME,NÃ¡zev PromÄ›nnÃ©
-X_ACTIVATED,{0} aktivovÃ¡n(a)
+VAR,Proměnná
+VARS,Proměnné
+VAR_NAME,Název Proměnné
+X_ACTIVATED,{0} aktivován(a)
 
 BUY,Koupit
 SELL,Prodat
-CLASS,TÅ™Ã­da
+CLASS,Třída
 ACT_1,Akt I
 ACT_2,Akt II
 
 X_COLON,{0}:
 
 //Packs
-SoA,SoA ïˆŽ
-BtT,BtT ïˆ
-CotW,CotW ïˆŒ
-CotWT,CotWT ïˆŒ
-CotWI,CotWI ïˆŒ
-CotWM,CotWM ïˆŒ
-FA,FA ïˆ‹
-FAT,FAT ïˆ‹
-FAI,FAI ïˆ‹
-FAM,FAM ïˆ‹
-HJ,HJ ï’€
-MoM1E,MoM1E ïˆŠ
-MoM1ET,MoM1ET ïˆŠ
-MoM1EI,MoM1EI ïˆŠ
-MoM1EM,MoM1EM ïˆŠ
-MoM1CK,CK ïˆ‰á¶œ
-base,base ïˆ‰
-PotS,PotS ï’
-RN,RN ïˆŠ
-SM,SM ïˆ‹ïˆŒ
-SoT,SoT ïˆ
+SoA,SoA 
+BtT,BtT 
+CotW,CotW 
+CotWT,CotWT 
+CotWI,CotWI 
+CotWM,CotWM 
+FA,FA 
+FAT,FAT 
+FAI,FAI 
+FAM,FAM 
+HJ,HJ 
+MoM1E,MoM1E 
+MoM1ET,MoM1ET 
+MoM1EI,MoM1EI 
+MoM1EM,MoM1EM 
+MoM1CK,CK ᶜ
+base,base 
+PotS,PotS 
+RN,RN 
+SM,SM 
+SoT,SoT 
 
 //Packs symbols MoM
-SoA_SYMBOL,ïˆŽ
-BtT_SYMBOL,ïˆ
-CotW_SYMBOL,ïˆŒ
-CotWT_SYMBOL,ïˆŒ
-CotWI_SYMBOL,ïˆŒ
-CotWM_SYMBOL,ïˆŒ
-FA_SYMBOL,ïˆ‹
-FAT_SYMBOL,ïˆ‹
-FAI_SYMBOL,ïˆ‹
-FAM_SYMBOL,ïˆ‹
-HJ_SYMBOL,ï’€
-MoM1E_SYMBOL,ïˆŠ
-MoM1ET_SYMBOL,ïˆŠ
-MoM1EI_SYMBOL,ïˆŠ
-MoM1EM_SYMBOL,ïˆŠ
-MoM1CK_SYMBOL,ïˆ‰á¶œ
-base_SYMBOL,ïˆ‰
-PotS_SYMBOL,ï’
-RN_SYMBOL,ïˆŠ
-SM_SYMBOL,ïˆ‹ïˆŒ
-SoT_SYMBOL,ïˆ
+SoA_SYMBOL,
+BtT_SYMBOL,
+CotW_SYMBOL,
+CotWT_SYMBOL,
+CotWI_SYMBOL,
+CotWM_SYMBOL,
+FA_SYMBOL,
+FAT_SYMBOL,
+FAI_SYMBOL,
+FAM_SYMBOL,
+HJ_SYMBOL,
+MoM1E_SYMBOL,
+MoM1ET_SYMBOL,
+MoM1EI_SYMBOL,
+MoM1EM_SYMBOL,
+MoM1CK_SYMBOL,ᶜ
+base_SYMBOL,
+PotS_SYMBOL,
+RN_SYMBOL,
+SM_SYMBOL,
+SoT_SYMBOL,
 
 //Packs symbols D2E
-LoR_SYMBOL,î ƒ
-LotW_SYMBOL,î „
-MoB_SYMBOL,î …
-MoR_SYMBOL,î †
-SoN_SYMBOL,î ‰
-TCTR_SYMBOL,î ‹
-TT_SYMBOL,î 
-BotW_SYMBOL,î 
-CoD_SYMBOL,î €
-CotF_SYMBOL,î 
-GoD_SYMBOL,î ‚
-OotO_SYMBOL,î ‡
-SoE_SYMBOL,î ˆ
-SotS_SYMBOL,î Š
-ToC_SYMBOL,î Œ
-VoD_SYMBOL,î Ž
+LoR_SYMBOL,
+LotW_SYMBOL,
+MoB_SYMBOL,
+MoR_SYMBOL,
+SoN_SYMBOL,
+TCTR_SYMBOL,
+TT_SYMBOL,
+BotW_SYMBOL,
+CoD_SYMBOL,
+CotF_SYMBOL,
+GoD_SYMBOL,
+OotO_SYMBOL,
+SoE_SYMBOL,
+SotS_SYMBOL,
+ToC_SYMBOL,
+VoD_SYMBOL,
 CKAoD_SYMBOL,ck
 CKD1E_SYMBOL,ck
 CKDQ_SYMBOL,ck
@@ -367,32 +369,32 @@ DJ42_SYMBOL,lt
 DJ43_SYMBOL,lt
 
 // Expansions name D2E (for performance)
-LL, ZtracenÃ© Legendy
-LoR,Labyrint ZkÃ¡zy î ƒ
-LotW,DraÄÃ­ Sluj î „
-MoB,Mlhy Bilehallu î …
-MoR,SÃ­dlo HavranÅ¯ î †
-SoN,StÃ­n Nerekhallu î ‰
-TCTR,Å˜etÄ›zy co RezivÄ›jÃ­ î ‹
-TT,ZlobÅ™Ã­ BaÅ¾iny î 
-BotW,Pouta DivoÄiny î 
-CoD,Koruna Osudu î €
-CotF,KÅ™Ã­Å¾ovÃ© TaÅ¾enÃ­ ZapomenutÃ½ch î 
-GoD,StrÃ¡Å¾ci Deephallu î ‚
-OotO,PÅ™Ã­saha VyhnankynÄ› î ‡
-SoE,StÅ™epy VÄ›Änotemna î ˆ
-SotS,SluÅ¾ebnÃ­ci TajemstvÃ­ î Š
-ToC,Ãšmluva BojovnÃ­kÅ¯ î Œ
-VoD,Vidiny Ãšsvitu î Ž
-CKAoD,OltÃ¡Å™ zoufalstvÃ­
+LL, Ztracené Legendy
+LoR,Labyrint Zkázy 
+LotW,Dračí Sluj 
+MoB,Mlhy Bilehallu 
+MoR,Sídlo Havranů 
+SoN,Stín Nerekhallu 
+TCTR,Řetězy co Rezivějí 
+TT,Zlobří Bažiny 
+BotW,Pouta Divočiny 
+CoD,Koruna Osudu 
+CotF,Křížové Tažení Zapomenutých 
+GoD,Strážci Deephallu 
+OotO,Přísaha Vyhnankyně 
+SoE,Střepy Věčnotemna 
+SotS,Služebníci Tajemství 
+ToC,Úmluva Bojovníků 
+VoD,Vidiny Úsvitu 
+CKAoD,Oltář zoufalství
 CKD1E,1. edice
-CKDQ,Dungeon Quest hrdinovÃ©
+CKDQ,Dungeon Quest hrdinové
 CKPromo,Promo
-CKToI,LedovÃ¡ hrobka
+CKToI,Ledová hrobka
 CKWoD,Studna temnoty
 DJ09,Splig
 DJ10,Belthir
-DJ11,Baron ZachariÃ¡Å¡
+DJ11,Baron Zachariáš
 DJ12,Alric Farrow
 DJ13,Merick Farrow
 DJ14,Eliza Farrow
@@ -400,7 +402,7 @@ DJ15,Valyndra
 DJ16,Raythen
 DJ17,Serena
 DJ18,Ariad
-DJ19,KrÃ¡lovna Ariad
+DJ19,Královna Ariad
 DJ20,Bol'Goreth
 DJ22,Rylan Olliven
 DJ23,Verminous
@@ -412,247 +414,247 @@ DJ42,Zarihell
 DJ43,Ardus Ix'Erebus
 
 //Items
-weapon,ZbraÅˆ
-firearm,StÅ™elnÃ¡ zbraÅˆ
-heavyweapon,TÄ›Å¾kÃ¡ zbraÅˆ
-heavy,TÄ›Å¾kÃ¡ zbraÅˆ
+weapon,Zbraň
+firearm,Střelná zbraň
+heavyweapon,Těžká zbraň
+heavy,Těžká zbraň
 tome,Kniha
-equipment,VybavenÃ­
-lightsource,Zdroj svÄ›tla
-bladedweapon,SeÄnÃ¡ zbraÅˆ
-bladed,SeÄnÃ¡ zbraÅˆ
+equipment,Vybavení
+lightsource,Zdroj světla
+bladedweapon,Sečná zbraň
+bladed,Sečná zbraň
 spell,Kouzlo
-key,KlÃ­Ä
-evidence,DÅ¯kaz
+key,Klíč
+evidence,Důkaz
 ally,Spojenec
-spelldefence,ObrannÃ© kouzlo
-spellattack,ÃštoÄnÃ© kouzlo
+spelldefence,Obranné kouzlo
+spellattack,Útočné kouzlo
 
 //Audio
 menu,Menu
 music,Hudba
-quest,Ãškol
-defeated,PoraÅ¾en
-newround,NovÃ© kolo
-attack,Ãštok
-unarmed,NeozbrojenÃ½
-horror,HrÅ¯za
+quest,Úkol
+defeated,Poražen
+newround,Nové kolo
+attack,Útok
+unarmed,Neozbrojený
+horror,Hrůza
 search,Hledat
 explore,Prozkoumat
 
 //Heroes
 latari,Latari
-dwarf,TrpaslÃ­k
+dwarf,Trpaslík
 gnome,Gnom
-male,MuÅ¾
-female,Å½ena
+male,Muž
+female,Žena
 
 //monsters
 monster,Montrum
-undead,NemrtvÃ½
+undead,Nemrtvý
 humanoid,Humanoid
 spirit,Duch
 beast,Bestie
 agent,Agent
-lieutenant,PoruÄÃ­k
-small,MalÃ½
-medium,StÅ™ednÃ­
-huge,VelkÃ½
-massive,MasivnÃ­
+lieutenant,Poručík
+small,Malý
+medium,Střední
+huge,Velký
+massive,Masivní
 building,Budova
-melee,Souboj na blÃ­zko
-ranged,VzdÃ¡lenÃ½ Ãºtok
+melee,Souboj na blízko
+ranged,Vzdálený útok
 goblin,Goblin
-cursed,ProkletÃ½
-cave,JeskynÄ›
-wilderness,DivoÄina
-civilized,CivilizovanÃ½
-dark,TemnÃ½
+cursed,Prokletý
+cave,Jeskyně
+wilderness,Divočina
+civilized,Civilizovaný
+dark,Temný
 mountain,Hory
 cold,Chlad
 hot,Horko
 water,Voda
-fleshless,BezmasÃ½
-snakeperson,HadÃ­ osoba
+fleshless,Bezmasý
+snakeperson,Hadí osoba
 relic,Relikvie
 elixir,Elixir
 
 //Tiles
-basement,SklepenÃ­
-river,Å˜eka
+basement,Sklepení
+river,Řeka
 street,Ulice
 hallway,Chodba
 bathroom,Koupelna
-bedroom,LoÅ¾nice
-kitchen,KuchynÄ›
+bedroom,Ložnice
+kitchen,Kuchyně
 dock,Dok
-storage,SkladiÅ¡tÄ›
+storage,Skladiště
 outside,Venku
-inside,UvnitÅ™
-big,VelkÃ½
-transition,PÅ™echod
-throne,TrÅ¯n
-pit,JÃ¡ma
+inside,Uvnitř
+big,Velký
+transition,Přechod
+throne,Trůn
+pit,Jáma
 farm,Farma
 tomb,Hrobka
 library,Knihovna
 graves,Hrob
 bridge,Most
 stairs,Schody
-torture,MuÄenÃ­
+torture,Mučení
 tents,Stany
-stables,StÃ¡je
+stables,Stáje
 hall,Hala
 map,Mapa
-city,MÄ›sto
-fountain,FontÃ¡na
-blackrealm,TemnosvÄ›t
-altar,OltÃ¡Å™
+city,Město
+fountain,Fontána
+blackrealm,Temnosvět
+altar,Oltář
 beds,Postele
 study,Studovna
-prison,VÄ›zenÃ­
+prison,Vězení
 plinth,Podstavec
 tavern,Hospoda
 statues,Sochy
-drawbridge,PadacÃ­ most
+drawbridge,Padací most
 rubble,Sutiny
 treasure,Poklad
-stone,KÃ¡men
-dirt,HlÃ­na
-timber,DÅ™evo
-snow,SnÃ­h
-lava,LÃ¡va
-swamp,BaÅ¾ina
+stone,Kámen
+dirt,Hlína
+timber,Dřevo
+snow,Sníh
+lava,Láva
+swamp,Bažina
 sludge,Bahno
-ship,LoÄ
-temple,ChrÃ¡m
+ship,Loď
+temple,Chrám
 train,Vlak
 
 // Colors
-black,ÄŒernÃ¡
-white,BÃ­lÃ¡
-red,ÄŒervena
-lime,LimetkovÃ¡
-blue,ModrÃ¡
-yellow,Å½lutÃ¡
-aqua,VodovÃ¡
-cyan,AzurovÃ¡
-magenta,PurpurovÃ¡
-fuchsia,FuchsiovÃ¡
-silver,StÅ™Ã­brnÃ¡
-gray,Å edÃ¡
-maroon,KaÅ¡tanovÃ¡
-olive,OlivovÃ¡
-green,ZelenÃ¡
-purple,FialovÃ¡
-teal,ModrozelenÃ¡
-navy,NÃ¡moÅ™nickÃ¡ modÅ™
+black,Černá
+white,Bílá
+red,Červena
+lime,Limetková
+blue,Modrá
+yellow,Žlutá
+aqua,Vodová
+cyan,Azurová
+magenta,Purpurová
+fuchsia,Fuchsiová
+silver,Stříbrná
+gray,Šedá
+maroon,Kaštanová
+olive,Olivová
+green,Zelená
+purple,Fialová
+teal,Modrozelená
+navy,Námořnická modř
 
 //Puzzles
-image,ObrÃ¡zek
-code,KÃ³d
+image,Obrázek
+code,Kód
 slide,Slide
-tower,VÄ›Å¾
+tower,Věž
 SYMBOL,Symbol
 ELEMENT,Element
 
 // Events
-Ordered,SeÅ™azeno
-Random,NÃ¡hodnÄ›
+Ordered,Seřazeno
+Random,Náhodně
 
 //Inherited from FFG localization files
-SET_FIRE,ZapÃ¡lit
-INVESTIGATOR_ELIMINATED,VyÅ¡etÅ™ovatel eliminovÃ¡n
-CLOSE,ZavÅ™Ã­t
-PUZZLE_GUESS,HÃ¡dat
+SET_FIRE,Zapálit
+INVESTIGATOR_ELIMINATED,Vyšetřovatel eliminován
+CLOSE,Zavřít
+PUZZLE_GUESS,Hádat
 
 UP,Nahoru
 DOWN,Dolu
 LEFT,Vlevo
 RIGHT,Vpravo
 
-PHASE_INVESTIGATOR,FÃ¡ze vyÅ¡etÅ™ovatele
-PHASE_MYTHOS,FÃ¡ze Mythose
+PHASE_INVESTIGATOR,Fáze vyšetřovatele
+PHASE_MYTHOS,Fáze Mythose
 MONSTER_STEP,Krok monstra
-HORROR_STEP,Krok hrÅ¯zy
-END_PHASE,Konec fÃ¡ze
+HORROR_STEP,Krok hrůzy
+END_PHASE,Konec fáze
 
-ATTACK_PROMPT,JakÃ½m typem zbranÄ› se ÃºtoÄÃ­?
-ATTACK_WITH_HEAVY_WEAPON,ïˆˆ ÃštoÄÃ­ s [i]tÄ›Å¾kou zbranÃ­[/i]
-ATTACK_WITH_BLADED_WEAPON,ïˆˆ ÃštoÄÃ­ se [i]seÄnou zbranÃ­[/i]
-ATTACK_WITH_FIREARM,ïˆˆ ÃštoÄÃ­ se [i]stÅ™elnou zbranÃ­[/i]
-ATTACK_WITH_SPELL,ïˆˆ ÃštoÄÃ­ kouzlem
-ATTACK_WITH_UNARMED,ïˆˆ ÃštoÄÃ­ beze zbranÄ›
+ATTACK_PROMPT,Jakým typem zbraně se útočí?
+ATTACK_WITH_HEAVY_WEAPON, Útočí s [i]těžkou zbraní[/i]
+ATTACK_WITH_BLADED_WEAPON, Útočí se [i]sečnou zbraní[/i]
+ATTACK_WITH_FIREARM, Útočí se [i]střelnou zbraní[/i]
+ATTACK_WITH_SPELL, Útočí kouzlem
+ATTACK_WITH_UNARMED, Útočí beze zbraně
 
-ACTION_X,ïˆˆ {0}
+ACTION_X, {0}
 
-STATS_WELCOME,DÃ­ky za hru. ProsÃ­m sdÃ­lejte sve zÃ¡Å¾itky s ostatnÃ­mi hrÃ¡Äi. VaÅ¡e hernÃ­ aktivita bude sdÃ­lena s autory hry pro dalÅ¡Ã­ zlepÅ¡ovÃ¡nÃ­ scÃ©naÅ™e.
+STATS_WELCOME,Díky za hru. Prosím sdílejte sve zážitky s ostatními hráči. Vaše herní aktivita bude sdílena s autory hry pro další zlepšování scénaře.
 
-STATS_ASK_VICTORY,VyhrÃ¡li jste tuto hru?
+STATS_ASK_VICTORY,Vyhráli jste tuto hru?
 STATS_ASK_VICTORY_YES,ANO!
-STATS_ASK_VICTORY_NO,Ne…
-STATS_ASK_RATING,Jak byste ohodnotili tento scÃ©nÃ¡Å™?\n(1: HrÅ¯za  10: ÃšÅ¾asnÃ©)
-STATS_ASK_COMMENTS,Chcete nechat komentÃ¡Å™ autorovi?
-STATS_MISSING_INFO,PÅ™ed odeslÃ¡nÃ­m nÃ¡m prosÃ­m sdÄ›l hodnocenÃ­ a jestli jste vyhrÃ¡li.
+STATS_ASK_VICTORY_NO,Ne.
+STATS_ASK_RATING,Jak byste ohodnotili tento scénář?\n(1: Hrůza  10: Úžasné)
+STATS_ASK_COMMENTS,Chcete nechat komentář autorovi?
+STATS_MISSING_INFO,Před odesláním nám prosím sděl hodnocení a jestli jste vyhráli.
 STATS_SEND_BUTTON,Odeslat
 STATS_MENU_BUTTON,Menu
 
-STATS_AVERAGE_WIN_RATIO,PomÄ›rnÄ› vÃ½her: {0}%
-STATS_NB_USER_REVIEWS,({0} uÅ¾ivatelskÃ½ch recenzÃ­)
-STATS_AVERAGE_DURATION,PrÅ¯mÄ›rnÃ¡ dÃ©lka hry: {0} min
-STATS_NO_AVERAGE_DURATION,PrÅ¯mÄ›rnÃ¡ dÃ©lka hry nedostupnÃ¡
-STATS_NO_AVERAGE_WIN_RATIO,PomÄ›r vÃ½her nedostupnÃ©
+STATS_AVERAGE_WIN_RATIO,Poměrně výher: {0}%
+STATS_NB_USER_REVIEWS,({0} uživatelských recenzí)
+STATS_AVERAGE_DURATION,Průměrná délka hry: {0} min
+STATS_NO_AVERAGE_DURATION,Průměrná délka hry nedostupná
+STATS_NO_AVERAGE_WIN_RATIO,Poměr výher nedostupné
 
-STATS_DOWNLOAD_ONGOING,Stahuji hernÃ­ statistiky...\nProsÃ­m za pÃ¡r vteÅ™in obnov strÃ¡nku
-STATS_ERROR_HTTP,Chyba pÅ™i stahovÃ¡nÃ­ hernÃ­ch statistik. Pokud problÃ©m pÅ™etrvÃ¡vÃ¡, nahlas tento problÃ©m na github Valkyrie\n{0}
-STATS_ERROR_NETWORK,Chyba pÅ™i stahovÃ¡nÃ­ hernÃ­ch statistik. ProsÃ­m zkontroluj svÃ© internetovÃ© pÅ™ipojenÃ­.
+STATS_DOWNLOAD_ONGOING,Stahuji herní statistiky...\nProsím za pár vteřin obnov stránku
+STATS_ERROR_HTTP,Chyba při stahování herních statistik. Pokud problém přetrvává, nahlas tento problém na github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Chyba při stahování herních statistik. Prosím zkontroluj své internetové připojení.
 
-ERROR_HTTP,Chyba pÅ™i stahovÃ¡nÃ­ souboru. Pokud problÃ©m pÅ™etrvÃ¡vÃ¡, nahlas tento problÃ©m na github Valkyrie\n{0}
-ERROR_NETWORK,Chyba pÅ™i stahovÃ¡nÃ­ souboru. ProsÃ­m zkontroluj svÃ© internetovÃ© pÅ™ipojenÃ­.
+ERROR_HTTP,Chyba při stahování souboru. Pokud problém přetrvává, nahlas tento problém na github Valkyrie\n{0}
+ERROR_NETWORK,Chyba při stahování souboru. Prosím zkontroluj své internetové připojení.
 
-NEW_VERSION_AVAILABLE,DostupnÃ¡ novÃ¡ verze
+NEW_VERSION_AVAILABLE,Dostupná nová verze
 
-SORT_TITLE,SeÅ™adit
-SORT_SELECT_CRITERIA,Vyber podmÃ­nky Å™azenÃ­
-SORT_SELECT_ORDER,Å˜adit podle:
-SORT_ASCENDING,VzestupnÄ›
-SORT_DESCENDING,SestupnÄ›
+SORT_TITLE,Seřadit
+SORT_SELECT_CRITERIA,Vyber podmínky řazení
+SORT_SELECT_ORDER,Řadit podle:
+SORT_ASCENDING,Vzestupně
+SORT_DESCENDING,Sestupně
 
 SORT_BY_AUTHOR,Autor
-SORT_BY_NAME,JmÃ©no
-SORT_BY_DIFFICULTY,ObtÃ­Å¾nost
-SORT_BY_DURATION,TrvÃ¡nÃ­
+SORT_BY_NAME,Jméno
+SORT_BY_DIFFICULTY,Obtížnost
+SORT_BY_DURATION,Trvání
 
-SORT_BY_RATING,HodnocenÃ­
-SORT_BY_AVERAGE_DURATION,PrÅ¯mÄ›rnÃ© hodnocenÃ­
-SORT_BY_WIN_RATIO,PomÄ›r vÃ­tÄ›zstvÃ­
+SORT_BY_RATING,Hodnocení
+SORT_BY_AVERAGE_DURATION,Průměrné hodnocení
+SORT_BY_WIN_RATIO,Poměr vítězství
 SORT_BY_DATE,Datum aktualizace
 
 FILTER_TITLE,Vyber filtry
 FILTER_SELECT_LANG,Vyber jazyk(y):
-FILTER_MISSING_EXPANSIONS_ON,SkrÃ½t scÃ©nÃ¡Å™e s chybÄ›jÃ­cÃ­mi rozÅ¡Ã­Å™enÃ­mi  â˜‘
-FILTER_MISSING_EXPANSIONS_OFF,SkrÃ½t scÃ©nÃ¡Å™e s chybÄ›jÃ­cÃ­mi rozÅ¡Ã­Å™enÃ­mi  â˜
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenÃ¡Å™(Å¯) vyfiltrovÃ¡no
+FILTER_MISSING_EXPANSIONS_ON,Skrýt scénáře s chybějícími rozšířeními  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Skrýt scénáře s chybějícími rozšířeními  ☐
+FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenář(ů) vyfiltrováno
 
-AUTHORS_SHORT,"Jeden Å™Ã¡dek pro autory (pro volbu ""Å™azenÃ­ podle autora"")"
-AUTHORS_UNKNOWN,NeznÃ¡mÃ­ autoÅ™i
+AUTHORS_SHORT,"Jeden řádek pro autory (pro volbu ""řazení podle autora"")"
+AUTHORS_UNKNOWN,Neznámí autoři
 
-SYNOPSYS,Popis (max 100 znakÅ¯)
+SYNOPSYS,Popis (max 100 znaků)
 
-UPDATED_THIS_WEEK,AktualizovÃ¡no tento tÃ½den
-UPDATED_THIS_MONTH,AktualizovÃ¡no tento mÄ›sÃ­c
-UPDATED_THIS_TRIMESTER,AktualizovÃ¡no tento trimestr
-UPDATED_THIS_SEMESTER,AktualizovÃ¡no tento semestr
-UPDATED_THIS_YEAR,AktualizovÃ¡no tento rok
-UPDATED_TWO_YEARS_AGO,AktualizovÃ¡no pÅ™ed dvÄ›ma roky
-UPDATE_OLDER_THAN_TWO_YEAR,AktualizovÃ¡no dÃ©le neÅ¾ pÅ™ed dvÄ›ma roky
+UPDATED_THIS_WEEK,Aktualizováno tento týden
+UPDATED_THIS_MONTH,Aktualizováno tento měsíc
+UPDATED_THIS_TRIMESTER,Aktualizováno tento trimestr
+UPDATED_THIS_SEMESTER,Aktualizováno tento semestr
+UPDATED_THIS_YEAR,Aktualizováno tento rok
+UPDATED_TWO_YEARS_AGO,Aktualizováno před dvěma roky
+UPDATE_OLDER_THAN_TWO_YEAR,Aktualizováno déle než před dvěma roky
 
 GO_OFFLINE,Odpojit
-GO_ONLINE,PÅ™ipojit
+GO_ONLINE,Připojit
 ONLINE,Online
 OFFLINE,Offline
 DOWNLOAD_ONGOING,Stahuji...
-OFFLINE_DUE_TO_ERROR,OFFLINE (Chyba sÃ­tÄ›)
+OFFLINE_DUE_TO_ERROR,OFFLINE (Chyba sítě)
 CONTENTPACK_CATEGORY_CUSTOM,Balíčky komunitního obsahu
 CONTENTPACK_DOWNLOAD,Stahování obsahu
 CONTENTPACK_DOWNLOAD_HEADER,Stažení balíčku obsahu komunity
@@ -663,9 +665,10 @@ TEXT_ALIGNMENT,Zarovnání
 TOP,Nahoru
 CENTER,Na střed
 BOTTOM,Dole
-RESTART_TO_APPLY,Vy�adov�n restart
-
+RESTART_TO_APPLY,Vyžadován restart
 CONTENT_IMPORT_OFFICIAL,Importovat z oficiální aplikace
 CONTENT_IMPORT_ZIP,Importovat ze ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
 CONTENT_REIMPORT_ZIP,Reimportovat ze ZIP
+RESOLUTION,Rozlišení
+FULLSCREEN,Celá obrazovka

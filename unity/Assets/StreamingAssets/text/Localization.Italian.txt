@@ -434,3 +434,5 @@ CONTENT_IMPORT_OFFICIAL,Importa da app ufficiale
 CONTENT_IMPORT_ZIP,Importa da ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimporta da app ufficiale
 CONTENT_REIMPORT_ZIP,Reimporta da ZIP
+RESOLUTION,Risoluzione
+FULLSCREEN,Schermo intero

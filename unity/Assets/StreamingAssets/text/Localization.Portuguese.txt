@@ -502,3 +502,5 @@ CONTENT_IMPORT_OFFICIAL,Importar do aplicativo oficial
 CONTENT_IMPORT_ZIP,Importar de ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimportar do aplicativo oficial
 CONTENT_REIMPORT_ZIP,Reimportar de ZIP
+RESOLUTION,Resolução
+FULLSCREEN,Tela cheia

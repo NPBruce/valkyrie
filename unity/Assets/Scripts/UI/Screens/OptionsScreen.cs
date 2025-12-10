@@ -24,6 +24,8 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
         private readonly StringKey SET_EDITOR_ALPHA = new StringKey("val", "SET_EDITOR_ALPHA");
         private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
+        private readonly StringKey RESOLUTION = new StringKey("val", "RESOLUTION");
+        private readonly StringKey FULLSCREEN = new StringKey("val", "FULLSCREEN");
 
         Game game = Game.Get();
 
@@ -91,7 +93,7 @@ namespace Assets.Scripts.UI.Screens
             // Header
             UIElement ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 8, 17, 18, 2);
-            ui.SetText(new StringKey("val", "RESOLUTION"));
+            ui.SetText(RESOLUTION);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
@@ -149,12 +151,13 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 8, 21.5f, 18, 2);
             ui.SetText(RESTART_TO_APPLY, Color.red);
+            ui.SetFont(game.gameType.GetFont());
             ui.SetFontSize(UIScaler.GetSmallFont());
 
             // Fullscreen toggle label
             ui = new UIElement();
             ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 24, 10, 2);
-            ui.SetText(new StringKey("val", "FULLSCREEN"));
+            ui.SetText(FULLSCREEN);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 

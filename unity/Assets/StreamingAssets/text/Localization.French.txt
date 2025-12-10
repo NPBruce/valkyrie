@@ -498,3 +498,5 @@ CONTENT_IMPORT_OFFICIAL,Importer depuis l'app officielle
 CONTENT_IMPORT_ZIP,Importer depuis ZIP
 CONTENT_REIMPORT_OFFICIAL,Réimporter depuis l'app officielle
 CONTENT_REIMPORT_ZIP,Réimporter depuis ZIP
+RESOLUTION,Résolution
+FULLSCREEN,Plein écran

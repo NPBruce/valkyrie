@@ -469,3 +469,5 @@ CONTENT_IMPORT_OFFICIAL,Importuj z oficjalnej aplikacji
 CONTENT_IMPORT_ZIP,Importuj z ZIP
 CONTENT_REIMPORT_OFFICIAL,Reimportuj z oficjalnej aplikacji
 CONTENT_REIMPORT_ZIP,Reimportuj z ZIP
+RESOLUTION,Rozdzielczość
+FULLSCREEN,Pełny ekran
