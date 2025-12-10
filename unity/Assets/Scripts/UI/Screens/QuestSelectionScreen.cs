@@ -1040,7 +1040,7 @@ namespace Assets.Scripts.UI.Screens
                 // same thing for synopsys: local language, or default language
                 if (q.languages_synopsys != null)
                 {
-                    bool valueFound = !q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
+                    bool valueFound = q.languages_synopsys.TryGetValue(game.currentLang, out synopsys_translation);
                     if (!valueFound || string.IsNullOrWhiteSpace(synopsys_translation))
                     {
                         q.languages_synopsys.TryGetValue(q.defaultLanguage, out synopsys_translation);
