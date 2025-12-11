@@ -69,9 +69,7 @@ CLEAR_FIRE,Clear Fire
 COLOR,Colour
 COMPONENT_NAME,Component Name:
 COMPONENT_TO_DELETE,Component to Delete:
-CONTENT_IMPORT,Import Content
 CONTENT_IMPORTING,Importing...\nThis may take a few minutes
-CONTENT_REIMPORT,Reimport Content
 CONTENT_LOCATE,Locate the game
 CONTENT_INSTALL_VIA_STEAM,Install via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
@@ -663,3 +661,14 @@ TEXT_ALIGNMENT,Align
 TOP,Top
 CENTER,Center
 BOTTOM,Bottom
+RESTART_TO_APPLY,Takes effect on restart
+
+CONTENT_IMPORT_OFFICIAL,Import from official app
+CONTENT_IMPORT_ZIP,Import from ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimport from official app
+CONTENT_REIMPORT_ZIP,Reimport from ZIP
+RESOLUTION,Resolution
+FULLSCREEN,Fullscreen
+
+ON,ON
+OFF,OFF

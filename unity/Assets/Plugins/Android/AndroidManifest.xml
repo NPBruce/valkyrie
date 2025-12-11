@@ -11,7 +11,7 @@
       </intent-filter>
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
-  <activity android:name = "com.android.accessmomdata.AccessActivity"></activity>
+
   </application>
   <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="26" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

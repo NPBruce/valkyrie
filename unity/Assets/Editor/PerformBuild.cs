@@ -67,6 +67,18 @@ class PerformBuild
         //EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Internal;
 
         Debug.Log("Starting Android Build!");
-        BuildPipeline.BuildPlayer(scenes, path, BuildTarget.Android, BuildOptions.None);
+        UnityEditor.Build.Reporting.BuildReport report = BuildPipeline.BuildPlayer(scenes, path, BuildTarget.Android, BuildOptions.None);
+        UnityEditor.Build.Reporting.BuildSummary summary = report.summary;
+
+        if (summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        {
+            Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+        }
+
+        if (summary.result == UnityEditor.Build.Reporting.BuildResult.Failed)
+        {
+            Debug.Log("Build failed");
+            EditorApplication.Exit(1);
+        }
     }
 }

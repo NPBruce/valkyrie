@@ -25,6 +25,12 @@ public class UIScaler {
         heightPx = Mathf.RoundToInt(c.transform.position.y * 2);
     }
 
+    public void UpdateResolution(Canvas c)
+    {
+        widthPx = Mathf.RoundToInt(c.transform.position.x * 2);
+        heightPx = Mathf.RoundToInt(c.transform.position.y * 2);
+    }
+
     // Number of pixels (canvas units) per scale unit
     public static float GetPixelsPerUnit()
     {

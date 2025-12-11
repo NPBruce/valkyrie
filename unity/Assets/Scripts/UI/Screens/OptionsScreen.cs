@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Content;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ValkyrieTools;
+using Assets.Scripts.Content;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -12,16 +13,21 @@ namespace Assets.Scripts.UI.Screens
     public class OptionsScreen
     {
         public static readonly HashSet<string> ENABLED_LANGS = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese".Split(','));
-        
-        private static readonly string IMG_LOW_EDITOR_TRANSPARENCY    = "ImageLowEditorTransparency";
+
+        private static readonly string IMG_LOW_EDITOR_TRANSPARENCY = "ImageLowEditorTransparency";
         private static readonly string IMG_MEDIUM_EDITOR_TRANSPARENCY = "ImageMediumEditorTransparency";
-        private static readonly string IMG_HIGH_EDITOR_TRANSPARENCY   = "ImageHighEditorTransparency";
+        private static readonly string IMG_HIGH_EDITOR_TRANSPARENCY = "ImageHighEditorTransparency";
 
         private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
         private readonly StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
         private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
         private readonly StringKey SET_EDITOR_ALPHA = new StringKey("val", "SET_EDITOR_ALPHA");
+        private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
+        private readonly StringKey RESOLUTION = new StringKey("val", "RESOLUTION");
+        private readonly StringKey FULLSCREEN = new StringKey("val", "FULLSCREEN");
+        private readonly StringKey OptionON = new StringKey("val", "ON");
+        private readonly StringKey OptionOff = new StringKey("val", "OFF");
 
         Game game = Game.Get();
 
@@ -59,6 +65,8 @@ namespace Assets.Scripts.UI.Screens
 
             CreateAudioElements();
 
+            CreateResolutionAndFullScreenOptions();
+
             CreateEditorTransparencyElements();
 
             // Button for back to main menu
@@ -69,6 +77,141 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetMediumFont());
             ui.SetButton(GameStateManager.MainMenu);
             new UIElementBorder(ui, Color.red);
+        }
+
+        private void CreateResolutionAndFullScreenOptions()
+        {
+            // Only render on Windows, Mac or Linux (player or editor)
+            var p = Application.platform;
+            bool isSupportedPlatform =
+                p == RuntimePlatform.WindowsPlayer || p == RuntimePlatform.OSXPlayer || p == RuntimePlatform.LinuxPlayer
+                || p == RuntimePlatform.WindowsEditor || p == RuntimePlatform.OSXEditor || p == RuntimePlatform.LinuxEditor;
+
+            if (!isSupportedPlatform)
+                return;
+
+            Game game = Game.Get();
+
+            // Header
+            UIElement ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 8, 17, 18, 2);
+            ui.SetText(RESOLUTION);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Prepare resolutions and find current index
+            var resolutions = ResolutionManager.GetAvailableResolutions();
+            int currentIndex = -1;
+
+            // Check config for pending resolution
+            string configRes = game.config.data.Get("UserConfig", "resolution");
+            if (!string.IsNullOrEmpty(configRes))
+            {
+                string[] parts = configRes.Split('x');
+                if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h))
+                {
+                    currentIndex = resolutions.FindIndex(r => r.width == w && r.height == h);
+                }
+            }
+
+            // Fallback to current screen resolution if config is missing or invalid
+            if (currentIndex < 0)
+            {
+                currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
+            }
+            if (currentIndex < 0) currentIndex = 0;
+
+            // Prev button
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits() - 6), 19, 3, 2);
+            ui.SetText("<");
+            ui.SetButton(delegate
+            {
+                DecreaseResolution(game, resolutions, currentIndex);
+            });
+            new UIElementBorder(ui);
+
+            // Current resolution display (center)
+            var cur = resolutions[currentIndex];
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 3, 19, 10, 2);
+            ui.SetText($"{cur.width} x {cur.height}");
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            new UIElementBorder(ui);
+
+            // Next button
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits() + 7), 19, 3, 2);
+            ui.SetText(">");
+            ui.SetButton(delegate
+            {
+                IncreaseResolution(game, resolutions, currentIndex);
+            });
+            new UIElementBorder(ui);
+
+            // Restart warning
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 8, 21.5f, 18, 2);
+            ui.SetText(RESTART_TO_APPLY, Color.red);
+            ui.SetFont(game.gameType.GetFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+
+            // Fullscreen toggle label
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 24, 10, 2);
+            ui.SetText(FULLSCREEN);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Fullscreen toggle button (On / Off)
+            // Check config for pending fullscreen state
+            string configFs = game.config.data.Get("UserConfig", "fullscreen");
+            bool isFs;
+            if (!string.IsNullOrEmpty(configFs))
+            {
+                isFs = configFs == "1";
+            }
+            else
+            {
+                isFs = ResolutionManager.IsFullscreen();
+            }
+
+            ui = new UIElement();
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 2, 27, 6, 2);
+            ui.SetText(isFs ? OptionON : OptionOff);
+            ui.SetButton(delegate
+            {
+                bool newFs = !isFs;
+                ResolutionManager.SetFullscreen(newFs);
+                game.config.data.Add("UserConfig", "fullscreen", newFs ? "1" : "0");
+                game.config.Save();
+                new OptionsScreen();
+            });
+            if (isFs)
+                new UIElementBorder(ui, Color.white);
+            else
+                new UIElementBorder(ui, Color.grey);
+        }
+
+        private static void IncreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
+        {
+            int idx = (currentIndex + 1) % resolutions.Count;
+            var r = resolutions[idx];
+            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
+            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+            game.config.Save();
+            ScheduleOptionsScreenReload();
+        }
+
+        private static void DecreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
+        {
+            int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
+            var r = resolutions[idx];
+            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
+            // persist choice to config (optional)
+            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
+            game.config.Save();
+            ScheduleOptionsScreenReload();
         }
 
         private void CreateEditorTransparencyElements()
@@ -86,10 +229,10 @@ namespace Assets.Scripts.UI.Screens
             Texture2D SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_LOW_EDITOR_TRANSPARENCY).image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
-            ui.SetLocation(UIScaler.GetHCenter()-3, 8, 6, 6);
+            ui.SetLocation(UIScaler.GetHCenter() - 3, 8, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.2f); });
             ui.SetImage(SampleSprite);
-            if(game.editorTransparency == 0.2f)
+            if (game.editorTransparency == 0.2f)
                 new UIElementBorder(ui, Color.white);
 
             SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_MEDIUM_EDITOR_TRANSPARENCY).image);
@@ -100,7 +243,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetImage(SampleSprite);
             if (game.editorTransparency == 0.3f)
                 new UIElementBorder(ui, Color.white);
-            
+
             SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_HIGH_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
@@ -115,7 +258,7 @@ namespace Assets.Scripts.UI.Screens
         private void CreateAudioElements()
         {
             UIElement ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 8, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 5, 10, 2);
             ui.SetText(MUSIC);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -126,7 +269,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 11, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 8, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -135,7 +278,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
             musicSlide = musicSlideObj.AddComponent<Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
 
@@ -154,7 +297,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
             musicSlideRev = musicSlideObjRev.AddComponent<Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 11 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = Slider.Direction.RightToLeft;
@@ -173,7 +316,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - mVolume;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 14, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 11, 10, 2);
             ui.SetText(EFFECTS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -184,7 +327,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) eVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 17, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 14, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -193,7 +336,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
             effectSlide = effectSlideObj.AddComponent<Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
@@ -216,7 +359,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
             effectSlideRev = effectSlideObjRev.AddComponent<Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 17 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = Slider.Direction.RightToLeft;
@@ -360,6 +503,18 @@ namespace Assets.Scripts.UI.Screens
 
             // clear list of local quests to make sure we take the latest changes
             Game.Get().questsList.UnloadLocalQuests();
+        }
+
+
+        private static void ScheduleOptionsScreenReload()
+        {
+            Game.Get().StartCoroutine(ReloadOptionsScreenNextFrame());
+        }
+
+        private static IEnumerator ReloadOptionsScreenNextFrame()
+        {
+            yield return null; // wait one frame
+            new OptionsScreen();
         }
     }
 }

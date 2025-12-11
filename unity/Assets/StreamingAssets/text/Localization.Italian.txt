@@ -24,9 +24,7 @@ CLEAR_FIRE,Incendio Estinto
 COLOR,Colore
 COMPONENT_NAME,Importa
 COMPONENT_TO_DELETE,Contenuto da Eliminare
-CONTENT_IMPORT,Contenuto Importato
 CONTENT_IMPORTING,In aggiornamento...
-CONTENT_REIMPORT,Reimporta Contenuto
 CONTENT_INSTALL_VIA_STEAM,Installalo con Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Installalo con Google Play
 CONTINUE,Continua
@@ -430,3 +428,14 @@ TEXT_ALIGNMENT, Allineamento
 TOP,In alto
 CENTER,Centro
 BOTTOM,In basso
+RESTART_TO_APPLY,Riavvio richiesto
+
+CONTENT_IMPORT_OFFICIAL,Importa da app ufficiale
+CONTENT_IMPORT_ZIP,Importa da ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimporta da app ufficiale
+CONTENT_REIMPORT_ZIP,Reimporta da ZIP
+RESOLUTION,Risoluzione
+FULLSCREEN,Schermo intero
+
+ON,Attivo
+OFF,Disattivo
