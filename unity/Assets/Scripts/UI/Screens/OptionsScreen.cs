@@ -526,7 +526,7 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(UIScaler.GetRight(-9), 1, 8, 2);
             ui.SetText(EXPORT_LOG);
             ui.SetFont(game.gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
             ui.SetButton(delegate
             {
                 if (Application.platform == RuntimePlatform.Android)
