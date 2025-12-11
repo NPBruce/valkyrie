@@ -26,6 +26,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
         private readonly StringKey RESOLUTION = new StringKey("val", "RESOLUTION");
         private readonly StringKey FULLSCREEN = new StringKey("val", "FULLSCREEN");
+        private readonly StringKey EXPORT_LOG = new StringKey("val", "EXPORT_LOG");
         private readonly StringKey OptionON = new StringKey("val", "ON");
         private readonly StringKey OptionOff = new StringKey("val", "OFF");
 
@@ -68,6 +69,8 @@ namespace Assets.Scripts.UI.Screens
             CreateResolutionAndFullScreenOptions();
 
             CreateEditorTransparencyElements();
+            
+            CreateLogElement();
 
             // Button for back to main menu
             ui = new UIElement();
@@ -515,6 +518,28 @@ namespace Assets.Scripts.UI.Screens
         {
             yield return null; // wait one frame
             new OptionsScreen();
+        }
+
+        private void CreateLogElement()
+        {
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetRight(-9), 1, 8, 2);
+            ui.SetText(EXPORT_LOG);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(delegate
+            {
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    NativeFilePicker.ExportFile(FileLogger.GetLogPath());
+                }
+                else
+                {
+                    string path = System.IO.Path.GetDirectoryName(Application.consoleLogPath);
+                    Application.OpenURL(path);
+                }
+            });
+            new UIElementBorder(ui, Color.white);
         }
     }
 }

@@ -668,3 +668,4 @@ FULLSCREEN,전체 화면
 
 ON,켜기
 OFF,끄기
+EXPORT_LOG,로그 내보내기

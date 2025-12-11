@@ -702,3 +702,4 @@ FULLSCREEN,フルスクリーン
 
 ON,オン
 OFF,オフ
+EXPORT_LOG,ログ出力
