@@ -2198,7 +2198,6 @@ a:hover.back-to-top {
 }
 
 /* end of min-width width 1200px */
-
 /****************************/
 /*     19. OS Icons         */
 /****************************/
@@ -2206,7 +2205,6 @@ a:hover.back-to-top {
 #download-android img,
 #download-macos img,
 #download-linux img,
-#download-fireos img,
 #download-ios img {
 	max-width: 156px;
 	display: block;
@@ -2218,7 +2216,6 @@ a:hover.back-to-top {
 #download-android .container .row,
 #download-macos .container .row,
 #download-linux .container .row,
-#download-fireos .container .row,
 #download-ios .container .row {
 	align-items: center;
 }
