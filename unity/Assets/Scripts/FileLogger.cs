@@ -6,7 +6,7 @@ public class FileLogger : MonoBehaviour
 {
     private static string logPath;
     private static FileLogger instance;
-    private const int MAX_LOG_SIZE_BYTES = 5 * 1024 * 1024; // 5MB Limit
+    private const int MAX_LOG_SIZE_BYTES = 25 * 1024 * 1024; // 25MB Limit
     private bool stopWriting = false;
 
     public static string GetLogPath()
