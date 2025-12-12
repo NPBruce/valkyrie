@@ -439,3 +439,4 @@ FULLSCREEN,Schermo intero
 
 ON,Attivo
 OFF,Disattivo
+EXPORT_LOG,Esporta log

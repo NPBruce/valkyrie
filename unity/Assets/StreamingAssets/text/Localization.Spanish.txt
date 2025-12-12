@@ -499,3 +499,4 @@ FULLSCREEN,Pantalla completa
 
 ON,Activado
 OFF,Desactivado
+EXPORT_LOG,Exportar log

@@ -672,3 +672,4 @@ FULLSCREEN,Fullscreen
 
 ON,ON
 OFF,OFF
+EXPORT_LOG,Export Log

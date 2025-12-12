@@ -174,6 +174,9 @@ public class Game : MonoBehaviour
 
             // deactivate screen timeount while in Valkyrie
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+            // activate file logger
+            gameObject.AddComponent<FileLogger>();
         }
 
         // Find the common objects we use.  These are created by unity.

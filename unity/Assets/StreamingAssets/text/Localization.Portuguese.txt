@@ -507,3 +507,4 @@ FULLSCREEN,Tela cheia
 
 ON,Ligado
 OFF,Desligado
+EXPORT_LOG,Exportar log
