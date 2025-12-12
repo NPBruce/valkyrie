@@ -29,7 +29,7 @@ on:
         default: false
         type: boolean
       customReleaseName:
-        description: 'Optional custom Release Name (Alphanumeric only). If set instead of version from file this name will be used for the release and the build artifacts.'
+        description: 'Optional custom Release Name (Alphanumeric only). If set instead of version from file version.txt this name will be used for the release and the build artifacts.'
         required: false
         type: string
       create_release:
