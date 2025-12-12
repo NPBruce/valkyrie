@@ -8,8 +8,28 @@ env:
 on:
   workflow_dispatch:
     inputs:
+      buildWindows:
+        description: 'Build Windows'
+        required: false
+        default: true
+        type: boolean
+      buildMac:
+        description: 'Build Mac'
+        required: false
+        default: false
+        type: boolean
+      buildLinux:
+        description: 'Build Linux'
+        required: false
+        default: false
+        type: boolean
+      buildAndroid:
+        description: 'Build Android'
+        required: false
+        default: false
+        type: boolean
       customReleaseName:
-        description: 'Custom Release Name (Alphanumeric only). If set instead of version from file this name will be used for the release and the build artifacts.'
+        description: 'Optional custom Release Name (Alphanumeric only). If set instead of version from file this name will be used for the release and the build artifacts.'
         required: false
         type: string
       create_release:
@@ -26,26 +46,6 @@ on:
         description: 'Pre release'
         required: false
         default: false
-        type: boolean
-      buildWindows:
-        description: 'Build Windows'
-        required: false
-        default: true
-        type: boolean
-      buildMac:
-        description: 'Build Mac'
-        required: false
-        default: true
-        type: boolean
-      buildLinux:
-        description: 'Build Linux'
-        required: false
-        default: true
-        type: boolean
-      buildAndroid:
-        description: 'Build Android'
-        required: false
-        default: true
         type: boolean
 
 jobs:
