@@ -8,6 +8,10 @@ env:
 on:
   workflow_dispatch:
     inputs:
+      customReleaseName:
+        description: 'Custom Release Name (Alphanumeric only). If set instead of version from file this name will be used for the release and the build artifacts.'
+        required: false
+        type: string
       create_release:
         description: 'Create release'
         required: false
@@ -52,12 +56,33 @@ jobs:
       - uses: actions/checkout@v4
 
       #Get the version for build and store in environment variable for later use.
+      #Get the version for build and store in environment variable for later use.
       - name: Get version
-        run: echo "Build_Version=${${{ github.workspace }}/unity/Assets/Resources/version.txt}" | Out-File -FilePath $env:GITHUB_ENV -Append
+        run: |
+           $versionFile = "${{ github.workspace }}/unity/Assets/Resources/version.txt"
+           $version = Get-Content $versionFile
+           $customName = "${{ github.event.inputs.customReleaseName }}"
+           
+           if (-not [string]::IsNullOrWhiteSpace($customName)) {
+               if ($customName -match '^[a-zA-Z0-9]+$') {
+                   Write-Host "Using Custom Release Name: $customName"
+                   echo "RELEASE_NAME=$customName" | Out-File -FilePath $env:GITHUB_ENV -Append
+               } else {
+                   Write-Error "Custom Release Name '$customName' is invalid. Must be alphanumeric only."
+                   exit 1
+               }
+           } else {
+               Write-Host "Using Version from file: $version"
+               echo "RELEASE_NAME=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+           }
+           # Build_Version is kept for backward compatibility if other scripts use it, 
+           # but we rely on RELEASE_NAME for artifacts/tags now.
+           echo "Build_Version=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       ## Save build version as artifact to ensure it can be used in the release step.
-      - name: Save build version as artifact
-        run: Get-Content "${{ github.workspace }}/unity/Assets/Resources/version.txt" | Set-Content build_version.txt
+      ## Save release name as artifact to ensure it can be used in the release step.
+      - name: Save release name as artifact
+        run: echo $env:RELEASE_NAME | Set-Content build_version.txt
       - uses: actions/upload-artifact@v4
         with:
             name: build-version
@@ -150,6 +175,7 @@ jobs:
       - name: Run build PowerShell script
         run: pwsh -File ${{ github.workspace }}/build.ps1
         env:
+          PACKAGE_VERSION: ${{ env.RELEASE_NAME }}
           BUILD_WINDOWS: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
           BUILD_MAC: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
           BUILD_LINUX: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
@@ -189,42 +215,42 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-zip
-          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.zip
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.RELEASE_NAME }}.zip
 
       - name: Archive windows 7zip build
         if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-7zip
-          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.7z
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.RELEASE_NAME }}.7z
 
       - name: Archive windows installer exe build
         if: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: windows-unity-build-exe
-          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.Build_Version }}.exe
+          path: ${{ github.workspace }}/build/valkyrie-windows-${{ env.RELEASE_NAME }}.exe
 
       - name: Archive macos build
         if: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: macos-unity-build
-          path: ${{ github.workspace }}/build/valkyrie-macos-${{ env.Build_Version }}.tar.gz
+          path: ${{ github.workspace }}/build/valkyrie-macos-${{ env.RELEASE_NAME }}.tar.gz
 
       - name: Archive linux build
         if: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: linux-unity-build
-          path: ${{ github.workspace }}/build/valkyrie-linux-${{ env.Build_Version }}.tar.gz
+          path: ${{ github.workspace }}/build/valkyrie-linux-${{ env.RELEASE_NAME }}.tar.gz
 
       - name: Archive android build
         if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: android-unity-build
-          path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.Build_Version }}.apk
+          path: ${{ github.workspace }}/build/Valkyrie-android-${{ env.RELEASE_NAME }}.apk
   Release:
     if: ${{ github.event.inputs.create_release == 'true' }}
     needs: Build
@@ -241,13 +267,13 @@ jobs:
         with:
           name: build-version
 
-      - name: Set build version env
-        run: echo "Build_Version=$(cat build_version.txt)" >> $GITHUB_ENV
+      - name: Set release name env
+        run: echo "RELEASE_NAME=$(cat build_version.txt)" >> $GITHUB_ENV
 
       - name: Check if release exists
         id: check_release
         run: |
-          release_url=$(gh api -X GET /repos/${{ github.repository }}/releases/tags/${{ env.Build_Version }} --jq '.upload_url' 2>/dev/null || echo "")
+          release_url=$(gh api -X GET /repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_NAME }} --jq '.upload_url' 2>/dev/null || echo "")
           if [ -n "$release_url" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "upload_url=$release_url" >> $GITHUB_OUTPUT
@@ -262,8 +288,8 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.Build_Version }}
-          name: ${{ env.Build_Version }}
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: ${{ env.RELEASE_NAME }}
           draft: ${{ github.event.inputs.DraftRelease }}
           prerelease: ${{ github.event.inputs.PreRelease }}
         env:
@@ -288,6 +314,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./release_artifacts/*
-          tag_name: ${{ env.Build_Version }}
+          tag_name: ${{ env.RELEASE_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
