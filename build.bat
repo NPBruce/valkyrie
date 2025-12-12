@@ -6,6 +6,14 @@ set /p version=<unity\Assets\Resources\version.txt
 echo [%TIME%] --- Starting Build Process ---
 echo [%TIME%] Version: %version%
 
+IF NOT "%PACKAGE_VERSION%"=="" (
+    SET OutputVersion=%PACKAGE_VERSION%
+    echo [%TIME%] Output Version ^(Overridden^): %PACKAGE_VERSION%
+) ELSE (
+    SET OutputVersion=%version%
+    echo [%TIME%] Output Version: %version%
+)
+
 rem set default build flags if not set
 IF "%BUILD_WINDOWS%"=="" SET BUILD_WINDOWS=true
 IF "%BUILD_MAC%"=="" SET BUILD_MAC=true
@@ -79,7 +87,7 @@ rmdir /s /q build\batchLinux
 rmdir /s /q build\macos
 rmdir /s /q build\win
 rmdir /s /q build\linux
-del build\Valkyrie-android-%version%.apk
+del build\Valkyrie-android-%OutputVersion%.apk
 
 rem create base structure
 echo [%TIME%] Creating build directories...
@@ -91,9 +99,9 @@ mkdir build\batch\valkyrie_Data
 mkdir build\batch\valkyrie_Data\content
 mkdir build\batchMac\Valkyrie.app
 mkdir build\batchMac\Valkyrie.app\Contents
-mkdir build\batchLinux\valkyrie-linux-%version%
-mkdir build\batchLinux\valkyrie-linux-%version%\valkyrie_Data
-mkdir build\batchLinux\valkyrie-linux-%version%\valkyrie_Data\content
+mkdir build\batchLinux\valkyrie-linux-%OutputVersion%
+mkdir build\batchLinux\valkyrie-linux-%OutputVersion%\valkyrie_Data
+mkdir build\batchLinux\valkyrie-linux-%OutputVersion%\valkyrie_Data\content
 
 mkdir build\win
 mkdir build\macos
@@ -187,7 +195,7 @@ if "%BUILD_ANDROID%"=="true" (
     jarsigner -verify -verbose -certs "%~dp0build\android\Valkyrie-android.apk"
     rem zipalign comes from the android build tools
     echo [%TIME%] Aligning APK...
-    zipalign -v 4 "%~dp0build\android\Valkyrie-android.apk" "%~dp0build\Valkyrie-android-%version%.apk"
+    zipalign -v 4 "%~dp0build\android\Valkyrie-android.apk" "%~dp0build\Valkyrie-android-%OutputVersion%.apk"
     echo [%TIME%] Android post-processing complete.
 )
 
@@ -199,7 +207,7 @@ copy .NET-Ogg-Vorbis-Encoder-LICENSE build\batch\.NET-Ogg-Vorbis-Encoder-LICENSE
 copy dotnetzip-license.rtf build\batch
 rem duplicate licence to macos/linux
 xcopy /I /E /Y build\batch build\batchMac\Valkyrie.app
-xcopy /I /E /Y build\batch build\batchLinux\valkyrie-linux-%version%
+xcopy /I /E /Y build\batch build\batchLinux\valkyrie-linux-%OutputVersion%
 
 rem copy over windows build
 echo [%TIME%] Packaging Windows build...
@@ -209,49 +217,49 @@ echo [%TIME%] Packaging macOS build...
 xcopy /E /Y build\macos build\batchMac
 rem copy over linux build
 echo [%TIME%] Packaging Linux build...
-xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%version%
+xcopy /E /Y build\linux build\batchLinux\valkyrie-linux-%OutputVersion%
 
 rem delete previous build
 echo [%TIME%] Removing old packages...
-del build\valkyrie-windows-%version%.exe
-del build\valkyrie-windows-%version%.zip
-del build\valkyrie-windows-%version%.7z
-del build\valkyrie-macos-%version%.tar.gz
-del build\valkyrie-linux-%version%.tar.gz
+del build\valkyrie-windows-%OutputVersion%.exe
+del build\valkyrie-windows-%OutputVersion%.zip
+del build\valkyrie-windows-%OutputVersion%.7z
+del build\valkyrie-macos-%OutputVersion%.tar.gz
+del build\valkyrie-linux-%OutputVersion%.tar.gz
 
 rem create windows zip
 if "%BUILD_WINDOWS%"=="true" (
     echo [%TIME%] Zipping Windows build...
-    7z a "%~dp0build\valkyrie-windows-%version%.7z" "%~dp0build\batch\*" -r
+    7z a "%~dp0build\valkyrie-windows-%OutputVersion%.7z" "%~dp0build\batch\*" -r
     rem create windows 7z
-    7z a "%~dp0build\valkyrie-windows-%version%.zip" "%~dp0build\batch\*" -r
+    7z a "%~dp0build\valkyrie-windows-%OutputVersion%.zip" "%~dp0build\batch\*" -r
 )
 rem create macos tar ball
 if "%BUILD_MAC%"=="true" (
     echo [%TIME%] Compressing macOS build...
-    7z a "%~dp0build\batchMac\valkyrie-macos-%version%.tar" "%~dp0build\batchMac\*" -r
-    7z a "%~dp0build\valkyrie-macos-%version%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
-    del "%~dp0build\batchMac\valkyrie-macos-%version%.tar"
+    7z a "%~dp0build\batchMac\valkyrie-macos-%OutputVersion%.tar" "%~dp0build\batchMac\*" -r
+    7z a "%~dp0build\valkyrie-macos-%OutputVersion%.tar.gz" "%~dp0build\batchMac\valkyrie-macos-%OutputVersion%.tar"
+    del "%~dp0build\batchMac\valkyrie-macos-%OutputVersion%.tar"
 )
 rem create linux tar ball
 if "%BUILD_LINUX%"=="true" (
     echo [%TIME%] Compressing Linux build...
-    7z a "%~dp0build\batchLinux\valkyrie-linux-%version%.tar" "%~dp0build\batchLinux\*" -r
-    7z a "%~dp0build\valkyrie-linux-%version%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
-    del "%~dp0build\batchLinux\valkyrie-linux-%version%.tar"
+    7z a "%~dp0build\batchLinux\valkyrie-linux-%OutputVersion%.tar" "%~dp0build\batchLinux\*" -r
+    7z a "%~dp0build\valkyrie-linux-%OutputVersion%.tar.gz" "%~dp0build\batchLinux\valkyrie-linux-%OutputVersion%.tar"
+    del "%~dp0build\batchLinux\valkyrie-linux-%OutputVersion%.tar"
 )
 rem move apk
-IF EXIST android\test.apk move android\test.apk valkyrie-android-%version%.apk
+IF EXIST android\test.apk move android\test.apk valkyrie-android-%OutputVersion%.apk
 
 set /a num=%version:~-1% 2>nul
 
 echo [%TIME%] Creating Installer...
 if "%num%"=="%version:~-1%" (
-    makensis /DVERSION=%version% valkyrie.nsi
+    makensis /DVERSION=%OutputVersion% valkyrie.nsi
     echo [%TIME%] Installer created (Release).
     goto :EOF
 )
 
-makensis /DVERSION=%version% /DPRERELEASE valkyrie.nsi
+makensis /DVERSION=%OutputVersion% /DPRERELEASE valkyrie.nsi
 echo [%TIME%] Installer created (Pre-release).
 echo [%TIME%] --- Build Process Complete ---
