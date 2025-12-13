@@ -255,14 +255,20 @@ public class ContentData
         // All packs must have a content_pack.ini, otherwise ignore
         ContentPack pack = null;
 
-        if (File.Exists(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
+        string combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+
+        if (File.Exists(combinedContentPackLocalPath))
         {
             pack = GetPackData(path, gameTypeName, checkGameType);
-            if(pack != null)
+            if (pack != null)
             {
                 AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
                 // We finish without actually loading the content, this is done later (content optional)
             }
+        }
+        else
+        {
+            ValkyrieDebug.Log("Could not find content pack file in temporary path (please check if container export failed): " + combinedContentPackLocalPath);
         }
     }
 
@@ -283,15 +289,15 @@ public class ContentData
         // Some packs have a type
         string type = d.Get("ContentPack", "type");
         if (
-            !checkGameType || 
+            !checkGameType ||
             (
-                !string.IsNullOrWhiteSpace(gameTypeName) 
+                !string.IsNullOrWhiteSpace(gameTypeName)
                 && type.StartsWith(gameTypeName)
             )
         )
         {
             var pack = GetContentPack(path, d, type);
-            if(pack == null)
+            if (pack == null)
             {
                 ValkyrieDebug.Log("Could not find content pack file: " + path + $"Please check if type=\"{gameTypeName}\" was set correctly in content_pack.ini file.");
             }
@@ -458,7 +464,7 @@ public class ContentData
         }
 
         // Check all possible extensions
-        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg",".tex" })
+        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg", ".tex" })
         {
             string file = name + extension;
             if (File.Exists(file))
