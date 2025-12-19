@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 using ValkyrieTools;
 
 // Monster information dialog (additional rules)
-public class InfoDialog {
+public class InfoDialog
+{
 
     public InfoDialog(Quest.Monster m)
     {
@@ -19,7 +19,13 @@ public class InfoDialog {
         UIElement ui = new UIElement();
         ui.SetLocation(10, 0.5f, UIScaler.GetWidthUnits() - 20, 12);
 
-        string monsterInfoSymbolsReplace = EventManager.OutputSymbolReplace(m.monsterData.info.Translate());
+
+        string monsterInfoSymbolsReplace = string.Empty;
+        if (m.monsterData != null && m.monsterData.info != null)
+        {
+            monsterInfoSymbolsReplace = EventManager.OutputSymbolReplace(m.monsterData.info.Translate());
+        }
+
         ui.SetText(monsterInfoSymbolsReplace);
         new UIElementBorder(ui);
 
