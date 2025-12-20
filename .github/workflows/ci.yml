@@ -135,7 +135,7 @@ jobs:
 
   security-scan:
     name: Security Scan
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       security-events: write
 
@@ -148,13 +148,23 @@ jobs:
         with:
           languages: csharp
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '6.0.x'
-
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: ${{ env.UNITY_VERSION }}
+          install-path: "C:/Program Files"
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
 
       - name: Restore NuGet packages
         run: nuget restore libraries/libraries.sln
