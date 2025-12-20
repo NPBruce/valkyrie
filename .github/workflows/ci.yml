@@ -1,0 +1,178 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+env:
+  UNITY_VERSION: 2019.4.41f1
+
+jobs:
+  build-libraries:
+    name: Build Libraries
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: ${{ env.UNITY_VERSION }}
+          install-path: "C:/Program Files"
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      - name: Build libraries
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+  unity-tests:
+    name: Unity Tests
+    runs-on: windows-latest
+    needs: build-libraries
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: ${{ env.UNITY_VERSION }}
+          install-path: "C:/Program Files"
+
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      - name: Build libraries
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+      - name: Remove conflicting UnityEngine.dll
+        run: |
+          if (Test-Path "unity/Assets/Plugins/UnityEngine.dll") {
+            Remove-Item "unity/Assets/Plugins/UnityEngine.dll" -Force
+          }
+
+      - name: Run Unity Edit Mode Tests
+        run: |
+          $UnityExe = "C:/Program Files/Unity/Editor/Unity.exe"
+          $LogFile = "${{ github.workspace }}/test-results.log"
+          $ResultsFile = "${{ github.workspace }}/test-results.xml"
+
+          & $UnityExe -batchmode -nographics -projectPath "${{ github.workspace }}/unity" `
+            -runTests -testPlatform EditMode `
+            -testResults $ResultsFile `
+            -logFile $LogFile
+
+          $exitCode = $LASTEXITCODE
+
+          if (Test-Path $LogFile) {
+            Get-Content $LogFile -Tail 100
+          }
+
+          exit $exitCode
+        continue-on-error: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: |
+            test-results.xml
+            test-results.log
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Check code formatting
+        run: |
+          dotnet format libraries/ValkyrieTools/ValkyrieTools.csproj --verify-no-changes --verbosity diagnostic || echo "::warning::Code formatting issues found. Run 'dotnet format' locally to fix."
+        continue-on-error: true
+
+  security-scan:
+    name: Security Scan
+    runs-on: windows-latest
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: ${{ env.UNITY_VERSION }}
+          install-path: "C:/Program Files"
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      - name: Build for CodeQL
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
