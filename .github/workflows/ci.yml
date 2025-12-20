@@ -58,15 +58,15 @@ jobs:
           unity-version: ${{ env.UNITY_VERSION }}
           install-path: "C:/Program Files"
 
-      - name: Move Unity to expected location
-        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
-
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
           unity-username: ${{ secrets.UNITY_USERNAME }}
           unity-password: ${{ secrets.UNITY_PASSWORD }}
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
 
       - name: Install NuGet
         run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
