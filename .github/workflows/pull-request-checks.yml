@@ -1,4 +1,19 @@
-name: CI
+# Pull Request Checks Workflow
+#
+# This workflow runs automatically on every pull request to the master branch.
+# It performs the following checks:
+#
+# 1. Build Libraries - Compiles C# libraries using MSBuild
+# 2. Unity Tests - Runs 867 unit tests in Unity Edit Mode
+# 3. Code Quality - Checks code formatting with dotnet format
+# 4. Security Scan - Runs CodeQL static analysis for security vulnerabilities
+#
+# Required Secrets (for Unity Tests job):
+# - UNITY_USERNAME: Unity account email
+# - UNITY_PASSWORD: Unity account password
+# - UNITY_AUTHENTICATOR_KEY: Unity 2FA TOTP secret key
+
+name: Pull Request Checks
 
 on:
   pull_request:
