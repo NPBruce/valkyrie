@@ -64,31 +64,32 @@ class VersionManager
 
         if (oldVersion.Equals("")) return true;
 
-        // Different number of components
-        if (oldV.Length != newV.Length)
-        {
-            return true;
-        }
+        int maxLen = Math.Max(oldV.Length, newV.Length);
+        
         // Check each component
-        for (int i = 0; i < oldV.Length; i++)
+        for (int i = 0; i < maxLen; i++)
         {
-            // Strip for only numbers
-            string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
-            string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
-            try
+            int oldInt = 0;
+            int newInt = 0;
+
+            if (i < oldV.Length)
             {
-                if (int.Parse(oldS) < int.Parse(newS))
-                {
-                    return true;
-                }
-                if (int.Parse(oldS) > int.Parse(newS))
-                {
-                    return false;
-                }
+                string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
+                int.TryParse(oldS, out oldInt);
             }
-            catch (System.Exception)
+            if (i < newV.Length)
+            {
+                string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
+                int.TryParse(newS, out newInt);
+            }
+
+            if (oldInt < newInt)
             {
                 return true;
+            }
+            if (oldInt > newInt)
+            {
+                return false;
             }
         }
         return false;
