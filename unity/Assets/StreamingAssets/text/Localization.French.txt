@@ -503,3 +503,4 @@ FULLSCREEN,Plein écran
 
 ON,Activé
 OFF,Désactivé
+EXPORT_LOG,Exporter le journal
