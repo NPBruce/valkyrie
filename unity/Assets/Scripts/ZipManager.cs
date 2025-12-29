@@ -42,7 +42,7 @@ public class ZipManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Warning: Unable to write file: " + local_archive_path + "\nException: "+ e.ToString()) ;
+            ValkyrieDebug.Log("Warning: Unable to create/update container file: " + local_archive_path + "\nException: "+ e.ToString()) ;
         }
     }
 
@@ -164,7 +164,7 @@ public class ZipManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            ValkyrieDebug.Log("Warning: Unable to read file: " + archive_name + "\nException" + e.ToString());
+            ValkyrieDebug.Log("Warning: Error while extracting container file: " + archive_name + "\nException" + e.ToString());
         }
     }
 

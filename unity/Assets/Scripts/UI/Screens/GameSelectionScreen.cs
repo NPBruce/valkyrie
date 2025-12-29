@@ -106,44 +106,9 @@ namespace Assets.Scripts.UI.Screens
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                try
-                {
-                    fcD2E.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.rtl");
-                    fcD2E.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.rtl");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find D2E app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
-
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-
-                try
-                {
-                    fcMoM.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.mom");
-                    fcMoM.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.mom");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find MoM app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
 #if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                try
-                {
-                    fcIA.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.iaca");
-                    fcIA.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.iaca");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find IA app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
 #endif
             }
             else
