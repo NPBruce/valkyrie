@@ -30,17 +30,7 @@ assignees: ''
 <!--A clear and concise description of what you expected to happen.-->
 ### Expected behavior
 
-<!--Please add the valkyrie log file from the following locations
-Log File:
-%LOCALAPPDATA%Low\NA\Valkyrie\output_log.txt
-Saves:
-%appdata%/Valkyrie/MoM/Save
-%appdata%/Valkyrie/D2E/Save
-Quest:
-%appdata%/Valkyrie/D2E/Editor
-Scenario:
-%appdata%/Valkyrie/MoM/Editor
--->
+<!--Please add the valkyrie log file (see this manual how to get the log file: https://github.com/NPBruce/valkyrie/wiki/Troubleshooting)-->
 ### LogFile
 
 
