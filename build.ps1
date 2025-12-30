@@ -290,11 +290,7 @@ function Package-Artifacts {
         Remove-Item $LinuxTar
     }
 
-    if ($Config.BuildAndroid -eq "true") {
-        if (Test-Path "android\test.apk") {
-            Move-Item "android\test.apk" "valkyrie-android-$Version.apk" -Force
-        }
-    }
+
 }
 
 function Create-Installer {
@@ -396,7 +392,7 @@ if ($Config.BuildAndroid -eq "true") {
     Invoke-CommandChecked { jarsigner -verify -verbose -certs $ApkPath } "Jarsigner verify failed"
 
     Write-Log "Aligning APK..."
-    $AlignedApk = "$BuildDir\Valkyrie-android-$Version.apk"
+    $AlignedApk = "$BuildDir\Valkyrie-android-$OutputVersion.apk"
     Invoke-CommandChecked { zipalign -v 4 $ApkPath $AlignedApk } "Zipalign failed"
     Write-Log "Android post-processing complete."
 }
