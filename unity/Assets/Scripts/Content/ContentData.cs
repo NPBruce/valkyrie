@@ -211,7 +211,6 @@ public class ContentData
         var manifestData = manager.GetLocalQuestManifestIniData();
 
         // Parse ini
-        Dictionary<string, QuestData.Quest> remote_quests_data = null;
 
         //Get all keys from manifest and combine them with pack file extension
         var downloadedPackFiles = manifestData.data.Select(s => Path.Combine(customContentPackPath, s.Key + ValkyrieConstants.ContentPackDownloadContainerExtension)).ToArray();
@@ -434,7 +433,6 @@ public class ContentData
 
     internal bool AddContent<T>(string name, T d) where T : IContent
     {
-        bool added = false;
         // If we don't already have one or it's lower priority then add this
         if (!TryGet(name, out T existingPackData)
             || existingPackData.Priority < d.Priority)

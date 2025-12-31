@@ -33,7 +33,6 @@ namespace Assets.Scripts.UI.Screens
         private Texture2D button_update = null;
         private Texture2D button_no_entry = null;
         // Display coroutine
-        Coroutine co_display = null;
 
         // Create page
         public ContentSelectDownloadScreen()
@@ -78,7 +77,6 @@ namespace Assets.Scripts.UI.Screens
 
             // Start here
             float offset = 0;
-            int nb_filtered_out_quest = 0;
 
             if (scrollArea == null)
             {

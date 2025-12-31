@@ -42,10 +42,8 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey CONTENT_REIMPORT_OFFICIAL = new StringKey("val", "CONTENT_REIMPORT_OFFICIAL");
         private static readonly StringKey CONTENT_REIMPORT_ZIP = new StringKey("val", "CONTENT_REIMPORT_ZIP");
 
-        private static readonly string MOM_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom";
         private static readonly string MOM_APP_URL_STEAM = "https://store.steampowered.com/app/478980/Mansions_of_Madness/";
 
-        private static readonly string D2E_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl";
         private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
 
 #if IA

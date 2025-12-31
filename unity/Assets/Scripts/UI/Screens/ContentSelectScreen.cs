@@ -108,7 +108,6 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawDownloadButtonTypeListPage()
         {
-            float text_width = 0f;
             UIElement uiDownloadCustomContentPack = null;
             uiDownloadCustomContentPack = new UIElement();
             uiDownloadCustomContentPack.SetText(CONTENTPACK_DOWNLOAD);

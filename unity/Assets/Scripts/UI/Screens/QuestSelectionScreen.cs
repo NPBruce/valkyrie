@@ -1249,7 +1249,6 @@ namespace Assets.Scripts.UI.Screens
             string pack_symbol_available = "";
             string pack_symbol_missing = "";
 
-            bool packFound = false;
             foreach (string pack in q.packs)
             {
                 if (game.cd.packSymbolDict.ContainsKey(pack))
@@ -1271,7 +1270,6 @@ namespace Assets.Scripts.UI.Screens
                         ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                         if (game.cd.loadedPacks.Contains(pack))
                         {
-                            packFound = true;
                             pack_symbol_available += pack;
                         }
                         else
@@ -1285,7 +1283,6 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                     if (game.cd.loadedPacks.Contains(pack))
                     {
-                        packFound = true;
                         pack_symbol_available += pack;
                     }
                     else
