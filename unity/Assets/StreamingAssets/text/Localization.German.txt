@@ -500,3 +500,6 @@ FULLSCREEN,Vollbild
 ON,An
 OFF,Aus
 EXPORT_LOG,Log exportieren
+
+LOADINGSCENARIOS,Szenarien laden...
+LOADINGCONTENTPACKS,Inhaltspakete laden...

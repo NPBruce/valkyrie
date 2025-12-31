@@ -102,7 +102,7 @@ namespace Assets.Scripts.UI.Screens
                 scrollArea.SetScrollSize(offset);
             }
 
-            images_list.StartDownloadASync();
+            images_list.StartDownloadASync(scrollArea);
         }
 
         private void RenderActionButton(float offset, KeyValuePair<string, RemoteContentPack> contentPack, IEnumerable<PackTypeData> localContentPackList)

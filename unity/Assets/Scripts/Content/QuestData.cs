@@ -1884,6 +1884,16 @@ public class QuestData
         }
     }
 
+    public class QuestLoaderContext
+    {
+        public string gameType;
+        public int maxHeroes;
+        public int defaultHeroes;
+        public string currentLang;
+        public bool isMoM;
+        public QuestsManager.QuestListMode questListMode;
+    }
+
     // Quest ini component has special data
     public class Quest
     {
@@ -1944,8 +1954,36 @@ public class QuestData
         public StringKey authors { get { return new StringKey("qst", authors_key); } }
         public StringKey authors_short { get { return new StringKey("qst", authors_short_key); } }
 
+        // Context for async loading
+        private QuestLoaderContext context = null;
+
         // Create from path
         public Quest(string pathIn)
+        {
+            // Default context from Game.Get() for main thread usage
+            CreateDefaultContext();
+            Load(pathIn);
+        }
+
+        public Quest(string pathIn, QuestLoaderContext ctx)
+        {
+            context = ctx;
+            Load(pathIn);
+        }
+
+        private void CreateDefaultContext()
+        {
+            if (Game.game == null) return; // Should not happen in main thread usage
+            context = new QuestLoaderContext();
+            context.gameType = Game.Get().gameType.TypeName();
+            context.maxHeroes = Game.Get().gameType.MaxHeroes();
+            context.defaultHeroes = Game.Get().gameType.DefaultHeroes();
+            context.currentLang = Game.Get().currentLang;
+            context.isMoM = Game.Get().gameType is MoMGameType;
+            context.questListMode = Game.Get().questsList.quest_list_mode;
+        }
+
+        private void Load(string pathIn)
         {
             path = pathIn;
             if (path.EndsWith("\\") || path.EndsWith("/"))
@@ -1964,9 +2002,9 @@ public class QuestData
             }
 
             // do not parse the content of a quest from another game type
-            if (iniData.ContainsKey("type") && iniData["type"] != Game.Get().gameType.TypeName())
+            if (iniData.ContainsKey("type") && iniData["type"] != context.gameType)
             {
-                ValkyrieDebug.Log("Quest " + identifier + " is not compatible with the current game type: " + Game.Get().gameType.TypeName() + ", it is for " + iniData["type"]);
+                ValkyrieDebug.Log("Quest " + identifier + " is not compatible with the current game type: " + context.gameType + ", it is for " + iniData["type"]);
                 valid = false;
                 return;
             }
@@ -1986,12 +2024,13 @@ public class QuestData
         // Create from ini data
         public Quest(string identifier, Dictionary<string, string> iniData)
         {
+            CreateDefaultContext();
             this.identifier = identifier.ToLower();
             if (LocalizationRead.dicts.ContainsKey("qst"))
             { 
                 localizationDict = LocalizationRead.dicts["qst"];
             } else {
-                localizationDict = new DictionaryI18n(new string[1] { ".," + Game.Get().currentLang }, defaultLanguage);
+                localizationDict = new DictionaryI18n(new string[1] { ".," + context.currentLang }, defaultLanguage);
             }
             valid = Populate(iniData);
         }
@@ -2021,7 +2060,7 @@ public class QuestData
             }
 
             SortedSet<String> requiredPacks = new SortedSet<string>();
-            if (Game.game.gameType is MoMGameType &&
+            if (context.isMoM &&
                 format < (int) QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT &&
                 QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains(identifier))
             {
@@ -2086,14 +2125,14 @@ public class QuestData
             }
             if (minHero < 1) minHero = 1;
 
-            maxHero = Game.Get().gameType.DefaultHeroes();
+            maxHero = context.defaultHeroes;
             if (iniData.ContainsKey("maxhero"))
             {
                 int.TryParse(iniData["maxhero"], out maxHero);
             }
-            if (maxHero > Game.Get().gameType.MaxHeroes())
+            if (maxHero > context.maxHeroes)
             {
-                maxHero = Game.Get().gameType.MaxHeroes();
+                maxHero = context.maxHeroes;
             }
 
             if (iniData.ContainsKey("difficulty"))
@@ -2183,7 +2222,9 @@ public class QuestData
             r.AppendLine("[Quest]");
             r.Append("format=").AppendLine(currentFormat.ToString());
             r.Append("hidden=").AppendLine(hidden.ToString());
-            r.Append("type=").AppendLine(Game.Get().gameType.TypeName());
+            // This is mostly editor side, so Game.Get() is fine, or we use context if available
+            string typeName = (context != null) ? context.gameType : Game.Get().gameType.TypeName();
+            r.Append("type=").AppendLine(typeName);
             r.Append("defaultlanguage=").AppendLine(defaultLanguage);
             r.Append("defaultmusicon=").AppendLine(defaultMusicOn.ToString());
             if (packs.Length > 0)
@@ -2196,7 +2237,8 @@ public class QuestData
             {
                 r.Append("minhero=").AppendLine(minHero.ToString());
             }
-            if (maxHero != Game.Get().gameType.DefaultHeroes())
+            int defaultHeroes = (context != null) ? context.defaultHeroes : Game.Get().gameType.DefaultHeroes();
+            if (maxHero != defaultHeroes)
             {
                 r.Append("maxhero=").AppendLine(maxHero.ToString());
             }
@@ -2259,13 +2301,16 @@ public class QuestData
         {
             string authors_short_translation = "";
 
+            QuestsManager.QuestListMode qlm = (context != null) ? context.questListMode : Game.Get().questsList.quest_list_mode;
+            string clang = (context != null) ? context.currentLang : Game.Get().currentLang;
+
             // if languages_authors_short is available, we are online in scenarios explorer and don't have access to .txt files yet
-            if (Game.Get().questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+            if (qlm == QuestsManager.QuestListMode.ONLINE)
             {
                 if (languages_authors_short.Count != 0)
                 {
                     // Try to get current language
-                    if (!languages_authors_short.TryGetValue(Game.Get().currentLang, out authors_short_translation))
+                    if (!languages_authors_short.TryGetValue(clang, out authors_short_translation))
                     {
                         // Try to get default language
                         if (!languages_authors_short.TryGetValue(defaultLanguage, out authors_short_translation))

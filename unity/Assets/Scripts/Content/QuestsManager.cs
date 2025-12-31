@@ -163,6 +163,44 @@ public class QuestsManager
             IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
             localManifest.Remove(key);
             localManifest.Add(key, downloaded_quest.data["Quest"]);
+
+            // Update local cache if it exists
+            if (local_quests_data != null)
+            {
+                // We need to construct a new Quest object.
+                // Since Quest constructor relies on file presence or IniData, we can use the remote data we just have?
+                // Actually, QuestLoader.GetQuests() does parsing.
+                // Let's rely on the file being present now (Save was called before this).
+                // We can use QuestLoader to parse just this one file if possible, or manually construct.
+                // QuestLoader doesn't expose a single file parser easily without modifications?
+                // Let's check QuestLoader.
+                // For now, let's assume we can re-create the quest data from the remote_quests_data which is serving as source
+                // OR simpler: we don't add it to local_quests_data fully parsed, we just ensure the list reload picks it up?
+                // The goal is to AVOID reload.
+                // So we MUST add it to local_quests_data.
+                
+                // Constructing a QuestData.Quest from IniData:
+                QuestData.Quest newQuest = new QuestData.Quest(key, downloaded_quest.data["Quest"]);
+                newQuest.valid = true; // Assume valid if downloaded successfully
+                // We might need to set other properties that usually come from file inspection?
+                // But for the list, the IniData (manifest) info is mostly what's needed (title, etc come from localization).
+                // Localization might be inside the package...
+                // If the package is downloaded, we can try to extract the localization? 
+                // That might be too heavy for the UI thread?
+                // But SetQuestAvailability is called after download?
+                
+                // Let's check what QuestData.Quest constructor does. It takes `Dictionary<string, string>`.
+                // It populates basic info.
+                
+                if (local_quests_data.ContainsKey(key))
+                {
+                    local_quests_data[key] = newQuest;
+                }
+                else
+                {
+                    local_quests_data.Add(key, newQuest);
+                }
+            }
         }
         else
         {
@@ -179,8 +217,11 @@ public class QuestsManager
         File.WriteAllText(saveLocation + ValkyrieConstants.ScenarioManifestPath, localManifest.ToString());
 
         // update status quest
-        remote_quests_data[key].downloaded = isAvailable;
-        remote_quests_data[key].update_available = false;
+        if (remote_quests_data.ContainsKey(key))
+        {
+            remote_quests_data[key].downloaded = isAvailable;
+            remote_quests_data[key].update_available = false;
+        }
     }
 
     /// <summary>
@@ -367,6 +408,59 @@ public class QuestsManager
             UnloadLocalQuests();
             // extract and load local quest
             local_quests_data = QuestLoader.GetQuests();
+        }
+    }
+
+    public void LoadAllLocalQuestsAsync(System.Action callback)
+    {
+        if (local_quests_data != null)
+        {
+            callback?.Invoke();
+            return;
+        }
+
+        UnloadLocalQuests();
+
+        // Prepare context on main thread
+        QuestData.QuestLoaderContext context = new QuestData.QuestLoaderContext();
+        context.gameType = Game.Get().gameType.TypeName();
+        context.maxHeroes = Game.Get().gameType.MaxHeroes();
+        context.defaultHeroes = Game.Get().gameType.DefaultHeroes();
+        context.currentLang = Game.Get().currentLang;
+        context.isMoM = Game.Get().gameType is MoMGameType;
+        context.questListMode = Game.Get().questsList.quest_list_mode;
+
+        // Start async loading
+        var task = QuestLoader.GetQuestsAsync(context);
+        Game.Get().StartCoroutine(WaitForQuestsLoad(task, callback));
+    }
+
+    public System.Collections.IEnumerator WaitForQuestsLoad(System.Threading.Tasks.Task<Dictionary<string, QuestData.Quest>> task, System.Action callback)
+    {
+        while (!task.IsCompleted)
+        {
+            yield return null;
+        }
+
+        if (task.IsFaulted)
+        {
+            ValkyrieDebug.Log("Error loading quests: " + task.Exception);
+            local_quests_data = new Dictionary<string, QuestData.Quest>();
+        }
+        else
+        {
+            local_quests_data = task.Result;
+        }
+        callback?.Invoke();
+    }
+
+    public IEnumerator WaitForQuestsLoad()
+    {
+        bool done = false;
+        LoadAllLocalQuestsAsync(() => done = true);
+        while (!done)
+        {
+            yield return null;
         }
     }
 

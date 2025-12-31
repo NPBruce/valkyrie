@@ -64,6 +64,69 @@ public class QuestLoader {
         return quests;
     }
 
+    public static System.Threading.Tasks.Task<Dictionary<string, QuestData.Quest>> GetQuestsAsync(QuestData.QuestLoaderContext context, bool getHidden = false)
+    {
+        return System.Threading.Tasks.Task.Run(() =>
+        {
+            Dictionary<string, QuestData.Quest> quests = new Dictionary<string, QuestData.Quest>();
+
+            // Look in the user application data directory
+            string dataLocation = Game.AppData();
+            ExtractManager.mkDir(dataLocation);
+            ExtractManager.mkDir(ContentData.DownloadPath());
+
+            // Get a list of downloaded quest not packed
+            List<string> questDirectories = GetUnpackedQuests(ContentData.DownloadPath());
+
+            // Extract only required files from downloaded packages 
+            ExtractManager.ExtractPackages(ContentData.DownloadPath());
+
+            // Get the list of extracted packages
+            questDirectories.AddRange(GetUnpackedQuests(ContentData.TempValkyriePath));
+
+            // Add the list of editor quest
+            if (context.isMoM)
+            {
+                dataLocation += "/MoM/Editor";
+            }
+            // Logic for other game types based on string check if needed, 
+            // but effectively we can rely on context.gameType or just check all standard paths if we want to mirror strictly.
+            // However, the original code used `game.gameType is Type`. 
+            // In Context we have `gameType` string.
+            // Let's assume standard paths based on string map or just replicate logic:
+            if (context.gameType == "D2E")
+            {
+                dataLocation += "/D2E/Editor";
+            }
+            if (context.gameType == "IA")
+            {
+                dataLocation += "/IA/Editor";
+            }
+            
+            questDirectories.AddRange(GetUnpackedQuests(dataLocation));
+
+            // Go through all directories
+            foreach (string p in questDirectories)
+            {
+                // load quest with context
+                QuestData.Quest q = new QuestData.Quest(p, context);
+                // Check quest is valid and of the right type
+                if (q.valid && q.type.Equals(context.gameType))
+                {
+                    // Is the quest hidden?
+                    if (!q.hidden || getHidden)
+                    {
+                        // Add quest to quest list
+                        quests.Add(p, q);
+                    }
+                }
+            }
+
+            // Return list of available quests
+            return quests;
+        });
+    }
+
     // Return a single quest, quest name is without file extension
     public static QuestData.Quest GetSingleQuest(string questName, bool getHidden = false)
     {

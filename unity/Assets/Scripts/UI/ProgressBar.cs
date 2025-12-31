@@ -8,12 +8,12 @@ public class ProgressBar : MonoBehaviour {
     RectTransform rect;
     float xEdge = 0;
     float size = 0;
-    WWW download;
+    UnityEngine.Networking.UnityWebRequest download;
 
     /// <summary>
-    /// Set the WWW object to monitor</summary>
-    /// <param name="d">WWW object</param>
-    public void SetDownload(WWW d)
+    /// Set the UnityWebRequest object to monitor</summary>
+    /// <param name="d">UnityWebRequest object</param>
+    public void SetDownload(UnityEngine.Networking.UnityWebRequest d)
     {
         download = d;
     }
@@ -30,11 +30,18 @@ public class ProgressBar : MonoBehaviour {
     /// <summary>
     /// Called once per frame by Unity.</summary>
     /// <param name="height">Vertical size.</param>
-	void Update () {
+    void Update () {
         float fill = 0;
-        if (download != null && download.error == null)
+        if (download != null)
         {
-            fill = download.progress * size;
+            if (!download.isDone)
+            {
+                fill = download.downloadProgress * size;
+            }
+            else if (!download.isNetworkError && !download.isHttpError)
+            {
+                fill = size;
+            }
         }
         rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, xEdge, fill);
     }
