@@ -303,7 +303,6 @@ public class ContentData
             return pack;
         }
 
-        ValkyrieDebug.Log("Could not find content pack file: " + path);
         return null;
     }
 
