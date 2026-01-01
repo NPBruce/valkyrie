@@ -167,30 +167,9 @@ public class QuestsManager
             // Update local cache if it exists
             if (local_quests_data != null)
             {
-                // We need to construct a new Quest object.
-                // Since Quest constructor relies on file presence or IniData, we can use the remote data we just have?
-                // Actually, QuestLoader.GetQuests() does parsing.
-                // Let's rely on the file being present now (Save was called before this).
-                // We can use QuestLoader to parse just this one file if possible, or manually construct.
-                // QuestLoader doesn't expose a single file parser easily without modifications?
-                // Let's check QuestLoader.
-                // For now, let's assume we can re-create the quest data from the remote_quests_data which is serving as source
-                // OR simpler: we don't add it to local_quests_data fully parsed, we just ensure the list reload picks it up?
-                // The goal is to AVOID reload.
-                // So we MUST add it to local_quests_data.
-                
                 // Constructing a QuestData.Quest from IniData:
                 QuestData.Quest newQuest = new QuestData.Quest(key, downloaded_quest.data["Quest"]);
                 newQuest.valid = true; // Assume valid if downloaded successfully
-                // We might need to set other properties that usually come from file inspection?
-                // But for the list, the IniData (manifest) info is mostly what's needed (title, etc come from localization).
-                // Localization might be inside the package...
-                // If the package is downloaded, we can try to extract the localization? 
-                // That might be too heavy for the UI thread?
-                // But SetQuestAvailability is called after download?
-                
-                // Let's check what QuestData.Quest constructor does. It takes `Dictionary<string, string>`.
-                // It populates basic info.
                 
                 if (local_quests_data.ContainsKey(key))
                 {

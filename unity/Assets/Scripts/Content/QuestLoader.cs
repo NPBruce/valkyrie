@@ -89,11 +89,7 @@ public class QuestLoader {
             {
                 dataLocation += "/MoM/Editor";
             }
-            // Logic for other game types based on string check if needed, 
-            // but effectively we can rely on context.gameType or just check all standard paths if we want to mirror strictly.
-            // However, the original code used `game.gameType is Type`. 
-            // In Context we have `gameType` string.
-            // Let's assume standard paths based on string map or just replicate logic:
+            // Logic for other game types based on string check if needed
             if (context.gameType == "D2E")
             {
                 dataLocation += "/D2E/Editor";
