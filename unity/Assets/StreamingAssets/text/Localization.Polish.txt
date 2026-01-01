@@ -474,3 +474,7 @@ FULLSCREEN,Pełny ekran
 
 ON,Wł.
 OFF,Wył.
+EXPORT_LOG,Eksportuj log
+
+LOADINGSCENARIOS,Wczytywanie scenariuszy...
+LOADINGCONTENTPACKS,Wczytywanie pakietów zawartości...

@@ -290,11 +290,7 @@ function Package-Artifacts {
         Remove-Item $LinuxTar
     }
 
-    if ($Config.BuildAndroid -eq "true") {
-        if (Test-Path "android\test.apk") {
-            Move-Item "android\test.apk" "valkyrie-android-$Version.apk" -Force
-        }
-    }
+
 }
 
 function Create-Installer {
@@ -321,7 +317,16 @@ function Create-Installer {
 Write-Log "--- Starting Build Process ---" -Color "Cyan"
 
 $Version = Get-BuildVersion -ScriptRoot $ScriptRoot
-Write-Log "Version: $Version" -Color "Green"
+Write-Log "Internal Version: $Version" -Color "Green"
+
+if ($env:PACKAGE_VERSION) {
+    $OutputVersion = $env:PACKAGE_VERSION
+    Write-Log "Output Version (Overridden): $OutputVersion" -Color "Magenta"
+}
+else {
+    $OutputVersion = $Version
+    Write-Log "Output Version: $OutputVersion" -Color "Green"
+}
 
 $Config = Get-BuildConfiguration
 
@@ -387,13 +392,13 @@ if ($Config.BuildAndroid -eq "true") {
     Invoke-CommandChecked { jarsigner -verify -verbose -certs $ApkPath } "Jarsigner verify failed"
 
     Write-Log "Aligning APK..."
-    $AlignedApk = "$BuildDir\Valkyrie-android-$Version.apk"
+    $AlignedApk = "$BuildDir\Valkyrie-android-$OutputVersion.apk"
     Invoke-CommandChecked { zipalign -v 4 $ApkPath $AlignedApk } "Zipalign failed"
     Write-Log "Android post-processing complete."
 }
 
-Package-Artifacts -BuildDir $BuildDir -Version $Version -Config $Config
+Package-Artifacts -BuildDir $BuildDir -Version $OutputVersion -Config $Config
 
-Create-Installer -Version $Version
+Create-Installer -Version $OutputVersion
 
 Write-Log "--- Build Process Complete ---" -Color "Green"

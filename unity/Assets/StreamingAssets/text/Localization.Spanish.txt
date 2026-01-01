@@ -499,3 +499,7 @@ FULLSCREEN,Pantalla completa
 
 ON,Activado
 OFF,Desactivado
+EXPORT_LOG,Exportar log
+
+LOADINGSCENARIOS,Cargando escenarios...
+LOADINGCONTENTPACKS,Cargando paquetes de contenido...

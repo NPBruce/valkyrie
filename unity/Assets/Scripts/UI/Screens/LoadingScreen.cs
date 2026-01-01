@@ -21,9 +21,9 @@ namespace Assets.Scripts.UI.Screens
         /// <summary>
         /// Construct a screen with pulsing logo, download progress and optional text label
         /// </summary>
-        /// <param name="download">WWW object tracking download</param>
+        /// <param name="download">UnityWebRequest object tracking download</param>
         /// <param name="display">Text to display</param>
-        public LoadingScreen(WWW download, string display = "")
+        public LoadingScreen(UnityEngine.Networking.UnityWebRequest download, string display = "")
         {
             Destroyer.Dialog();
             Draw(display);
@@ -56,6 +56,11 @@ namespace Assets.Scripts.UI.Screens
         /// <param name="display">Text to display</param>
         private void Draw(string display)
         {
+            // Background
+            UIElement bg = new UIElement();
+            bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
+            bg.SetBGColor(Color.black);
+
             // Create an object
             GameObject logo = new GameObject("logo");
             // Mark it as dialog

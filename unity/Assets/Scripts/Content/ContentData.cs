@@ -211,7 +211,6 @@ public class ContentData
         var manifestData = manager.GetLocalQuestManifestIniData();
 
         // Parse ini
-        Dictionary<string, QuestData.Quest> remote_quests_data = null;
 
         //Get all keys from manifest and combine them with pack file extension
         var downloadedPackFiles = manifestData.data.Select(s => Path.Combine(customContentPackPath, s.Key + ValkyrieConstants.ContentPackDownloadContainerExtension)).ToArray();
@@ -255,14 +254,20 @@ public class ContentData
         // All packs must have a content_pack.ini, otherwise ignore
         ContentPack pack = null;
 
-        if (File.Exists(path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
+        string combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+
+        if (File.Exists(combinedContentPackLocalPath))
         {
             pack = GetPackData(path, gameTypeName, checkGameType);
-            if(pack != null)
+            if (pack != null)
             {
                 AddPackToAllPacksAndPackSymbol(pack, allPacks, packSymbolDict);
                 // We finish without actually loading the content, this is done later (content optional)
             }
+        }
+        else
+        {
+            ValkyrieDebug.Log("Could not find content pack file in temporary path (please check if container export failed): " + combinedContentPackLocalPath);
         }
     }
 
@@ -283,22 +288,21 @@ public class ContentData
         // Some packs have a type
         string type = d.Get("ContentPack", "type");
         if (
-            !checkGameType || 
+            !checkGameType ||
             (
-                !string.IsNullOrWhiteSpace(gameTypeName) 
+                !string.IsNullOrWhiteSpace(gameTypeName)
                 && type.StartsWith(gameTypeName)
             )
         )
         {
             var pack = GetContentPack(path, d, type);
-            if(pack == null)
+            if (pack == null)
             {
                 ValkyrieDebug.Log("Could not find content pack file: " + path + $"Please check if type=\"{gameTypeName}\" was set correctly in content_pack.ini file.");
             }
             return pack;
         }
 
-        ValkyrieDebug.Log("Could not find content pack file: " + path);
         return null;
     }
 
@@ -428,7 +432,6 @@ public class ContentData
 
     internal bool AddContent<T>(string name, T d) where T : IContent
     {
-        bool added = false;
         // If we don't already have one or it's lower priority then add this
         if (!TryGet(name, out T existingPackData)
             || existingPackData.Priority < d.Priority)
@@ -458,7 +461,7 @@ public class ContentData
         }
 
         // Check all possible extensions
-        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg",".tex" })
+        foreach (string extension in new[] { ".dds", ".pvr", ".png", ".jpg", ".jpeg", ".tex" })
         {
             string file = name + extension;
             if (File.Exists(file))
@@ -634,17 +637,35 @@ public class ContentData
         long pixelformat = -1;
         try
         {
-            string imagePath = new Uri(file).AbsoluteUri;
-            var www = new WWW(imagePath);
+            byte[] data = null;
+            if (File.Exists(file))
+            {
+                data = File.ReadAllBytes(file);
+            }
+            else
+            {
+                string imagePath = new Uri(file).AbsoluteUri;
+                using (UnityEngine.Networking.UnityWebRequest uwr = UnityEngine.Networking.UnityWebRequest.Get(imagePath))
+                {
+                    var op = uwr.SendWebRequest();
+                    while (!op.isDone) { }
+
+                    if (uwr.isNetworkError || uwr.isHttpError)
+                    {
+                        throw new Exception(uwr.error);
+                    }
+                    data = uwr.downloadHandler.data;
+                }
+            }
 
             // *** HEADER ****
             // int verison
             // int flags
-            pixelformat = BitConverter.ToInt64(www.bytes, 8);
+            pixelformat = BitConverter.ToInt64(data, 8);
             // int color space
             // int channel type
-            int height = BitConverter.ToInt32(www.bytes, 24);
-            int width = BitConverter.ToInt32(www.bytes, 28);
+            int height = BitConverter.ToInt32(data, 24);
+            int width = BitConverter.ToInt32(data, 28);
             // int depth
             // int num surfaces
             // int num faces
@@ -653,8 +674,8 @@ public class ContentData
 
             // *** IMAGE DATA ****
             const int PVR_HEADER_SIZE = 52;
-            var image = new byte[www.bytesDownloaded - PVR_HEADER_SIZE];
-            Buffer.BlockCopy(www.bytes, PVR_HEADER_SIZE, image, 0, www.bytesDownloaded - PVR_HEADER_SIZE);
+            var image = new byte[data.Length - PVR_HEADER_SIZE];
+            Buffer.BlockCopy(data, PVR_HEADER_SIZE, image, 0, data.Length - PVR_HEADER_SIZE);
             Texture2D texture = null;
             switch (pixelformat)
             {
@@ -689,9 +710,35 @@ public class ContentData
         if (file == null) throw new ArgumentNullException("file");
         try
         {
-            string imagePath = new Uri(file).AbsoluteUri;
-            var www = new WWW(imagePath);
-            return www.texture;
+            if (File.Exists(file))
+            {
+                byte[] data = File.ReadAllBytes(file);
+                Texture2D tex = new Texture2D(2, 2);
+                if (tex.LoadImage(data))
+                {
+                    return tex;
+                }
+                else
+                {
+                    ValkyrieDebug.Log("Warning: ImageToTexture failed to LoadImage for: " + file);
+                    return null;
+                }
+            }
+            else
+            {
+                string imagePath = new Uri(file).AbsoluteUri;
+                using (UnityEngine.Networking.UnityWebRequest uwr = UnityEngine.Networking.UnityWebRequestTexture.GetTexture(imagePath))
+                {
+                    var op = uwr.SendWebRequest();
+                    while (!op.isDone) { }
+
+                    if (uwr.isNetworkError || uwr.isHttpError)
+                    {
+                        throw new Exception(uwr.error);
+                    }
+                    return UnityEngine.Networking.DownloadHandlerTexture.GetContent(uwr);
+                }
+            }
         }
         catch (Exception ex)
         {

@@ -702,3 +702,7 @@ FULLSCREEN,フルスクリーン
 
 ON,オン
 OFF,オフ
+EXPORT_LOG,ログ出力
+
+LOADINGSCENARIOS,シナリオを読み込んでいます...
+LOADINGCONTENTPACKS,コンテンツパックを読み込んでいます...

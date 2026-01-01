@@ -42,10 +42,8 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey CONTENT_REIMPORT_OFFICIAL = new StringKey("val", "CONTENT_REIMPORT_OFFICIAL");
         private static readonly StringKey CONTENT_REIMPORT_ZIP = new StringKey("val", "CONTENT_REIMPORT_ZIP");
 
-        private static readonly string MOM_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.mom";
         private static readonly string MOM_APP_URL_STEAM = "https://store.steampowered.com/app/478980/Mansions_of_Madness/";
 
-        private static readonly string D2E_APP_URL_ANDROID = "https://play.google.com/store/apps/details?id=com.fantasyflightgames.rtl";
         private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
 
 #if IA
@@ -106,44 +104,9 @@ namespace Assets.Scripts.UI.Screens
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                try
-                {
-                    fcD2E.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.rtl");
-                    fcD2E.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.rtl");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find D2E app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
-
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-
-                try
-                {
-                    fcMoM.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.mom");
-                    fcMoM.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.mom");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find MoM app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
 #if IA
                 fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                try
-                {
-                    fcIA.apkPath = Android.GetAndroidAPKPath("com.fantasyflightgames.iaca");
-                    fcIA.packageVersion = Android.GetAndroidPackageVersion("com.fantasyflightgames.iaca");
-                }
-                catch (System.Exception e)
-                {
-                    ValkyrieDebug.Log("Didn't find IA app");
-                    ValkyrieDebug.Log(e.ToString());
-                }
-
 #endif
             }
             else

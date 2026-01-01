@@ -675,3 +675,7 @@ FULLSCREEN,Celá obrazovka
 
 ON,Zapnuto
 OFF,Vypnuto
+EXPORT_LOG,Exportovat log
+
+LOADINGSCENARIOS,Načítání scénářů...
+LOADINGCONTENTPACKS,Načítání balíčků obsahu...

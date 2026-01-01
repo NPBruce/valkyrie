@@ -672,3 +672,7 @@ FULLSCREEN,Fullscreen
 
 ON,ON
 OFF,OFF
+EXPORT_LOG,Export Log
+
+LOADINGSCENARIOS,Loading scenarios...
+LOADINGCONTENTPACKS,Loading content packs...

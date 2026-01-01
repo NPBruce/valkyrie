@@ -502,3 +502,7 @@ FULLSCREEN,Полноэкранный режим
 
 ON,ВКЛ
 OFF,ВЫКЛ
+EXPORT_LOG,Экспорт журнала
+
+LOADINGSCENARIOS,Загрузка сценариев...
+LOADINGCONTENTPACKS,Загрузка пакетов контента...

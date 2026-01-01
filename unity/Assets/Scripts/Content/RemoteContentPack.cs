@@ -9,8 +9,8 @@ namespace Assets.Scripts.Content
 {
     public class RemoteContentPack
     {
-        public new Dictionary<string, string> languages_name;
-        public new Dictionary<string, string> languages_description;
+        public Dictionary<string, string> languages_name;
+        public Dictionary<string, string> languages_description;
         public string image;
         public string identifier;
         public string type;

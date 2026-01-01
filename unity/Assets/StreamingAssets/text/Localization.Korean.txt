@@ -668,3 +668,7 @@ FULLSCREEN,전체 화면
 
 ON,켜기
 OFF,끄기
+EXPORT_LOG,로그 내보내기
+
+LOADINGSCENARIOS,시나리오 로딩 중...
+LOADINGCONTENTPACKS,콘텐츠 팩 로딩 중...
