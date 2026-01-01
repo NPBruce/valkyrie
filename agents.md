@@ -1,10 +1,25 @@
 # AGENTS Guidelines for This Repository
-This repository contains a Unity application located in the root of this repository. When
+This repository contains a Unity engine application located in the root of this repository. When
 working on the project interactively with an agent (e.g. the Codex CLI) please follow
 the guidelines below so that the development experience continues to work smoothly.
 
+## Application wiki
+The online documentation for the application can be found here: https://github.com/NPBruce/valkyrie/wiki
+
 ## Development environment
 Coding is planned to happen in a Windows environment. Therefore commands like -grep will not work.
+
+## Unity version
+Unity version can be found here: unity\ProjectSettings\ProjectVersion.txt
+
+Before implementing any Unity related changes always check if those changes are compatible with current Unity version.
+
+## Target operating systems
+The application is targeted to be used on the following operating systems:
+- Windows
+- Mac
+- Linux
+- Android
 
 ## Localization files
 Localization files are located in `Assets/StreamingAssets/text/`.
