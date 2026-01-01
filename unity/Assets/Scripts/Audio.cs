@@ -107,9 +107,14 @@ public class Audio : MonoBehaviour
         foreach (string s in fileNames)
         {
             string fileName = s;
-            var file = new WWW(new System.Uri(fileName).AbsoluteUri);
-            yield return file;
-            newMusic.Add(file.GetAudioClip());
+            using (UnityEngine.Networking.UnityWebRequest uwr = UnityEngine.Networking.UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, AudioType.UNKNOWN))
+            {
+                yield return uwr.SendWebRequest();
+                if (!uwr.isNetworkError && !uwr.isHttpError)
+                {
+                    newMusic.Add(UnityEngine.Networking.DownloadHandlerAudioClip.GetContent(uwr));
+                }
+            }
         }
         music = newMusic;
         if (isDefaultQuestMusic)
@@ -124,15 +129,17 @@ public class Audio : MonoBehaviour
 
     public IEnumerator PlayEffect(string fileName)
     {
-        var file = new WWW(new System.Uri(fileName).AbsoluteUri);
-        yield return file;
-        if (file.error != null)
+        using (UnityEngine.Networking.UnityWebRequest uwr = UnityEngine.Networking.UnityWebRequestMultimedia.GetAudioClip(new System.Uri(fileName).AbsoluteUri, AudioType.UNKNOWN))
         {
-            ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + file.error);
-        }
-        else
-        {
-            audioSourceEffect.PlayOneShot(file.GetAudioClip(), effectVolume);
+            yield return uwr.SendWebRequest();
+            if (uwr.isNetworkError || uwr.isHttpError)
+            {
+                ValkyrieDebug.Log("Warning: Unable to load audio: " + fileName + " Error: " + uwr.error);
+            }
+            else
+            {
+                audioSourceEffect.PlayOneShot(UnityEngine.Networking.DownloadHandlerAudioClip.GetContent(uwr), effectVolume);
+            }
         }
     }
 

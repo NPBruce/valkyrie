@@ -93,5 +93,15 @@ namespace Assets.Scripts.UI
         {
             return scrollArea.GetComponent<RectTransform>().anchoredPosition.y - scrollArea.GetComponent<RectTransform>().rect.y;
         }
+
+        public void AddScrollListener(UnityEngine.Events.UnityAction<Vector2> call)
+        {
+            scrollBG.GetComponent<UnityEngine.UI.ScrollRect>().onValueChanged.AddListener(call);
+        }
+
+        public void RemoveScrollListener(UnityEngine.Events.UnityAction<Vector2> call)
+        {
+            scrollBG.GetComponent<UnityEngine.UI.ScrollRect>().onValueChanged.RemoveListener(call);
+        }
     }
 }

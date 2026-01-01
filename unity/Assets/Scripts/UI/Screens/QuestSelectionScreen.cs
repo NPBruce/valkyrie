@@ -187,14 +187,14 @@ namespace Assets.Scripts.UI.Screens
             }
 
             // Heading
-            UIElement ui = new UIElement();
+            UIElement ui = new UIElement(Game.QUESTUI);
             ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
             ui.SetText(new StringKey("val", "SELECT", game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetLargeFont());
 
             // back to menu
-            ui = new UIElement();
+            ui = new UIElement(Game.QUESTUI);
             ui.SetLocation(1, 0.5f, 8, 1.5f);
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(Game.Get().gameType.GetHeaderFont());
@@ -203,7 +203,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(ui, Color.red);
 
             // initialize text indicator for filtered scenario
-            text_number_of_filtered_scenario = new UIElement();
+            text_number_of_filtered_scenario = new UIElement(Game.QUESTUI);
             text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
             text_number_of_filtered_scenario.SetText(" ");
             text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -211,7 +211,7 @@ namespace Assets.Scripts.UI.Screens
             text_number_of_filtered_scenario.SetFontSize(UIScaler.GetSmallFont());
 
             // Show filter button
-            ui = new UIElement();
+            ui = new UIElement(Game.QUESTUI);
             Texture2D filterTex = null;
             filterTex = Resources.Load("sprites/filter") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
@@ -219,8 +219,16 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { FilterPopup(); });
             new UIElementBorder(ui);
 
+            // Show reload button
+            ui = new UIElement(Game.QUESTUI);
+            Texture2D reloadTex = Resources.Load("sprites/refresh") as Texture2D; // Assuming a sprite exists, or use text "R"
+            ui.SetImage(reloadTex);
+            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 0.2f, 3.5f, 1.5f, 1.5f);
+            ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
+            new UIElementBorder(ui);
+
             // Show sort button
-            ui = new UIElement();
+            ui = new UIElement(Game.QUESTUI);
             Texture2D sortTex = null;
             sortTex = Resources.Load("sprites/sort") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f, 3.5f, 1.5f, 1.5f);
@@ -337,7 +345,7 @@ namespace Assets.Scripts.UI.Screens
             if (text_connection_status != null)
                 text_connection_status.Destroy();
 
-            text_connection_status = new UIElement();
+            text_connection_status = new UIElement(Game.QUESTUI);
 
             // Display connection status message
             if (game.questsList.quest_list_mode == QuestsManager.QuestListMode.ERROR_DOWNLOAD)
@@ -416,7 +424,7 @@ namespace Assets.Scripts.UI.Screens
             ui_picture_shadow.SetImage(picture_shadow);
 
             // draw image
-            UIElement picture = new UIElement(ui_picture_shadow.GetTransform());
+            UIElement picture = new UIElement(Game.QUESTLIST, ui_picture_shadow.GetTransform());
             picture.SetLocation(0.30f, 0.30f, width_heigth - 0.6f, width_heigth - 0.6f);
             picture.SetBGColor(Color.clear);
             picture.SetImage(texture);
@@ -425,7 +433,7 @@ namespace Assets.Scripts.UI.Screens
             // draw pin
             const float pin_width = 1.4f;
             const float pin_height = 1.6f;
-            UIElement pin = new UIElement(picture.GetTransform());
+            UIElement pin = new UIElement(Game.QUESTLIST, picture.GetTransform());
             pin.SetLocation((width_heigth / 2f) - (pin_width / 1.5f), (-pin_height / 2f), pin_width, pin_height);
             pin.SetBGColor(Color.clear);
             pin.SetImage(picture_pin);
@@ -617,7 +625,7 @@ namespace Assets.Scripts.UI.Screens
                     string current_author = game.questsList.GetQuestData(key).GetShortAuthor();
                     if (current_author != last_author)
                     {
-                        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                        UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                         ui.SetLocation(1f, offset + 0.4f, UIScaler.GetWidthUnits() - 5f, 2f);
                         ui.SetText(current_author, Color.black);
                         ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -648,7 +656,7 @@ namespace Assets.Scripts.UI.Screens
 
                     if (current_update_information != last_update_info)
                     {
-                        UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+                        UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                         ui.SetLocation(1f, offset + 0.4f, UIScaler.GetWidthUnits() - 5f, 2f);
                         ui.SetText(current_update_information, Color.black);
                         ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -757,20 +765,23 @@ namespace Assets.Scripts.UI.Screens
             co_display = StartCoroutine(DrawQuestList());
         }
 
-        public void CleanQuestList()
-        {
-            // Clean up everything marked as 'questlist'
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
-                Destroy(go);
+    Dictionary<string, UIElement> questActionButtons = new Dictionary<string, UIElement>();
 
-            scrollArea = null;
+    public void CleanQuestList()
+    {
+        // Clean up everything marked as 'questlist'
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
+            Destroy(go);
 
-            // quest images
-            images_list.Clear();
+        scrollArea = null;
+        questActionButtons.Clear();
 
-            if (co_display != null)
-                StopCoroutine(co_display);
-        }
+        // quest images
+        images_list.Clear();
+
+        if (co_display != null)
+            StopCoroutine(co_display);
+    }
 
         // check if the quest proposes at least one selected language
         public bool HasSelectedLanguage(QuestData.Quest q)
@@ -821,165 +832,209 @@ namespace Assets.Scripts.UI.Screens
         }
 
 
-        public IEnumerator DrawQuestList()
+    // Draw the list of quests
+    public IEnumerator DrawQuestList()
+    {
+        if (scrollArea == null)
         {
-            UIElement ui = null;
+            // scroll area
+            scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
+            scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
+            new UIElementBorder(scrollArea, Color.grey);
+        }
+        // Add "Loading..." text for all modes
+        UIElement loadingText = new UIElement();
+        loadingText.SetLocation(UIScaler.GetHCenter() - 5, 10, 10, 2);
+        loadingText.SetText(CommonStringKeys.LOADINGSCENARIOS, Color.white);
+        loadingText.SetFont(game.gameType.GetHeaderFont());
+        loadingText.SetFontSize(UIScaler.GetMediumFont());
 
-            // Start here
-            float offset = 0;
-            int nb_filtered_out_quest = 0;
-            bool is_expansion_missing = false;
+        // Hide scroll area while loading
+        if (scrollArea != null)
+        {
+            scrollArea.GetScrollTransform().gameObject.SetActive(false);
+        }
 
-            if (scrollArea == null)
+        // reset sort information
+        last_author = "";
+        last_update_info = null;
+
+        // Wait for the quest list to be downloaded (if online and still downloading)
+        while (game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+        {
+            yield return null;
+        }
+
+        if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+        {
+            // Only need to load from disk if offline
+            yield return StartCoroutine(game.questsList.WaitForQuestsLoad());
+        }
+
+        // Update the list (download/sort) - this can be slow
+        // For online, this fetches/prepares the sorted list
+        GetQuestList();
+
+        // Check if we found anything (Error handling)
+        if (questList.Count == 0 && game.questsList.quest_list_mode == QuestsManager.QuestListMode.ONLINE)
+        {
+             // If online and nothing found, maybe connection error?
+             // But we just want to ensure we tried.
+        }
+
+        // Draw the list
+        yield return StartCoroutine(DrawListItems());
+        
+        // Destroy loading text
+        loadingText.Destroy();
+        
+        // Show scroll area
+        if (scrollArea != null)
+        {
+            scrollArea.GetScrollTransform().gameObject.SetActive(true);
+        }
+    }
+
+    private IEnumerator DrawListItems()
+    {
+        UIElement ui = null;
+
+        // Start here
+        float offset = 0;
+        int nb_filtered_out_quest = 0;
+        bool is_expansion_missing = false;
+
+        // Stopwatch for time-slicing
+        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        stopwatch.Start();
+
+        // Loop through all available quests
+        foreach (string key in questList)
+        {
+            QuestData.Quest q = game.questsList.GetQuestData(key);
+
+            //skip the quest if it was marked as invalid
+            if (!q.valid)
             {
-                // scroll area
-                scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
-                scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
-                new UIElementBorder(scrollArea, Color.grey);
+                ValkyrieDebug.Log("WARNING: Scenario " + key + " is not valid, skipping it");
+                continue;
             }
 
-            // reset sort information
-            last_author = "";
-            last_update_info = null;
+            UIElement frame = null;
+            is_expansion_missing = false;
 
-            // wait for the quest list to be downloaded
-            while (game.questsList.quest_list_mode == QuestsManager.QuestListMode.DOWNLOADING)
+            // Filter langs
+            if (!HasSelectedLanguage(q))
+            {
+                nb_filtered_out_quest++;
+                continue;
+            }
+
+            // Filter packages
+            if (filter_missing_expansions && q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count != 0)
+            {
+                nb_filtered_out_quest++;
+                continue;
+            }
+
+            try
+            {
+                // Statistics data preparation for this quest
+                string filename = key.ToLower() + ValkyrieConstants.ScenarioDownloadContainerExtension;
+                bool has_stats = (game.stats != null && game.stats.scenarios_stats != null && game.stats.scenarios_stats.ContainsKey(filename));
+                int stats_play_count = 0;
+                int stats_win_ratio = 0;
+                int stats_avg_duration = 0;
+                float stats_rating = 0f;
+                if (has_stats)
+                {
+                    ScenarioStats q_stats = game.stats.scenarios_stats[filename];
+                    stats_play_count = q_stats.scenario_play_count;
+                    stats_win_ratio = (int)(q_stats.scenario_avg_win_ratio * 100);
+                    stats_avg_duration = (int)(q_stats.scenario_avg_duration);
+                    stats_rating = q_stats.scenario_avg_rating / 10;
+                }
+
+                // Get data translation
+                string name_translation, synopsys_translation;
+                QuestGetTranslations(q, out name_translation, out synopsys_translation);
+
+                // Text information displayed depending on sort option
+                offset = DrawSortInfo(key, offset);
+
+                // Frame
+                frame = QuestRenderFrame(ref offset);
+
+                // prepare/draw list of Images
+                ui = QuestRenderImage(offset, q);
+
+                // languages flags
+                ui = QuestRenderLanguageFlags(ui, offset, q);
+
+                // Quest name
+                ui = QuestRenderName(offset, ref name_translation);
+
+                // Required expansions
+                float heroes_y_offset;
+                int expansions_symbol_font_size;
+                QuestRenderPackSymbols(ref ui, offset, ref is_expansion_missing, q, out heroes_y_offset, out expansions_symbol_font_size);
+
+                // Min/max heroes
+                ui = QuestRenderMinMaxHeroes(q, heroes_y_offset, expansions_symbol_font_size);
+
+                // Quest short description (synopsys)
+                QuestRenderShortDescription(ref ui, offset, ref synopsys_translation);
+
+                // Action Button
+                // - First burnt hole
+                ui = QuestRenderActionButton(offset, is_expansion_missing, key, q);
+
+                // all texts below use this y value as reference
+                float top_text_y = offset + 4.1f;
+
+                // Duration
+                ui = QuestRenderDuration(ui, q, top_text_y);
+
+                //  average duration
+                ui = QuestRenderAverageDuration(ui, has_stats, stats_avg_duration, top_text_y);
+
+                // Difficulty
+                ui = QuestRenderDifficulity(ui, q, top_text_y);
+
+                //  average win ratio
+                ui = QuestRenderWinRatio(ui, has_stats, stats_win_ratio, top_text_y);
+
+                //  rating
+                ui = QuestRenderRating(ui, has_stats, stats_play_count, stats_rating, top_text_y);
+
+                offset += 7.1f;
+
+                scrollArea.SetScrollSize(offset);
+
+                if (nb_filtered_out_quest > 0)
+                {
+                    StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
+                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+                }
+                else
+                {
+                    text_number_of_filtered_scenario.SetText(" ");
+                }
+            }
+            catch (Exception e)
+            {
+                ValkyrieDebug.Log("ERROR: Error while processing quest " + key + ": " + e.Message);
+            }                
+
+            if (stopwatch.ElapsedMilliseconds > 4)
             {
                 yield return null;
+                stopwatch.Restart();
             }
+        }
 
-            if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
-            {
-                // Get and load a list of all locally available quests
-                game.questsList.LoadAllLocalQuests();
-            }
-
-            // get quest list dependant on mode (online/offline)
-            GetQuestList();
-
-            // Loop through all available quests
-            foreach (string key in questList)
-            {
-                QuestData.Quest q = game.questsList.GetQuestData(key);
-
-                //skip the quest if it was marked as invalid
-                if (!q.valid)
-                {
-                    ValkyrieDebug.Log("WARNING: Scenario " + key + " is not valid, skipping it");
-                    continue;
-                }
-
-                UIElement frame = null;
-                is_expansion_missing = false;
-
-                // Filter langs
-                if (!HasSelectedLanguage(q))
-                {
-                    nb_filtered_out_quest++;
-                    continue;
-                }
-
-                // Filter packages
-                if (filter_missing_expansions && q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count != 0)
-                {
-                    nb_filtered_out_quest++;
-                    continue;
-                }
-
-                try
-                {
-                    // Statistics data preparation for this quest
-                    string filename = key.ToLower() + ValkyrieConstants.ScenarioDownloadContainerExtension;
-                    bool has_stats = (game.stats != null && game.stats.scenarios_stats != null && game.stats.scenarios_stats.ContainsKey(filename));
-                    int stats_play_count = 0;
-                    int stats_win_ratio = 0;
-                    int stats_avg_duration = 0;
-                    float stats_rating = 0f;
-                    if (has_stats)
-                    {
-                        ScenarioStats q_stats = game.stats.scenarios_stats[filename];
-                        stats_play_count = q_stats.scenario_play_count;
-                        stats_win_ratio = (int)(q_stats.scenario_avg_win_ratio * 100);
-                        stats_avg_duration = (int)(q_stats.scenario_avg_duration);
-                        stats_rating = q_stats.scenario_avg_rating / 10;
-                    }
-
-                    // Get data translation
-                    string name_translation, synopsys_translation;
-                    QuestGetTranslations(q, out name_translation, out synopsys_translation);
-
-                    // Text information displayed depending on sort option
-                    offset = DrawSortInfo(key, offset);
-
-                    // Frame
-                    frame = QuestRenderFrame(ref offset);
-
-                    // prepare/draw list of Images
-                    ui = QuestRenderImage(offset, q);
-
-                    // languages flags
-                    ui = QuestRenderLanguageFlags(ui, offset, q);
-
-                    // Quest name
-                    ui = QuestRenderName(offset, ref name_translation);
-
-                    // Required expansions
-                    float heroes_y_offset;
-                    int expansions_symbol_font_size;
-                    QuestRenderPackSymbols(ref ui, offset, ref is_expansion_missing, q, out heroes_y_offset, out expansions_symbol_font_size);
-
-                    // Min/max heroes
-                    ui = QuestRenderMinMaxHeroes(q, heroes_y_offset, expansions_symbol_font_size);
-
-                    // Quest short description (synopsys)
-                    QuestRenderShortDescription(ref ui, offset, ref synopsys_translation);
-
-                    // Action Button
-                    // - First burnt hole
-                    ui = QuestRenderActionButton(offset, is_expansion_missing, key, q);
-
-                    // all texts below use this y value as reference
-                    float top_text_y = offset + 4.1f;
-
-                    // Duration
-                    ui = QuestRenderDuration(ui, q, top_text_y);
-
-                    //  average duration
-                    ui = QuestRenderAverageDuration(ui, has_stats, stats_avg_duration, top_text_y);
-
-                    // Difficulty
-                    ui = QuestRenderDifficulity(ui, q, top_text_y);
-
-                    //  average win ratio
-                    ui = QuestRenderWinRatio(ui, has_stats, stats_win_ratio, top_text_y);
-
-                    //  rating
-                    ui = QuestRenderRating(ui, has_stats, stats_play_count, stats_rating, top_text_y);
-
-                    offset += 7.1f;
-
-                    scrollArea.SetScrollSize(offset);
-
-                    if (nb_filtered_out_quest > 0)
-                    {
-                        StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
-                        text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
-                    }
-                    else
-                    {
-                        text_number_of_filtered_scenario.SetText(" ");
-                    }
-                }
-                catch (Exception e)
-                {
-                    ValkyrieDebug.Log("ERROR: Error while processing quest " + key + ": " + e.Message);
-                }                
-
-                yield return null;
-            }
-
-            // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
-            if (nb_filtered_out_quest > 0)
+        // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
+        if (nb_filtered_out_quest > 0)
             {
                 StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
                 text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
@@ -989,12 +1044,69 @@ namespace Assets.Scripts.UI.Screens
                 text_number_of_filtered_scenario.SetText(" ");
             }
 
-            images_list.StartDownloadASync();
+            images_list.StartDownloadASync(scrollArea);
         }
 
+    private UIElement QuestRenderActionButton(float offset, bool is_expansion_missing, string key, QuestData.Quest q)
+    {
+        UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+        ui.SetBGColor(Color.clear);
+        ui.SetLocation(UIScaler.GetRight(-10.5f), offset + 0.5f, 6, 4f);
+        ui.SetImage(button_hole);
+        if (!is_expansion_missing)
+        {
+            ui.SetButton(delegate { Selection(key); });
+        }
+        // - then action button
+        ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+        ui.SetBGColor(Color.clear);
+        ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
+        
+        UpdateButtonVisuals(ui, key, q, is_expansion_missing);
+
+        questActionButtons[key] = ui;
+
+        return ui;
+    }
+
+    public void UpdateQuestButton(string key)
+    {
+        if (questActionButtons.ContainsKey(key))
+        {
+            QuestData.Quest q = game.questsList.GetQuestData(key);
+            bool is_expansion_missing = q.GetMissingPacks(game.cd.GetLoadedPackIDs()).Count != 0;
+            UpdateButtonVisuals(questActionButtons[key], key, q, is_expansion_missing);
+        }
+    }
+
+    private void UpdateButtonVisuals(UIElement ui, string key, QuestData.Quest q, bool is_expansion_missing)
+    {
+        if (is_expansion_missing)
+        {
+            ui.SetImage(button_no_entry);
+        }
+        else if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
+        {
+            ui.SetImage(button_play);
+            ui.SetButton(delegate { Selection(key); });
+        }
+        else if (q.downloaded)
+        {
+            if (q.update_available)
+                ui.SetImage(button_update);
+            else
+                ui.SetImage(button_play);
+            ui.SetButton(delegate { Selection(key); });
+        }
+        else
+        {
+            ui.SetImage(button_download);
+            ui.SetButton(delegate { Selection(key); });
+        }
+    }    
         private UIElement QuestRenderImage(float offset, QuestData.Quest q)
         {
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
             ui.SetLocation(0.9f, offset + 0.8f, 5f, 5f); // this is the location for the shadow (to be displayed first)
             ui.SetBGColor(Color.clear);
             if (q.image.Length > 0)
@@ -1057,7 +1169,7 @@ namespace Assets.Scripts.UI.Screens
 
         private UIElement QuestRenderFrame(ref float offset)
         {
-            UIElement frame = new UIElement(scrollArea.GetScrollTransform());
+            UIElement frame = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
             frame.SetLocation(0f, offset, UIScaler.GetWidthUnits() - 3.2f, 6.7f);
             frame.SetBGColor(Color.white);
             frame.SetImage(scroll_paper);
@@ -1089,7 +1201,7 @@ namespace Assets.Scripts.UI.Screens
 
                 foreach (string lang_name in languages)
                 {
-                    ui = new UIElement(scrollArea.GetScrollTransform());
+                    ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                     flagTex = Resources.Load("sprites/flags/" + lang_name) as Texture2D;
                     ui.SetLocation(flag_x_offset, flag_y_offset, flag_size, flag_size);
                     ui.SetImage(flagTex);
@@ -1102,7 +1214,7 @@ namespace Assets.Scripts.UI.Screens
 
         private UIElement QuestRenderName(float offset, ref string name_translation)
         {
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
             ui.SetLocation(5.5f, offset + 0.3f, UIScaler.GetWidthUnits() - 8, 1.5f);
             ui.SetTextPadding(0.5f);
@@ -1136,7 +1248,6 @@ namespace Assets.Scripts.UI.Screens
             string pack_symbol_available = "";
             string pack_symbol_missing = "";
 
-            bool packFound = false;
             foreach (string pack in q.packs)
             {
                 if (game.cd.packSymbolDict.ContainsKey(pack))
@@ -1158,7 +1269,6 @@ namespace Assets.Scripts.UI.Screens
                         ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                         if (game.cd.loadedPacks.Contains(pack))
                         {
-                            packFound = true;
                             pack_symbol_available += pack;
                         }
                         else
@@ -1172,7 +1282,6 @@ namespace Assets.Scripts.UI.Screens
                     ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                     if (game.cd.loadedPacks.Contains(pack))
                     {
-                        packFound = true;
                         pack_symbol_available += pack;
                     }
                     else
@@ -1185,7 +1294,7 @@ namespace Assets.Scripts.UI.Screens
 
             if (!string.IsNullOrWhiteSpace(pack_symbol_available))
             {
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size, game.gameType.GetSymbolFont());
                 ui.SetLocation(expansion_x_offset, expansion_y_offset, symbols_available_width + 1, 1);
                 ui.SetText(pack_symbol_available, Color.black);
@@ -1198,7 +1307,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 is_expansion_missing = true;
                 pack_symbol_missing = MISSING_EXPANSIONS.Translate() + pack_symbol_missing;
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size, game.gameType.GetSymbolFont());
                 ui.SetLocation(expansion_x_offset + symbols_available_width, expansion_y_offset, symbols_missing_width + 1, 1);
                 ui.SetText(pack_symbol_missing, dark_red_text_color);
@@ -1215,7 +1324,7 @@ namespace Assets.Scripts.UI.Screens
                 //  Number of user reviews
                 StringKey STATS_NB_USER_REVIEWS = new StringKey("val", "STATS_NB_USER_REVIEWS", stats_play_count);
                 float user_review_text_width = 0;
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 user_review_text_width = ui.GetStringWidth(STATS_NB_USER_REVIEWS, UIScaler.GetSmallFont()) + 1;
                 ui.SetText(STATS_NB_USER_REVIEWS, Color.black);
                 ui.SetLocation(UIScaler.GetRight(-10.5f) - (user_review_text_width), top_text_y + 0.7f, user_review_text_width, 1);
@@ -1233,7 +1342,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 float score_text_width = 0;
 
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, grey_transparent_text_color);
                 score_text_width = ui.GetStringWidth(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, font_size);
                 ui.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
@@ -1242,7 +1351,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetTextHorizontalOverflow(HorizontalWrapMode.Overflow);
 
-                UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
+                UIElementCropped uic = new UIElementCropped(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 uic.SetText(rating_symbol + rating_symbol + rating_symbol + rating_symbol + rating_symbol, Color.black);
                 uic.SetLocation(UIScaler.GetRight(-10.5f), top_text_y + 0.4f, score_text_width, 1.8f);
                 uic.SetBGColor(Color.clear);
@@ -1261,7 +1370,7 @@ namespace Assets.Scripts.UI.Screens
             if (has_stats)
             {
                 StringKey STATS_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_AVERAGE_WIN_RATIO", stats_win_ratio);
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y + 1f, 15, 1);
                 if (stats_win_ratio >= 0)
                     ui.SetText(STATS_AVERAGE_WIN_RATIO, Color.black);
@@ -1279,7 +1388,7 @@ namespace Assets.Scripts.UI.Screens
             if (q.difficulty != 0)
             {
                 float difficulty_text_offset = 0f;
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetText(new StringKey("val", "DIFFICULTY"), Color.black);
                 difficulty_text_offset = ui.GetStringWidth(new StringKey("val", "DIFFICULTY"));
                 ui.SetLocation(UIScaler.GetHCenter() - 5.5f, top_text_y, difficulty_text_offset + 0.5f, 1);
@@ -1295,7 +1404,7 @@ namespace Assets.Scripts.UI.Screens
                 }
                 float difficulty_string_width = 0;
 
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 difficulty_string_width = ui.GetStringWidth(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, font_size);
                 ui.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                 ui.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, grey_transparent_text_color);
@@ -1303,7 +1412,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 ui.SetFontSize(font_size);
 
-                UIElementCropped uic = new UIElementCropped(scrollArea.GetScrollTransform());
+                UIElementCropped uic = new UIElementCropped(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 uic.SetLocation(UIScaler.GetHCenter() + (difficulty_text_offset - 5.5f), top_text_y + 0.1f, difficulty_string_width, 1);
                 uic.SetText(difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol + difficulty_symbol, Color.black);
                 uic.SetTextAlignment(TextAnchor.LowerLeft);
@@ -1320,7 +1429,7 @@ namespace Assets.Scripts.UI.Screens
             if (has_stats)
             {
                 StringKey STATS_AVERAGE_DURATION = new StringKey("val", "STATS_AVERAGE_DURATION", stats_avg_duration);
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetLocation(6, top_text_y + 1, 15, 1);
                 if (stats_avg_duration > 0)
                     ui.SetText(STATS_AVERAGE_DURATION, Color.black);
@@ -1339,14 +1448,14 @@ namespace Assets.Scripts.UI.Screens
             {
                 float duration_text_offset = 0f;
 
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetText(new StringKey("val", "DURATION"), Color.black);
                 duration_text_offset = ui.GetStringWidth(new StringKey("val", "DURATION"));
                 ui.SetLocation(6f, top_text_y, duration_text_offset + 0.5f, 1);
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
                 ui.SetBGColor(Color.clear);
 
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetLocation(6f + duration_text_offset + 0.5f, top_text_y, 5, 1);
                 ui.SetText(q.lengthMin + "  -  " + q.lengthMax, Color.black);
                 ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -1356,51 +1465,13 @@ namespace Assets.Scripts.UI.Screens
             return ui;
         }
 
-        private UIElement QuestRenderActionButton(float offset, bool is_expansion_missing, string key, QuestData.Quest q)
-        {
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
-            ui.SetBGColor(Color.clear);
-            ui.SetLocation(UIScaler.GetRight(-10.5f), offset + 0.5f, 6, 4f);
-            ui.SetImage(button_hole);
-            if (!is_expansion_missing)
-            {
-                ui.SetButton(delegate { Selection(key); });
-            }
-            // - then action button
-            ui = new UIElement(scrollArea.GetScrollTransform());
-            ui.SetBGColor(Color.clear);
-            ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
-            if (is_expansion_missing)
-            {
-                ui.SetImage(button_no_entry);
-            }
-            else if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
-            {
-                ui.SetImage(button_play);
-                ui.SetButton(delegate { Selection(key); });
-            }
-            else if (q.downloaded)
-            {
-                if (q.update_available)
-                    ui.SetImage(button_update);
-                else
-                    ui.SetImage(button_play);
-                ui.SetButton(delegate { Selection(key); });
-            }
-            else
-            {
-                ui.SetImage(button_download);
-                ui.SetButton(delegate { Selection(key); });
-            }
 
-            return ui;
-        }
 
         private void QuestRenderShortDescription(ref UIElement ui, float offset, ref string synopsys_translation)
         {
             if (synopsys_translation != null)
             {
-                ui = new UIElement(scrollArea.GetScrollTransform());
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
                 ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
                 ui.SetTextPadding(0.5f);
@@ -1419,7 +1490,7 @@ namespace Assets.Scripts.UI.Screens
 
         private UIElement QuestRenderMinMaxHeroes(QuestData.Quest q, float heroes_y_offset, int expansions_symbol_font_size)
         {
-            UIElement ui = new UIElement(scrollArea.GetScrollTransform());
+            UIElement ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
             ui.SetLocation(UIScaler.GetRight(-10f) - 10f, heroes_y_offset, 10f, 1);
             ui.SetText($"{q.minHero}-{q.maxHero} {game.gameType.HeroesName().Translate()}", Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleRight);
@@ -1443,18 +1514,22 @@ namespace Assets.Scripts.UI.Screens
 
             QuestData.Quest q = game.questsList.GetQuestData(key);
 
-            Destroyer.Dialog();
-            CleanQuestList();
+            // Destroyer.Dialog();
+            // CleanQuestList();
 
             if (game.questsList.quest_list_mode != QuestsManager.QuestListMode.ONLINE)
             {
                 // Play
+                Destroyer.Dialog();
+                CleanQuestList();
                 ValkyrieDebug.Log("INFO: ... and launch offline quest");
                 new QuestDetailsScreen(q);
             }
             else if (q.downloaded && !q.update_available)
             {
                 // Play
+                Destroyer.Dialog();
+                CleanQuestList();
                 ValkyrieDebug.Log("INFO: ... and launch online quest");
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
             }
@@ -1466,8 +1541,8 @@ namespace Assets.Scripts.UI.Screens
                 download.tag = Game.QUESTUI;
                 QuestAndContentPackDownload qd = download.AddComponent<QuestAndContentPackDownload>();
                 qd.Download(key, false);
-                // We need to refresh local quest list after download
-                game.questsList.UnloadLocalQuests();
+                // We do NOT refresh the list here, relying on incremental update in QuestsManager
+                // game.questsList.UnloadLocalQuests(); 
             }
         }
     }

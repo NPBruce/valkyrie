@@ -163,6 +163,23 @@ public class QuestsManager
             IniData downloaded_quest = IniRead.ReadFromString(remote_quests_data[key].ToString());
             localManifest.Remove(key);
             localManifest.Add(key, downloaded_quest.data["Quest"]);
+
+            // Update local cache if it exists
+            if (local_quests_data != null)
+            {
+                // Constructing a QuestData.Quest from IniData:
+                QuestData.Quest newQuest = new QuestData.Quest(key, downloaded_quest.data["Quest"]);
+                newQuest.valid = true; // Assume valid if downloaded successfully
+                
+                if (local_quests_data.ContainsKey(key))
+                {
+                    local_quests_data[key] = newQuest;
+                }
+                else
+                {
+                    local_quests_data.Add(key, newQuest);
+                }
+            }
         }
         else
         {
@@ -179,8 +196,11 @@ public class QuestsManager
         File.WriteAllText(saveLocation + ValkyrieConstants.ScenarioManifestPath, localManifest.ToString());
 
         // update status quest
-        remote_quests_data[key].downloaded = isAvailable;
-        remote_quests_data[key].update_available = false;
+        if (remote_quests_data.ContainsKey(key))
+        {
+            remote_quests_data[key].downloaded = isAvailable;
+            remote_quests_data[key].update_available = false;
+        }
     }
 
     /// <summary>
@@ -367,6 +387,59 @@ public class QuestsManager
             UnloadLocalQuests();
             // extract and load local quest
             local_quests_data = QuestLoader.GetQuests();
+        }
+    }
+
+    public void LoadAllLocalQuestsAsync(System.Action callback)
+    {
+        if (local_quests_data != null)
+        {
+            callback?.Invoke();
+            return;
+        }
+
+        UnloadLocalQuests();
+
+        // Prepare context on main thread
+        QuestData.QuestLoaderContext context = new QuestData.QuestLoaderContext();
+        context.gameType = Game.Get().gameType.TypeName();
+        context.maxHeroes = Game.Get().gameType.MaxHeroes();
+        context.defaultHeroes = Game.Get().gameType.DefaultHeroes();
+        context.currentLang = Game.Get().currentLang;
+        context.isMoM = Game.Get().gameType is MoMGameType;
+        context.questListMode = Game.Get().questsList.quest_list_mode;
+
+        // Start async loading
+        var task = QuestLoader.GetQuestsAsync(context);
+        Game.Get().StartCoroutine(WaitForQuestsLoad(task, callback));
+    }
+
+    public System.Collections.IEnumerator WaitForQuestsLoad(System.Threading.Tasks.Task<Dictionary<string, QuestData.Quest>> task, System.Action callback)
+    {
+        while (!task.IsCompleted)
+        {
+            yield return null;
+        }
+
+        if (task.IsFaulted)
+        {
+            ValkyrieDebug.Log("Error loading quests: " + task.Exception);
+            local_quests_data = new Dictionary<string, QuestData.Quest>();
+        }
+        else
+        {
+            local_quests_data = task.Result;
+        }
+        callback?.Invoke();
+    }
+
+    public IEnumerator WaitForQuestsLoad()
+    {
+        bool done = false;
+        LoadAllLocalQuestsAsync(() => done = true);
+        while (!done)
+        {
+            yield return null;
         }
     }
 

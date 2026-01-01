@@ -10,7 +10,7 @@ using System.Linq;
 // Class for quest selection window
 public class QuestAndContentPackDownload : MonoBehaviour
 {
-    public WWW download;
+    public UnityEngine.Networking.UnityWebRequest download;
     public Game game;
     string key = "";
     bool isContentPack;
@@ -62,7 +62,7 @@ public class QuestAndContentPackDownload : MonoBehaviour
     public void Save(string key, bool isContentPack)
     {
         // in case of error during download, do nothing
-        if (!string.IsNullOrEmpty(download.error) || download.bytesDownloaded <= 0)
+        if (download.isNetworkError || download.isHttpError || download.downloadedBytes <= 0)
             return;
 
         // Write to disk
@@ -90,7 +90,7 @@ public class QuestAndContentPackDownload : MonoBehaviour
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
         {
-            writer.Write(download.bytes);
+            writer.Write(download.downloadHandler.data);
             writer.Close();
         }
 
@@ -113,8 +113,10 @@ public class QuestAndContentPackDownload : MonoBehaviour
         }
         else
         {
-            game.questSelectionScreen.Show();
+            game.questSelectionScreen.UpdateQuestButton(key);
         }
+
+        download.Dispose();
     }
 
     /// <summary>
@@ -124,10 +126,10 @@ public class QuestAndContentPackDownload : MonoBehaviour
     /// <param name="call">function to call on completion</param>
     public IEnumerator Download(string file, UnityEngine.Events.UnityAction call)
     {
-        download = new WWW(file);
+        download = UnityEngine.Networking.UnityWebRequest.Get(file);
         new LoadingScreen(download, new StringKey("val", "DOWNLOAD_PACKAGE").Translate());
-        yield return download;
-        if (!string.IsNullOrEmpty(download.error))
+        yield return download.SendWebRequest();
+        if (download.isNetworkError || download.isHttpError)
         {
             // fixme not fatal
             ValkyrieDebug.Log("Error while downloading :" + file);

@@ -440,3 +440,6 @@ FULLSCREEN,Schermo intero
 ON,Attivo
 OFF,Disattivo
 EXPORT_LOG,Esporta log
+
+LOADINGSCENARIOS,Caricamento scenari...
+LOADINGCONTENTPACKS,Caricamento pacchetti di contenuti...
