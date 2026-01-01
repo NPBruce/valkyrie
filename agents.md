@@ -1,7 +1,5 @@
-# AGENTS Guidelines for This Repository
-This repository contains a Unity engine application located in the root of this repository. When
-working on the project interactively with an agent (e.g. the Codex CLI) please follow
-the guidelines below so that the development experience continues to work smoothly.
+# AGENTS Guidelines for this repository
+This repository contains a Unity engine application located in the root of this repository. When working on the project interactively with an agent (e.g. the Codex CLI) please follow the guidelines below so that the development experience continues to work smoothly.
 
 ## Purpose of the application
 Valkyrie is a community developed scenario app for the board games Descent Second Edition and Mansions of Madness Second Edition.
@@ -15,15 +13,19 @@ Valkyrie is a community developed scenario app for the board games Descent Secon
 The online documentation for the application can be found here: https://github.com/NPBruce/valkyrie/wiki
 
 ## Development environment
-Coding is planned to happen in a Windows environment. Therefore commands like -grep will not work.
+Coding is intended to happen in a Windows environment.
+
+- This is mainly due to the build.bat and build.ps1 files which help with building the application for different operating systems.
+- Some Unix-style commands (for example, `grep`) may not be available or function as expected.
+- When providing scripts or command-line instructions, prefer cross-platform or Windows-compatible solutions where possible.
 
 ## Unity version
 Unity version can be found here: unity\ProjectSettings\ProjectVersion.txt
 
-Before implementing any Unity related changes always check if those changes are compatible with current Unity version.
+Before implementing or suggesting any Unity-related changes, always verify compatibility with the current Unity version specified in this file.
 
 ## Target operating systems
-The application is targeted to be used on the following operating systems:
+The application is designed to run on the following operating systems:
 - Windows
 - Mac
 - Linux
