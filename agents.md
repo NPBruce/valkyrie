@@ -1,6 +1,5 @@
 # AGENTS Guidelines for this repository
-
-You are an expert in C#, Unity, and scalable game development.
+You are an expert in C#, Unity, and scalable application development.
 
 This repository contains a Unity engine application located in the root of this repository. When working on the project interactively with an agent (e.g. the Codex CLI) please follow the guidelines below so that the development experience continues to work smoothly.
 
@@ -20,7 +19,7 @@ The online documentation for the application can be found here: https://github.c
 ### Key Principles
 - Write clear, technical responses with precise C# and Unity examples.
 - Prioritize readability and maintainability; follow C# coding conventions and Unity best practices.
-- Use descriptive variable and function names; adhere to naming conventions (e.g., PascalCase for public members, camelCase for private members).
+- Use descriptive variable and function names.
 - Structure your project in a modular way using Unity's component-based architecture to promote reusability and separation of concerns.
 
 ### C#/Unity
@@ -76,9 +75,58 @@ The application is designed to run on the following operating systems:
 - Android
 
 ## Project structure and logic
+- The application is purely based on unities UI system (Canvas, UI elements) for creating the app user interface.
+- The unity project is located in folder `unity`.
+- There is only one scene in the unity project located at `unity\Assets\Scenes\Game.unity`.
+
+### Assets
+Assets are located in folder `unity/Assets`.
+
+### Code
+C# code is located in folder `unity/Assets/Scripts`.
+
+#### Constants
+Constants are located in file `unity/Assets/Scripts/ValkyrieConstants.cs`.
+
+#### UI components
+UI components are located in folder `unity/Assets/Scripts/UI`.
+
+#### UI screens
+UI screens are located in folder `unity/Assets/Scripts/UI/Screens`.
+
+### Website
+The public GitHub website data is located in folder `web` and `index.html`.
+
+### GitHub data
+
+#### GitHub actions
+GitHub actions are located in folder `.github/workflows/`.
+
+#### GitHub issue templates
+GitHub issues are located in folder `.github/ISSUE_TEMPLATE/`.
+
+### Libraries
+Additional c# helper libraries are located in folder `libraries`. Helper libraries are:
+- **FFGAppImport**: Imports assets from official FFG apps.
+- **ValkyrieTools**: Common helpers and Android JNI utilities.
+- **SetVersion**: Updates version numbers in build files.
+- **ObbExtract**: Extract files from Android OBB archives.
+- **IADBExtract / Injection / MoMInjection**: Tools to extract/convert game data to Valkyrie format.
+- **PuzzleGenerator**: Generates puzzle data.
+
+#### Resources
+Resources are located in folder `unity/Assets/Resources`. Resource data contains:
+- External scripts: External files used for different purposes under `unity/Assets/Resources/Scripts/`
+- Fonts: Font files under `unity/Assets/Resources/Fonts/`
+- Sprites: Icons and other common images under `unity/Assets/Resources/Sprites/`
+
+### Build scripts
+There are two build scripts:
+- `build.bat` is a batch file for Windows.
+- `build.ps1` is a PowerShell script for Windows. This file is used in the GitHub actions build pipeline (`github\workflows\buildAndOptionalRelease.yml`).
 
 ### Localization files
-Localization files are located in `Assets/StreamingAssets/text/`.
+UI text should always get localized. Localization files are located in `Assets/StreamingAssets/text/`.
 - `Localization.English.txt` is the master file.
 - The format is `KEY,Value`.
 - When adding new text:
