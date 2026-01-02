@@ -30,7 +30,7 @@ This repository contains a Unity engine application located in the root of this 
 - Unity Asset Store packages (as needed for specific functionality)
 - Third-party plugins (carefully vetted for compatibility and performance)
 
-Key Conventions
+### Key Conventions
 1. Follow Unity's component-based architecture for modular and reusable game elements.
 2. Prioritize performance optimization and memory management in every stage of development.
 3. Maintain a clear and logical project structure to enhance readability and asset management.
