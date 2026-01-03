@@ -627,7 +627,6 @@ FILTER_TITLE,필터 선택
 FILTER_SELECT_LANG,선택 언어(s) 숨기기:
 FILTER_MISSING_EXPANSIONS_ON,보유하지 않는 확장 시나리오 숨기기 ☑
 FILTER_MISSING_EXPANSIONS_OFF,보유하지 않는 확장 시나리오 숨기기 ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} 시나리오(s) 필터
 
 AUTHORS_SHORT,제작자 문구(목록 정렬-제작자 옵션)
 AUTHORS_UNKNOWN,알 수 없는 제작자 (제작자 업데이트 필요)
@@ -672,3 +671,4 @@ EXPORT_LOG,로그 내보내기
 
 LOADINGSCENARIOS,시나리오 로딩 중...
 LOADINGCONTENTPACKS,콘텐츠 팩 로딩 중...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} 시나리오 (+{1} 시나리오 필터)

@@ -634,7 +634,6 @@ FILTER_TITLE,Vyber filtry
 FILTER_SELECT_LANG,Vyber jazyk(y):
 FILTER_MISSING_EXPANSIONS_ON,Skrýt scénáře s chybějícími rozšířeními  ☑
 FILTER_MISSING_EXPANSIONS_OFF,Skrýt scénáře s chybějícími rozšířeními  ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenář(ů) vyfiltrováno
 
 AUTHORS_SHORT,"Jeden řádek pro autory (pro volbu ""řazení podle autora"")"
 AUTHORS_UNKNOWN,Neznámí autoři
@@ -679,3 +678,4 @@ EXPORT_LOG,Exportovat log
 
 LOADINGSCENARIOS,Načítání scénářů...
 LOADINGCONTENTPACKS,Načítání balíčků obsahu...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenářů (+{1} vyfiltrováno)

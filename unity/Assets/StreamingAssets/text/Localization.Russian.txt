@@ -460,7 +460,6 @@ FILTER_TITLE,Фильтры
 FILTER_SELECT_LANG,Выберите язык(-и), на котором вы говорите:
 FILTER_MISSING_EXPANSIONS_ON,Скрыть сценарии с отсутствующими дополнениями ☑
 FILTER_MISSING_EXPANSIONS_OFF,Скрыть сценарии с отсутствующими дополнениями ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,Скрыто сценариев: {0}
 
 AUTHORS_SHORT,Автор сценария (для "сортировки по авторам")
 AUTHORS_UNKNOWN,Аноним (требуется обновление сценария автором)
@@ -506,3 +505,4 @@ EXPORT_LOG,Экспорт журнала
 
 LOADINGSCENARIOS,Загрузка сценариев...
 LOADINGCONTENTPACKS,Загрузка пакетов контента...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} сценариев (+{1} скрыто)

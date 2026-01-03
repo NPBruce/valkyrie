@@ -902,6 +902,8 @@ namespace Assets.Scripts.UI.Screens
         // Start here
         float offset = 0;
         int nb_filtered_out_quest = 0;
+        int nb_invalid_quest = 0;
+        int total_scenarios = questList.Count;
         bool is_expansion_missing = false;
 
         // Stopwatch for time-slicing
@@ -917,6 +919,7 @@ namespace Assets.Scripts.UI.Screens
             if (!q.valid)
             {
                 ValkyrieDebug.Log("WARNING: Scenario " + key + " is not valid, skipping it");
+                nb_invalid_quest++;
                 continue;
             }
 
@@ -1013,8 +1016,8 @@ namespace Assets.Scripts.UI.Screens
 
                 if (nb_filtered_out_quest > 0)
                 {
-                    StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
-                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+                    StringKey FILTER_TEXT_TOTAL_AND_FILTERED = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
+                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_TOTAL_AND_FILTERED);
                 }
                 else
                 {
@@ -1036,8 +1039,8 @@ namespace Assets.Scripts.UI.Screens
         // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
         if (nb_filtered_out_quest > 0)
             {
-                StringKey FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO = new StringKey("val", "FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO", nb_filtered_out_quest);
-                text_number_of_filtered_scenario.SetText(FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO);
+                StringKey FILTER_TEXT_TOTAL_AND_FILTERED = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
+                text_number_of_filtered_scenario.SetText(FILTER_TEXT_TOTAL_AND_FILTERED);
             }
             else
             {

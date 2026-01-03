@@ -66,7 +66,7 @@ The application is designed to run on the following operating systems:
 - Android
 
 ## Project structure
-For project structure see `README.md`.
+For project structure see `README.md`. Check this structure first when searching for content in the repostory to speed up finding it.
 
 ## Application wiki
 Wiki documentation for the application can be found here: https://github.com/NPBruce/valkyrie/wiki

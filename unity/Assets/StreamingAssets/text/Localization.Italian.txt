@@ -397,7 +397,6 @@ FILTER_TITLE,Seleziona filtri
 FILTER_SELECT_LANG,Seleziona le lingue che parli:
 FILTER_MISSING_EXPANSIONS_ON,Nascondi scenari con espansioni mancanti ☑
 FILTER_MISSING_EXPANSIONS_OFF,Nascondi scenari con espansioni mancanti ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} scenari filtrati
 
 AUTHORS_SHORT,Linea di testo per Autori (per l’opzione "filtra per autore")
 AUTHORS_UNKNOWN,Autori sconosciuti (richiede aggiornamento scenario dell’autore)
@@ -443,3 +442,4 @@ EXPORT_LOG,Esporta log
 
 LOADINGSCENARIOS,Caricamento scenari...
 LOADINGCONTENTPACKS,Caricamento pacchetti di contenuti...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenari (+{1} scenari filtrati)
