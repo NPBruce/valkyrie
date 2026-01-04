@@ -466,7 +466,6 @@ FILTER_TITLE,Selecione os filtros
 FILTER_SELECT_LANG,Selecione os idioma:
 FILTER_MISSING_EXPANSIONS_ON,Esconder cenários com expansões faltando ☑
 FILTER_MISSING_EXPANSIONS_OFF,Esconder cenários com expansões faltando ☐
-FILTER_TEXT_NUMBER_OF_FILTERED_SCENARIO,{0} cenários(s) filtrados
 
 AUTHORS_SHORT,Autores em uma única linha (para opção "ordenar por autor")
 AUTHORS_UNKNOWN,Autores desconhecidos (necessita uma atualização do cenário pelo autor)
@@ -511,3 +510,4 @@ EXPORT_LOG,Exportar log
 
 LOADINGSCENARIOS,Carregando cenários...
 LOADINGCONTENTPACKS,Carregando pacotes de conteúdo...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} cenários (+{1} cenários filtrados)
