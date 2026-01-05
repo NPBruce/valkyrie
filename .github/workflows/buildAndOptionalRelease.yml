@@ -45,6 +45,11 @@ on:
       PreRelease:
         description: 'Pre release'
         required: false
+        default: true
+        type: boolean
+      make_latest:
+        description: 'Make this the latest release'
+        required: false
         default: false
         type: boolean
 
@@ -292,6 +297,7 @@ jobs:
           name: ${{ env.RELEASE_NAME }}
           draft: ${{ github.event.inputs.DraftRelease }}
           prerelease: ${{ github.event.inputs.PreRelease }}
+          make_latest: ${{ github.event.inputs.make_latest }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -315,5 +321,6 @@ jobs:
         with:
           files: ./release_artifacts/*
           tag_name: ${{ env.RELEASE_NAME }}
+          make_latest: ${{ github.event.inputs.make_latest }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
