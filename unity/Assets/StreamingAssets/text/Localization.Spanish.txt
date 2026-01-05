@@ -503,3 +503,8 @@ EXPORT_LOG,Exportar log
 LOADINGSCENARIOS,Cargando escenarios...
 LOADINGCONTENTPACKS,Cargando paquetes de contenido...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} escenarios (+{1} escenarios filtrados)
+
+FADE,Velocidad de fundido
+FADE_INSTANT,Instantáneo
+FADE_FAST,Rápido
+FADE_SLOW,Lento

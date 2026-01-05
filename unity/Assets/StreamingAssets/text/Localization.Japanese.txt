@@ -706,3 +706,8 @@ EXPORT_LOG,ログ出力
 LOADINGSCENARIOS,シナリオを読み込んでいます...
 LOADINGCONTENTPACKS,コンテンツパックを読み込んでいます...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} シナリオ (+{1} シナリオ 除外)
+
+FADE,フェード速度
+FADE_INSTANT,即時
+FADE_FAST,速い
+FADE_SLOW,遅い

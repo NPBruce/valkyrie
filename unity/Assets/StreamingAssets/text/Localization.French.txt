@@ -507,3 +507,8 @@ EXPORT_LOG,Exporter le journal
 LOADINGSCENARIOS,Chargement des scénarios...
 LOADINGCONTENTPACKS,Chargement des packs de contenu...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scénarios (+{1} scénarios filtrés)
+
+FADE,Vitesse de fondu
+FADE_INSTANT,Instantané
+FADE_FAST,Rapide
+FADE_SLOW,Lent

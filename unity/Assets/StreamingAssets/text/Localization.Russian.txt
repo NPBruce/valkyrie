@@ -506,3 +506,8 @@ EXPORT_LOG,Экспорт журнала
 LOADINGSCENARIOS,Загрузка сценариев...
 LOADINGCONTENTPACKS,Загрузка пакетов контента...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} сценариев (+{1} скрыто)
+
+FADE,Скорость затухания
+FADE_INSTANT,Мгновенно
+FADE_FAST,Быстро
+FADE_SLOW,Медленно

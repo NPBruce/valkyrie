@@ -443,3 +443,8 @@ EXPORT_LOG,Esporta log
 LOADINGSCENARIOS,Caricamento scenari...
 LOADINGCONTENTPACKS,Caricamento pacchetti di contenuti...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenari (+{1} scenari filtrati)
+
+FADE,Velocità dissolvenza
+FADE_INSTANT,Istantaneo
+FADE_FAST,Veloce
+FADE_SLOW,Lento

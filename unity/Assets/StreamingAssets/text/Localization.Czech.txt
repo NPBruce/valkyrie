@@ -679,3 +679,8 @@ EXPORT_LOG,Exportovat log
 LOADINGSCENARIOS,Načítání scénářů...
 LOADINGCONTENTPACKS,Načítání balíčků obsahu...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenářů (+{1} vyfiltrováno)
+
+FADE,Rychlost stmívání
+FADE_INSTANT,Okamžitě
+FADE_FAST,Rychle
+FADE_SLOW,Pomalu

@@ -676,3 +676,8 @@ EXPORT_LOG,Export Log
 LOADINGSCENARIOS,Loading scenarios...
 LOADINGCONTENTPACKS,Loading content packs...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenarios (+{1} scenarios filtered out)
+
+FADE,Fade Speed
+FADE_INSTANT,Instant
+FADE_FAST,Fast
+FADE_SLOW,Slow

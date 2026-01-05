@@ -48,6 +48,22 @@ public class EditorComponentUI : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
+        if (uiComponent.imageName.Length > 0)
+        {
+            // Label
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "FADE")));
+
+            // Button/Dropdown
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 4, 1);
+            ui.SetText(new StringKey("val", "FADE_" + uiComponent.fadeSpeed.ToUpper()));
+            ui.SetButton(delegate { SetFadeSpeed(); });
+            new UIElementBorder(ui);
+            offset += 2;
+        }
+
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "UNITS")));
@@ -504,6 +520,23 @@ public class EditorComponentUI : EditorComponentEvent
     public void ToggleBorder()
     {
         uiComponent.border = !uiComponent.border;
+        Update();
+    }
+
+    public void SetFadeSpeed()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectFadeSpeed, CommonStringKeys.SELECT_ITEM);
+        select.AddItem(new StringKey("val", "FADE_INSTANT").Translate(), "instant");
+        select.AddItem(new StringKey("val", "FADE_FAST").Translate(), "fast");
+        select.AddItem(new StringKey("val", "FADE_SLOW").Translate(), "slow");
+        select.Draw();
+    }
+
+    public void SelectFadeSpeed(string speed)
+    {
+        uiComponent.fadeSpeed = speed;
         Update();
     }
 }

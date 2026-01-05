@@ -511,3 +511,8 @@ EXPORT_LOG,Exportar log
 LOADINGSCENARIOS,Carregando cenários...
 LOADINGCONTENTPACKS,Carregando pacotes de conteúdo...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} cenários (+{1} cenários filtrados)
+
+FADE,Velocidade de Desvanecimento
+FADE_INSTANT,Instantâneo
+FADE_FAST,Rápido
+FADE_SLOW,Lento

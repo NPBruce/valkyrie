@@ -478,3 +478,8 @@ EXPORT_LOG,Eksportuj log
 LOADINGSCENARIOS,Wczytywanie scenariuszy...
 LOADINGCONTENTPACKS,Wczytywanie pakietów zawartości...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenariuszy (+{1} odfiltrowano)
+
+FADE,Szybkość zanikania
+FADE_INSTANT,Natychmiast
+FADE_FAST,Szybko
+FADE_SLOW,Wolno
