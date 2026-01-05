@@ -448,3 +448,4 @@ FADE,Velocità dissolvenza
 FADE_INSTANT,Istantaneo
 FADE_FAST,Veloce
 FADE_SLOW,Lento
+ENABLE_CLICK,Consenti clic

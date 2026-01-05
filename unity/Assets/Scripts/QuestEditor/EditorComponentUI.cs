@@ -61,6 +61,23 @@ public class EditorComponentUI : EditorComponentEvent
             ui.SetText(new StringKey("val", "FADE_" + uiComponent.fadeSpeed.ToUpper()));
             ui.SetButton(delegate { SetFadeSpeed(); });
             new UIElementBorder(ui);
+
+            offset += 2;
+
+            // Click Effect Toggle
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 8, 1);
+            ui.SetText(new StringKey("val", "ENABLE_CLICK"));
+            ui.SetButton(delegate { ToggleClickEffect(); });
+            new UIElementBorder(ui);
+            if (uiComponent.enableClick)
+            {
+                ui.SetText(new StringKey("val", "ENABLE_CLICK"), Color.white);
+            }
+            else
+            {
+                ui.SetText(new StringKey("val", "ENABLE_CLICK"), new Color(0.4f, 0.4f, 0.4f));
+            }
             offset += 2;
         }
 
@@ -537,6 +554,12 @@ public class EditorComponentUI : EditorComponentEvent
     public void SelectFadeSpeed(string speed)
     {
         uiComponent.fadeSpeed = speed;
+        Update();
+    }
+
+    public void ToggleClickEffect()
+    {
+        uiComponent.enableClick = !uiComponent.enableClick;
         Update();
     }
 }

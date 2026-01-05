@@ -508,3 +508,4 @@ FADE,Überblendgeschwindigkeit
 FADE_INSTANT,Sofort
 FADE_FAST,Schnell
 FADE_SLOW,Langsam
+ENABLE_CLICK,Klick erlauben

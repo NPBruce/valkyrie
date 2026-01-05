@@ -684,3 +684,4 @@ FADE,Rychlost stmívání
 FADE_INSTANT,Okamžitě
 FADE_FAST,Rychle
 FADE_SLOW,Pomalu
+ENABLE_CLICK,Povolit kliknutí

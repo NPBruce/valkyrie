@@ -483,3 +483,4 @@ FADE,Szybkość zanikania
 FADE_INSTANT,Natychmiast
 FADE_FAST,Szybko
 FADE_SLOW,Wolno
+ENABLE_CLICK,Zezwól na kliknięcie

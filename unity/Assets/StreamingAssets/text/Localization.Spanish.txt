@@ -508,3 +508,4 @@ FADE,Velocidad de fundido
 FADE_INSTANT,Instantáneo
 FADE_FAST,Rápido
 FADE_SLOW,Lento
+ENABLE_CLICK,Permitir clic

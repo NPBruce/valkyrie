@@ -681,3 +681,4 @@ FADE,Fade Speed
 FADE_INSTANT,Instant
 FADE_FAST,Fast
 FADE_SLOW,Slow
+ENABLE_CLICK,Allow Click

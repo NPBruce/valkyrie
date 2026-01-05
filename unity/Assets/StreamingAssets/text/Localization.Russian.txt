@@ -511,3 +511,4 @@ FADE,Скорость затухания
 FADE_INSTANT,Мгновенно
 FADE_FAST,Быстро
 FADE_SLOW,Медленно
+ENABLE_CLICK,Разрешить клик

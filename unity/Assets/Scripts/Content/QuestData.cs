@@ -417,6 +417,7 @@ public class QuestData
 
         public bool border = false;
         public string fadeSpeed = "fast";
+        public bool enableClick = true;
 
         public string uitext_key { get { return genKey("uitext"); } }
 
@@ -429,6 +430,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
+            enableClick = true;
         }
 
         // Create from ini data
@@ -519,6 +521,11 @@ public class QuestData
             {
                 bool.TryParse(data["border"], out border);
             }
+
+            if (data.ContainsKey("clickeffect"))
+            {
+                bool.TryParse(data["clickeffect"], out enableClick);
+            }
         }
 
         // Save to string (for editor)
@@ -591,6 +598,11 @@ public class QuestData
             if (!fadeSpeed.Equals("fast"))
             {
                 r += "fadespeed=" + fadeSpeed + nl;
+            }
+
+            if (!enableClick)
+            {
+                r += "clickeffect=" + enableClick + nl;
             }
 
             return r;
