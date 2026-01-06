@@ -682,5 +682,5 @@ FADE_INSTANT,Instant
 FADE_FAST,Fast
 FADE_SLOW,Slow
 CLICK_BEHAVIOR,Click Behavior
-CLICK_BLINK,Blink / trigger event
+CLICK_BLINK,Blink / Trigger event
 CLICK_STATIC,Static / No event
