@@ -512,4 +512,6 @@ FADE,Vitesse de fondu
 FADE_INSTANT,Instantané
 FADE_FAST,Rapide
 FADE_SLOW,Lent
-ENABLE_CLICK,Autoriser le clic
+CLICK_BEHAVIOR,Comportement au clic
+CLICK_BLINK,Clignoter / Déclencher événement
+CLICK_STATIC,Statique / Pas d'événement

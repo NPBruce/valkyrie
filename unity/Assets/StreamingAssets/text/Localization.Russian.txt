@@ -511,4 +511,6 @@ FADE,Скорость затухания
 FADE_INSTANT,Мгновенно
 FADE_FAST,Быстро
 FADE_SLOW,Медленно
-ENABLE_CLICK,Разрешить клик
+CLICK_BEHAVIOR,Поведение клика
+CLICK_BLINK,Мигание / событие
+CLICK_STATIC,Статично / Нет события

@@ -64,20 +64,24 @@ public class EditorComponentUI : EditorComponentEvent
 
             offset += 2;
 
-            // Click Effect Toggle
+            // Click Behavior Label
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 8, 1);
-            ui.SetText(new StringKey("val", "ENABLE_CLICK"));
-            ui.SetButton(delegate { ToggleClickEffect(); });
-            new UIElementBorder(ui);
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
+
+            // Click Behavior Button
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 14, 1);
             if (uiComponent.enableClick)
             {
-                ui.SetText(new StringKey("val", "ENABLE_CLICK"), Color.white);
+                ui.SetText(new StringKey("val", "CLICK_BLINK"));
             }
             else
             {
-                ui.SetText(new StringKey("val", "ENABLE_CLICK"), new Color(0.4f, 0.4f, 0.4f));
+                ui.SetText(new StringKey("val", "CLICK_STATIC"));
             }
+            ui.SetButton(delegate { ToggleClickEffect(); });
+            new UIElementBorder(ui);
             offset += 2;
         }
 

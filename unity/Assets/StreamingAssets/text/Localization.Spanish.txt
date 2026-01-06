@@ -508,4 +508,6 @@ FADE,Velocidad de fundido
 FADE_INSTANT,Instantáneo
 FADE_FAST,Rápido
 FADE_SLOW,Lento
-ENABLE_CLICK,Permitir clic
+CLICK_BEHAVIOR,Comportamiento al hacer clic
+CLICK_BLINK,Parpadear / Activar evento
+CLICK_STATIC,Estático / Sin evento

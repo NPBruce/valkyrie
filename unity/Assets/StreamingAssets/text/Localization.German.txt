@@ -508,4 +508,6 @@ FADE,Überblendgeschwindigkeit
 FADE_INSTANT,Sofort
 FADE_FAST,Schnell
 FADE_SLOW,Langsam
-ENABLE_CLICK,Klick erlauben
+CLICK_BEHAVIOR,Klickverhalten
+CLICK_BLINK,Blinken / Ereignis auslösen
+CLICK_STATIC,Statisch / Kein Ereignis

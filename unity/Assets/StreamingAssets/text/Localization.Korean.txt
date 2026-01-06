@@ -677,4 +677,6 @@ FADE,페이드 속도
 FADE_INSTANT,즉시
 FADE_FAST,빠르게
 FADE_SLOW,느리게
-ENABLE_CLICK,클릭 허용
+CLICK_BEHAVIOR,클릭 동작
+CLICK_BLINK,깜박임 / 이벤트 트리거
+CLICK_STATIC,정적 / 이벤트 없음

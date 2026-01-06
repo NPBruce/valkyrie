@@ -516,4 +516,6 @@ FADE,Velocidade de Desvanecimento
 FADE_INSTANT,Instantâneo
 FADE_FAST,Rápido
 FADE_SLOW,Lento
-ENABLE_CLICK,Permitir Clique
+CLICK_BEHAVIOR,Comportamento do Clique
+CLICK_BLINK,Piscar / disparar evento
+CLICK_STATIC,Estático / Sem evento

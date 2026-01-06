@@ -448,4 +448,6 @@ FADE,Velocità dissolvenza
 FADE_INSTANT,Istantaneo
 FADE_FAST,Veloce
 FADE_SLOW,Lento
-ENABLE_CLICK,Consenti clic
+CLICK_BEHAVIOR,Comportamento clic
+CLICK_BLINK,Lampeggia / Attiva evento
+CLICK_STATIC,Statico / Nessun evento
