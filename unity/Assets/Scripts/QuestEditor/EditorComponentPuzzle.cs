@@ -116,7 +116,7 @@ public class EditorComponentPuzzle : EditorComponentEvent
             offset += 2;
         }
 
-        if (puzzleComponent.imageType.Length > 0)
+        if (puzzleComponent.imageType.Length > 0 || puzzleComponent.puzzleClass.Equals("image"))
         {
             // Label
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
