@@ -24,6 +24,26 @@ This repository contains a Unity engine application located in the root of this 
 - Implement custom error messages and debug visualizations to improve the development experience.
 - Use Unity's assertion system (Debug.Assert) to catch logical errors during development.
 
+### Testing
+The project uses NUnit for unit testing, integrated into the Unity Test Runner.
+
+#### Running Tests via Unity Editor
+1. Open the **Test Runner** window (`Window > General > Test Runner`).
+2. Select **EditMode** tab.
+3. Click **Run All** to execute all editor tests.
+
+#### Running Tests via Command Line (Windows)
+You can run tests in batch mode using the Unity executable. Ensure the Unity Editor is closed before running this command to avoid file lock issues.
+
+```powershell
+& 'C:\Program Files\Unity\Hub\Editor\2019.4.41f1\Editor\Unity.exe' -runTests -batchmode -projectPath 'path\to\your\project\valkyrie\unity' -testResults 'path\to\your\project\valkyrie\unity\TestResults.xml' -testPlatform EditMode
+```
+
+#### Test Structure
+- Tests are located in `Assets/UnitTests/Editor`.
+- Tests generally verify parsing logic, content loading, and game rules (e.g., `QuestData`, `PuzzleCode`).
+- Use `CultureInfo.InvariantCulture` for all locale-dependent parsing (e.g., `float.TryParse`) to ensure tests pass on all system locales.
+
 ### Dependencies
 - Unity Engine
 - .NET Framework (version compatible with your Unity version)
