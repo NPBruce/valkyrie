@@ -2,7 +2,7 @@
 
 
 // This class provides functions to manage the versions of the app
-class VersionManager
+public class VersionManager
 {
     static public string online_version = "0.0.0";
     static Action version_downloaded_action = null;
