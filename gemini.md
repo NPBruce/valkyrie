@@ -54,6 +54,7 @@ You can run tests in batch mode using the Unity executable. Ensure the Unity Edi
 1. Follow Unity's component-based architecture for modular and reusable game elements.
 2. Prioritize performance optimization and memory management in every stage of development.
 3. Maintain a clear and logical project structure to enhance readability and asset management.
+4. Use a test driven approach when implementing new features.
 
 Refer to Unity documentation and C# programming guides for best practices in scripting, application/game architecture, and performance optimization.
 
