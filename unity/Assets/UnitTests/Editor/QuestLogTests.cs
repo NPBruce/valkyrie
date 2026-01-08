@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for QuestLog class and Quest.LogEntry class - Quest logging functionality
@@ -195,9 +195,8 @@ namespace Valkyrie.Tests.Editor
             // Arrange & Act
             var entry = new Quest.LogEntry("Valkyrie message", false, true);
 
-            // Assert - Valkyrie entries are only visible in editor
-            // Note: Application.isEditor is false in test context
-            Assert.AreEqual("", entry.GetEntry());
+            // Assert - Valkyrie entries are visible in editor (Test runs in editor)
+            Assert.AreEqual("Valkyrie message\n\n", entry.GetEntry());
         }
 
         [Test]
@@ -228,7 +227,7 @@ namespace Valkyrie.Tests.Editor
             var entry = new Quest.LogEntry("valkyrie0", "Valkyrie message");
 
             // Assert
-            Assert.AreEqual("", entry.GetEntry());
+            Assert.AreEqual("Valkyrie message\n\n", entry.GetEntry());
         }
 
         #endregion

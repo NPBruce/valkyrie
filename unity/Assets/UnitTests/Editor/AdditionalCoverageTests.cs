@@ -4,7 +4,7 @@ using Assets.Scripts;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for additional coverage on utility classes:

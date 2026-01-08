@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ValkyrieTools;
 using Assets.Scripts.Content;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for EventManager class and related event handling functionality.

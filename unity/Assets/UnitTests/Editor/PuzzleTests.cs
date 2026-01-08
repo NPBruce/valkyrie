@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for Puzzle classes - PuzzleSlide, PuzzleTower, and PuzzleImage

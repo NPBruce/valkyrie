@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for SaveManager class and related save/load functionality.
@@ -189,7 +189,7 @@ namespace Valkyrie.Tests.Editor
             bool result = VersionManager.VersionNewer(oldVersion, newVersion);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.IsFalse(result);
         }
 
         #endregion

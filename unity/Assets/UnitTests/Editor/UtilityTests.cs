@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for utility classes: LinqUtil, FormatVersions, and TextAlignment
@@ -253,7 +253,7 @@ namespace Valkyrie.Tests.Editor
         {
             // Assert - verify set contains expected scenarios (lowercase)
             Assert.IsTrue(QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains("escape"));
-            Assert.IsTrue(QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains("holymanson"));
+            Assert.IsTrue(QuestFormat.SCENARIOS_THAT_REQUIRE_CONVERSION_KIT.Contains("holymansion"));
         }
 
         [Test]

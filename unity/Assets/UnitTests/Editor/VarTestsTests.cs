@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for VarTests, VarTestsLogicalOperator, VarTestsParenthesis, and VarOperation classes.

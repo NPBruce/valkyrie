@@ -52,7 +52,17 @@ namespace Assets.Scripts.Content
 
         public StringKey(string unknownKey)
         {
-            if (Regex.Match(unknownKey, LocalizationRead.LookupRegexKey()).Success)
+            bool matchSuccess = false;
+            try
+            {
+                matchSuccess = Regex.Match(unknownKey, LocalizationRead.LookupRegexKey()).Success;
+            }
+            catch (System.ArgumentException)
+            {
+                matchSuccess = false;
+            }
+
+            if (matchSuccess)
             {
                 string[] parts = unknownKey.Substring(1,unknownKey.Length -2).Split(":".ToCharArray(), 3, System.StringSplitOptions.RemoveEmptyEntries);
 

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Assets.Scripts.Content;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Comprehensive unit tests for ContentTypes data classes.

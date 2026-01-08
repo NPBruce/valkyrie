@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Assets.Scripts;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for DictionaryI18n class - Internationalization dictionary functionality

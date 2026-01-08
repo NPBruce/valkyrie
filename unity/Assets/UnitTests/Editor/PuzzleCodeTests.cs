@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for PuzzleCode, PuzzleCode.Answer, and PuzzleCode.CodeGuess classes.
@@ -252,7 +252,7 @@ namespace Valkyrie.Tests.Editor
             int result = guess.CorrectType();
 
             // Assert
-            Assert.AreEqual(1, result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]

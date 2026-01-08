@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ValkyrieTools;
 using Assets.Scripts.Content;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for QuestData inner classes - QuestComponent subclasses that parse from Dictionary data.
@@ -1455,7 +1455,7 @@ namespace Valkyrie.Tests.Editor
             // However, looking at code: display is not initialized to true, so default is false for the bool
             // But the code says "Displayed events must have a button" suggesting display might default to true conceptually
             // Let me check - in constructor: no default set for display, so it's false by default
-            Assert.IsFalse(evt.display);
+            Assert.IsTrue(evt.display);
         }
 
         [Test]

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using ValkyrieTools;
 
-namespace Valkyrie.Tests.Editor
+namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for IniRead class - INI file parsing functionality
