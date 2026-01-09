@@ -21,9 +21,6 @@ on:
     branches: [master]
   workflow_dispatch:
 
-env:
-
-
 jobs:
   build-libraries:
     name: Build Libraries
