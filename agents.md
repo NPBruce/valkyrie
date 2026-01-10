@@ -24,6 +24,26 @@ This repository contains a Unity engine application located in the root of this 
 - Implement custom error messages and debug visualizations to improve the development experience.
 - Use Unity's assertion system (Debug.Assert) to catch logical errors during development.
 
+### Testing
+The project uses NUnit for unit testing, integrated into the Unity Test Runner.
+
+#### Running Tests via Unity Editor
+1. Open the **Test Runner** window (`Window > General > Test Runner`).
+2. Select **EditMode** tab.
+3. Click **Run All** to execute all editor tests.
+
+#### Running Tests via Command Line (Windows)
+You can run tests in batch mode using the Unity executable. Ensure the Unity Editor is closed before running this command to avoid file lock issues.
+
+```powershell
+& 'C:\Program Files\Unity\Hub\Editor\2019.4.41f1\Editor\Unity.exe' -runTests -batchmode -projectPath 'path\to\your\project\valkyrie\unity' -testResults 'path\to\your\project\valkyrie\unity\TestResults.xml' -testPlatform EditMode
+```
+
+#### Test Structure
+- Tests are located in `Assets/UnitTests/Editor`.
+- Tests generally verify parsing logic, content loading, and game rules (e.g., `QuestData`, `PuzzleCode`).
+- Use `CultureInfo.InvariantCulture` for all locale-dependent parsing (e.g., `float.TryParse`) to ensure tests pass on all system locales.
+
 ### Dependencies
 - Unity Engine
 - .NET Framework (version compatible with your Unity version)
@@ -34,6 +54,7 @@ This repository contains a Unity engine application located in the root of this 
 1. Follow Unity's component-based architecture for modular and reusable game elements.
 2. Prioritize performance optimization and memory management in every stage of development.
 3. Maintain a clear and logical project structure to enhance readability and asset management.
+4. Use a test driven approach when implementing new features.
 
 Refer to Unity documentation and C# programming guides for best practices in scripting, application/game architecture, and performance optimization.
 
@@ -43,7 +64,7 @@ UI text should always get localized. Localization files are located in `Assets/S
 - The format is `KEY,Value`.
 - When adding new text:
 1. Add the `KEY,English Value` to `Localization.English.txt`.
-2. Add a translated version `KEY,Translated Value` to *all* other relevant files (`Localization.German.txt`, `Localization.French.txt`, `Localization.Spanish.txt`, `Localization.Italian.txt`, etc.). Failing to do so will result in missing text for users of those languages.
+2. **CRITICAL**: Add a translated version `KEY,Translated Value` to *all* other relevant files (`Localization.German.txt`, `Localization.French.txt`, `Localization.Spanish.txt`, `Localization.Italian.txt`, etc.) **IMMEDIATELY**. Do not defer this task. Failing to do so will result in missing text for users of those languages.
 3. In C# code, use `new StringKey("val", "KEY")` to reference the text.
 4. For commonly used keys, add a static reference in `Assets/Scripts/Content/CommonStringKeys.cs`.
 
