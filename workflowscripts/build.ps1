@@ -3,6 +3,9 @@
 
 $ErrorActionPreference = "Stop"
 $ScriptRoot = $PSScriptRoot
+if ((Split-Path $ScriptRoot -Leaf) -eq "workflowScripts") {
+    $ScriptRoot = Split-Path $ScriptRoot -Parent
+}
 
 # -----------------------------------------------------------------------------
 # Helper Functions
