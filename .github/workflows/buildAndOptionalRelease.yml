@@ -165,7 +165,7 @@ jobs:
       #Run build script
       #Run build script
       - name: Run build PowerShell script
-        run: pwsh -File ${{ github.workspace }}/build.ps1
+        run: pwsh -File ${{ github.workspace }}/workflowscripts/build.ps1
         env:
           PACKAGE_VERSION: ${{ env.RELEASE_NAME }}
           BUILD_WINDOWS: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
