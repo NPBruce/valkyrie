@@ -44,7 +44,8 @@ function Run-UnityTests {
         "-logFile", "$LogFile"
     )
 
-    $process = Start-Process -FilePath $UnityExe -ArgumentList $argList -Wait -PassThru -NoNewWindow
+    $process = Start-Process -FilePath $UnityExe -ArgumentList $argList -PassThru -NoNewWindow
+    $process.WaitForExit()
     $exitCode = $process.ExitCode
 
     if (Test-Path $ResultsFile) {
