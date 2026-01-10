@@ -34,12 +34,18 @@ function Run-UnityTests {
     $LogFile = "$env:GITHUB_WORKSPACE/test-results.log"
     $ResultsFile = "$env:GITHUB_WORKSPACE/test-results.xml"
 
-    & $UnityExe -batchmode -nographics -projectPath "$env:GITHUB_WORKSPACE/unity" `
-        -runTests -testPlatform EditMode `
-        -testResults $ResultsFile `
-        -logFile $LogFile
+    $argList = @(
+        "-batchmode",
+        "-nographics",
+        "-projectPath", "$env:GITHUB_WORKSPACE/unity",
+        "-runTests",
+        "-testPlatform", "EditMode",
+        "-testResults", "$ResultsFile",
+        "-logFile", "$LogFile"
+    )
 
-    $exitCode = $LASTEXITCODE
+    $process = Start-Process -FilePath $UnityExe -ArgumentList $argList -Wait -PassThru -NoNewWindow
+    $exitCode = $process.ExitCode
 
     if (Test-Path $ResultsFile) {
         [xml]$xml = Get-Content $ResultsFile

@@ -39,9 +39,8 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Check code formatting
-        run: |
-          dotnet format libraries/ValkyrieTools/ValkyrieTools.csproj --verify-no-changes --verbosity diagnostic || echo "::warning::Code formatting issues found. Run 'dotnet format' locally to fix."
+      - name: Check Code Quality
+        run: dotnet format libraries/ValkyrieTools/ValkyrieTools.csproj --verify-no-changes --verbosity minimal || echo "::warning::Code formatting issues found. Run 'dotnet format' locally to fix."
         continue-on-error: true
 
       # Initialize CodeQL
