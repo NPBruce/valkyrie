@@ -59,6 +59,13 @@ jobs:
           unity-version: ${{ env.UNITY_VERSION }}
           install-path: "C:/Program Files"
 
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+
       - name: Move Unity to expected location
         run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
 
@@ -77,13 +84,6 @@ jobs:
 
       - name: Remove conflicting UnityEngine.dll
         run: . ./workflowScripts/workflowHelper.ps1; Remove-ConflictingDLL
-
-      - name: Activate Unity
-        uses: kuler90/activate-unity@v1
-        with:
-          unity-username: ${{ secrets.UNITY_USERNAME }}
-          unity-password: ${{ secrets.UNITY_PASSWORD }}
-          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
 
       - name: Run Unity Edit Mode Tests
         run: . ./workflowScripts/workflowHelper.ps1; Run-UnityTests
