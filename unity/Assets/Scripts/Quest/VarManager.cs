@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 public class VarManager
 {
@@ -18,7 +19,7 @@ public class VarManager
         foreach (KeyValuePair<string, string> kv in data)
         {
             float value = 0;
-            float.TryParse(kv.Value, out value);
+            float.TryParse(kv.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
             // There is a \ before var starting with #, so they don't get ignored.
             if(kv.Key.IndexOf("\\")==0)
             {
@@ -91,7 +92,7 @@ public class VarManager
         }
         if (char.IsNumber(op.value[0]) || op.value[0] == '-' || op.value[0] == '.')
         {
-            float.TryParse(op.value, out r);
+            float.TryParse(op.value, NumberStyles.Float, CultureInfo.InvariantCulture, out r);
             return r;
         }
         if (op.value.IndexOf("#rand") == 0)
@@ -285,11 +286,11 @@ public class VarManager
                 if (kv.Key.IndexOf("#") == 0)
                 {
                     // # means comments in .ini
-                    r += "\\" + kv.Key + "=" + kv.Value.ToString() + nl;
+                    r += "\\" + kv.Key + "=" + kv.Value.ToString(CultureInfo.InvariantCulture) + nl;
                 }
                 else
                 {
-                    r += kv.Key + "=" + kv.Value.ToString() + nl;
+                    r += kv.Key + "=" + kv.Value.ToString(CultureInfo.InvariantCulture) + nl;
                 }
             }
         }

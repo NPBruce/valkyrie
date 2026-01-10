@@ -6,7 +6,7 @@ using UnityEngine;
 using ValkyrieTools;
 
 // This class provides functions to load and save games.
-class SaveManager
+public class SaveManager
 {
     public static string minValkyieVersion = "0.7.3";
 

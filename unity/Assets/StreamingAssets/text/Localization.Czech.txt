@@ -681,6 +681,8 @@ LOADINGCONTENTPACKS,Načítání balíčků obsahu...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenářů (+{1} vyfiltrováno)
 
 FADE,Rychlost stmívání
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
 FADE_INSTANT,Okamžitě
 FADE_FAST,Rychle
 FADE_SLOW,Pomalu

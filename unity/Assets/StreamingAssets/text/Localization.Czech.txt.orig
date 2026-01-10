@@ -1,0 +1,694 @@
+.,Czech
+// Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
+// ICONS
+ICON_SKILL_STRENGTH,
+ICON_SKILL_AGILITY,
+ICON_SKILL_OBSERVATION,
+ICON_SKILL_LORE,
+ICON_SKILL_INFLUENCE,
+ICON_SKILL_WILL,
+ICON_ACTION,
+ICON_SUCCESS_RESULT,
+ICON_INVESTIGATION_RESULT,
+ICON_TENTACLE,
+ICON_PRODUCT_MAD01,
+ICON_PRODUCT_MAD06,
+ICON_PRODUCT_MAD09,
+ICON_PRODUCT_MAD20,
+ICON_PRODUCT_MAD21,
+ICON_PRODUCT_MAD22,
+ICON_PRODUCT_MAD23,
+ICON_PRODUCT_MAD25,
+ICON_PRODUCT_MAD26,
+ICON_PRODUCT_MAD27,
+ICON_PRODUCT_MAD28,
+
+// TEXTS
+ABILITY,Schopnost
+ABOUT,O aplikaci
+ABOUT_FFG,Valkyrie je pomocná aplikace Pána Zla, inspirována hrou od Fantasy Flight Games, Descent: Road to Legend.  Většina obrázků je importována z FFG aplikace a pod copyrightem FFG a dalších držitelů práv a ochranných známek. Vlaječky jazyků pocházejí od Freepik z www.flaticon.com.
+ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity,  UnityStandaloneFileBrowser z gkngkc a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
+ACTIONS,Akce
+ACTIVATED,Aktivován
+ACTIVATION,Aktivace
+ACTIVATIONS,Aktivace
+ADD_COMPONENTS,Přidat komponenty
+COMPONENTS,Komponenty
+RENAME,Přejmenování
+SAVE_TEST,Uložit a vyzkoušet
+SOURCE,Zdroj
+COMMENT,Komentář
+TRUE,Ano
+FALSE,Ne
+SNAP,Chytit
+FREE,Volný
+CONFIRM,Potvrdit
+INSPECT,Prohlédnout
+DURATION,Trvání
+DESCRIPTION,Popis
+AUTHORS,Autoři
+DIFFICULTY,Obtížnost
+VALIDATE_SCENARIO,Ověřit
+FILE,Soubor
+OPTIMIZE_LOCALIZATION,Optimalizovat překlad
+CREATE_PACKAGE,Vytvořit balíček
+REORDER_COMPONENTS,Přeskládat díly
+POSITION_SNAP,╳ {val:SNAP}
+POSITION_FREE,〜 {val:FREE}
+ASSIGN,Nastavit proměnnou
+ATTACK,Zaútočit
+ATTACK_MESSAGE,Zpráva útoku:
+AUDIO,Zvuk
+BACK,Zpět
+BASE,Základ
+BUTTON,Tlačítko
+BUTTONS,Tlačítka
+CAMERA,Kamera
+CANCEL,Zrušit
+CHOOSE_LANG,Výběr jazyka
+CLEAR_FIRE,Čistý oheň
+COLOR,Barva
+COMPONENT_NAME,Jméno dílu:
+COMPONENT_TO_DELETE,Díl ke smazání:
+CONTENT_IMPORT,Importovat obsah
+CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
+CONTENT_REIMPORT,Znovu imporovat obsah
+CONTENT_LOCATE,Najít hru
+CONTENT_INSTALL_VIA_STEAM,Instalovat ze Steamu
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalovat z Google Play
+CONTINUE,Pokračovat
+COPY,Kopírovat
+CUSTOMMONSTER,Vlastní monstrum
+DEFAULTMUSICON,Zapnout základni hudbu
+D2E_APP_NOT_FOUND,Nelze najít Road to Legend
+D2E_HEROES_NAME,Hrdinové
+D2E_HERO_NAME,Hrdina
+D2E_NAME,Descent: Výprava do temnot (Druhá edice)
+D2E_QUEST_NAME,Úkol
+DEFEATED,Poražen
+DELETE,Smazat
+UPDATE,Aktualizovat
+DIALOG,Dialog
+DOOR,Dveře
+DOWNLOAD,Stáhnout
+DOWNLOAD_LIST,Stahuji seznam balíčků
+DOWNLOAD_PACKAGE,Stahuji balíček
+E,E
+EFFECTS,Efekty
+EMPTY,
+END_TURN,Konec kola
+ROUND,kolo {0}
+EVADE,Úhyb
+EVENT,Událost
+EXIT,Konec
+FINISHED,Dokončeno
+FIRST,První
+FORCE_ACTIVATE,Vynutit aktivaci
+
+HEALTH,Zdraví
+HEALTH_HERO,za hrdinu
+HIGHLIGHT,Zvýraznit
+HORROR_CHECK,Kontrola hrůzy
+AWARENESS,Ostražitost
+IA_APP_NOT_FOUND,Nelze nalézt Legends of the Alliance, Instalovat ze Steamu
+IA_APP_NOT_FOUND_ANDROID,Nelze nalézt Legends of the Alliance, Instalovat z Google Play
+IA_HEROES_NAME,Hrdinové
+IA_HERO_NAME,Hrdina
+IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
+IA_QUEST_NAME,Mise
+INDENT,  {0}
+INFO,Info
+INFORMATION,Informace
+INITIAL_MESSAGE,Úvodní zpráva:
+ITEM,Předmět
+QITEM,Úkolový předmět
+KO,KO
+LOAD_QUEST,Pokračovat
+LOG,Deník
+SKILLS,Talent
+ITEMS,Věci
+ITEMS_SMALL,věci
+GOLD,Zlato
+MAIN_MENU,Hlavní menu
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Horni okraj
+MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Spodni okraj
+MOM_APP_NOT_FOUND,Nelze nalézt Panství děsu
+MOM_HEROES_NAME,Vyšetřovatelé
+MOM_HERO_NAME,Vyšetřovatel
+MOM_NAME,Panství děsu (Druhá edice)
+MOM_QUEST_NAME,Scénář
+MONSTER,Monstrum
+MONSTER_ATTACKS,Monstrum útočí.
+MONSTER_MASTER,Lord
+MONSTER_MASTER_X,Lord {0}
+MONSTER_MINION,Běžná
+MONSTER_NORMAL,Normální
+
+MONSTER_UNIQUE,Unikátní
+MOVES,Pohyby
+MPLACE,Umístění
+MUSIC,Hudba
+NAME,Jméno
+NEW,Nový
+NEW_X,{Nový {0}}
+NONE,{Žádný}
+
+NEXT_EVENTS,Další události
+NOT_FIRST,Ne první
+NO_ATTACK_MESSAGE,Zpráva bez útoku
+
+NUMBER,Číslo
+NUMBER_HEROS,{0} Hrdiny:
+OK,Ok
+OP,Op
+OPTIONS,Volby
+PLACEMENT,Umístění
+
+PLACE_IMG,Umístit obrázek:
+POOL_TRAITS,Výběr vlastností:
+POSITION,Pozice
+POSITION_TYPE_HIGHLIGHT,Zvýraznění
+POSITION_TYPE_UNUSED,Nepoužité
+PUZZLE,Hádanka
+PUZZLE_ALT_LEVEL,Alternativní uroveň
+PUZZLE_SOLUTION,Řešení
+PUZZLE_CLASS,Třída
+PUZZLE_CLASS_SELECT,Výběr třídy
+IMAGE,Obrázek
+
+PUZZLE_LEVEL,Úroveň hádanky
+PUZZLE_SELECT_SKILL,Výběr talentu:
+PUZZLE_IMAGE_CLASS,obrázek
+PUZZLE_CODE_CLASS,kód
+PUZZLE_SLIDE_CLASS,slide
+QUEST,Úkol
+QUEST_NAME_DOWNLOAD,Stáhnout {0}
+QUEST_NAME_EDITOR,Editor úkolů
+EDITOR,Editor
+QUEST_NAME_UPDATE,  [Aktualizace] {0}
+QUOTA,Kvóta
+RECOVER,Obnovit
+INVESTIGATOR_ATTACKS,Vyšetřovatel útočí
+
+
+RELOAD,Znovu načíst
+REMOVE_COMPONENTS,Odebrat díly:
+REQUIRED_EXPANSIONS,Vyžadované rozšírení:
+REQUIRES_EXPANSION, Vyžaduje:  {0}
+
+REQ_TRAITS,Vyž. vlastnosti:
+RESET,Reset
+ROTATE_TO,Otočit: {0}
+ROTATION,Otočení
+SAVE,Uložit
+AUTOSAVE,Automatické uložení
+SELECT_SAVE,Výběr uložení:
+SELECT,Výběr {0}
+SELECT_CLASS,Výběr třídy
+SELECTION,Výběr
+SELECT_CONTENT,Výběr obsahu
+SELECT_EXPANSION,Výběr obsahu rozšíření:
+SELECT_IMAGE,Výběr obrazu:
+SELECT_ITEM,Výběr předmětu
+SELECT_PACK,Výběr balíčku
+SELECT_TO_COPY,Vyber {0} ke kopírování:
+SELECT_TO_DELETE,Vyber {0} ke smazáni:
+DISABLE,Zakázat
+HIDE,Skrýt
+HIDDEN,Skryto
+ACTIVE,Aktivní
+SET,Nastavit
+SET_EDITOR_ALPHA,Průhlednost editoru
+SKILL,Talent
+SELECT_SKILLS,Vyber talenty:
+SPAWN,Monstrum
+STARTING_ITEM,Startovní předmět
+STARTING_ITEMS,Startovní předměty
+START_QUEST,Nová hra
+START,Začátek
+
+TESTS,Zkoušky
+TILE,Díl
+
+AND,A
+OR,Nebo
+
+TOKEN,Žeton
+TOOLS,Nástroje
+TOTAL_MOVES,Celkové pohyby
+TRAITS,Vlastnosti
+TRIGGER,Spouštěč
+TYPE,Typ
+TYPES,Typy
+UNABLE_BUTTON,Tlačitko nedostupné:
+
+UI,UI
+UNITS,Jednotky
+HORIZONTAL,Horizontální
+VERTICAL,Vertikální
+ALIGN,Zarovnat
+SIZE,Velikost
+TEXT_SIZE,Velikost textu
+BACKGROUND_COLOUR,Barva pozadí
+ASPECT,Poměr
+BORDER,Okraj
+NO_BORDER,Bez okraje
+UNDO,Zpět
+UNIQUE_DEFEATED,Unikátní\nporažen(a)
+UNIQUE_INFO,Unikátní informace
+UNIQUE_MONSTER,Unikátní monstrum
+UNIQUE_TITLE,Unikátní díl
+UNUSED,Nepoužité
+VALUE,Hodnota
+VAR,Proměnná
+VARS,Proměnné
+VAR_NAME,Název Proměnné
+X_ACTIVATED,{0} aktivován(a)
+
+BUY,Koupit
+SELL,Prodat
+CLASS,Třída
+ACT_1,Akt I
+ACT_2,Akt II
+
+X_COLON,{0}:
+
+//Packs
+SoA,SoA 
+BtT,BtT 
+CotW,CotW 
+CotWT,CotWT 
+CotWI,CotWI 
+CotWM,CotWM 
+FA,FA 
+FAT,FAT 
+FAI,FAI 
+FAM,FAM 
+HJ,HJ 
+MoM1E,MoM1E 
+MoM1ET,MoM1ET 
+MoM1EI,MoM1EI 
+MoM1EM,MoM1EM 
+MoM1CK,CK ᶜ
+base,base 
+PotS,PotS 
+RN,RN 
+SM,SM 
+SoT,SoT 
+
+//Packs symbols MoM
+SoA_SYMBOL,
+BtT_SYMBOL,
+CotW_SYMBOL,
+CotWT_SYMBOL,
+CotWI_SYMBOL,
+CotWM_SYMBOL,
+FA_SYMBOL,
+FAT_SYMBOL,
+FAI_SYMBOL,
+FAM_SYMBOL,
+HJ_SYMBOL,
+MoM1E_SYMBOL,
+MoM1ET_SYMBOL,
+MoM1EI_SYMBOL,
+MoM1EM_SYMBOL,
+MoM1CK_SYMBOL,ᶜ
+base_SYMBOL,
+PotS_SYMBOL,
+RN_SYMBOL,
+SM_SYMBOL,
+SoT_SYMBOL,
+
+//Packs symbols D2E
+LoR_SYMBOL,
+LotW_SYMBOL,
+MoB_SYMBOL,
+MoR_SYMBOL,
+SoN_SYMBOL,
+TCTR_SYMBOL,
+TT_SYMBOL,
+BotW_SYMBOL,
+CoD_SYMBOL,
+CotF_SYMBOL,
+GoD_SYMBOL,
+OotO_SYMBOL,
+SoE_SYMBOL,
+SotS_SYMBOL,
+ToC_SYMBOL,
+VoD_SYMBOL,
+CKAoD_SYMBOL,ck
+CKD1E_SYMBOL,ck
+CKDQ_SYMBOL,ck
+CKPromo_SYMBOL,ck
+CKToI_SYMBOL,ck
+CKWoD_SYMBOL,ck
+DJ09_SYMBOL,lt
+DJ10_SYMBOL,lt
+DJ11_SYMBOL,lt
+DJ12_SYMBOL,lt
+DJ13_SYMBOL,lt
+DJ14_SYMBOL,lt
+DJ15_SYMBOL,lt
+DJ16_SYMBOL,lt
+DJ17_SYMBOL,lt
+DJ18_SYMBOL,lt
+DJ19_SYMBOL,lt
+DJ20_SYMBOL,lt
+DJ22_SYMBOL,lt
+DJ23_SYMBOL,lt
+DJ24_SYMBOL,lt
+DJ25_SYMBOL,lt
+DJ35_SYMBOL,lt
+DJ41_SYMBOL,lt
+DJ42_SYMBOL,lt
+DJ43_SYMBOL,lt
+
+// Expansions name D2E (for performance)
+LL, Ztracené Legendy
+LoR,Labyrint Zkázy 
+LotW,Dračí Sluj 
+MoB,Mlhy Bilehallu 
+MoR,Sídlo Havranů 
+SoN,Stín Nerekhallu 
+TCTR,Řetězy co Rezivějí 
+TT,Zlobří Bažiny 
+BotW,Pouta Divočiny 
+CoD,Koruna Osudu 
+CotF,Křížové Tažení Zapomenutých 
+GoD,Strážci Deephallu 
+OotO,Přísaha Vyhnankyně 
+SoE,Střepy Věčnotemna 
+SotS,Služebníci Tajemství 
+ToC,Úmluva Bojovníků 
+VoD,Vidiny Úsvitu 
+CKAoD,Oltář zoufalství
+CKD1E,1. edice
+CKDQ,Dungeon Quest hrdinové
+CKPromo,Promo
+CKToI,Ledová hrobka
+CKWoD,Studna temnoty
+DJ09,Splig
+DJ10,Belthir
+DJ11,Baron Zachariáš
+DJ12,Alric Farrow
+DJ13,Merick Farrow
+DJ14,Eliza Farrow
+DJ15,Valyndra
+DJ16,Raythen
+DJ17,Serena
+DJ18,Ariad
+DJ19,Královna Ariad
+DJ20,Bol'Goreth
+DJ22,Rylan Olliven
+DJ23,Verminous
+DJ24,Tristayne Olliven
+DJ25,Gargan Mirklace
+DJ35,Skarn
+DJ41,Kyndrithul
+DJ42,Zarihell
+DJ43,Ardus Ix'Erebus
+
+//Items
+weapon,Zbraň
+firearm,Střelná zbraň
+heavyweapon,Těžká zbraň
+heavy,Těžká zbraň
+tome,Kniha
+equipment,Vybavení
+lightsource,Zdroj světla
+bladedweapon,Sečná zbraň
+bladed,Sečná zbraň
+spell,Kouzlo
+key,Klíč
+evidence,Důkaz
+ally,Spojenec
+spelldefence,Obranné kouzlo
+spellattack,Útočné kouzlo
+
+//Audio
+menu,Menu
+music,Hudba
+quest,Úkol
+defeated,Poražen
+newround,Nové kolo
+attack,Útok
+unarmed,Neozbrojený
+horror,Hrůza
+search,Hledat
+explore,Prozkoumat
+
+//Heroes
+latari,Latari
+dwarf,Trpaslík
+gnome,Gnom
+male,Muž
+female,Žena
+
+//monsters
+monster,Montrum
+undead,Nemrtvý
+humanoid,Humanoid
+spirit,Duch
+beast,Bestie
+agent,Agent
+lieutenant,Poručík
+small,Malý
+medium,Střední
+huge,Velký
+massive,Masivní
+building,Budova
+melee,Souboj na blízko
+ranged,Vzdálený útok
+goblin,Goblin
+cursed,Prokletý
+cave,Jeskyně
+wilderness,Divočina
+civilized,Civilizovaný
+dark,Temný
+mountain,Hory
+cold,Chlad
+hot,Horko
+water,Voda
+fleshless,Bezmasý
+snakeperson,Hadí osoba
+relic,Relikvie
+elixir,Elixir
+
+//Tiles
+basement,Sklepení
+river,Řeka
+street,Ulice
+hallway,Chodba
+bathroom,Koupelna
+bedroom,Ložnice
+kitchen,Kuchyně
+dock,Dok
+storage,Skladiště
+outside,Venku
+inside,Uvnitř
+big,Velký
+transition,Přechod
+throne,Trůn
+pit,Jáma
+farm,Farma
+tomb,Hrobka
+library,Knihovna
+graves,Hrob
+bridge,Most
+stairs,Schody
+torture,Mučení
+tents,Stany
+stables,Stáje
+hall,Hala
+map,Mapa
+city,Město
+fountain,Fontána
+blackrealm,Temnosvět
+altar,Oltář
+beds,Postele
+study,Studovna
+prison,Vězení
+plinth,Podstavec
+tavern,Hospoda
+statues,Sochy
+drawbridge,Padací most
+rubble,Sutiny
+treasure,Poklad
+stone,Kámen
+dirt,Hlína
+timber,Dřevo
+snow,Sníh
+lava,Láva
+swamp,Bažina
+sludge,Bahno
+ship,Loď
+temple,Chrám
+train,Vlak
+
+// Colors
+black,Černá
+white,Bílá
+red,Červena
+lime,Limetková
+blue,Modrá
+yellow,Žlutá
+aqua,Vodová
+cyan,Azurová
+magenta,Purpurová
+fuchsia,Fuchsiová
+silver,Stříbrná
+gray,Šedá
+maroon,Kaštanová
+olive,Olivová
+green,Zelená
+purple,Fialová
+teal,Modrozelená
+navy,Námořnická modř
+
+//Puzzles
+image,Obrázek
+code,Kód
+slide,Slide
+tower,Věž
+SYMBOL,Symbol
+ELEMENT,Element
+
+// Events
+Ordered,Seřazeno
+Random,Náhodně
+
+//Inherited from FFG localization files
+SET_FIRE,Zapálit
+INVESTIGATOR_ELIMINATED,Vyšetřovatel eliminován
+CLOSE,Zavřít
+PUZZLE_GUESS,Hádat
+
+UP,Nahoru
+DOWN,Dolu
+LEFT,Vlevo
+RIGHT,Vpravo
+
+PHASE_INVESTIGATOR,Fáze vyšetřovatele
+PHASE_MYTHOS,Fáze Mythose
+MONSTER_STEP,Krok monstra
+HORROR_STEP,Krok hrůzy
+END_PHASE,Konec fáze
+
+ATTACK_PROMPT,Jakým typem zbraně se útočí?
+ATTACK_WITH_HEAVY_WEAPON, Útočí s [i]těžkou zbraní[/i]
+ATTACK_WITH_BLADED_WEAPON, Útočí se [i]sečnou zbraní[/i]
+ATTACK_WITH_FIREARM, Útočí se [i]střelnou zbraní[/i]
+ATTACK_WITH_SPELL, Útočí kouzlem
+ATTACK_WITH_UNARMED, Útočí beze zbraně
+
+ACTION_X, {0}
+
+STATS_WELCOME,Díky za hru. Prosím sdílejte sve zážitky s ostatními hráči. Vaše herní aktivita bude sdílena s autory hry pro další zlepšování scénaře.
+
+STATS_ASK_VICTORY,Vyhráli jste tuto hru?
+STATS_ASK_VICTORY_YES,ANO!
+STATS_ASK_VICTORY_NO,Ne.
+STATS_ASK_RATING,Jak byste ohodnotili tento scénář?\n(1: Hrůza  10: Úžasné)
+STATS_ASK_COMMENTS,Chcete nechat komentář autorovi?
+STATS_MISSING_INFO,Před odesláním nám prosím sděl hodnocení a jestli jste vyhráli.
+STATS_SEND_BUTTON,Odeslat
+STATS_MENU_BUTTON,Menu
+
+STATS_AVERAGE_WIN_RATIO,Poměrně výher: {0}%
+STATS_NB_USER_REVIEWS,({0} uživatelských recenzí)
+STATS_AVERAGE_DURATION,Průměrná délka hry: {0} min
+STATS_NO_AVERAGE_DURATION,Průměrná délka hry nedostupná
+STATS_NO_AVERAGE_WIN_RATIO,Poměr výher nedostupné
+
+STATS_DOWNLOAD_ONGOING,Stahuji herní statistiky...\nProsím za pár vteřin obnov stránku
+STATS_ERROR_HTTP,Chyba při stahování herních statistik. Pokud problém přetrvává, nahlas tento problém na github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Chyba při stahování herních statistik. Prosím zkontroluj své internetové připojení.
+
+ERROR_HTTP,Chyba při stahování souboru. Pokud problém přetrvává, nahlas tento problém na github Valkyrie\n{0}
+ERROR_NETWORK,Chyba při stahování souboru. Prosím zkontroluj své internetové připojení.
+
+NEW_VERSION_AVAILABLE,Dostupná nová verze
+
+SORT_TITLE,Seřadit
+SORT_SELECT_CRITERIA,Vyber podmínky řazení
+SORT_SELECT_ORDER,Řadit podle:
+SORT_ASCENDING,Vzestupně
+SORT_DESCENDING,Sestupně
+
+SORT_BY_AUTHOR,Autor
+SORT_BY_NAME,Jméno
+SORT_BY_DIFFICULTY,Obtížnost
+SORT_BY_DURATION,Trvání
+
+SORT_BY_RATING,Hodnocení
+SORT_BY_AVERAGE_DURATION,Průměrné hodnocení
+SORT_BY_WIN_RATIO,Poměr vítězství
+SORT_BY_DATE,Datum aktualizace
+
+FILTER_TITLE,Vyber filtry
+FILTER_SELECT_LANG,Vyber jazyk(y):
+FILTER_MISSING_EXPANSIONS_ON,Skrýt scénáře s chybějícími rozšířeními  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Skrýt scénáře s chybějícími rozšířeními  ☐
+
+AUTHORS_SHORT,"Jeden řádek pro autory (pro volbu ""řazení podle autora"")"
+AUTHORS_UNKNOWN,Neznámí autoři
+
+SYNOPSYS,Popis (max 100 znaků)
+
+UPDATED_THIS_WEEK,Aktualizováno tento týden
+UPDATED_THIS_MONTH,Aktualizováno tento měsíc
+UPDATED_THIS_TRIMESTER,Aktualizováno tento trimestr
+UPDATED_THIS_SEMESTER,Aktualizováno tento semestr
+UPDATED_THIS_YEAR,Aktualizováno tento rok
+UPDATED_TWO_YEARS_AGO,Aktualizováno před dvěma roky
+UPDATE_OLDER_THAN_TWO_YEAR,Aktualizováno déle než před dvěma roky
+
+GO_OFFLINE,Odpojit
+GO_ONLINE,Připojit
+ONLINE,Online
+OFFLINE,Offline
+DOWNLOAD_ONGOING,Stahuji...
+OFFLINE_DUE_TO_ERROR,OFFLINE (Chyba sítě)
+CONTENTPACK_CATEGORY_CUSTOM,Balíčky komunitního obsahu
+CONTENTPACK_DOWNLOAD,Stahování obsahu
+CONTENTPACK_DOWNLOAD_HEADER,Stažení balíčku obsahu komunity
+MISSING_EXPANSIONS,Chybějící rozšíření:
+
+RICH_TEXT,Bohatý text
+TEXT_ALIGNMENT,Zarovnání
+TOP,Nahoru
+CENTER,Na střed
+BOTTOM,Dole
+RESTART_TO_APPLY,Vyžadován restart
+CONTENT_IMPORT_OFFICIAL,Importovat z oficiální aplikace
+CONTENT_IMPORT_ZIP,Importovat ze ZIP
+CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
+CONTENT_REIMPORT_ZIP,Reimportovat ze ZIP
+RESOLUTION,Rozlišení
+FULLSCREEN,Celá obrazovka
+
+ON,Zapnuto
+OFF,Vypnuto
+EXPORT_LOG,Exportovat log
+
+LOADINGSCENARIOS,Načítání scénářů...
+LOADINGCONTENTPACKS,Načítání balíčků obsahu...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenářů (+{1} vyfiltrováno)
+<<<<<<< HEAD
+
+FADE,Rychlost stmívání
+FADE_INSTANT,Okamžitě
+FADE_FAST,Rychle
+FADE_SLOW,Pomalu
+CLICK_BEHAVIOR,Chování při kliknutí
+CLICK_BLINK,Blikání / spustit událost
+CLICK_STATIC,Statické / Žádná událost
+=======
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+>>>>>>> release/3.12

@@ -63,26 +63,32 @@ public class VarTests
     /// <returns> index of closing parenthesis</returns>
     public int FindClosingParenthesis(int index_open)
     {
-        VarTestsParenthesis tmp;
-        int count = 0;
-
-        for (int i = index_open; i < VarTestsComponents.Count; i++)
+        if (index_open < 0 || index_open >= VarTestsComponents.Count) return -1;
         {
-            if (VarTestsComponents[i].GetClassVarTestsComponentType() == VarTestsParenthesis.GetVarTestsComponentType())
+            VarTestsParenthesis tmp;
+            int count = 0;
+
+            for (int i = index_open; i < VarTestsComponents.Count; i++)
             {
-                tmp = (VarTestsParenthesis)VarTestsComponents[i];
+                if (VarTestsComponents[i].GetClassVarTestsComponentType() == VarTestsParenthesis.GetVarTestsComponentType())
+                {
+                    tmp = (VarTestsParenthesis)VarTestsComponents[i];
 
-                if (tmp.parenthesis == "(")
-                    count++;
-                else if (tmp.parenthesis == ")" && count == 0)
-                    return i;
-                else
-                    count--;
+                    if (tmp.parenthesis == "(")
+                    {
+                        count++;
+                    }
+                    else if (tmp.parenthesis == ")")
+                    {
+                        count--;
+                        if (count == 0) return i;
+                    }
+                }
             }
-        }
 
-        // not found
-        return -1;
+            // not found
+            return -1;
+        }
     }
 
     /// <summary> Seach for the opening parenthesis of specified closing parenthesis </summary>
@@ -90,26 +96,32 @@ public class VarTests
     /// <returns> index of opening parenthesis</returns>
     public int FindOpeningParenthesis(int index_close)
     {
-        VarTestsParenthesis tmp;
-        int count = 0;
-
-        for (int i = index_close; i >= 0; i--)
+        if (index_close < 0 || index_close >= VarTestsComponents.Count) return -1;
         {
-            if (VarTestsComponents[i].GetClassVarTestsComponentType() == VarTestsParenthesis.GetVarTestsComponentType())
+            VarTestsParenthesis tmp;
+            int count = 0;
+
+            for (int i = index_close; i >= 0; i--)
             {
-                tmp = (VarTestsParenthesis)VarTestsComponents[i];
+                if (VarTestsComponents[i].GetClassVarTestsComponentType() == VarTestsParenthesis.GetVarTestsComponentType())
+                {
+                    tmp = (VarTestsParenthesis)VarTestsComponents[i];
 
-                if (tmp.parenthesis == ")")
-                    count++;
-                else if (tmp.parenthesis == "(" && count == 0)
-                    return i;
-                else
-                    count--;
+                    if (tmp.parenthesis == ")")
+                    {
+                        count++;
+                    }
+                    else if (tmp.parenthesis == "(")
+                    {
+                        count--;
+                        if (count == 0) return i;
+                    }
+                }
             }
-        }
 
-        // not found
-        return -1;
+            // not found
+            return -1;
+        }
     }
 
     /// <summary> Search for the next valid position for parenthesis or varOperation </summary>
@@ -217,13 +229,13 @@ public class VarTests
 
             if (tmp.parenthesis == "(")
             {
-                other_parenthesis_index = FindClosingParenthesis(index+1);
+                other_parenthesis_index = FindClosingParenthesis(index);
                 VarTestsComponents.RemoveAt(other_parenthesis_index);
                 VarTestsComponents.RemoveAt(index);
             }
             else if (tmp.parenthesis == ")")
             {
-                other_parenthesis_index = FindOpeningParenthesis(index-1);
+                other_parenthesis_index = FindOpeningParenthesis(index);
                 VarTestsComponents.RemoveAt(index);
                 VarTestsComponents.RemoveAt(other_parenthesis_index);
             }

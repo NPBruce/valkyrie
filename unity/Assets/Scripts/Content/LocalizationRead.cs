@@ -307,6 +307,7 @@ namespace Assets.Scripts.Content
         /// <returns>regex string</returns>
         public static string LookupRegexKey()
         {
+            if (dicts.Count == 0) return "(?!)";
             string regexKey = "{(";
             foreach (string key in dicts.Keys)
             {

@@ -678,6 +678,8 @@ LOADINGCONTENTPACKS,Loading content packs...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenarios (+{1} scenarios filtered out)
 
 FADE,Fade Speed
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
 FADE_INSTANT,Instant
 FADE_FAST,Fast
 FADE_SLOW,Slow

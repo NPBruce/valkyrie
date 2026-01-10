@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Text;
 using Assets.Scripts.Content;
 using UnityEngine.UI;
@@ -459,17 +460,17 @@ public class QuestData
 
             if (data.ContainsKey("size"))
             {
-                float.TryParse(data["size"], out size);
+                float.TryParse(data["size"], NumberStyles.Float, CultureInfo.InvariantCulture, out size);
             }
 
             if (data.ContainsKey("textsize"))
             {
-                float.TryParse(data["textsize"], out textSize);
+                float.TryParse(data["textsize"], NumberStyles.Float, CultureInfo.InvariantCulture, out textSize);
             }
 
             if (data.ContainsKey("textaspect"))
             {
-                float.TryParse(data["textaspect"], out aspect);
+                float.TryParse(data["textaspect"], NumberStyles.Float, CultureInfo.InvariantCulture, out aspect);
             }
 
             if (data.ContainsKey("textcolor"))
@@ -644,7 +645,12 @@ public class QuestData
             mTraitsPool = new string[0];
 
             // Initialise array
-            placement = new string[game.gameType.MaxHeroes() + 1][];
+            int maxHeroes = 4;
+            if (game != null && game.gameType != null)
+            {
+                maxHeroes = game.gameType.MaxHeroes() + 1;
+            }
+            placement = new string[maxHeroes][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -680,7 +686,12 @@ public class QuestData
             }
 
             // Array of placements by hero count
-            placement = new string[game.gameType.MaxHeroes() + 1][];
+            int maxHeroes = 4;
+            if (game != null && game.gameType != null)
+            {
+                maxHeroes = game.gameType.MaxHeroes() + 1;
+            }
+            placement = new string[maxHeroes][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -700,11 +711,11 @@ public class QuestData
             }
             if (data.ContainsKey("uniquehealth"))
             {
-                float.TryParse(data["uniquehealth"], out uniqueHealthBase);
+                float.TryParse(data["uniquehealth"], NumberStyles.Float, CultureInfo.InvariantCulture, out uniqueHealthBase);
             }
             if (data.ContainsKey("uniquehealthhero"))
             {
-                float.TryParse(data["uniquehealthhero"], out uniqueHealthHero);
+                float.TryParse(data["uniquehealthhero"], NumberStyles.Float, CultureInfo.InvariantCulture, out uniqueHealthHero);
             }
         }
 
@@ -1352,13 +1363,13 @@ public class QuestData
             if (data.ContainsKey("xposition"))
             {
                 locationSpecified = true;
-                float.TryParse(data["xposition"], out location.x);
+                float.TryParse(data["xposition"], NumberStyles.Float, CultureInfo.InvariantCulture, out location.x);
             }
 
             if (data.ContainsKey("yposition"))
             {
                 locationSpecified = true;
-                float.TryParse(data["yposition"], out location.y);
+                float.TryParse(data["yposition"], NumberStyles.Float, CultureInfo.InvariantCulture, out location.y);
             }
             if (data.ContainsKey("comment"))
             {
@@ -1555,12 +1566,12 @@ public class QuestData
             if (data.ContainsKey("health"))
             {
                 healthDefined = true;
-                float.TryParse(data["health"], out healthBase);
+                float.TryParse(data["health"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthBase);
             }
             if (data.ContainsKey("healthperhero"))
             {
                 healthDefined = true;
-                float.TryParse(data["healthperhero"], out healthPerHero);
+                float.TryParse(data["healthperhero"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthPerHero);
             }
 
             if (data.ContainsKey("evadeevent"))

@@ -8,6 +8,7 @@ using System.Linq;
 using Assets.Scripts.Content;
 using UnityEngine;
 using ValkyrieTools;
+using System.Globalization;
 using Random = UnityEngine.Random;
 
 public class PackTypeData : GenericData
@@ -34,11 +35,11 @@ public class TileSideData : GenericData
         // Get location of top left square in tile image, default 0
         if (content.ContainsKey("top"))
         {
-            float.TryParse(content["top"], out top);
+            float.TryParse(content["top"], NumberStyles.Float, CultureInfo.InvariantCulture, out top);
         }
         if (content.ContainsKey("left"))
         {
-            float.TryParse(content["left"], out left);
+            float.TryParse(content["left"], NumberStyles.Float, CultureInfo.InvariantCulture, out left);
         }
 
         // pixel per D2E square (inch) of image
@@ -46,12 +47,12 @@ public class TileSideData : GenericData
         {
             if (content["pps"].StartsWith("*"))
             {
-                float.TryParse(content["pps"].Remove(0, 1), out pxPerSquare);
+                float.TryParse(content["pps"].Remove(0, 1), NumberStyles.Float, CultureInfo.InvariantCulture, out pxPerSquare);
                 pxPerSquare *= Game.Get().gameType.TilePixelPerSquare();
             }
             else
             {
-                float.TryParse(content["pps"], out pxPerSquare);
+                float.TryParse(content["pps"], NumberStyles.Float, CultureInfo.InvariantCulture, out pxPerSquare);
             }
         }
         else
@@ -62,7 +63,7 @@ public class TileSideData : GenericData
         // Some MoM tiles have crazy aspect
         if (content.ContainsKey("aspect"))
         {
-            float.TryParse(content["aspect"], out aspect);
+            float.TryParse(content["aspect"], NumberStyles.Float, CultureInfo.InvariantCulture, out aspect);
         }
 
         // Other side used for validating duplicate use
@@ -227,11 +228,11 @@ public class MonsterData : GenericData
         }
         if (content.ContainsKey("health"))
         {
-            float.TryParse(content["health"], out healthBase);
+            float.TryParse(content["health"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthBase);
         }
         if (content.ContainsKey("healthperhero"))
         {
-            float.TryParse(content["healthperhero"], out healthPerHero);
+            float.TryParse(content["healthperhero"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthPerHero);
         }
         if (content.ContainsKey("horror"))
         {
@@ -384,7 +385,7 @@ public class TokenData : GenericData
         // pixel per D2E square (inch) of image
         if (content.ContainsKey("pps"))
         {
-            float.TryParse(content["pps"], out pxPerSquare);
+            float.TryParse(content["pps"], NumberStyles.Float, CultureInfo.InvariantCulture, out pxPerSquare);
         }
     }
 

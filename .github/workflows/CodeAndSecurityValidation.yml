@@ -1,0 +1,103 @@
+name: Code and security validation
+description: |
+  This workflow runs automatically on every pull request to the master branch.
+  It performs the following checks:
+
+  1. Build Libraries - Compiles C# libraries using MSBuild
+  2. Unity Tests - Runs unit tests in Unity Edit Mode
+  3. Code Quality - Checks code formatting with dotnet format
+  4. Security Scan - Runs CodeQL static analysis for security vulnerabilities
+
+  Required Secrets (for Unity Tests job):
+  - UNITY_USERNAME: Unity account email
+  - UNITY_PASSWORD: Unity account password
+  - UNITY_AUTHENTICATOR_KEY: Unity 2FA TOTP secret key
+run-name: Code and security validation triggered by ${{ github.actor }}
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  Validation:
+    name: Code and security validation
+    runs-on: windows-latest
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get Unity Version
+        run: . ./workflowScripts/workflowHelper.ps1; Get-UnityVersion
+
+      # Setup .NET for Code Quality
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Check Code Quality
+        run: dotnet format libraries/ValkyrieTools/ValkyrieTools.csproj --verify-no-changes --verbosity minimal || echo "::warning::Code formatting issues found. Run 'dotnet format' locally to fix."
+        continue-on-error: true
+
+      # Initialize CodeQL
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+
+      # Setup Unity & Build Dependencies
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup Unity Editor
+        uses: seinsinnes/setup-unity@v1.1.0
+        with:
+          unity-version: ${{ env.UNITY_VERSION }}
+          install-path: "C:/Program Files"
+
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+
+      - name: Move Unity to expected location
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      # Build Libraries (Triggers CodeQL tracing)
+      - name: Build libraries
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+      - name: Remove conflicting UnityEngine.dll
+        run: . ./workflowScripts/workflowHelper.ps1; Remove-ConflictingDLL
+
+      - name: Run Unity Edit Mode Tests
+        run: . ./workflowScripts/workflowHelper.ps1; Run-UnityTests
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: |
+            test-results.xml
+            test-results.log

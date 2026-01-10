@@ -34,6 +34,9 @@ Unity plugins are located in folder `unity/Assets/Plugins`. The following plugin
 ### Code
 C# code is located in folder `unity/Assets/Scripts`.
 
+### Unit tests.
+Unit tests are located in folder `unity\Assets\UnitTests`.
+
 #### Constants
 String constants are located in file `unity/Assets/Scripts/ValkyrieConstants.cs`.
 
