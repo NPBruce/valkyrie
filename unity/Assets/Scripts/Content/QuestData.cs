@@ -415,7 +415,10 @@ public class QuestData
         public string textBackgroundColor = "transparent";
         public TextAlignment textAlignment = TextAlignment.CENTER;
         public float aspect = 1;
+
         public bool border = false;
+        public string fadeSpeed = "fast";
+        public bool enableClick = true;
 
         public string uitext_key { get { return genKey("uitext"); } }
 
@@ -428,6 +431,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
+            enableClick = true;
         }
 
         // Create from ini data
@@ -442,6 +446,11 @@ public class QuestData
             {
                 string value = data["image"];
                 imageName = value != null ? value.Replace('\\', '/') : value;
+            }
+
+            if (data.ContainsKey("fadespeed"))
+            {
+                fadeSpeed = data["fadespeed"];
             }
 
             if (data.ContainsKey("vunits"))
@@ -513,6 +522,11 @@ public class QuestData
             {
                 bool.TryParse(data["border"], out border);
             }
+
+            if (data.ContainsKey("clickeffect"))
+            {
+                bool.TryParse(data["clickeffect"], out enableClick);
+            }
         }
 
         // Save to string (for editor)
@@ -580,6 +594,16 @@ public class QuestData
             if (vAlign > 0)
             {
                 r += "valign=bottom" + nl;
+            }
+
+            if (!fadeSpeed.Equals("fast"))
+            {
+                r += "fadespeed=" + fadeSpeed + nl;
+            }
+
+            if (!enableClick)
+            {
+                r += "clickeffect=" + enableClick + nl;
             }
 
             return r;
@@ -1195,7 +1219,9 @@ public class QuestData
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
         public string puzzleSolution = "";
+
         public string imageType = "";
+        public string fadeSpeed = "instant";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1220,6 +1246,10 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
+            }
+            if (data.ContainsKey("fadespeed"))
+            {
+                fadeSpeed = data["fadespeed"];
             }
             if (data.ContainsKey("skill"))
             {
@@ -1268,6 +1298,10 @@ public class QuestData
             if (!puzzleSolution.Equals(""))
             {
                 r += "puzzlesolution=" + puzzleSolution + nl;
+            }
+            if (!fadeSpeed.Equals("instant"))
+            {
+                r += "fadespeed=" + fadeSpeed + nl;
             }
             return r;
         }

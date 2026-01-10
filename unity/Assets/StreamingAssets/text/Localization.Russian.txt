@@ -506,5 +506,13 @@ EXPORT_LOG,Экспорт журнала
 LOADINGSCENARIOS,Загрузка сценариев...
 LOADINGCONTENTPACKS,Загрузка пакетов контента...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} сценариев (+{1} скрыто)
+
+FADE,Скорость затухания
 QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
 QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,Мгновенно
+FADE_FAST,Быстро
+FADE_SLOW,Медленно
+CLICK_BEHAVIOR,Поведение клика
+CLICK_BLINK,Мигание / событие
+CLICK_STATIC,Статично / Нет события

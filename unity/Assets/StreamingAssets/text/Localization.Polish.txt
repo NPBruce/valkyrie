@@ -478,5 +478,13 @@ EXPORT_LOG,Eksportuj log
 LOADINGSCENARIOS,Wczytywanie scenariuszy...
 LOADINGCONTENTPACKS,Wczytywanie pakietów zawartości...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenariuszy (+{1} odfiltrowano)
+
+FADE,Szybkość zanikania
 QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
 QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,Natychmiast
+FADE_FAST,Szybko
+FADE_SLOW,Wolno
+CLICK_BEHAVIOR,Zachowanie kliknięcia
+CLICK_BLINK,Miganie / wyzwalanie zdarzenia
+CLICK_STATIC,Statyczne / Brak zdarzenia

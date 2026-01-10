@@ -503,5 +503,13 @@ EXPORT_LOG,Log exportieren
 LOADINGSCENARIOS,Szenarien laden...
 LOADINGCONTENTPACKS,Inhaltspakete laden...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} Szenarien (+{1} Szenarien herausgefiltert)
+
+FADE,Überblendgeschwindigkeit
 QUEST_EDITOR_HERO_COUNT_LABEL,Anzahl der Helden
 QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Anzahl der Ermittler
+FADE_INSTANT,Sofort
+FADE_FAST,Schnell
+FADE_SLOW,Langsam
+CLICK_BEHAVIOR,Klickverhalten
+CLICK_BLINK,Blinken / Ereignis auslösen
+CLICK_STATIC,Statisch / Kein Ereignis

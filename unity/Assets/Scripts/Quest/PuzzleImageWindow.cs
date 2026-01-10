@@ -166,6 +166,21 @@ public class PuzzleImageWindow
         image.sprite = imageSprite[imgPos.x][imgPos.y];
         image.rectTransform.sizeDelta = new Vector2(width * UIScaler.GetPixelsPerUnit(), height * UIScaler.GetPixelsPerUnit());
 
+        if (questPuzzle.imageType.Length > 0 && !solved && !questPuzzle.fadeSpeed.Equals("instant"))
+        {
+            float speed = 1f;
+            if (questPuzzle.fadeSpeed.Equals("slow")) speed = 0.5f;
+
+            // Initialize alpha to 0
+            Color c = image.color;
+            c.a = 0;
+            image.color = c;
+
+            // Add component
+            FadeIn fi = gameObject.AddComponent<FadeIn>();
+            fi.speed = speed;
+        }
+
         if (solved)
         {
             return;
@@ -326,5 +341,30 @@ public class PuzzleImageWindow
                 }
             }
         }
+        }
     }
-}
+
+    public class FadeIn : MonoBehaviour
+    {
+        public float speed = 1f;
+        UnityEngine.UI.Image image;
+
+        void Start()
+        {
+            image = gameObject.GetComponent<UnityEngine.UI.Image>();
+        }
+
+        void Update()
+        {
+            if (image == null) return;
+            Color c = image.color;
+            c.a += Time.deltaTime * speed;
+            if (c.a >= 1f)
+            {
+                c.a = 1f;
+                Destroy(this);
+            }
+            image.color = c;
+        }
+    }
+

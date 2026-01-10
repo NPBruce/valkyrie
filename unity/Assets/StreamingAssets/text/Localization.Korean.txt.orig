@@ -672,13 +672,16 @@ EXPORT_LOG,로그 내보내기
 LOADINGSCENARIOS,시나리오 로딩 중...
 LOADINGCONTENTPACKS,콘텐츠 팩 로딩 중...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} 시나리오 (+{1} 시나리오 필터)
+<<<<<<< HEAD
 
 FADE,페이드 속도
-QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
-QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
 FADE_INSTANT,즉시
 FADE_FAST,빠르게
 FADE_SLOW,느리게
 CLICK_BEHAVIOR,클릭 동작
 CLICK_BLINK,깜박임 / 이벤트 트리거
 CLICK_STATIC,정적 / 이벤트 없음
+=======
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+>>>>>>> release/3.12

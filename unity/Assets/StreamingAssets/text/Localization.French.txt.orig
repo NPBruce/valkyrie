@@ -1,0 +1,522 @@
+.,French
+// TEXTS
+ABILITY,Capacité
+ABOUT,À propos
+ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, UnityStandaloneFileBrowser de gkngkc et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ACTIONS,Actions
+ACTIVATED,Activé
+ACTIVATION,Activation
+ACTIVATIONS,Activations
+ADD_COMPONENTS,Ajouter éléments :
+COMPONENTS,Composants
+RENAME,Renommer
+SAVE_TEST,Sauvegarder & Tester
+SOURCE,Source
+COMMENT,Commenter
+TRUE,Vrai
+FALSE,Faux
+SNAP,Casser
+FREE,Libre
+CONFIRM,Confirmer
+INSPECT,Inspect
+DURATION,Durée
+DESCRIPTION,Description
+AUTHORS,Auteurs
+DIFFICULTY,Difficulté
+VALIDATE_SCENARIO,Valider
+FILE,Fichier
+OPTIMIZE_LOCALIZATION,Optimiser traduction
+CREATE_PACKAGE,Créer Package
+REORDER_COMPONENTS,Réordonner Composants
+ASSIGN,Assigner
+ATTACK,Attaquer
+ATTACK_MESSAGE,Message en cas d'attaque :
+AUDIO,Audio
+BACK,Retour
+BASE,Base
+BUTTON,Bouton
+BUTTONS,Boutons
+CAMERA,Camera
+CANCEL,Retour
+CHOOSE_LANG,Choix de la langue
+CLEAR_FIRE,Éteindre le feu
+COLOR,Couleur
+COMPONENT_NAME,Nom de l'élément :
+COMPONENT_TO_DELETE,Élément à supprimer
+CONTENT_IMPORTING,Import...\nL'opération peut prendre quelques minutes
+CONTENT_LOCATE,Localiser le jeu
+CONTENT_INSTALL_VIA_STEAM,Installer via Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Installer via Google Play
+CONTINUE,Continuer
+COPY,Copier
+CUSTOMMONSTER,Monstre personnalisé
+D2E_APP_NOT_FOUND,L'application "Road to Legend" est introuvable
+D2E_HEROES_NAME,Héros
+D2E_HERO_NAME,Héro
+D2E_NAME,Descent: Voyages dans les Ténèbres (2nde édition)
+D2E_QUEST_NAME,mission
+DEFEATED,Éliminé
+DELETE,Supprimer
+UPDATE,Mise à jour
+DIALOG,Dialogue
+DOOR,Porte
+DOWNLOAD,Télécharger
+DOWNLOAD_LIST,Téléchargement de la liste des packages
+DOWNLOAD_PACKAGE,Téléchargement du Package
+E,E
+EFFECTS,Effets
+END_TURN,Fin du tour
+ROUND,Tour {0}
+EVADE,Évasion
+EVENT,Événement
+EXIT,Sortir
+FINISHED,Terminé
+FIRST,Premier
+FORCE_ACTIVATE,Forcer l'activation
+
+HEALTH,Santé
+HEALTH_HERO,Par Héros
+HIGHLIGHT,Mettre en valeur
+HORROR_CHECK,Test d'horreur
+AWARENESS,Conscience
+IA_APP_NOT_FOUND,Veuillez installer Legends of the Alliance via Steam
+IA_APP_NOT_FOUND_ANDROID,Veuillez installer Legends of the Alliance via Google Play
+IA_HEROES_NAME,Heroes
+IA_HERO_NAME,Hero
+IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
+IA_QUEST_NAME,MissionINDENT,  {0}
+INFO,Info
+INFORMATION,Information
+INITIAL_MESSAGE,Message de départ :
+ITEM,Objet
+QITEM,QItem
+KO,KO
+LOAD_QUEST,Reprendre une partie
+LOG,Journal
+SKILLS,Compétences
+ITEMS,Objets
+ITEMS_SMALL,Objets
+GOLD,Or
+MAIN_MENU,Menu principal
+MAX,Max
+MAX_X,Max {0}
+MAX_CAM,Max Cam
+MENU,Menu
+MIN,Min
+MIN_X,Min {0}
+MIN_CAM,Min Cam
+MOM_APP_NOT_FOUND,L'application "Mansions of Madness" est introuvable
+MOM_HEROES_NAME,Investigateurs
+MOM_HERO_NAME,Investigateur
+MOM_NAME,Les Demeures de l'Épouvante Seconde Edition
+MOM_QUEST_NAME,scénario
+MONSTER,Monstre
+MONSTER_ATTACKS,Le monstre attaque.
+MONSTER_MASTER,Maître
+MONSTER_MASTER_X,Maître {0}
+MONSTER_MINION,Serviteur
+MONSTER_NORMAL,Normal
+
+MONSTER_UNIQUE,Unique
+MOVES,Actions
+MPLACE,Position
+MUSIC,Musique
+NAME,Nom
+NEW,Nouveau
+NEW_X,{Nouveau {0}}
+NONE,{Aucun}
+
+NEXT_EVENTS,Événements suivants
+NOT_FIRST,Pas en premier
+NO_ATTACK_MESSAGE,Message en absence d'attaque :
+
+NUMBER,Numéro
+NUMBER_HEROS,{0} Héros:
+OK,Ok
+OP,Opérateur
+OPTIONS,Options
+PLACEMENT,Positionnement
+
+PLACE_IMG,Placer Img :
+POOL_TRAITS,Traits possibles :
+POSITION,Position
+POSITION_TYPE_HIGHLIGHT,Mise en valeur
+POSITION_TYPE_UNUSED,Non utilisé
+PUZZLE,Puzzle
+PUZZLE_ALT_LEVEL,Difficulté
+PUZZLE_CLASS,Classe
+PUZZLE_CLASS_SELECT,Choix de la classe
+IMAGE,Image
+
+PUZZLE_LEVEL,Niveau
+PUZZLE_SELECT_SKILL,Choisir compétence
+PUZZLE_IMAGE_CLASS,image
+PUZZLE_CODE_CLASS,code
+PUZZLE_SLIDE_CLASS,mécanisme
+QUEST,Scénario
+QUEST_NAME_DOWNLOAD,Télécharger {0}
+QUEST_NAME_EDITOR,Éditeur de {0}
+EDITOR,Éditeur
+QUEST_NAME_UPDATE,  [Mise à jour] {0}
+QUOTA,Quota
+RECOVER,Récupérer
+INVESTIGATOR_ATTACKS,Attaques de l'investigateur
+
+
+RELOAD,Recharger
+REMOVE_COMPONENTS,Retirer des éléments
+REQUIRED_EXPANSIONS,Extensions requises :
+REQUIRES_EXPANSION, Requiert :  {0}
+
+REQ_TRAITS,Attributs requis :
+RESET,Reset
+ROTATION,Rotation
+SAVE,Sauver
+AUTOSAVE,Sauvegarde auto.
+SELECT_SAVE,Charger
+SELECT,Choisir {0}
+SELECT_CLASS,Choisir classe
+SELECTION,Sélection
+SELECT_CONTENT,Choisir du contenu
+SELECT_EXPANSION,Choix des extensions
+SELECT_IMAGE,Choisir Image
+SELECT_ITEM,Choix des objets
+SELECT_PACK,Choix des paquets
+SELECT_TO_COPY,Choisir {0} à copier
+SELECT_TO_DELETE,Sélectionner {0} pour le supprimmer
+DISABLE,Désactiver
+HIDE,Cacher
+HIDDEN,Caché
+ACTIVE,Actif
+SET,Action
+SET_EDITOR_ALPHA,Transparence Éditeur
+SKILL,Compétence
+SELECT_SKILLS,Choisir compétences
+SPAWN,Générer
+STARTING_ITEM,Objets de départ
+STARTING_ITEMS,Objets de départ
+START_QUEST,Nouvelle partie
+START,Démarrer
+
+TESTS,Tests
+TILE,Tuile
+
+AND,ET
+OR,OU
+
+TOKEN,Marqueur
+TOOLS,Outils
+TOTAL_MOVES,Actions (total)
+TRAITS,Traits
+TRIGGER,Déclencheur
+TYPE,Type
+TYPES,Types
+UNABLE_BUTTON,Bouton impossible
+
+UI,UI
+UNITS,Unités
+HORIZONTAL,Horizontal
+VERTICAL,Vertical
+ALIGN,Aligner
+SIZE,Taille
+TEXT_SIZE,Taille du texte
+BACKGROUND_COLOUR,Couleur de fond
+ASPECT,Aspect
+BORDER,Bordure
+NO_BORDER,Sans bordure
+UNDO,Annuler action
+UNIQUE_DEFEATED,Unique Battu
+UNIQUE_INFO,Info unique
+UNIQUE_MONSTER,Monstre unique
+UNIQUE_TITLE,Titre unique
+UNUSED,Non utilisé
+VALUE,Valeur
+VAR,Variable
+VARS,Variables
+VAR_NAME,Nom variable :
+X_ACTIVATED,{0} Activé
+
+BUY,Acheter
+SELL,Vendre
+CLASS,Classe
+ACT_1,Acte 1
+ACT_2,Acte 2
+
+//Items
+weapon,Arme
+firearm,Arme à feu
+heavyweapon,Arme lourde
+heavy,Arme lourde
+tome,Tome
+equipment,Équipement
+lightsource,Source de lumière
+bladedweapon,Arme tranchante
+bladed,Arme tranchante
+spell,Sort
+key,Clé
+evidence,Preuve
+ally,Allié
+
+//Audio
+menu,Menu
+music,Musique
+newround,Nouveau tour
+attack,Attaque
+unarmed,Sans arme
+horror,Horreur
+search,Recherche
+explore,Exploration
+
+//Heroes
+latari,Latari
+dwarf,Nain
+gnome,Gnome
+male,Homme
+female,Femme
+
+//monsters
+monster,Monstre
+undead,Mort vivant
+humanoid,Humanoïde
+spirit,Esprit
+beast,Bête
+agent,Agent
+lieutenant,Lieutenant
+small,Petit
+medium,Moyen
+huge,Grand
+massive,Massif
+building,Bâtiment
+melee,Mélée
+ranged,Distance
+goblin,Goblin
+cursed,Maudit
+cave,Cave
+wilderness,Étendue sauvage
+civilized,Civilisé
+dark,Sombre
+mountain,Montagne
+cold,Froid
+hot,Chaud
+water,Eau
+fleshless,Sans Chair
+snakeperson,Être Serpent
+relic,Relique
+elixir,Élixir
+
+//Tiles
+basement,Sous-sol
+river,Rivière
+street,Rue
+hallway,Couloir
+bathroom,Salle de bain
+kitchen,Cuisine
+dock,Quai
+storage,Entrepôt
+outside,Extérieur
+inside,Intérieur
+big,Grand
+transition,Transition
+throne,Trône
+pit,Fosse
+farm,Grange
+tomb,Tombe
+library,Bibliothèque
+graves,Cimetière
+bridge,Pont
+stairs,Escaliers
+torture,Torture
+tents,Tentes
+stables,Étables
+hall,Salon
+map,Carte
+bedroom,Chambre
+city,Ville
+fountain,Fontaine
+blackrealm,Royaume noir
+altar,Autel
+beds,Lits
+study,Étude
+prison,Prison
+plinth,Support
+tavern,Taverne
+statues,Statues
+drawbridge,Pont-levis
+rubble,décombres
+treasure,Trésor
+stone,Pierre
+dirt,Saleté
+timber,Bois
+snow,Neige
+lava,Lave
+swamp,Marécage
+sludge,Boue
+ship,Navire
+temple,Temple
+train,Train
+
+// Colors
+black,Noir
+white,Blanc
+red,Rouge
+lime,Citron vert
+blue,Bleu
+yellow,Jaune
+aqua,Eau
+cyan,Cyan
+magenta,Magenta
+fuchsia,Fuchsia
+silver,Argent
+gray,Gris
+maroon,Marron
+olive,Olive
+green,Vert
+purple,Violet
+teal,Sarcelle
+navy,Bleu marine
+
+//Puzzles
+image,Image
+code,Code
+slide,Mécanisme
+tower,Tour d'Hanoï
+SYMBOL,Symbole
+ELEMENT,Élément
+
+// Events
+Ordered,Ordonné
+Random,Aléatoire
+
+//Inherited from FFG localization files
+SET_FIRE,Mettre le feu
+INVESTIGATOR_ELIMINATED,Investigateur éliminé
+CLOSE,Fermer
+PUZZLE_GUESS,Proposer
+
+UP,Haut
+DOWN,Bas
+LEFT,Gauche
+RIGHT,Droite
+
+PHASE_INVESTIGATOR,Phase d'Investigateur
+PHASE_MYTHOS,Phase du Mythe
+MONSTER_STEP,Étape de monstre
+HORROR_STEP,Étape d'horreur
+END_PHASE,Terminer la phase
+
+ATTACK_PROMPT,Avec quel type d’arme allez-vous attaquer ?
+ATTACK_WITH_HEAVY_WEAPON, Attaquer avec une [i]Arme Lourde[/i]
+ATTACK_WITH_BLADED_WEAPON, Attaquer avec une [i]Arme Tranchante[/i]
+ATTACK_WITH_FIREARM, Attaquer avec une [i]Arme à feu[/i]
+ATTACK_WITH_SPELL, Attaquer avec un Sort
+ATTACK_WITH_UNARMED, Attaquer à mains nues
+
+ACTION_X, {0}
+
+
+STATS_WELCOME,Merci d'avoir joué.  Vous pouvez noter et partager votre expérience sur ce scénario avec les prochains joueurs. Vos actions en jeu seront envoyés à l'auteur pour lui permettre d'améliorer ce scénario.
+STATS_ASK_VICTORY,Avez vous gagné cette partie?
+STATS_ASK_VICTORY_YES,OUI !
+STATS_ASK_VICTORY_NO,Non...
+STATS_ASK_RATING,Quelle note donneriez vous à ce scénario\n(1: nul  10: exceptionnel)
+STATS_ASK_COMMENTS,Souhaitez vous laissez un commentaire pour l'auteur du scénario ?
+STATS_MISSING_INFO,Merci de noter le scénario, et d'indiquer votre résultat avant de soumettre.
+STATS_SEND_BUTTON,Envoyer
+STATS_MENU_BUTTON,Menu
+
+STATS_AVERAGE_WIN_RATIO,Ratio de victoire: {0}%
+STATS_NB_USER_REVIEWS,({0} évaluations)
+STATS_AVERAGE_DURATION,Durée moyenne: {0} min
+STATS_NO_AVERAGE_DURATION,Durée moyenne indisponible
+STATS_NO_AVERAGE_WIN_RATIO,Ratio de victoire indisponible
+
+STATS_DOWNLOAD_ONGOING,Téléchargement des statistiques et notes...\nVeuillez recharger dans quelques secondes
+STATS_ERROR_HTTP,Erreur lors du téléchargement des statistiques, si le problème persiste merci de faire un retour sur Github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Erreur lors du téléchargement des statistiques, veuillez vérifier votre connexion internet
+
+ERROR_HTTP,Erreur lors du téléchargement du fichier, si le problème persiste merci de faire un retour sur Github Valkyrie\n{0}
+ERROR_NETWORK,Erreur lors du téléchargement du fichier, veuillez vérifier votre connexion internet
+
+NEW_VERSION_AVAILABLE,Mise à jour disponible!
+
+SORT_TITLE,Tri
+SORT_SELECT_CRITERIA,Selectionnez le critère de tri:
+SORT_SELECT_ORDER,Ordre:
+SORT_ASCENDING,Ascendant
+SORT_DESCENDING,Descendant
+
+SORT_BY_AUTHOR,Auteurs
+SORT_BY_NAME,Nom
+SORT_BY_DIFFICULTY,Difficulté
+SORT_BY_DURATION,Durée
+
+SORT_BY_RATING,Notes
+SORT_BY_AVERAGE_DURATION,Durée moy.
+SORT_BY_WIN_RATIO,% victoire
+SORT_BY_DATE,Mise à jour
+
+FILTER_TITLE,Filtres
+FILTER_SELECT_LANG,Sélectionnez le(s) language(s) que vous comprenez:
+FILTER_MISSING_EXPANSIONS_ON,Cachez les scénarios avec une extension manquante  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Cachez les scénarios avec une extension manquante  ☐
+
+AUTHORS_SHORT,Auteurs en une ligne de texte (pour  le "tri par auteurs")
+AUTHORS_UNKNOWN,Auteurs inconnus (le scénario doit être mis à jour pour avoir cette information)
+
+SYNOPSYS,Synopsys (max 100 characters)
+
+UPDATED_THIS_WEEK,Mis à jour cette semaine
+UPDATED_THIS_MONTH,Mis à jour ce mois ci
+UPDATED_THIS_TRIMESTER,Mis à jour ces 3 derniers mois
+UPDATED_THIS_SEMESTER,Mis à jour ces 6 derniers mois
+UPDATED_THIS_YEAR,Mis à jour il y a moins d'un an
+UPDATED_TWO_YEARS_AGO,Mis à jour il y a moins de deux ans
+UPDATE_OLDER_THAN_TWO_YEAR,Mis à jour il y a plus de deux ans
+
+GO_OFFLINE,PASSER EN HORS LIGNE
+GO_ONLINE,ALLER EN LIGNE
+ONLINE,EN LIGNE
+OFFLINE,HORS LIGNE
+DOWNLOAD_ONGOING,Téléchargement en cours...
+OFFLINE_DUE_TO_ERROR,MODE HORS LIGNE (erreur réseau)
+
+CONTENTPACK_CATEGORY_CUSTOM,Packs de contenu communautaire
+CONTENTPACK_DOWNLOAD,Téléchargement de contenu
+CONTENTPACK_DOWNLOAD_HEADER,Téléchargement du pack de contenu communautaire
+MISSING_EXPANSIONS,Extensions manquantes :
+
+RICH_TEXT,Texte riche
+TEXT_ALIGNMENT,Aligner
+TOP,Haut
+CENTER,Centre
+BOTTOM,Bas
+RESTART_TO_APPLY,Redémarrage requis
+
+CONTENT_IMPORT_OFFICIAL,Importer depuis l'app officielle
+CONTENT_IMPORT_ZIP,Importer depuis ZIP
+CONTENT_REIMPORT_OFFICIAL,Réimporter depuis l'app officielle
+CONTENT_REIMPORT_ZIP,Réimporter depuis ZIP
+RESOLUTION,Résolution
+FULLSCREEN,Plein écran
+
+ON,Activé
+OFF,Désactivé
+EXPORT_LOG,Exporter le journal
+
+LOADINGSCENARIOS,Chargement des scénarios...
+LOADINGCONTENTPACKS,Chargement des packs de contenu...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} scénarios (+{1} scénarios filtrés)
+<<<<<<< HEAD
+
+FADE,Vitesse de fondu
+FADE_INSTANT,Instantané
+FADE_FAST,Rapide
+FADE_SLOW,Lent
+CLICK_BEHAVIOR,Comportement au clic
+CLICK_BLINK,Clignoter / Déclencher événement
+CLICK_STATIC,Statique / Pas d'événement
+=======
+QUEST_EDITOR_HERO_COUNT_LABEL,Nombre de Héros
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Nombre d'Investigateurs
+>>>>>>> release/3.12
