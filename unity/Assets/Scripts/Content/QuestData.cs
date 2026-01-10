@@ -1210,7 +1210,7 @@ public class QuestData
         public string puzzleSolution = "";
 
         public string imageType = "";
-        public string fadeSpeed = "fast";
+        public string fadeSpeed = "instant";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1288,7 +1288,7 @@ public class QuestData
             {
                 r += "puzzlesolution=" + puzzleSolution + nl;
             }
-            if (!fadeSpeed.Equals("fast"))
+            if (!fadeSpeed.Equals("instant"))
             {
                 r += "fadespeed=" + fadeSpeed + nl;
             }
