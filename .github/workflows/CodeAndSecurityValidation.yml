@@ -21,7 +21,7 @@ on:
 
 jobs:
   Validation:
-    name: Validation
+    name: Code and security validation
     runs-on: windows-latest
     permissions:
       security-events: write
