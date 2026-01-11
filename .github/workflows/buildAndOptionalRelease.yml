@@ -294,7 +294,7 @@ jobs:
 
       - name: Check if release exists
         id: check_release
-        run: . ./workflowscripts/workflowHelper.ps1; Check-ReleaseExists
+        run: . ./workflowScripts/workflowHelper.ps1; Check-ReleaseExists
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
