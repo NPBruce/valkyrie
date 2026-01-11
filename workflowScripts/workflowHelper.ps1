@@ -83,24 +83,6 @@ function Run-UnityTests {
     }
 }
 
-function Check-ReleaseExists {
-    try {
-        # 2>$null to suppress stderr from gh if 404, though gh api usually handles it gracefully with --jq
-        $releaseUrl = gh api -X GET /repos/$env:GITHUB_REPOSITORY/releases/tags/$env:RELEASE_NAME --jq '.upload_url' 2>$null
-    }
-    catch {
-        $releaseUrl = ""
-    }
-
-    if (-not [string]::IsNullOrEmpty($releaseUrl)) {
-        echo "exists=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-        echo "upload_url=$releaseUrl" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-    }
-    else {
-        echo "exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-    }
-}
-
 function Remove-ConflictingDLL {
     if (Test-Path "unity/Assets/Plugins/UnityEngine.dll") {
         Remove-Item "unity/Assets/Plugins/UnityEngine.dll" -Force

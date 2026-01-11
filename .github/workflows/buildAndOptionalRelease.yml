@@ -294,8 +294,14 @@ jobs:
 
       - name: Check if release exists
         id: check_release
-        run: . ./workflowScripts/workflowHelper.ps1; Check-ReleaseExists
-        shell: pwsh
+        run: |
+          release_url=$(gh api -X GET /repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_NAME }} --jq '.upload_url' 2>/dev/null || echo "")
+          if [ -n "$release_url" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "upload_url=$release_url" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
