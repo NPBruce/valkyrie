@@ -70,35 +70,35 @@ function Build-Unity {
     Write-Log "Building for $PlatformName..."
 
     # Construct arguments dynamically
-    $Args = @("-batchmode", "-quit", "-projectPath", $UnityProject)
+    $UnityArgs = @("-batchmode", "-quit", "-projectPath", $UnityProject)
 
     if (![string]::IsNullOrEmpty($BuildTarget)) {
-        $Args += "-buildTarget"
-        $Args += $BuildTarget
+        $UnityArgs += "-buildTarget"
+        $UnityArgs += $BuildTarget
     }
 
     if (![string]::IsNullOrEmpty($BuildPlayerOption)) {
-        $Args += $BuildPlayerOption
-        $Args += $OutputPath
+        $UnityArgs += $BuildPlayerOption
+        $UnityArgs += $OutputPath
     }
 
     if (![string]::IsNullOrEmpty($BuildMethod)) {
-        $Args += "-executeMethod"
-        $Args += $BuildMethod
+        $UnityArgs += "-executeMethod"
+        $UnityArgs += $BuildMethod
         # Android specific arg for the method
         if ($PlatformName -eq "Android") {
-            $Args += "+buildlocation"
-            $Args += $OutputPath
+            $UnityArgs += "+buildlocation"
+            $UnityArgs += $OutputPath
         }
     }
 
     # Add log file argument
-    $Args += "-logFile"
-    $Args += $LogFile
+    $UnityArgs += "-logFile"
+    $UnityArgs += $LogFile
 
-    Write-Log "Running Unity with args: $Args"
+    Write-Log "Running Unity with args: $UnityArgs"
 
-    $UnityProcess = Start-Process -FilePath $UnityExe -ArgumentList $Args -NoNewWindow -PassThru
+    $UnityProcess = Start-Process -FilePath $UnityExe -ArgumentList $UnityArgs -NoNewWindow -PassThru
     $UnityProcess.WaitForExit()
 
     if ($UnityProcess.ExitCode -ne 0) {
@@ -227,7 +227,14 @@ function Install-Dependencies {
     param ([string]$ScriptRoot)
 
     Write-Log "Restoring NuGet packages..."
-    Invoke-CommandChecked { winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements } "Winget install failed"
+    if (-not (Get-Command nuget -ErrorAction SilentlyContinue)) {
+        Write-Log "Installing NuGet..."
+        Invoke-CommandChecked { winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements } "Winget install failed"
+    }
+    else {
+        Write-Log "NuGet already installed."
+    }
+    Write-Log "Restoring NuGet packages..."
     Invoke-CommandChecked { nuget restore "$ScriptRoot\libraries\libraries.sln" } "NuGet restore failed"
 }
 
