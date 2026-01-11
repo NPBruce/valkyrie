@@ -53,16 +53,8 @@ namespace Assets.Scripts.UI.Screens
             
             
            // Version type : alpha / beta should be displayed
-            if( Game.Get().version.EndsWith("a") )
-            {
-                ui = new UIElement();
-                ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);
-                ui.SetText("alpha version");
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { TestCrash(); });
-            }
-            if (Game.Get().version.EndsWith("b"))
+            // Version type : beta should be displayed
+            if (VersionManager.IsBeta(Game.Get().version))
             {
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetRight(-6), 1, 6, 3);

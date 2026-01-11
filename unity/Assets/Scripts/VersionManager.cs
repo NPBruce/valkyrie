@@ -95,4 +95,15 @@ public class VersionManager
         return false;
     }
 
+    /// <summary>
+    /// Checks if the provided version string indicates a beta version.
+    /// A beta version is defined as having more than 2 components (e.g., 3.12.1).
+    /// </summary>
+    /// <param name="version">The version string to check.</param>
+    /// <returns>True if the version is beta, otherwise false.</returns>
+    public static bool IsBeta(string version)
+    {
+        return version.Split('.').Length > 2;
+    }
+
 }
