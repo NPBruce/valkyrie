@@ -155,17 +155,8 @@ namespace SetVersion
 
             if (!Char.IsDigit(version[version.Length - 1]))
             {
-                VersionComponentChar = version[version.Length - 1] + 1 - 'a';
-                if (VersionComponentChar < 1)
-                {
-                    Console.WriteLine("Error reading training letter.");
-                    return "0";
-                }
-                if (VersionComponentChar > 9)
-                {
-                    Console.WriteLine("Trailing letter to high.");
-                    return "0";
-                }
+                 Console.WriteLine("Version does not end in a digit (suffixes not supported).");
+                 return "0";
             }
 
             int versionCode = VersionComponentChar;
