@@ -73,6 +73,6 @@ Resources are located in folder `unity/Assets/Resources`. Resource data contains
 - Sprites: Icons and other common images under `unity/Assets/Resources/Sprites/`
 
 ### Build scripts
-There are two build scripts:
-- `build.bat` is a batch file for Windows.
-- `build.ps1` is a PowerShell script for Windows. This file is used in the GitHub actions build pipeline (`github\workflows\buildAndOptionalRelease.yml`).
+There are two build scripts that can by used as alternative for building the application in Unity editor. For more information on build see [Developer guide](https://github.com/NPBruce/valkyrie/wiki/Developer-Guide).
+- `workflowScripts/build.bat` is a batch file for Windows.
+- `workflowScripts/build.ps1` is a PowerShell script for Windows. This file is used in the GitHub actions build pipeline (`github\workflows\buildAndOptionalRelease.yml`).
