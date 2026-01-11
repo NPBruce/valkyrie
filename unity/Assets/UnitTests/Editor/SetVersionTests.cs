@@ -1,10 +1,7 @@
 using NUnit.Framework;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 
-namespace SetVersion.Tests
+namespace Valkyrie.UnitTests
 {
     // Logic copied from libraries/SetVersion/Program.cs for validation in Unity Editor
     public class VersionLogic
