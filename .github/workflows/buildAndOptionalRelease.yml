@@ -162,6 +162,34 @@ jobs:
       - uses: repolevedavaj/install-nsis@v1.0.3
         with:
           nsis-version: '3.10'
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      - name: Build libraries
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+      - name: Remove conflicting UnityEngine.dll
+        run: . ./workflowScripts/workflowHelper.ps1; Remove-ConflictingDLL
+
+      - name: Run Unity Edit Mode Tests
+        run: . ./workflowScripts/workflowHelper.ps1; Run-UnityTests
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: |
+            test-results.xml
+            test-results.log
+
       #Run build script
       #Run build script
       - name: Run build PowerShell script
