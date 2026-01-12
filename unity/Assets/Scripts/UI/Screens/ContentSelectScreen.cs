@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,9 +74,6 @@ namespace Assets.Scripts.UI.Screens
                 CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image, false);
             }
 
-            //bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
-
-            //string customContentPackImagePath = "E:\\Eigene Dokumente\\Max\\Programmierung\\Projekte\\valkyrie\\unity\\Assets\\Resources\\Sprites\\CustomContentPackIcon.jpg";
             string customContentPackImagePath = "sprites/CustomContentPackIcon";
             CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, customContentPackImagePath, true);
 
