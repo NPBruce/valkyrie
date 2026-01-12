@@ -682,3 +682,4 @@ FADE_SLOW,느리게
 CLICK_BEHAVIOR,클릭 동작
 CLICK_BLINK,깜박임 / 이벤트 트리거
 CLICK_STATIC,정적 / 이벤트 없음
+REQUIRED,필수

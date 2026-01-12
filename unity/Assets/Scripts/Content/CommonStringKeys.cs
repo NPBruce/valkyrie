@@ -91,6 +91,7 @@ namespace Assets.Scripts.Content
         public static readonly StringKey RESET = new StringKey(VAL, "RESET");
         public static readonly StringKey LOADINGSCENARIOS = new StringKey(VAL, "LOADINGSCENARIOS");
         public static readonly StringKey LOADINGCONTENTPACKS = new StringKey(VAL, "LOADINGCONTENTPACKS");
+        public static readonly StringKey REQUIRED = new StringKey(VAL, "REQUIRED");
 
     }
 }

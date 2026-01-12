@@ -513,3 +513,4 @@ FADE_SLOW,Langsam
 CLICK_BEHAVIOR,Klickverhalten
 CLICK_BLINK,Blinken / Ereignis auslösen
 CLICK_STATIC,Statisch / Kein Ereignis
+REQUIRED,Erforderlich
