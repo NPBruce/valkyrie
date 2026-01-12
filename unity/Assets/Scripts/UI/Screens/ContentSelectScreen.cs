@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
             // Note this is currently unordered
             foreach (PackTypeData type in game.cd.Values<PackTypeData>())
             {
-                string typeId = type.sectionName.Substring("PackType".Length);
+                string typeId = type.sectionName.Substring(ValkyrieConstants.PackType.Length);
 
                 //skip custom category if it was added for some reason
                 if (typeId.Equals(typeIdCustom, StringComparison.OrdinalIgnoreCase))
