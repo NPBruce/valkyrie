@@ -17,7 +17,7 @@ public class ConfigFile
     public ConfigFile()
     {
         data = new IniData();
-        string optionsFile = Game.AppData() + "/config.ini";
+        string optionsFile = Game.DefaultAppData() + "/config.ini";
         if (File.Exists(optionsFile))
         {
             data = IniRead.ReadFromIni(optionsFile);
@@ -50,13 +50,13 @@ public class ConfigFile
     // Save the configuration in memory to disk
     public void Save()
     {
-        string optionsFile = Game.AppData() + "/config.ini";
+        string optionsFile = Game.DefaultAppData() + "/config.ini";
         string content = data.ToString();
         try
         {
-            if (!Directory.Exists(Game.AppData()))
+            if (!Directory.Exists(Game.DefaultAppData()))
             {
-                Directory.CreateDirectory(Game.AppData());
+                Directory.CreateDirectory(Game.DefaultAppData());
             }
             File.WriteAllText(optionsFile, content);
         }
