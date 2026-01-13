@@ -258,6 +258,7 @@ spelldefence,Защитное заклинаниеэ
 spellattack,Атакующее заклинание
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Воспроизводить звук в фоне
 menu,Меню
 music,Музыка
 quest,Задание

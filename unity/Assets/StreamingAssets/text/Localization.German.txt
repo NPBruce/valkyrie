@@ -257,6 +257,7 @@ spelldefence,Verteid.-Zauber
 spellattack,Angriff-Zauber
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Audio im Hintergrund abspielen
 menu,Menü
 music,Musik
 quest,Szenario

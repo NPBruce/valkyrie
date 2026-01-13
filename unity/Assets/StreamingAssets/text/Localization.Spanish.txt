@@ -256,6 +256,7 @@ evidence,Pista
 ally,Aliado
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Reproducir audio en segundo plano
 menu,Menú
 music,Música
 quest,Escenario

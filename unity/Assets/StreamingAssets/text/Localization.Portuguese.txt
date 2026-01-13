@@ -265,6 +265,7 @@ spelldefence,Feitiço de Defesa
 spellattack,Feitiço de Ataque
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Reproduzir áudio em segundo plano
 menu,Menu
 music,Música
 quest,Aventura

@@ -259,6 +259,7 @@ evidence,Preuve
 ally,Allié
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Lire l'audio en arrière-plan
 menu,Menu
 music,Musique
 newround,Nouveau tour
