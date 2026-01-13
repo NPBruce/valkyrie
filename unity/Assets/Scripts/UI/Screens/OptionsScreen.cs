@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +29,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey EXPORT_LOG = new StringKey("val", "EXPORT_LOG");
         private readonly StringKey OptionON = new StringKey("val", "ON");
         private readonly StringKey OptionOff = new StringKey("val", "OFF");
+        private readonly StringKey PLAY_AUDIO_IN_BACKGROUND = new StringKey("val", "PLAY_AUDIO_IN_BACKGROUND");
 
         Game game = Game.Get();
 
@@ -223,7 +224,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Select language text
             UIElement ui = new UIElement(Game.DIALOG);
-            ui.SetLocation(UIScaler.GetHCenter() - 8, 5, 16, 2);
+            ui.SetLocation(UIScaler.GetHCenter() - 10, 5, 16, 2);
             ui.SetText(SET_EDITOR_ALPHA);
             ui.SetTextAlignment(TextAnchor.MiddleCenter);
             ui.SetFont(game.gameType.GetHeaderFont());
@@ -232,7 +233,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_LOW_EDITOR_TRANSPARENCY).image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
-            ui.SetLocation(UIScaler.GetHCenter() - 3, 8, 6, 6);
+            ui.SetLocation(UIScaler.GetHCenter() - 5, 8, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.2f); });
             ui.SetImage(SampleSprite);
             if (game.editorTransparency == 0.2f)
@@ -241,7 +242,7 @@ namespace Assets.Scripts.UI.Screens
             SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_MEDIUM_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
-            ui.SetLocation(UIScaler.GetHCenter() - 3, 15, 6, 6);
+            ui.SetLocation(UIScaler.GetHCenter() - 5, 15, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.3f); });
             ui.SetImage(SampleSprite);
             if (game.editorTransparency == 0.3f)
@@ -250,7 +251,7 @@ namespace Assets.Scripts.UI.Screens
             SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_HIGH_EDITOR_TRANSPARENCY).image);
             SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
             ui = new UIElement(Game.DIALOG);
-            ui.SetLocation(UIScaler.GetHCenter() - 3, 22, 6, 6);
+            ui.SetLocation(UIScaler.GetHCenter() - 5, 22, 6, 6);
             ui.SetButton(delegate { UpdateEditorTransparency(0.4f); });
             ui.SetImage(SampleSprite);
             if (game.editorTransparency == 0.4f)
@@ -261,7 +262,7 @@ namespace Assets.Scripts.UI.Screens
         private void CreateAudioElements()
         {
             UIElement ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 5, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 4, 10, 2);
             ui.SetText(MUSIC);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -272,7 +273,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) mVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 8, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 6, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -281,7 +282,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
             musicSlide = musicSlideObj.AddComponent<Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
 
@@ -300,7 +301,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
             musicSlideRev = musicSlideObjRev.AddComponent<Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 8 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = Slider.Direction.RightToLeft;
@@ -319,7 +320,7 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.value = 1 - mVolume;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 11, 10, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 4, 8.5f, 10, 2);
             ui.SetText(EFFECTS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -330,7 +331,7 @@ namespace Assets.Scripts.UI.Screens
             if (vSet.Length == 0) eVolume = 1;
 
             ui = new UIElement();
-            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 14, 14, 2);
+            ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 10.5f, 14, 2);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -339,7 +340,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
             effectSlide = effectSlideObj.AddComponent<Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 10.5f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
@@ -362,7 +363,7 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
             effectSlideRev = effectSlideObjRev.AddComponent<Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 14 * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 10.5f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
             effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, ((0.75f * UIScaler.GetWidthUnits()) - 6) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = Slider.Direction.RightToLeft;
@@ -379,6 +380,33 @@ namespace Assets.Scripts.UI.Screens
 
             effectSlide.value = eVolume;
             effectSlideRev.value = 1 - eVolume;
+
+            // Background Audio Toggle
+            // Only render on Windows, Mac or Linux (player or editor)
+            var p = Application.platform;
+            bool isSupportedPlatform =
+                p == RuntimePlatform.WindowsPlayer || p == RuntimePlatform.OSXPlayer || p == RuntimePlatform.LinuxPlayer
+                || p == RuntimePlatform.WindowsEditor || p == RuntimePlatform.OSXEditor || p == RuntimePlatform.LinuxEditor;
+
+            if (isSupportedPlatform)
+            {
+                // Check config
+                string configBgAudio = game.config.data.Get("UserConfig", "playAudioInBackground");
+                bool isBgAudio = configBgAudio == "1";
+
+                ui = new UIElement();
+                ui.SetLocation((0.75f * UIScaler.GetWidthUnits()) - 6, 13.5f, 14, 2);
+                ui.SetText(PLAY_AUDIO_IN_BACKGROUND);
+                ui.SetButton(delegate
+                {
+                    bool newState = !isBgAudio;
+                    Application.runInBackground = newState;
+                    game.config.data.Add("UserConfig", "playAudioInBackground", newState ? "1" : "0");
+                    game.config.Save();
+                    new OptionsScreen();
+                });
+                new UIElementBorder(ui, isBgAudio ? Color.white : Color.grey);
+            }
         }
 
 

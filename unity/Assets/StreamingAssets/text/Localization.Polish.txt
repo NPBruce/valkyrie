@@ -248,6 +248,7 @@ evidence,Dowód
 ally,Sprzymieńca
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Odtwarzaj dźwięk w tle
 menu,Menu
 music,Muzyka
 quest,Scenariusz

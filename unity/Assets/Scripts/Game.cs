@@ -220,6 +220,17 @@ public class Game : MonoBehaviour
                 debugTests = true;
         }
 
+        // Apply background audio setting
+        string s_playAudio = config.data.Get("UserConfig", "playAudioInBackground");
+        if (s_playAudio == "1")
+        {
+            Application.runInBackground = true;
+        }
+        else
+        {
+            Application.runInBackground = false;
+        }
+
         // Apply saved resolution and fullscreen settings
         string savedRes = config.data.Get("UserConfig", "resolution");
         string savedFs = config.data.Get("UserConfig", "fullscreen");

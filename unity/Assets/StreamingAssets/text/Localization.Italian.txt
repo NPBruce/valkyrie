@@ -201,6 +201,7 @@ evidence,Prova
 ally,Alleato
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Riproduci audio in background
 menu,Menu
 music,Musica
 quest,Scenario

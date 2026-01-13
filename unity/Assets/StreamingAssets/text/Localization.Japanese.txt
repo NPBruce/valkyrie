@@ -484,6 +484,7 @@ spelldefence,特殊防御
 spellattack,特殊攻撃
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,バックグラウンドでオーディオを再生
 menu,メニュー
 music,音楽
 quest,クエスト

@@ -261,6 +261,7 @@ spellattack,特殊攻擊
 
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,后台播放音频
 menu,目錄
 music,音樂
 quest,劇本

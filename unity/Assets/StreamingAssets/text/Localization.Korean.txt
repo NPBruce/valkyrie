@@ -424,6 +424,7 @@ spelldefence,방어 마법
 spellattack,공격 마법
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,백그라운드에서 오디오 재생
 menu,메뉴
 music,음악
 quest,퀘스트

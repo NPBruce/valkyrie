@@ -431,6 +431,7 @@ spelldefence,Obranné kouzlo
 spellattack,Útočné kouzlo
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Přehrávat zvuk na pozadí
 menu,Menu
 music,Hudba
 quest,Úkol
