@@ -514,3 +514,4 @@ FADE_SLOW,Lento
 CLICK_BEHAVIOR,Comportamiento al hacer clic
 CLICK_BLINK,Parpadear / Activar evento
 CLICK_STATIC,Estático / Sin evento
+REQUIRED,Requerido

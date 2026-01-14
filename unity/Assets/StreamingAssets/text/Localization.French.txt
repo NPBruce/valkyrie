@@ -518,3 +518,4 @@ FADE_SLOW,Lent
 CLICK_BEHAVIOR,Comportement au clic
 CLICK_BLINK,Clignoter / Déclencher événement
 CLICK_STATIC,Statique / Pas d'événement
+REQUIRED,Requis

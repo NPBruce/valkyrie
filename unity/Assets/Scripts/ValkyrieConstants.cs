@@ -1,5 +1,6 @@
-﻿using Assets.Scripts.Content;
+using Assets.Scripts.Content;
 using System;
+using System.Collections.Generic;
 
 namespace Assets.Scripts
 {
@@ -27,5 +28,8 @@ namespace Assets.Scripts
         public const string QuestIniFilePath = "/quest.ini";
         public const string RemoteContentPackIniType = "RemoteContentPack";
         public const string ContentPackIniFile = "content_pack.ini";
+        public const string BaseGameIdContentPackDescent = "D2EBase";
+        public const string BaseGameIdContentPackMansionsOfMadness = "MoMBase";
+        public const string PackType = "PackType";
     }
 }

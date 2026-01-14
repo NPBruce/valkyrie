@@ -517,3 +517,4 @@ FADE_SLOW,Медленно
 CLICK_BEHAVIOR,Поведение клика
 CLICK_BLINK,Мигание / событие
 CLICK_STATIC,Статично / Нет события
+REQUIRED,Требуется
