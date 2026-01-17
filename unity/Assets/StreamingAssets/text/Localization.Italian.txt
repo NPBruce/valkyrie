@@ -455,3 +455,4 @@ CLICK_BEHAVIOR,Comportamento clic
 CLICK_BLINK,Lampeggia / Attiva evento
 CLICK_STATIC,Statico / Nessun evento
 REQUIRED,Richiesto
+SELECT_GAME_TYPE,Seleziona tipo di gioco

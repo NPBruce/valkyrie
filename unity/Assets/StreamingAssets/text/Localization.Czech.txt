@@ -691,3 +691,4 @@ CLICK_BEHAVIOR,Chování při kliknutí
 CLICK_BLINK,Blikání / spustit událost
 CLICK_STATIC,Statické / Žádná událost
 REQUIRED,Vyžadováno
+SELECT_GAME_TYPE,Vybrat typ hry

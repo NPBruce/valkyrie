@@ -18,10 +18,10 @@ namespace Assets.Scripts.UI.Screens
     // and import controls
     public class GameSelectionScreen
     {
-        FFGImport fcD2E;
-        FFGImport fcMoM;
+        static FFGImport fcD2E;
+        static FFGImport fcMoM;
 #if IA
-        FFGImport fcIA;
+        static FFGImport fcIA;
 #endif
         protected string importType = "";
         Thread importThread;
@@ -92,6 +92,9 @@ namespace Assets.Scripts.UI.Screens
 
         private void InitializeImporters()
         {
+            // Check if we have already initialized
+            if (fcD2E != null && fcMoM != null) return;
+            
             // Get the current content for games
             if (Application.platform == RuntimePlatform.OSXPlayer)
             {
