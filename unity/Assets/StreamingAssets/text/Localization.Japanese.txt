@@ -484,6 +484,7 @@ spelldefence,特殊防御
 spellattack,特殊攻撃
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,バックグラウンドでオーディオを再生
 menu,メニュー
 music,音楽
 quest,クエスト
@@ -706,3 +707,14 @@ EXPORT_LOG,ログ出力
 LOADINGSCENARIOS,シナリオを読み込んでいます...
 LOADINGCONTENTPACKS,コンテンツパックを読み込んでいます...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} シナリオ (+{1} シナリオ 除外)
+
+FADE,フェード速度
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,即時
+FADE_FAST,速い
+FADE_SLOW,遅い
+CLICK_BEHAVIOR,クリック動作
+CLICK_BLINK,点滅 / イベントトリガー
+CLICK_STATIC,静的 / イベントなし
+REQUIRED,必須

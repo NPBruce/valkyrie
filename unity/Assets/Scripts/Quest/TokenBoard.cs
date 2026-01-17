@@ -49,6 +49,15 @@ public class TokenBoard : MonoBehaviour {
             if (Game.Get().editMode) return;
 
             c = component;
+            // Check if we should enable click for UI
+            if (component is Quest.UI)
+            {
+                if (!((Quest.UI)component).qUI.enableClick)
+                {
+                    return;
+                }
+            }
+
             UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;
             button.onClick.AddListener(delegate { startEvent(); });

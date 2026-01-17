@@ -265,6 +265,7 @@ spelldefence,Feitiço de Defesa
 spellattack,Feitiço de Ataque
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Reproduzir áudio em segundo plano
 menu,Menu
 music,Música
 quest,Aventura
@@ -511,3 +512,13 @@ EXPORT_LOG,Exportar log
 LOADINGSCENARIOS,Carregando cenários...
 LOADINGCONTENTPACKS,Carregando pacotes de conteúdo...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} cenários (+{1} cenários filtrados)
+
+FADE,Velocidade de Desvanecimento
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,Instantâneo
+FADE_FAST,Rápido
+FADE_SLOW,Lento
+CLICK_BEHAVIOR,Comportamento do Clique
+CLICK_BLINK,Piscar / disparar evento
+CLICK_STATIC,Estático / Sem eventoREQUIRED,Obrigatório

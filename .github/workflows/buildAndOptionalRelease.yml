@@ -60,29 +60,16 @@ jobs:
 
       - uses: actions/checkout@v4
 
+
+      - name: Get Unity Version
+        run: . ./workflowScripts/workflowHelper.ps1; Get-UnityVersion
+
       #Get the version for build and store in environment variable for later use.
       #Get the version for build and store in environment variable for later use.
       - name: Get version
-        run: |
-           $versionFile = "${{ github.workspace }}/unity/Assets/Resources/version.txt"
-           $version = Get-Content $versionFile
-           $customName = "${{ github.event.inputs.customReleaseName }}"
-           
-           if (-not [string]::IsNullOrWhiteSpace($customName)) {
-               if ($customName -match '^[a-zA-Z0-9]+$') {
-                   Write-Host "Using Custom Release Name: $customName"
-                   echo "RELEASE_NAME=$customName" | Out-File -FilePath $env:GITHUB_ENV -Append
-               } else {
-                   Write-Error "Custom Release Name '$customName' is invalid. Must be alphanumeric only."
-                   exit 1
-               }
-           } else {
-               Write-Host "Using Version from file: $version"
-               echo "RELEASE_NAME=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
-           }
-           # Build_Version is kept for backward compatibility if other scripts use it, 
-           # but we rely on RELEASE_NAME for artifacts/tags now.
-           echo "Build_Version=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+        run: . ./workflowScripts/workflowHelper.ps1; Get-ReleaseVersion
+        env:
+           CUSTOM_RELEASE_NAME: ${{ github.event.inputs.customReleaseName }}
 
       ## Save build version as artifact to ensure it can be used in the release step.
       ## Save release name as artifact to ensure it can be used in the release step.
@@ -109,28 +96,28 @@ jobs:
       - name: Setup Unity Editor
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2019.4.41f1
+          unity-version: ${{ env.UNITY_VERSION }}
           install-path: "C:/Program Files"
 
       - name: Setup Unity Linux Module
         if: ${{ github.event.inputs.buildLinux == 'true' || github.event.inputs.buildLinux == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2019.4.41f1
+          unity-version: ${{ env.UNITY_VERSION }}
           unity-modules: "linux-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Mac Module
         if: ${{ github.event.inputs.buildMac == 'true' || github.event.inputs.buildMac == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2019.4.41f1
+          unity-version: ${{ env.UNITY_VERSION }}
           unity-modules: "mac-mono"
           install-path: "C:/Program Files"
       - name: Setup Unity Android Module
         if: ${{ github.event.inputs.buildAndroid == 'true' || github.event.inputs.buildAndroid == '' }}
         uses: seinsinnes/setup-unity@v1.1.0
         with:
-          unity-version: 2019.4.41f1
+          unity-version: ${{ env.UNITY_VERSION }}
           unity-modules: "android"
           install-path: "C:/Program Files"
 
@@ -143,7 +130,7 @@ jobs:
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
       #Move unity to where the build script expects it to be installed.
       - name: Move unity to expected location
-        run: Rename-Item "C:/Program Files/2019.4.41f1" Unity
+        run: Rename-Item "C:/Program Files/${{ env.UNITY_VERSION }}" Unity
 
       #Remove all pre-installed android sdk build tool versions except 28.0.3
       #Get-ChildItem -Path "C:/Android/android-sdk/build-tools" -Exclude 28.0.3,29.0.2 | Remove-Item -Recurse -Force
@@ -175,10 +162,38 @@ jobs:
       - uses: repolevedavaj/install-nsis@v1.0.3
         with:
           nsis-version: '3.10'
+
+      - name: Install NuGet
+        run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
+
+      - name: Update PATH for NuGet
+        run: echo "$env:localappdata\NuGet" >> $env:GITHUB_PATH
+
+      - name: Restore NuGet packages
+        run: nuget restore libraries/libraries.sln
+
+      - name: Build libraries
+        run: msbuild libraries/libraries.sln /p:Configuration=Release /nologo
+
+      - name: Remove conflicting UnityEngine.dll
+        run: . ./workflowScripts/workflowHelper.ps1; Remove-ConflictingDLL
+
+      - name: Run Unity Edit Mode Tests
+        run: . ./workflowScripts/workflowHelper.ps1; Run-UnityTests
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-test-results
+          path: |
+            test-results.xml
+            test-results.log
+
       #Run build script
       #Run build script
       - name: Run build PowerShell script
-        run: pwsh -File ${{ github.workspace }}/build.ps1
+        run: pwsh -File ${{ github.workspace }}/workflowscripts/build.ps1
         env:
           PACKAGE_VERSION: ${{ env.RELEASE_NAME }}
           BUILD_WINDOWS: ${{ github.event.inputs.buildWindows == 'true' || github.event.inputs.buildWindows == '' }}
@@ -261,6 +276,8 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Get version from artifact
         uses: actions/download-artifact@v4
         with:

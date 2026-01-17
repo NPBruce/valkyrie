@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using System.Text;
 using Assets.Scripts.Content;
 using UnityEngine.UI;
@@ -414,7 +415,10 @@ public class QuestData
         public string textBackgroundColor = "transparent";
         public TextAlignment textAlignment = TextAlignment.CENTER;
         public float aspect = 1;
+
         public bool border = false;
+        public string fadeSpeed = "fast";
+        public bool enableClick = true;
 
         public string uitext_key { get { return genKey("uitext"); } }
 
@@ -427,6 +431,7 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             cancelable = true;
+            enableClick = true;
         }
 
         // Create from ini data
@@ -443,6 +448,11 @@ public class QuestData
                 imageName = value != null ? value.Replace('\\', '/') : value;
             }
 
+            if (data.ContainsKey("fadespeed"))
+            {
+                fadeSpeed = data["fadespeed"];
+            }
+
             if (data.ContainsKey("vunits"))
             {
                 bool.TryParse(data["vunits"], out verticalUnits);
@@ -450,17 +460,17 @@ public class QuestData
 
             if (data.ContainsKey("size"))
             {
-                float.TryParse(data["size"], out size);
+                float.TryParse(data["size"], NumberStyles.Float, CultureInfo.InvariantCulture, out size);
             }
 
             if (data.ContainsKey("textsize"))
             {
-                float.TryParse(data["textsize"], out textSize);
+                float.TryParse(data["textsize"], NumberStyles.Float, CultureInfo.InvariantCulture, out textSize);
             }
 
             if (data.ContainsKey("textaspect"))
             {
-                float.TryParse(data["textaspect"], out aspect);
+                float.TryParse(data["textaspect"], NumberStyles.Float, CultureInfo.InvariantCulture, out aspect);
             }
 
             if (data.ContainsKey("textcolor"))
@@ -511,6 +521,11 @@ public class QuestData
             if (data.ContainsKey("border"))
             {
                 bool.TryParse(data["border"], out border);
+            }
+
+            if (data.ContainsKey("clickeffect"))
+            {
+                bool.TryParse(data["clickeffect"], out enableClick);
             }
         }
 
@@ -581,6 +596,16 @@ public class QuestData
                 r += "valign=bottom" + nl;
             }
 
+            if (!fadeSpeed.Equals("fast"))
+            {
+                r += "fadespeed=" + fadeSpeed + nl;
+            }
+
+            if (!enableClick)
+            {
+                r += "clickeffect=" + enableClick + nl;
+            }
+
             return r;
         }
     }
@@ -620,7 +645,12 @@ public class QuestData
             mTraitsPool = new string[0];
 
             // Initialise array
-            placement = new string[game.gameType.MaxHeroes() + 1][];
+            int maxHeroes = 4;
+            if (game != null && game.gameType != null)
+            {
+                maxHeroes = game.gameType.MaxHeroes() + 1;
+            }
+            placement = new string[maxHeroes][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -656,7 +686,12 @@ public class QuestData
             }
 
             // Array of placements by hero count
-            placement = new string[game.gameType.MaxHeroes() + 1][];
+            int maxHeroes = 4;
+            if (game != null && game.gameType != null)
+            {
+                maxHeroes = game.gameType.MaxHeroes() + 1;
+            }
+            placement = new string[maxHeroes][];
             for (int i = 0; i < placement.Length; i++)
             {
                 placement[i] = new string[0];
@@ -676,11 +711,11 @@ public class QuestData
             }
             if (data.ContainsKey("uniquehealth"))
             {
-                float.TryParse(data["uniquehealth"], out uniqueHealthBase);
+                float.TryParse(data["uniquehealth"], NumberStyles.Float, CultureInfo.InvariantCulture, out uniqueHealthBase);
             }
             if (data.ContainsKey("uniquehealthhero"))
             {
-                float.TryParse(data["uniquehealthhero"], out uniqueHealthHero);
+                float.TryParse(data["uniquehealthhero"], NumberStyles.Float, CultureInfo.InvariantCulture, out uniqueHealthHero);
             }
         }
 
@@ -1184,7 +1219,9 @@ public class QuestData
         public int puzzleLevel = 4;
         public int puzzleAltLevel = 3;
         public string puzzleSolution = "";
+
         public string imageType = "";
+        public string fadeSpeed = "instant";
 
         // Create a new puzzle with name (editor)
         public Puzzle(string s) : base(s)
@@ -1209,6 +1246,10 @@ public class QuestData
             {
                 string value = data["image"];
                 imageType = value != null ? value.Replace('\\', '/') : value;
+            }
+            if (data.ContainsKey("fadespeed"))
+            {
+                fadeSpeed = data["fadespeed"];
             }
             if (data.ContainsKey("skill"))
             {
@@ -1257,6 +1298,10 @@ public class QuestData
             if (!puzzleSolution.Equals(""))
             {
                 r += "puzzlesolution=" + puzzleSolution + nl;
+            }
+            if (!fadeSpeed.Equals("instant"))
+            {
+                r += "fadespeed=" + fadeSpeed + nl;
             }
             return r;
         }
@@ -1318,13 +1363,13 @@ public class QuestData
             if (data.ContainsKey("xposition"))
             {
                 locationSpecified = true;
-                float.TryParse(data["xposition"], out location.x);
+                float.TryParse(data["xposition"], NumberStyles.Float, CultureInfo.InvariantCulture, out location.x);
             }
 
             if (data.ContainsKey("yposition"))
             {
                 locationSpecified = true;
-                float.TryParse(data["yposition"], out location.y);
+                float.TryParse(data["yposition"], NumberStyles.Float, CultureInfo.InvariantCulture, out location.y);
             }
             if (data.ContainsKey("comment"))
             {
@@ -1521,12 +1566,12 @@ public class QuestData
             if (data.ContainsKey("health"))
             {
                 healthDefined = true;
-                float.TryParse(data["health"], out healthBase);
+                float.TryParse(data["health"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthBase);
             }
             if (data.ContainsKey("healthperhero"))
             {
                 healthDefined = true;
-                float.TryParse(data["healthperhero"], out healthPerHero);
+                float.TryParse(data["healthperhero"], NumberStyles.Float, CultureInfo.InvariantCulture, out healthPerHero);
             }
 
             if (data.ContainsKey("evadeevent"))

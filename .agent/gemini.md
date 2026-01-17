@@ -1,0 +1,1 @@
+Always follow all rules set in `.agent\agents.md`.

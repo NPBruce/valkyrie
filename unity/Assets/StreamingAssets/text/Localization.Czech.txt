@@ -431,6 +431,7 @@ spelldefence,Obranné kouzlo
 spellattack,Útočné kouzlo
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,Přehrávat zvuk na pozadí
 menu,Menu
 music,Hudba
 quest,Úkol
@@ -679,3 +680,14 @@ EXPORT_LOG,Exportovat log
 LOADINGSCENARIOS,Načítání scénářů...
 LOADINGCONTENTPACKS,Načítání balíčků obsahu...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} scenářů (+{1} vyfiltrováno)
+
+FADE,Rychlost stmívání
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,Okamžitě
+FADE_FAST,Rychle
+FADE_SLOW,Pomalu
+CLICK_BEHAVIOR,Chování při kliknutí
+CLICK_BLINK,Blikání / spustit událost
+CLICK_STATIC,Statické / Žádná událost
+REQUIRED,Vyžadováno

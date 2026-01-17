@@ -34,18 +34,9 @@ This repository contains a Unity engine application located in the root of this 
 1. Follow Unity's component-based architecture for modular and reusable game elements.
 2. Prioritize performance optimization and memory management in every stage of development.
 3. Maintain a clear and logical project structure to enhance readability and asset management.
+4. Always use a test driven approach when implementing new features (except for UI related features).
 
 Refer to Unity documentation and C# programming guides for best practices in scripting, application/game architecture, and performance optimization.
-
-### Localization files
-UI text should always get localized. Localization files are located in `Assets/StreamingAssets/text/`.
-- `Localization.English.txt` is the master file.
-- The format is `KEY,Value`.
-- When adding new text:
-1. Add the `KEY,English Value` to `Localization.English.txt`.
-2. Add a translated version `KEY,Translated Value` to *all* other relevant files (`Localization.German.txt`, `Localization.French.txt`, `Localization.Spanish.txt`, `Localization.Italian.txt`, etc.). Failing to do so will result in missing text for users of those languages.
-3. In C# code, use `new StringKey("val", "KEY")` to reference the text.
-4. For commonly used keys, add a static reference in `Assets/Scripts/Content/CommonStringKeys.cs`.
 
 ## Development environment
 Coding is intended to happen in a Windows environment.
@@ -57,16 +48,3 @@ Coding is intended to happen in a Windows environment.
 ## Unity version
 - Unity version can be found here: unity\ProjectSettings\ProjectVersion.txt
 - Before implementing or suggesting any Unity-related changes, always verify compatibility with the current Unity version.
-
-## Target operating systems
-The application is designed to run on the following operating systems:
-- Windows
-- Mac
-- Linux
-- Android
-
-## Project structure
-For project structure see `README.md`. Check this structure first when searching for content in the repostory to speed up finding it.
-
-## Application wiki
-Wiki documentation for the application can be found here: https://github.com/NPBruce/valkyrie/wiki

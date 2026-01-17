@@ -1694,6 +1694,9 @@ public class Quest
         public UI(QuestData.UI questUI, Game gameObject) : base(gameObject)
         {
             qUI = questUI;
+            if (qUI.fadeSpeed.Equals("instant")) fadeSpeed = 100f;
+            else if (qUI.fadeSpeed.Equals("slow")) fadeSpeed = 0.5f;
+            else fadeSpeed = 1f;
 
             // Find quest UI panel
             GameObject panel = GameObject.Find("QuestUICanvas");
@@ -1774,7 +1777,7 @@ public class Quest
                 // Create the image
                 image = unityObject.AddComponent<Image>();
                 Sprite tileSprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), Vector2.zero, 1);
-                image.color = new Color(1, 1, 1, 0);
+                image.color = new Color(1, 1, 1, qUI.fadeSpeed.Equals("instant") ? 1 : 0);
                 image.sprite = tileSprite;
                 aspect = (float) newTex.width / (float) newTex.height;
             }
@@ -2016,6 +2019,7 @@ public class Quest
 
         // Target alpha
         public float targetAlpha = 1f;
+        public float fadeSpeed = 1f;
 
         public BoardComponent(Game gameObject)
         {
@@ -2036,7 +2040,7 @@ public class Quest
         virtual public void UpdateAlpha(float time)
         {
             float alpha = GetColor().a;
-            float distUpdate = time;
+            float distUpdate = time * fadeSpeed;
             float distRemain = targetAlpha - alpha;
             if (distRemain > distUpdate)
             {

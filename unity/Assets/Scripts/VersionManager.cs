@@ -2,7 +2,7 @@
 
 
 // This class provides functions to manage the versions of the app
-class VersionManager
+public class VersionManager
 {
     static public string online_version = "0.0.0";
     static Action version_downloaded_action = null;
@@ -93,6 +93,17 @@ class VersionManager
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// Checks if the provided version string indicates a beta version.
+    /// A beta version is defined as having more than 2 components (e.g., 3.12.1).
+    /// </summary>
+    /// <param name="version">The version string to check.</param>
+    /// <returns>True if the version is beta, otherwise false.</returns>
+    public static bool IsBeta(string version)
+    {
+        return version.Split('.').Length > 2;
     }
 
 }

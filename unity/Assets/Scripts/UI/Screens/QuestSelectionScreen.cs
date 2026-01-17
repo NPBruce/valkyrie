@@ -223,7 +223,7 @@ namespace Assets.Scripts.UI.Screens
             ui = new UIElement(Game.QUESTUI);
             Texture2D reloadTex = Resources.Load("sprites/refresh") as Texture2D; // Assuming a sprite exists, or use text "R"
             ui.SetImage(reloadTex);
-            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 0.2f, 3.5f, 1.5f, 1.5f);
+            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
             new UIElementBorder(ui);
 

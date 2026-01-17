@@ -204,6 +204,7 @@ public class Game : MonoBehaviour
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
+        userRoot = config.data.Get("UserConfig", "UserRoot");
 
         string vSet = config.data.Get("UserConfig", "editorTransparency");
         if (vSet == "")
@@ -217,6 +218,17 @@ public class Game : MonoBehaviour
             s_debug_tests = s_debug_tests.ToLower();
             if (s_debug_tests == "true" || s_debug_tests == "1")
                 debugTests = true;
+        }
+
+        // Apply background audio setting
+        string s_playAudio = config.data.Get("UserConfig", "playAudioInBackground");
+        if (s_playAudio == "1")
+        {
+            Application.runInBackground = true;
+        }
+        else
+        {
+            Application.runInBackground = false;
         }
 
         // Apply saved resolution and fullscreen settings
@@ -503,14 +515,32 @@ public class Game : MonoBehaviour
         }
     }
 
+    public string userRoot;
+
     public static string AppData()
+    {
+        if (Game.Get() != null && !string.IsNullOrEmpty(Game.Get().userRoot) && Application.platform != RuntimePlatform.Android)
+        {
+            return Game.Get().userRoot;
+        }
+        return DefaultAppData();
+    }
+
+    public static string DefaultAppData()
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            string appData = Path.Combine(Android.GetStorage(), "Valkyrie");
-            if (appData != null)
+            try
             {
-                return appData;
+                string appData = Path.Combine(Android.GetStorage(), "Valkyrie");
+                if (appData != null)
+                {
+                    return appData;
+                }
+            }
+            catch(Exception)
+            {
+                // Fails in editor
             }
         }
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Valkyrie");

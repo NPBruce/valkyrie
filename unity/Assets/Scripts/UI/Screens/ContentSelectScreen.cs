@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
             // Note this is currently unordered
             foreach (PackTypeData type in game.cd.Values<PackTypeData>())
             {
-                string typeId = type.sectionName.Substring("PackType".Length);
+                string typeId = type.sectionName.Substring(ValkyrieConstants.PackType.Length);
 
                 //skip custom category if it was added for some reason
                 if (typeId.Equals(typeIdCustom, StringComparison.OrdinalIgnoreCase))
@@ -74,9 +74,6 @@ namespace Assets.Scripts.UI.Screens
                 CreatePackTypeCategory(ref offset, ref left, typeId, typeName, type.image, false);
             }
 
-            //bg.SetImage(Resources.Load($"sprites/GameBackground{game.gameType.TypeName()}") as Texture2D, true, AspectRatioFitter.AspectMode.EnvelopeParent);
-
-            //string customContentPackImagePath = "E:\\Eigene Dokumente\\Max\\Programmierung\\Projekte\\valkyrie\\unity\\Assets\\Resources\\Sprites\\CustomContentPackIcon.jpg";
             string customContentPackImagePath = "sprites/CustomContentPackIcon";
             CreatePackTypeCategory(ref offset, ref left, typeIdCustom, string.Empty, customContentPackImagePath, true);
 
@@ -232,7 +229,10 @@ namespace Assets.Scripts.UI.Screens
                     string id = cp.id;
                     buttons.Add(id, new List<UIElement>());
                     Color bgColor = Color.white;
-                    if (!selected.Contains(id))
+                    string baseContentPackId = game.gameType.BaseContentPackId();
+                    bool isBaseContentPack = baseContentPackId.Equals(id);
+
+                    if (!isBaseContentPack && !selected.Contains(id))
                     {
                         bgColor = new Color(0.3f, 0.3f, 0.3f);
                     }
@@ -304,7 +304,14 @@ namespace Assets.Scripts.UI.Screens
                     }
 
                     ui.SetBGColor(bgColor);
-                    ui.SetText("(" + game.cd.GetContentAcronym(id) + ")", Color.black);
+                    if (isBaseContentPack)
+                    {
+                         ui.SetText("(" + CommonStringKeys.REQUIRED.Translate() + ")", Color.red);
+                    }
+                    else 
+                    {
+                         ui.SetText("(" + game.cd.GetContentAcronym(id) + ")", Color.black);
+                    }
                     ui.SetTextAlignment(TextAnchor.MiddleLeft);
                     ui.SetFont(game.gameType.GetSymbolFont());
                     ui.SetFontSize(text_font_size);
@@ -431,6 +438,12 @@ namespace Assets.Scripts.UI.Screens
             var packs = game.config.GetPacks(game.gameType.TypeName()).ToSet();
             if (packs.Contains(id))
             {
+                string baseContentPackId = game.gameType.BaseContentPackId();
+                // Base game content cannot be deselected
+                if (baseContentPackId.Equals(id))
+                {
+                    return;
+                }
                 game.config.RemovePack(game.gameType.TypeName(), id);
             }
             else

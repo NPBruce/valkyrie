@@ -261,6 +261,7 @@ spellattack,特殊攻擊
 
 
 //Audio
+PLAY_AUDIO_IN_BACKGROUND,后台播放音频
 menu,目錄
 music,音樂
 quest,劇本
@@ -484,3 +485,14 @@ EXPORT_LOG,导出日志
 LOADINGSCENARIOS,正在加载剧本...
 LOADINGCONTENTPACKS,正在加载内容包...
 FILTER_TEXT_TOTAL_AND_FILTERED,{0} 场景 (+{1} 过滤掉的场景)
+
+FADE,渐变速度
+QUEST_EDITOR_HERO_COUNT_LABEL,Number of Heroes
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Number of Investigators
+FADE_INSTANT,立即
+FADE_FAST,快
+FADE_SLOW,慢
+CLICK_BEHAVIOR,点击行为
+CLICK_BLINK,闪烁 / 触发事件
+CLICK_STATIC,静态 / 无事件
+REQUIRED,必须

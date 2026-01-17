@@ -1,1 +1,0 @@
-Please always read all content in "agents.md" file and follow rules defined there.

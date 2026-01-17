@@ -4,7 +4,7 @@ using ValkyrieTools;
 
 namespace Assets.Scripts.Content
 {
-    internal class ManifestManager
+    public class ManifestManager
     {
         public readonly string Path;
 

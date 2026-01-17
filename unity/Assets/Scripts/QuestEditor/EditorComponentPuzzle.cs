@@ -115,6 +115,8 @@ public class EditorComponentPuzzle : EditorComponentEvent
             new UIElementBorder(ui);
             offset += 2;
         }
+
+
         
         if (puzzleComponent.puzzleClass.Equals("code")) 
         {
@@ -292,4 +294,6 @@ public class EditorComponentPuzzle : EditorComponentEvent
         puzzleComponent.imageType = image;
         Update();
     }
+
+
 }
