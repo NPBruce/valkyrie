@@ -519,3 +519,4 @@ CLICK_BEHAVIOR,Comportement au clic
 CLICK_BLINK,Clignoter / Déclencher événement
 CLICK_STATIC,Statique / Pas d'événement
 REQUIRED,Requis
+FILTER_TEXT_TOTAL_ONLY,{0} scénarios

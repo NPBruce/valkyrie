@@ -718,3 +718,4 @@ CLICK_BEHAVIOR,クリック動作
 CLICK_BLINK,点滅 / イベントトリガー
 CLICK_STATIC,静的 / イベントなし
 REQUIRED,必須
+FILTER_TEXT_TOTAL_ONLY,{0} シナリオ

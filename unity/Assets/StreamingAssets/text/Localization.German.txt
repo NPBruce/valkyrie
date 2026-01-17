@@ -515,3 +515,4 @@ CLICK_BEHAVIOR,Klickverhalten
 CLICK_BLINK,Blinken / Ereignis auslösen
 CLICK_STATIC,Statisch / Kein Ereignis
 REQUIRED,Erforderlich
+FILTER_TEXT_TOTAL_ONLY,{0} Szenarien

@@ -522,3 +522,4 @@ FADE_SLOW,Lento
 CLICK_BEHAVIOR,Comportamento do Clique
 CLICK_BLINK,Piscar / disparar evento
 CLICK_STATIC,Estático / Sem eventoREQUIRED,Obrigatório
+FILTER_TEXT_TOTAL_ONLY,{0} cenários
