@@ -110,12 +110,6 @@ HEALTH_HERO,za hrdinu
 HIGHLIGHT,Zvýraznit
 HORROR_CHECK,Kontrola hrůzy
 AWARENESS,Ostražitost
-IA_APP_NOT_FOUND,Nelze nalézt Legends of the Alliance, Instalovat ze Steamu
-IA_APP_NOT_FOUND_ANDROID,Nelze nalézt Legends of the Alliance, Instalovat z Google Play
-IA_HEROES_NAME,Hrdinové
-IA_HERO_NAME,Hrdina
-IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
-IA_QUEST_NAME,Mise
 INDENT,  {0}
 INFO,Info
 INFORMATION,Informace
@@ -692,3 +686,4 @@ CLICK_BLINK,Blikání / spustit událost
 CLICK_STATIC,Statické / Žádná událost
 REQUIRED,Vyžadováno
 FILTER_TEXT_TOTAL_ONLY,{0} scenářů
+SELECT_GAME_TYPE,Vybrat typ hry

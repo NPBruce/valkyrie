@@ -516,3 +516,4 @@ CLICK_BLINK,Parpadear / Activar evento
 CLICK_STATIC,Estático / Sin evento
 REQUIRED,Requerido
 FILTER_TEXT_TOTAL_ONLY,{0} escenarios
+SELECT_GAME_TYPE,Seleccionar tipo de juego

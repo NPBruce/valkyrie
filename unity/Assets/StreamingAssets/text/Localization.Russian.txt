@@ -79,12 +79,6 @@ HEALTH_HERO,За каждого игрока
 HIGHLIGHT,Отметка
 HORROR_CHECK,Проверка Ужаса
 AWARENESS,Бдительность
-IA_APP_NOT_FOUND,Не найдено Legends of the Alliance, установите из Steam
-IA_APP_NOT_FOUND_ANDROID,Не найдено Legends of the Alliance
-IA_HEROES_NAME,Герои
-IA_HERO_NAME,Герой
-IA_NAME,Звездные войны: Имперский штурм НЕДОСТУПНО
-IA_QUEST_NAME,Миссия
 INDENT,  {0}
 INFO,Инфо
 INFORMATION,Информация
@@ -519,3 +513,4 @@ CLICK_BLINK,Мигание / событие
 CLICK_STATIC,Статично / Нет события
 REQUIRED,Требуется
 FILTER_TEXT_TOTAL_ONLY,{0} сценариев
+SELECT_GAME_TYPE,Выбрать тип игры

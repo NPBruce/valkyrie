@@ -456,3 +456,4 @@ CLICK_BLINK,Lampeggia / Attiva evento
 CLICK_STATIC,Statico / Nessun evento
 REQUIRED,Richiesto
 FILTER_TEXT_TOTAL_ONLY,{0} scenari
+SELECT_GAME_TYPE,Seleziona tipo di gioco

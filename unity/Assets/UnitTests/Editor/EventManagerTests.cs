@@ -45,13 +45,7 @@ namespace Valkyrie.UnitTests
                 "CHARS_MAP should contain MoM game type");
         }
 
-        [Test]
-        public void CHARS_MAP_ContainsIAGameType()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP.ContainsKey("IA"),
-                "CHARS_MAP should contain IA game type");
-        }
+
 
         [Test]
         public void CHARS_MAP_D2E_ContainsHeartSymbol()
@@ -189,77 +183,7 @@ namespace Valkyrie.UnitTests
                 "MoM map should contain clue symbol");
         }
 
-        [Test]
-        public void CHARS_MAP_IA_ContainsWoundSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{wound}"),
-                "IA map should contain wound symbol");
-        }
 
-        [Test]
-        public void CHARS_MAP_IA_ContainsSurgeSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{surge}"),
-                "IA map should contain surge symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsAttackSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{attack}"),
-                "IA map should contain attack symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsStrainSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{strain}"),
-                "IA map should contain strain symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsTechSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{tech}"),
-                "IA map should contain tech symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsInsightSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{insight}"),
-                "IA map should contain insight symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsBlockSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{block}"),
-                "IA map should contain block symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsEvadeSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{evade}"),
-                "IA map should contain evade symbol");
-        }
-
-        [Test]
-        public void CHARS_MAP_IA_ContainsDodgeSymbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHARS_MAP["IA"].ContainsKey("{dodge}"),
-                "IA map should contain dodge symbol");
-        }
 
         #endregion
 
@@ -281,13 +205,7 @@ namespace Valkyrie.UnitTests
                 "CHAR_PACKS_MAP should contain MoM game type");
         }
 
-        [Test]
-        public void CHAR_PACKS_MAP_ContainsIAGameType()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHAR_PACKS_MAP.ContainsKey("IA"),
-                "CHAR_PACKS_MAP should contain IA game type");
-        }
+
 
         [Test]
         public void CHAR_PACKS_MAP_MoM_ContainsMAD01Symbol()
@@ -305,13 +223,7 @@ namespace Valkyrie.UnitTests
                 "MoM packs map should contain MAD06 symbol");
         }
 
-        [Test]
-        public void CHAR_PACKS_MAP_IA_ContainsSWI01Symbol()
-        {
-            // Assert
-            Assert.IsTrue(EventManager.CHAR_PACKS_MAP["IA"].ContainsKey("{SWI01}"),
-                "IA packs map should contain SWI01 symbol");
-        }
+
 
         [Test]
         public void CHAR_PACKS_MAP_D2E_IsEmpty()

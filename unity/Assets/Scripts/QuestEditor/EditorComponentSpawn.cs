@@ -264,7 +264,7 @@ public class EditorComponentSpawn : EditorComponentEvent
         if (traitOffset > offset) offset = traitOffset;
 
         offset++;
-        if (game.gameType is D2EGameType || game.gameType is IAGameType)
+        if (game.gameType is D2EGameType)
         {
             offset = AddPlacementComponenets(offset);
         }
