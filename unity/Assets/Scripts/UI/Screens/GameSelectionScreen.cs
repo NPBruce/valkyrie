@@ -18,11 +18,9 @@ namespace Assets.Scripts.UI.Screens
     // and import controls
     public class GameSelectionScreen
     {
-        static FFGImport fcD2E;
-        static FFGImport fcMoM;
-#if IA
-        static FFGImport fcIA;
-#endif
+        FFGImport fcD2E;
+        FFGImport fcMoM;
+
         protected string importType = "";
         Thread importThread;
 
@@ -46,11 +44,7 @@ namespace Assets.Scripts.UI.Screens
 
         private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
 
-#if IA
-        private StringKey IA_NAME = new StringKey("val", "IA_NAME");
-        private StringKey IA_APP_NOT_FOUND = new StringKey("val", "IA_APP_NOT_FOUND");
-        private StringKey IA_APP_NOT_FOUND_ANDROID = new StringKey("val", "IA_APP_NOT_FOUND_ANDROID");
-#endif
+
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -80,9 +74,7 @@ namespace Assets.Scripts.UI.Screens
 
             DrawMoMSection(offset);
             
-#if IA
-            DrawIASection();
-#endif
+
 
             DrawExitButton();
 
@@ -100,32 +92,24 @@ namespace Assets.Scripts.UI.Screens
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#if IA
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#endif
+
             }
             else if (Application.platform == RuntimePlatform.Android)
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#if IA
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#endif
+
             }
             else
             {
                 fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
                 fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#if IA
-                fcIA = new FFGImport(FFGAppImport.GameType.IA, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-#endif
+
             }
 
             fcD2E.Inspect();
             fcMoM.Inspect();
-#if IA
-            fcIA.Inspect();
-#endif
+
         }
 
         private void DrawBanner()
@@ -354,60 +338,7 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-#if IA
-        private void DrawIASection()
-        {
-            // Draw IA button
-            Color startColor = Color.white;
-            if (fcIA.NeedImport())
-            {
-                startColor = Color.gray;
-            }
-            // Always disabled
-            startColor = Color.gray;
-            UIElement ui = new UIElement();
-            ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, 21, 30, 3);
-            ui.SetText(IA_NAME, startColor);
-            ui.SetFontSize(UIScaler.GetMediumFont());
-            //ui.SetButton(delegate { IA(); });
-            ui.SetBGColor(new Color(0, 0.03f, 0f));
-            new UIElementBorder(ui, startColor);
 
-            // Draw IA import button
-            ui = new UIElement();
-            if (fcIA.ImportAvailable())
-            {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, 24.2f, 14, 2);
-                StringKey keyText = StringKey.NULL;
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    keyText = fcIA.NeedImport() ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP;
-                }
-                else
-                {
-                    keyText = fcIA.NeedImport() ? CONTENT_IMPORT_OFFICIAL : CONTENT_REIMPORT_OFFICIAL;
-                }
-                ui.SetText(keyText);
-                ui.SetFontSize(UIScaler.GetMediumFont());
-                ui.SetButton(delegate { Import("IA"); });
-                ui.SetBGColor(new Color(0, 0.03f, 0f));
-                new UIElementBorder(ui);
-            }
-            else // Import unavailable
-            {
-                ui.SetLocation((UIScaler.GetWidthUnits() - 24) / 2, 24.2f, 24, 1);
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetText(IA_APP_NOT_FOUND_ANDROID, Color.red);
-                }
-                else
-                {
-                    ui.SetText(IA_APP_NOT_FOUND, Color.red);
-                }
-                new UIElementBorder(ui, Color.red);
-            }
-        }
-#endif
 
         private void DrawExitButton()
         {
@@ -525,12 +456,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(path); }));
             }
-#if IA
-            if (type.Equals("IA"))
-            {
-                importThread = new Thread(new ThreadStart(delegate { fcIA.Import(path); }));
-            }
-#endif
+
             importThread.Start();
         }
 
@@ -587,19 +513,7 @@ namespace Assets.Scripts.UI.Screens
                         ZipManager.CopyDirectory(tempPath, destPath);
                     }
                 }
-#if IA
-                if (type.Equals("IA"))
-                {
-                    if (rawAssetsFound) fcIA.Import(tempPath);
-                    else
-                    {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcIA.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
-                    }
-                }
-#endif
+
             }));
             importThread.Start();
         }
@@ -639,20 +553,7 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        // Start game as IA
-        public void IA()
-        {
-            // Not working yet
-#if false
-            // Check if import neeeded
-            if (!fcIA.NeedImport())
-            {
-                Game.Get().gameType = new IAGameType();
-                loadLocalization();
-                Destroyer.MainMenu();
-            }
-#endif
-        }
+
 
         /// <summary>
         /// After selecting game, we load the localization file.

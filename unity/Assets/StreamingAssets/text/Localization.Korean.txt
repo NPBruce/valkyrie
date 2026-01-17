@@ -108,12 +108,6 @@ HEALTH_HERO,조사자당 추가 체력
 HIGHLIGHT,하이라이트
 HORROR_CHECK,공포 체크
 AWARENESS,인식
-IA_APP_NOT_FOUND,Unable to locate Legends of the Alliance, install via Steam
-IA_APP_NOT_FOUND_ANDROID,Unable to locate Legends of the Alliance
-IA_HEROES_NAME,영웅
-IA_HERO_NAME,영웅
-IA_NAME,스타 워즈 : 임페리얼 어썰트 없는
-IA_QUEST_NAME,미션
 INDENT,  {0}
 INFO,정보
 INFORMATION,정보

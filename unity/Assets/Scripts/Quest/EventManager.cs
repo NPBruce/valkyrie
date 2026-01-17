@@ -978,21 +978,7 @@ public class EventManager
                 {"{clue}", ""},
             }
         },
-        { "IA", new Dictionary<string,string>()
-            {
-                {"{action}", ""},
-                {"{wound}", ""},
-                {"{surge}", ""},
-                {"{attack}", ""},
-                {"{strain}", ""},
-                {"{tech}", ""},
-                {"{insight}", ""},
-                {"{strength}", ""},
-                {"{block}", ""},
-                {"{evade}", ""},
-                {"{dodge}", ""},
-            }
-        }
+
     };
 
     public static Dictionary<string, Dictionary<string, string>> CHAR_PACKS_MAP = new Dictionary<string, Dictionary<string, string>>
@@ -1014,11 +1000,7 @@ public class EventManager
                 {"{MAD28}", ""},
             }
         },
-        { "IA", new Dictionary<string,string>()
-            {
-                {"{SWI01}", ""},
-            }
-        }
+
     };
 }
 
