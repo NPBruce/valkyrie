@@ -512,4 +512,5 @@ CLICK_BEHAVIOR,Поведение клика
 CLICK_BLINK,Мигание / событие
 CLICK_STATIC,Статично / Нет события
 REQUIRED,Требуется
+FILTER_TEXT_TOTAL_ONLY,{0} сценариев
 SELECT_GAME_TYPE,Выбрать тип игры

@@ -63,7 +63,7 @@ namespace Assets.Scripts.Content
         {
             data = new Dictionary<string, Dictionary<string, string>>();
             rawData = new Dictionary<string, List<string>>();
-            currentLanguage = Game.Get().currentLang;
+            InitCurrentLanguage();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Assets.Scripts.Content
         {
             data = new Dictionary<string, Dictionary<string, string>>();
             rawData = new Dictionary<string, List<string>>();
-            currentLanguage = Game.Get().currentLang;
+            InitCurrentLanguage();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Assets.Scripts.Content
         {
             data = new Dictionary<string, Dictionary<string, string>>();
             rawData = new Dictionary<string, List<string>>();
-            currentLanguage = Game.Get().currentLang;
+            InitCurrentLanguage();
             AddData(languageData);
         }
 
@@ -98,8 +98,16 @@ namespace Assets.Scripts.Content
             data = new Dictionary<string, Dictionary<string, string>>();
             rawData = new Dictionary<string, List<string>>();
             defaultLanguage = newDefaultLanguage;
-            currentLanguage = Game.Get().currentLang;
+            InitCurrentLanguage();
             AddData(languageData);
+        }
+
+        private void InitCurrentLanguage()
+        {
+            if (Game.Get() != null)
+                currentLanguage = Game.Get().currentLang;
+            else
+                currentLanguage = "English";
         }
 
         /// <summary>

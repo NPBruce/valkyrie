@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -1016,12 +1016,13 @@ namespace Assets.Scripts.UI.Screens
 
                 if (nb_filtered_out_quest > 0)
                 {
-                    StringKey FILTER_TEXT_TOTAL_AND_FILTERED = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
-                    text_number_of_filtered_scenario.SetText(FILTER_TEXT_TOTAL_AND_FILTERED);
+                    StringKey filterText = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
+                    text_number_of_filtered_scenario.SetText(filterText.Translate());
                 }
                 else
                 {
-                    text_number_of_filtered_scenario.SetText(" ");
+                    StringKey filterText = new StringKey("val", "FILTER_TEXT_TOTAL_ONLY", total_scenarios - nb_filtered_out_quest - nb_invalid_quest);
+                    text_number_of_filtered_scenario.SetText(filterText.Translate());
                 }
             }
             catch (Exception e)
@@ -1038,14 +1039,15 @@ namespace Assets.Scripts.UI.Screens
 
         // Do it one last time in case the latest scenario has been filtered or if there are no scenario in the list
         if (nb_filtered_out_quest > 0)
-            {
-                StringKey FILTER_TEXT_TOTAL_AND_FILTERED = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
-                text_number_of_filtered_scenario.SetText(FILTER_TEXT_TOTAL_AND_FILTERED);
-            }
-            else
-            {
-                text_number_of_filtered_scenario.SetText(" ");
-            }
+        {
+            StringKey filterText = new StringKey(new StringKey("val", "FILTER_TEXT_TOTAL_AND_FILTERED"), "{0}:" + (total_scenarios - nb_filtered_out_quest - nb_invalid_quest), "{1}:" + nb_filtered_out_quest);
+            text_number_of_filtered_scenario.SetText(filterText.Translate());
+        }
+        else
+        {
+            StringKey filterText = new StringKey("val", "FILTER_TEXT_TOTAL_ONLY", total_scenarios - nb_filtered_out_quest - nb_invalid_quest);
+            text_number_of_filtered_scenario.SetText(filterText.Translate());
+        }
 
             images_list.StartDownloadASync(scrollArea);
         }
@@ -1525,6 +1527,9 @@ namespace Assets.Scripts.UI.Screens
                 // Play
                 Destroyer.Dialog();
                 CleanQuestList();
+                // Clean up quest UI (header, filters, etc)
+                foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+                    Destroy(go);
                 ValkyrieDebug.Log("INFO: ... and launch offline quest");
                 new QuestDetailsScreen(q);
             }
@@ -1533,6 +1538,9 @@ namespace Assets.Scripts.UI.Screens
                 // Play
                 Destroyer.Dialog();
                 CleanQuestList();
+                // Clean up quest UI (header, filters, etc)
+                foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+                    Destroy(go);
                 ValkyrieDebug.Log("INFO: ... and launch online quest");
                 new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
             }

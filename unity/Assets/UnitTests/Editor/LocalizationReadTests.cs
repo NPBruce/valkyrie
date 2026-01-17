@@ -763,5 +763,84 @@ namespace Valkyrie.UnitTests
         }
 
         #endregion
+
+        #region DictLookup and StringKey Tests
+
+        [Test]
+        public void DictLookup_NumericParameter_ReplacesCorrectly()
+        {
+            // Arrange
+            DictionaryI18n dict = new DictionaryI18n();
+            dict.AddEntry("KEY", "Value: {0}", "English");
+            LocalizationRead.dicts.Add("val", dict);
+
+            // Act
+            // This mirrors the fix: passing int directly to StringKey constructor
+            StringKey sk = new StringKey("val", "KEY", 5);
+            string result = LocalizationRead.DictLookup(sk);
+
+            // Assert
+            Assert.AreEqual("Value: 5", result);
+        }
+
+        [Test]
+        public void DictLookup_StringParameter_ReplacedCorrectly()
+        {
+            // Arrange
+            DictionaryI18n dict = new DictionaryI18n();
+            dict.AddEntry("KEY_S", "Hello {0}", "English");
+            LocalizationRead.dicts.Add("val", dict);
+
+            // Act
+            StringKey sk = new StringKey("val", "KEY_S", "World");
+            string result = LocalizationRead.DictLookup(sk);
+
+            // Assert
+            Assert.AreEqual("Hello World", result);
+        }
+
+
+        [Test]
+        public void DictLookup_MultipleParameters_ReplacedCorrectly()
+        {
+            // Arrange
+            DictionaryI18n dict = new DictionaryI18n();
+            dict.AddEntry("KEY_M", "{0} met {1}", "English");
+            LocalizationRead.dicts.Add("val", dict);
+
+            // Act
+            // To replace multiple parameters, we need to ensure the parameters string contains brackets {}
+            // so DictQuery enters the parsing mode.
+            // We construct parameters manually: "{0}:Alice:{1}:Bob", passing "Alice:{1}:Bob" 
+            // because the constructor prepends "{0}:"
+            StringKey sk = new StringKey("val", "KEY_M", "Alice:{1}:Bob");
+            
+            string result = LocalizationRead.DictLookup(sk);
+
+            // Assert
+            Assert.AreEqual("Alice met Bob", result);
+        }
+
+        [Test]
+        public void DictLookup_IncorrectParameterFormat_FailsToReplace()
+        {
+            // Arrange
+            DictionaryI18n dict = new DictionaryI18n();
+            dict.AddEntry("KEY_ERR", "Count: {0}", "English");
+            LocalizationRead.dicts.Add("val", dict);
+
+            // Act
+            // This mirrors the bug: manually adding "{0}:" to the value parameter
+            // The StringKey constructor adds "{0}:", so we get "{0}:{0}:5" in the parameters string
+            // DictQuery parses elements: KEY_ERR, {0}, {0}, 5
+            // It replaces "{0}" with "{0}", leaving the string unchanged.
+            StringKey sk = new StringKey("val", "KEY_ERR", "{0}:" + 5);
+            string result = LocalizationRead.DictLookup(sk);
+
+            // Assert
+            Assert.AreEqual("Count: {0}", result);
+        }
+
+        #endregion
     }
 }
