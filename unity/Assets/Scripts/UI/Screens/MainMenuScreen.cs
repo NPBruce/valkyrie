@@ -11,6 +11,7 @@ namespace Assets.Scripts.UI.Screens
     public class MainMenuScreen
     {
         private static readonly StringKey SELECT_CONTENT = new StringKey("val", "SELECT_CONTENT");
+        private static readonly StringKey SELECT_GAME_TYPE = new StringKey("val", "SELECT_GAME_TYPE");
         private static readonly StringKey ABOUT = new StringKey("val", "ABOUT");
         private static readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
         private static readonly StringKey ABOUT_FFG = new StringKey("val", "ABOUT_FFG");
@@ -134,9 +135,26 @@ namespace Assets.Scripts.UI.Screens
             ui.SetBGColor(BUTTON_BG_COLOR);
             new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
-            // Exit Valkyrie
+            // Select Game Type
             ui = new UIElement();
             ui.SetLocation(menuButtonsX, 23, ButtonWidth, 2);
+            ui.SetText(SELECT_GAME_TYPE);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            if (SELECT_GAME_TYPE.Translate().Length > 20)
+            {
+                ui.SetFontSize(UIScaler.GetSmallFont());
+            }
+            else
+            {
+                ui.SetFontSize(UIScaler.GetMediumFont());
+            }
+            ui.SetButton(GameSelection);
+            ui.SetBGColor(BUTTON_BG_COLOR);
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
+
+            // Exit Valkyrie
+            ui = new UIElement();
+            ui.SetLocation(menuButtonsX, 26, ButtonWidth, 2);
             ui.SetText(CommonStringKeys.EXIT);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -177,6 +195,15 @@ namespace Assets.Scripts.UI.Screens
         {
             ValkyrieDebug.Log("INFO: Accessing config");
             new OptionsScreen();
+        }
+
+        public void GameSelection()
+        {
+            ValkyrieDebug.Log("INFO: Return to game selection");
+            // Clean up everything
+            Destroyer.Destroy();
+            Game.Get().gameType = new NoGameType();
+            new GameSelectionScreen();
         }
 
         static int click_counter = 0;

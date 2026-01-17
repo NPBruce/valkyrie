@@ -84,6 +84,9 @@ namespace Assets.Scripts.UI.Screens
 
         private void InitializeImporters()
         {
+            // Check if we have already initialized
+            if (fcD2E != null && fcMoM != null) return;
+            
             // Get the current content for games
             if (Application.platform == RuntimePlatform.OSXPlayer)
             {

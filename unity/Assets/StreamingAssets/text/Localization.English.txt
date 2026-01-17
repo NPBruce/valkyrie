@@ -682,3 +682,4 @@ CLICK_BEHAVIOR,Click Behavior
 CLICK_BLINK,Blink / Trigger event
 CLICK_STATIC,Static / No event
 REQUIRED,Required
+SELECT_GAME_TYPE,Select Game Type
