@@ -18,8 +18,8 @@ namespace Assets.Scripts.UI.Screens
     // and import controls
     public class GameSelectionScreen
     {
-        FFGImport fcD2E;
-        FFGImport fcMoM;
+        static FFGImport fcD2E;
+        static FFGImport fcMoM;
 
         protected string importType = "";
         Thread importThread;
