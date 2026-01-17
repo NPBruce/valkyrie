@@ -488,4 +488,4 @@ FADE_FAST,Szybko
 FADE_SLOW,Wolno
 CLICK_BEHAVIOR,Zachowanie kliknięcia
 CLICK_BLINK,Miganie / wyzwalanie zdarzenia
-CLICK_STATIC,Statyczne / Brak zdarzenia
+CLICK_STATIC,Statyczne / Brak zdarzeniaREQUIRED,Wymagane

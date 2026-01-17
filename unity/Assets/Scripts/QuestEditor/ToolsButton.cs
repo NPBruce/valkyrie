@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using Assets.Scripts.UI;
+using Assets.Scripts;
 
 // Special class for the Menu button present while in a quest
 public class ToolsButton
@@ -12,12 +13,14 @@ public class ToolsButton
     public ToolsButton()
     {
         Game game = Game.Get();
-        if (!game.editMode) return;
+        if (!game.editMode)
+            return;
 
         UIElement ui = new UIElement(Game.QUESTUI);
         ui.SetLocation(UIScaler.GetRight(-6), 0, 6, 1);
         ui.SetText(new StringKey("val", "COMPONENTS"));
-        ui.SetButton(delegate { QuestEditorData.TypeSelect(); });
+        ui.SetButton(delegate
+        { QuestEditorData.TypeSelect(); });
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.QUESTUI);
@@ -37,7 +40,8 @@ public class ToolsButton
 
     public void Test()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null) return;
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+            return;
 
         Game game = Game.Get();
         int min = game.CurrentQuest.qd.quest.minHero;
@@ -55,8 +59,10 @@ public class ToolsButton
             heroCount = min;
         }
 
-        if (heroCount < min) heroCount = min;
-        if (heroCount > max) heroCount = max;
+        if (heroCount < min)
+            heroCount = min;
+        if (heroCount > max)
+            heroCount = max;
 
         DrawHeroSelection();
     }
@@ -170,7 +176,9 @@ public class ToolsButton
         // All content data has been loaded by editor, cleanup everything
         game.cd = new ContentData(game.gameType.DataDirectory());
         // Load the base content
-        game.ContentLoader.LoadContentID("");
+        string basecontentPackId = game.gameType.BaseContentPackId();
+        game.ContentLoader.LoadContentID(basecontentPackId);
+
         // Load current configuration
         Dictionary<string, string> packs = game.config.data.Get(game.gameType.TypeName() + "Packs");
         if (packs != null)

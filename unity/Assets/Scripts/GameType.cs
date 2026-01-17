@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Content;
+using Assets.Scripts;
+using Assets.Scripts.Content;
 using System;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ using UnityEngine;
 public abstract class GameType
 {
     public abstract string DataDirectory();
+    public abstract string BaseContentPackId();
     public abstract StringKey HeroName();
     public abstract StringKey HeroesName();
     public abstract StringKey QuestName();
@@ -32,6 +34,11 @@ public class NoGameType : GameType
     public override string DataDirectory()
     {
         return ContentData.ContentPath();
+    }
+
+    public override string BaseContentPackId()
+    {
+        return "";
     }
 
     public override StringKey HeroName()
@@ -125,6 +132,11 @@ public class D2EGameType : GameType
         return ContentData.ContentPath() + "D2E/";
     }
 
+    public override string BaseContentPackId()
+    {
+        return ValkyrieConstants.BaseGameIdContentPackDescent;
+    }
+
     public override StringKey HeroName()
     {
         return new StringKey("val", "D2E_HERO_NAME");
@@ -212,6 +224,11 @@ class MoMGameType : GameType
     public override string DataDirectory()
     {
         return ContentData.ContentPath() + "MoM/";
+    }
+
+    public override string BaseContentPackId()
+    {
+        return ValkyrieConstants.BaseGameIdContentPackMansionsOfMadness;
     }
 
     public override StringKey HeroName()
@@ -303,6 +320,11 @@ class MoMGameType : GameType
 // Things for IA
 public class IAGameType : GameType
 {
+    public override string BaseContentPackId()
+    {
+        return "BaseIA";
+    }
+
     public override string DataDirectory()
     {
         return ContentData.ContentPath() + "IA/";

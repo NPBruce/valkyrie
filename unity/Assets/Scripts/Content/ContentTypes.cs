@@ -1,4 +1,4 @@
-﻿
+
 // Class for tile specific data
 
 using System;
@@ -10,10 +10,11 @@ using UnityEngine;
 using ValkyrieTools;
 using System.Globalization;
 using Random = UnityEngine.Random;
+using Assets.Scripts;
 
 public class PackTypeData : GenericData
 {
-    public static new string type = "PackType";
+    public static new string type = ValkyrieConstants.PackType;
 
     public PackTypeData(string name, Dictionary<string, string> content, string path, List<string> sets = null) : base(name, content, path, type, sets)
     {

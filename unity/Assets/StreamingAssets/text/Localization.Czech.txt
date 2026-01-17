@@ -690,3 +690,4 @@ FADE_SLOW,Pomalu
 CLICK_BEHAVIOR,Chování při kliknutí
 CLICK_BLINK,Blikání / spustit událost
 CLICK_STATIC,Statické / Žádná událost
+REQUIRED,Vyžadováno
