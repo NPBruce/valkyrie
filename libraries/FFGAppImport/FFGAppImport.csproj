@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetImport\AppFinder.cs" />
-    <Compile Include="AssetImport\IAFinder.cs" />
+
     <Compile Include="AssetImport\ExtractDataTool.cs" />
     <Compile Include="AssetImport\FetchContent.cs" />
     <Compile Include="AssetImport\FSBExport.cs" />
