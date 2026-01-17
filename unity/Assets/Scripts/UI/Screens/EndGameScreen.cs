@@ -56,10 +56,10 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                // TODO: support a background picture for IA
                 GameStateManager.MainMenu();
                 return;
             }
+
             bg.SetImage(bgTex);
             bg.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
             

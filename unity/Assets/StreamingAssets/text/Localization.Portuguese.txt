@@ -86,12 +86,6 @@ HEALTH_HERO,Por Herói
 HIGHLIGHT,Destaque
 HORROR_CHECK,Teste de Horror
 AWARENESS,Consciência
-IA_APP_NOT_FOUND,Não foi possível localizar Legends of the Alliance, instale via Steam
-IA_APP_NOT_FOUND_ANDROID,Não foi possível localizar Legends of the Alliance
-IA_HEROES_NAME,Heróis
-IA_HERO_NAME,Heróis
-IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
-IA_QUEST_NAME,Missão
 INDENT,  {0}
 INFO,Info
 INFORMATION,Informação
