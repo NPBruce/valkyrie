@@ -8,7 +8,7 @@ namespace Valkyrie.UnitTests
 {
     /// <summary>
     /// Unit tests for GameType classes - Game-specific settings and configuration
-    /// Tests cover NoGameType, D2EGameType, MoMGameType, and IAGameType implementations
+    /// Tests cover NoGameType, D2EGameType, and MoMGameType implementations
     /// Note: Font-related methods are skipped as they require Unity Resources
     /// Note: MoMGameType is internal, so it is accessed via reflection
     /// </summary>
@@ -622,235 +622,15 @@ namespace Valkyrie.UnitTests
 
         #endregion
 
-        #region IAGameType Tests
 
-        [Test]
-        public void IAGameType_DataDirectory_ReturnsIAPath()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            string result = gameType.DataDirectory();
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.EndsWith("IA/"));
-            Assert.AreEqual(ContentData.ContentPath() + "IA/", result);
-        }
-
-        [Test]
-        public void IAGameType_HeroName_ReturnsIAHeroNameKey()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            StringKey result = gameType.HeroName();
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("val", result.dict);
-            Assert.AreEqual("IA_HERO_NAME", result.key);
-        }
-
-        [Test]
-        public void IAGameType_HeroesName_ReturnsIAHeroesNameKey()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            StringKey result = gameType.HeroesName();
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("val", result.dict);
-            Assert.AreEqual("IA_HEROES_NAME", result.key);
-        }
-
-        [Test]
-        public void IAGameType_MaxHeroes_ReturnsFour()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            int result = gameType.MaxHeroes();
-
-            // Assert
-            Assert.AreEqual(4, result);
-        }
-
-        [Test]
-        public void IAGameType_DefaultHeroes_ReturnsFour()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            int result = gameType.DefaultHeroes();
-
-            // Assert
-            Assert.AreEqual(4, result);
-        }
-
-        [Test]
-        public void IAGameType_TilePixelPerSquare_Returns105()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            float result = gameType.TilePixelPerSquare();
-
-            // Assert
-            Assert.AreEqual(105f, result);
-        }
-
-        [Test]
-        public void IAGameType_TypeName_ReturnsIA()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            string result = gameType.TypeName();
-
-            // Assert
-            Assert.AreEqual("IA", result);
-        }
-
-        [Test]
-        public void IAGameType_TileOnGrid_ReturnsTrue()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            bool result = gameType.TileOnGrid();
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void IAGameType_DisplayMorale_ReturnsTrue()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            bool result = gameType.DisplayMorale();
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void IAGameType_MonstersGrouped_ReturnsFalse()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            bool result = gameType.MonstersGrouped();
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void IAGameType_SelectionRound_ReturnsOne()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            float result = gameType.SelectionRound();
-
-            // Assert
-            Assert.AreEqual(1f, result);
-        }
-
-        [Test]
-        public void IAGameType_TileRound_ReturnsOne()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            float result = gameType.TileRound();
-
-            // Assert
-            Assert.AreEqual(1f, result);
-        }
-
-        [Test]
-        public void IAGameType_DisplayHeroes_ReturnsTrue()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            bool result = gameType.DisplayHeroes();
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void IAGameType_QuestName_ReturnsIAQuestNameKey()
-        {
-            // Arrange
-            IAGameType gameType = new IAGameType();
-
-            // Act
-            StringKey result = gameType.QuestName();
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("val", result.dict);
-            Assert.AreEqual("IA_QUEST_NAME", result.key);
-        }
-
-        #endregion
 
         #region Cross-GameType Comparison Tests
 
-        [Test]
-        public void GameTypes_D2EAndIA_HaveSameTilePixelPerSquare()
-        {
-            // Arrange
-            D2EGameType d2e = new D2EGameType();
-            IAGameType ia = new IAGameType();
 
-            // Act & Assert
-            Assert.AreEqual(d2e.TilePixelPerSquare(), ia.TilePixelPerSquare());
-        }
 
-        [Test]
-        public void GameTypes_D2EAndIA_HaveSameMaxHeroes()
-        {
-            // Arrange
-            D2EGameType d2e = new D2EGameType();
-            IAGameType ia = new IAGameType();
 
-            // Act & Assert
-            Assert.AreEqual(d2e.MaxHeroes(), ia.MaxHeroes());
-            Assert.AreEqual(4, d2e.MaxHeroes());
-        }
 
-        [Test]
-        public void GameTypes_D2EAndIA_HaveSameDefaultHeroes()
-        {
-            // Arrange
-            D2EGameType d2e = new D2EGameType();
-            IAGameType ia = new IAGameType();
 
-            // Act & Assert
-            Assert.AreEqual(d2e.DefaultHeroes(), ia.DefaultHeroes());
-        }
 
         [Test]
         public void GameTypes_MoM_HasHigherMaxHeroesThanOthers()
@@ -858,11 +638,8 @@ namespace Valkyrie.UnitTests
             // Arrange
             GameType mom = CreateMoMGameType();
             D2EGameType d2e = new D2EGameType();
-            IAGameType ia = new IAGameType();
-
             // Act & Assert
             Assert.IsTrue(mom.MaxHeroes() > d2e.MaxHeroes());
-            Assert.IsTrue(mom.MaxHeroes() > ia.MaxHeroes());
         }
 
         [Test]
@@ -872,13 +649,10 @@ namespace Valkyrie.UnitTests
             NoGameType no = new NoGameType();
             D2EGameType d2e = new D2EGameType();
             GameType mom = CreateMoMGameType();
-            IAGameType ia = new IAGameType();
-
             // Act & Assert
             Assert.IsTrue(no.TileOnGrid());
             Assert.IsTrue(d2e.TileOnGrid());
             Assert.IsFalse(mom.TileOnGrid());
-            Assert.IsTrue(ia.TileOnGrid());
         }
 
         [Test]
@@ -888,22 +662,18 @@ namespace Valkyrie.UnitTests
             NoGameType no = new NoGameType();
             D2EGameType d2e = new D2EGameType();
             GameType mom = CreateMoMGameType();
-            IAGameType ia = new IAGameType();
-
             // Act
             string[] typeNames = new string[]
             {
                 no.TypeName(),
                 d2e.TypeName(),
-                mom.TypeName(),
-                ia.TypeName()
+                mom.TypeName()
             };
 
             // Assert - all should be unique (NoGameType returns empty string)
             Assert.AreEqual("", typeNames[0]);
             Assert.AreEqual("D2E", typeNames[1]);
             Assert.AreEqual("MoM", typeNames[2]);
-            Assert.AreEqual("IA", typeNames[3]);
         }
 
         [Test]
@@ -912,12 +682,9 @@ namespace Valkyrie.UnitTests
             // Arrange
             D2EGameType d2e = new D2EGameType();
             GameType mom = CreateMoMGameType();
-            IAGameType ia = new IAGameType();
-
             // Act & Assert
             Assert.IsTrue(d2e.DataDirectory().Contains(d2e.TypeName()));
             Assert.IsTrue(mom.DataDirectory().Contains(mom.TypeName()));
-            Assert.IsTrue(ia.DataDirectory().Contains(ia.TypeName()));
         }
 
         #endregion

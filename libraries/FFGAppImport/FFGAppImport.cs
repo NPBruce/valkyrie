@@ -51,8 +51,7 @@ namespace FFGAppImport
     public enum GameType
     {
         D2E,
-        MoM,
-        IA
+        MoM
     }
 
     public enum Platform
