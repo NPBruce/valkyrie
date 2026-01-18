@@ -37,10 +37,7 @@ public class QuestLoader {
         {
             dataLocation += "/D2E/Editor";
         }
-        if (game.gameType is IAGameType)
-        {
-            dataLocation += "/IA/Editor";
-        }
+
         questDirectories.AddRange(GetUnpackedQuests(dataLocation));
         
         // Go through all directories
@@ -94,10 +91,7 @@ public class QuestLoader {
             {
                 dataLocation += "/D2E/Editor";
             }
-            if (context.gameType == "IA")
-            {
-                dataLocation += "/IA/Editor";
-            }
+
             
             questDirectories.AddRange(GetUnpackedQuests(dataLocation));
 

@@ -79,12 +79,6 @@ HEALTH_HERO,Pro Held
 HIGHLIGHT,Markieren
 HORROR_CHECK,Horrortest
 AWARENESS,Aufmerksamkeit
-IA_APP_NOT_FOUND,"Imperial Assault" nicht gefunden, bitte über Steam installieren
-IA_APP_NOT_FOUND_ANDROID,"Imperial Assault" nicht gefunden
-IA_HEROES_NAME,Helden
-IA_HERO_NAME,Held
-IA_NAME,Star Wars: Imperial Assault
-IA_QUEST_NAME,Mission
 INDENT,  {0}
 INFO,Info
 INFORMATION,Information
@@ -515,3 +509,5 @@ CLICK_BEHAVIOR,Klickverhalten
 CLICK_BLINK,Blinken / Ereignis auslösen
 CLICK_STATIC,Statisch / Kein Ereignis
 REQUIRED,Erforderlich
+FILTER_TEXT_TOTAL_ONLY,{0} Szenarien
+SELECT_GAME_TYPE,Spieltyp auswählen

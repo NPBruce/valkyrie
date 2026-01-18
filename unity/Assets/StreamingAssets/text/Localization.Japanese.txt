@@ -173,12 +173,6 @@ HEALTH_HERO,Per Hero
 HIGHLIGHT,ハイライト
 HORROR_CHECK,恐怖判定
 AWARENESS,知覚力
-IA_APP_NOT_FOUND,Unable to locate Legends of the Alliance, install via Steam
-IA_APP_NOT_FOUND_ANDROID,Unable to locate Legends of the Alliance
-IA_HEROES_NAME,Heroes
-IA_HERO_NAME,Hero
-IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
-IA_QUEST_NAME,Mission
 INDENT,  {0}
 INFO,情報
 INFORMATION,情報
@@ -718,3 +712,5 @@ CLICK_BEHAVIOR,クリック動作
 CLICK_BLINK,点滅 / イベントトリガー
 CLICK_STATIC,静的 / イベントなし
 REQUIRED,必須
+FILTER_TEXT_TOTAL_ONLY,{0} シナリオ
+SELECT_GAME_TYPE,ゲームタイプを選択

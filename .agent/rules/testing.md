@@ -2,7 +2,7 @@
 trigger: always_on
 ---
 
-- Generate unit tests for each file and each method
+- Always generate unit tests for each file and each method
    - Exception: UI related classes in `valkyrie\unity\Assets\Scripts\UI`
 - Unit Tests should always be located in `valkyrie\unity\Assets\UnitTests`
 - When new tests have been created/existing tests have been updated ask if Unit tests should be ran. Do not run Unit Tests without confirmation from the user.

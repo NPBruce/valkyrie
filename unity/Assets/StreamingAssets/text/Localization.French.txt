@@ -80,12 +80,6 @@ HEALTH_HERO,Par Héros
 HIGHLIGHT,Mettre en valeur
 HORROR_CHECK,Test d'horreur
 AWARENESS,Conscience
-IA_APP_NOT_FOUND,Veuillez installer Legends of the Alliance via Steam
-IA_APP_NOT_FOUND_ANDROID,Veuillez installer Legends of the Alliance via Google Play
-IA_HEROES_NAME,Heroes
-IA_HERO_NAME,Hero
-IA_NAME,Star Wars: Imperial Assault UNAVAILABLE
-IA_QUEST_NAME,MissionINDENT,  {0}
 INFO,Info
 INFORMATION,Information
 INITIAL_MESSAGE,Message de départ :
@@ -519,3 +513,5 @@ CLICK_BEHAVIOR,Comportement au clic
 CLICK_BLINK,Clignoter / Déclencher événement
 CLICK_STATIC,Statique / Pas d'événement
 REQUIRED,Requis
+FILTER_TEXT_TOTAL_ONLY,{0} scénarios
+SELECT_GAME_TYPE,Sélectionner le type de jeu
