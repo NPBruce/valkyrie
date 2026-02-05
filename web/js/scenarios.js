@@ -426,14 +426,79 @@ document.addEventListener('DOMContentLoaded', function () {
         else if (pageLang === 'pl') userLang = 'Polish';
         else if (pageLang === 'pt') userLang = 'Portuguese';
 
-        // Filter Logic
+        // Parse Hash Helper
+        const parseHash = () => {
+            const hash = window.location.hash.substring(1); // Remove #
+            const params = new URLSearchParams(hash);
+            return {
+                type: params.get('type') || (hash.includes('type=mom') ? 'mom' : 'd2e'), // Fallback for old style
+                duration: params.get('duration') || '',
+                difficulty: params.get('difficulty') || '',
+                language: params.get('language') || '',
+                expansion: params.get('expansions') ? params.get('expansions').split(',') : [],
+                author: params.get('author') || '',
+                sortField: params.get('sort') || 'last_updated',
+                sortDir: params.get('sort_direction') || 'desc'
+            };
+        };
+
+        const initialParams = parseHash();
+
         // Filter Logic
         const state = {
-            D2E: { data: [], filters: { duration: '', difficulty: '', language: '', expansion: [], author: '' }, sort: { field: 'last_updated', dir: 'desc' } },
-            MOM: { data: [], filters: { duration: '', difficulty: '', language: '', expansion: [], author: '' }, sort: { field: 'last_updated', dir: 'desc' } }
+            D2E: {
+                data: [],
+                filters: {
+                    duration: initialParams.duration,
+                    difficulty: initialParams.difficulty,
+                    language: initialParams.language,
+                    expansion: initialParams.expansion,
+                    author: initialParams.author
+                },
+                sort: {
+                    field: initialParams.sortField,
+                    dir: initialParams.sortDir
+                }
+            },
+            MOM: {
+                data: [],
+                filters: {
+                    duration: initialParams.duration,
+                    difficulty: initialParams.difficulty,
+                    language: initialParams.language,
+                    expansion: initialParams.expansion,
+                    author: initialParams.author
+                },
+                sort: {
+                    field: initialParams.sortField,
+                    dir: initialParams.sortDir
+                }
+            }
+        };
+
+        const updateHash = (type) => {
+            const s = state[type];
+            const params = new URLSearchParams();
+            params.set('type', type.toLowerCase());
+
+            if (s.filters.duration) params.set('duration', s.filters.duration);
+            if (s.filters.difficulty) params.set('difficulty', s.filters.difficulty);
+            if (s.filters.language) params.set('language', s.filters.language);
+            if (s.filters.author) params.set('author', s.filters.author);
+            if (s.filters.expansion && s.filters.expansion.length > 0) params.set('expansions', s.filters.expansion.join(','));
+
+            if (s.sort.field !== 'last_updated') params.set('sort', s.sort.field);
+            if (s.sort.dir !== 'desc') params.set('sort_direction', s.sort.dir);
+
+            // Replace history state to avoid clogging back button
+            const newHash = '#' + params.toString();
+            if (window.location.hash !== newHash) {
+                window.history.replaceState(null, null, newHash);
+            }
         };
 
         const applyFilters = (type, userLang) => {
+            updateHash(type);
             const s = state[type];
             let filtered = s.data.slice(); // Copy
 
@@ -449,11 +514,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Difficulty
-            if (s.filters.difficulty) {
-                const diff = parseFloat(s.filters.difficulty);
+            if (s.filters.difficulty !== '') {
+                const targetStars = parseInt(s.filters.difficulty, 10);
                 filtered = filtered.filter(item => {
-                    const itemDiff = parseFloat(item.difficulty) || 0;
-                    return (itemDiff / 0.2) >= diff;
+                    const val = parseFloat(item.difficulty) || 0;
+                    const stars = Math.round(val / 0.2);
+                    const clampedStars = Math.max(0, Math.min(5, stars));
+                    return clampedStars === targetStars;
                 });
             }
 
@@ -606,10 +673,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label class="mb-1 text-muted small">${lblDifficulty}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-difficulty">
                         <option value="">${lblAny}</option>
-                        <option value="1">1+ &#9733;</option>
-                        <option value="2">2+ &#9733;</option>
-                        <option value="3">3+ &#9733;</option>
-                        <option value="4">4+ &#9733;</option>
+                        <option value="0">0 &#9733;</option>
+                        <option value="1">1 &#9733;</option>
+                        <option value="2">2 &#9733;</option>
+                        <option value="3">3 &#9733;</option>
+                        <option value="4">4 &#9733;</option>
                         <option value="5">5 &#9733;</option>
                     </select>
                 </div>
@@ -669,6 +737,12 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.sort-field').value = state[type].sort.field;
             filterBar.querySelector('.sort-dir').value = state[type].sort.dir;
 
+            // Set initial filter values from state
+            filterBar.querySelector('.filter-duration').value = state[type].filters.duration;
+            filterBar.querySelector('.filter-difficulty').value = state[type].filters.difficulty;
+            filterBar.querySelector('.filter-language').value = state[type].filters.language;
+            filterBar.querySelector('.filter-author').value = state[type].filters.author;
+
             // Listeners
             filterBar.querySelector('.filter-duration').addEventListener('change', (e) => {
                 state[type].filters.duration = e.target.value;
@@ -706,24 +780,38 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             checkboxes.forEach(cb => {
+                // Initialize Checkbox state
+                if (state[type].filters.expansion.includes(cb.value)) {
+                    cb.checked = true;
+                }
+
                 cb.addEventListener('change', () => {
                     const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
                     state[type].filters.expansion = selected;
                     applyFilters(type, userLang);
 
                     // Update Button Text
-                    if (selected.length === 0) {
-                        btnSpan.textContent = lblAny;
-                    } else if (selected.length === 1) {
-                        const code = selected[0];
-                        const name = expansionOptions.find(o => o.code === code).name;
-                        // Truncate if long
-                        btnSpan.textContent = name.length > 20 ? name.substring(0, 18) + '...' : name;
-                    } else {
-                        btnSpan.textContent = `${selected.length} Selected`;
-                    }
+                    updatePacksButtonText(selected);
                 });
             });
+
+            // Initial Button Text Update
+            const updatePacksButtonText = (selected) => {
+                if (selected.length === 0) {
+                    btnSpan.textContent = lblAny;
+                } else if (selected.length === 1) {
+                    const code = selected[0];
+                    const opt = expansionOptions.find(o => o.code === code);
+                    const name = opt ? opt.name : code;
+                    // Truncate if long
+                    btnSpan.textContent = name.length > 20 ? name.substring(0, 18) + '...' : name;
+                } else {
+                    btnSpan.textContent = `${selected.length} Selected`;
+                }
+            };
+
+            // Set initial label
+            updatePacksButtonText(state[type].filters.expansion);
 
 
             // Sort Listeners
@@ -801,9 +889,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        // Initial Load based on Hash
-        const hash = window.location.hash;
-        if (hash.includes('type=mom')) {
+        // Initial Load
+        if (initialParams.type === 'mom') {
             activateTab('mom');
         } else {
             activateTab('d2e');
