@@ -1,0 +1,815 @@
+document.addEventListener('DOMContentLoaded', function () {
+    "use strict";
+
+    // --- Configuration ---
+
+    // URLS
+    const URLS = {
+        D2E: 'https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/D2E/manifestDownload.ini',
+        D2E_PACKS: 'https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/D2E/contentPacksManifestDownload.ini',
+        MOM: 'https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/manifestDownload.ini',
+        MOM_PACKS: 'https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/MoM/contentPacksManifestDownload.ini'
+    };
+
+    const LANG_FLAGS = {
+        'English': '🇬🇧',
+        'Spanish': '🇪🇸',
+        'German': '🇩🇪',
+        'French': '🇫🇷',
+        'Italian': '🇮🇹',
+        'Polish': '🇵🇱',
+        'Portuguese': '🇵🇹',
+        'Russian': '🇷🇺',
+        'Czech': '🇨🇿',
+        'Hungarian': '🇭🇺',
+        'Dutch': '🇳🇱',
+        'Chinese': '🇨🇳',
+        'Korean': '🇰🇷',
+        'Japanese': '🇯🇵'
+    };
+
+    const TRANSLATIONS = {
+        'Difficulty': {
+            'English': 'Difficulty',
+            'German': 'Schwierigkeit',
+            'Spanish': 'Dificultad',
+            'French': 'Difficulté',
+            'Italian': 'Difficoltà',
+            'Polish': 'Trudność',
+            'Portuguese': 'Dificuldade'
+        },
+        'Expansions': {
+            'English': 'Required Content Packs',
+            'German': 'Benötigte Inhaltspakete',
+            'Spanish': 'Paquetes de Contenido Requeridos',
+            'French': 'Packs de Contenu Requis',
+            'Italian': 'Pacchetti di Contenuto Richiesti',
+            'Polish': 'Wymagane Pakiety Zawartości',
+            'Portuguese': 'Pacotes de Conteúdo Necessários'
+        },
+        'NoImage': {
+            'English': 'No Image',
+            'German': 'Kein Bild',
+            'Spanish': 'Sin Imagen',
+            'French': 'Pas d\'Image',
+            'Italian': 'Nessuna Immagine',
+            'Polish': 'Brak Obrazu',
+            'Portuguese': 'Sem Imagem'
+        },
+        'NoContent': {
+            'English': 'No content found.',
+            'German': 'Kein Inhalt gefunden.',
+            'Spanish': 'No se encontró contenido.',
+            'French': 'Aucun contenu trouvé.',
+            'Italian': 'Nessun contenuto trovato.',
+            'Polish': 'Nie znaleziono zawartości.',
+            'Portuguese': 'Nenhum conteúdo encontrado.'
+        },
+        'NoPacks': {
+            'English': 'No content packs found.',
+            'German': 'Keine Inhaltspakete gefunden.',
+            'Spanish': 'No se encontraron paquetes de contenido.',
+            'French': 'Aucun pack de contenu trouvé.',
+            'Italian': 'Nessun pacchetto di contenuto trovato.',
+            'Polish': 'Nie znaleziono pakietów zawartości.',
+            'Portuguese': 'Nenhum pacote de conteúdo encontrado.'
+        },
+        'Duration': {
+            'English': 'Duration',
+            'German': 'Dauer',
+            'Spanish': 'Duración',
+            'French': 'Durée',
+            'Italian': 'Durata',
+            'Polish': 'Czas trwania',
+            'Portuguese': 'Duração'
+        },
+        'Author': {
+            'English': 'Author',
+            'German': 'Autor',
+            'Spanish': 'Autor',
+            'French': 'Auteur',
+            'Italian': 'Autore',
+            'Polish': 'Autor',
+            'Portuguese': 'Autor'
+        },
+        'LastUpdated': {
+            'English': 'Last Updated',
+            'German': 'Letzte Aktualisierung',
+            'Spanish': 'Última Actualización',
+            'French': 'Dernière mise à jour',
+            'Italian': 'Ultimo aggiornamento',
+            'Polish': 'Ostatnia aktualizacja',
+            'Portuguese': 'Última atualização'
+        },
+        'Language': {
+            'English': 'Language',
+            'German': 'Sprache',
+            'Spanish': 'Idioma',
+            'French': 'Langue',
+            'Italian': 'Lingua',
+            'Polish': 'Język',
+            'Portuguese': 'Idioma'
+        },
+        'Any': {
+            'English': 'Any',
+            'German': 'Beliebig',
+            'Spanish': 'Cualquiera',
+            'French': 'Tout',
+            'Italian': 'Qualsiasi',
+            'Polish': 'Dowolny',
+            'Portuguese': 'Qualquer'
+        },
+        'SortBy': {
+            'English': 'Sort By',
+            'German': 'Sortieren nach',
+            'Spanish': 'Ordenar por',
+            'French': 'Trier par',
+            'Italian': 'Ordina per',
+            'Polish': 'Sortuj według',
+            'Portuguese': 'Ordenar por'
+        },
+        'Name': {
+            'English': 'Name',
+            'German': 'Name',
+            'Spanish': 'Nombre',
+            'French': 'Nom',
+            'Italian': 'Nome',
+            'Polish': 'Nazwa',
+            'Portuguese': 'Nome'
+        },
+        'Ascending': {
+            'English': 'Ascending',
+            'German': 'Aufsteigend',
+            'Spanish': 'Ascendente',
+            'French': 'Croissant',
+            'Italian': 'Ascendente',
+            'Polish': 'Rosnąco',
+            'Portuguese': 'Ascendente'
+        },
+        'Descending': {
+            'English': 'Descending',
+            'German': 'Absteigend',
+            'Spanish': 'Descendente',
+            'French': 'Décroissant',
+            'Italian': 'Discendente',
+            'Polish': 'Malejąco',
+            'Portuguese': 'Descendente'
+        }
+    };
+
+    // --- Helpers ---
+
+    function parseINI(data) {
+        const lines = data.split(/\r?\n/);
+        const items = [];
+        let currentItem = null;
+
+        lines.forEach(line => {
+            line = line.trim();
+            if (!line || line.startsWith(';')) return;
+
+            if (line.startsWith('[') && line.endsWith(']')) {
+                if (currentItem) items.push(currentItem);
+                const id = line.substring(1, line.length - 1);
+                currentItem = { id: id };
+            } else if (currentItem) {
+                const equalIndex = line.indexOf('=');
+                if (equalIndex !== -1) {
+                    const key = line.substring(0, equalIndex).trim();
+                    let value = line.substring(equalIndex + 1).trim();
+
+                    // Basic unescape for newlines
+                    value = value.replace(/\\n/g, '\n');
+
+                    // Remove surrounding quotes if present (e.g. image="foo.png")
+                    if (value.length >= 2 && value.startsWith('"') && value.endsWith('"')) {
+                        value = value.substring(1, value.length - 1);
+                    }
+
+                    currentItem[key] = value;
+                }
+            }
+        });
+
+        if (currentItem) items.push(currentItem);
+        return items;
+    }
+
+    function loadData(url) {
+        // No caching found here anymore!
+        console.log(`Fetching ${url}...`);
+        return fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                const parsed = parseINI(text);
+                return parsed;
+            });
+    }
+
+    function getHardwareStars(difficulty) {
+        const val = parseFloat(difficulty) || 0;
+        const stars = Math.round(val / 0.2);
+        const count = Math.max(0, Math.min(5, stars));
+        return {
+            filled: '★'.repeat(count),
+            empty: '☆'.repeat(5 - count)
+        };
+    }
+
+    function getLocalizedValue(item, fieldPrefix, lang) {
+        let val = '';
+        if (item[`${fieldPrefix}.${lang}`]) val = item[`${fieldPrefix}.${lang}`];
+        else if (item[`${fieldPrefix}.English`]) val = item[`${fieldPrefix}.English`];
+        else {
+            const keys = Object.keys(item);
+            const fallbackKey = keys.find(k => k.startsWith(fieldPrefix + '.'));
+            if (fallbackKey) val = item[fallbackKey];
+            else val = item[fieldPrefix] || '';
+        }
+        // Remove <size=46>, <b>, <i>, <color=red>, etc.
+        return val.replace(/<[^>]+>/g, '');
+    }
+
+    function getFlagIcons(item) {
+        const languages = new Set();
+        Object.keys(item).forEach(key => {
+            if (key.startsWith('name.')) {
+                const code = key.split('.')[1];
+                languages.add(code);
+            }
+        });
+
+        return Array.from(languages).map(l => {
+            const flag = LANG_FLAGS[l] || l;
+            return `<span title="${l}" style="margin-right:4px; cursor:help;">${flag}</span>`;
+        }).join('');
+    }
+
+    function getTransitionLabel(key, lang) {
+        if (TRANSLATIONS[key] && TRANSLATIONS[key][lang]) {
+            return TRANSLATIONS[key][lang];
+        }
+        return TRANSLATIONS[key]['English'] || key;
+    }
+
+    function formatText(text) {
+        if (!text) return '';
+        return text
+            .replace(/\[b\]/g, '')
+            .replace(/\[\/b\]/g, '')
+            .replace(/\[i\]/g, '')
+            .replace(/\[\/i\]/g, '');
+    }
+
+    function getPlaceholderSvg(text) {
+        return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect width='150' height='150' fill='%232f2c3d'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23555'%3E" + text + "%3C/text%3E%3C/svg%3E";
+    }
+
+    // --- Rendering ---
+
+    function renderScenarios(data, containerId, lang = 'English') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // Show spinner during render
+        container.innerHTML = '<div class="text-center w-100 py-5"><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
+
+        setTimeout(() => {
+            container.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                const msg = getTransitionLabel('NoContent', lang);
+                container.innerHTML = `<p class="text-center">${msg}</p>`;
+                return;
+            }
+
+            const noImageText = getTransitionLabel('NoImage', lang);
+            const placeholderSvg = getPlaceholderSvg(noImageText);
+
+            data.forEach(item => {
+                if (item.hidden === 'True') return;
+
+                const card = document.createElement('div');
+                card.className = 'scenario-card';
+
+                const name = getLocalizedValue(item, 'name', lang) || item.id;
+                let desc = getLocalizedValue(item, 'synopsys', lang) || getLocalizedValue(item, 'description', lang) || '';
+                // Changed from 'authors' to 'authors_short' as requested
+                let authors = getLocalizedValue(item, 'authors_short', lang) || getLocalizedValue(item, 'authors', lang) || 'Community';
+
+                // Format text
+                desc = formatText(desc);
+                authors = formatText(authors);
+
+                let authorsDisplay = authors;
+                if (authors.length > 50) {
+                    authorsDisplay = authors.substring(0, 50) + '...';
+                }
+                const authorsTitle = authors.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;');
+
+                // Image logic
+                let imgHtml = `<img src="${placeholderSvg}" alt="${name}" class="img-placeholder">`;
+                if (item.url && item.image) {
+                    imgHtml = `<img src="${item.url}${item.image}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${placeholderSvg}';">`;
+                }
+
+                const flagsHtml = getFlagIcons(item);
+                const min = item.lengthmin || '?';
+                const max = item.lengthmax || '?';
+                const stars = getHardwareStars(item.difficulty);
+                const diffLabel = getTransitionLabel('Difficulty', lang);
+
+                // Packs logic
+                let packsHtml = '';
+                if (item.packs) {
+                    const packsLabel = getTransitionLabel('Expansions', lang);
+                    packsHtml = `<div class="meta-item"><span title="${packsLabel}">${packsLabel}: ${item.packs}</span></div>`;
+                }
+
+                const durationLabel = getTransitionLabel('Duration', lang);
+                const authorLabel = getTransitionLabel('Author', lang);
+                const updatedLabel = getTransitionLabel('LastUpdated', lang);
+
+                card.innerHTML = `
+                    <div class="scenario-image">${imgHtml}</div>
+                    <div class="scenario-details">
+                        <h4 class="scenario-title">${name}</h4>
+                        <div class="scenario-meta">
+                            <div class="d-flex flex-wrap align-items-center w-100">
+                                <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
+                                <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${stars.filled}<span style="opacity:0.5">${stars.empty}</span></span></span></div>
+                                <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
+                                ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center mt-1 w-100">
+                                <div class="meta-item meta-langs">${flagsHtml}</div>
+                                ${packsHtml}
+                            </div>
+                        </div>
+                        <div class="scenario-description">${desc.split('\n')[0]}...</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }, 50);
+    }
+
+    function renderPacks(data, containerId, lang = 'English') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // Force container class to match scenarios for consistent styling
+        container.className = 'scenarios-container';
+        container.classList.remove('d-flex', 'flex-wrap'); // Remove badge-style classes if present
+
+        container.innerHTML = '';
+        if (!data || data.length === 0) {
+            const msg = getTransitionLabel('NoPacks', lang);
+            container.innerHTML = `<p class="text-center">${msg}</p>`;
+            return;
+        }
+
+        // Sort Packs Alphabetically by Name
+        data.sort((a, b) => {
+            const nameA = getLocalizedValue(a, 'name', lang) || a.id;
+            const nameB = getLocalizedValue(b, 'name', lang) || b.id;
+            return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+        });
+
+        const noImageText = getTransitionLabel('NoImage', lang);
+        const placeholderSvg = getPlaceholderSvg(noImageText);
+
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'scenario-card';
+
+            const name = getLocalizedValue(item, 'name', lang) || item.id;
+            let desc = getLocalizedValue(item, 'description', lang) || '';
+
+            // Format text
+            desc = formatText(desc);
+
+            // Image logic
+            let imgHtml = `<img src="${placeholderSvg}" alt="${name}" class="img-placeholder">`;
+            if (item.url && item.image) {
+                imgHtml = `<img src="${item.url}${item.image}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${placeholderSvg}';">`;
+            }
+
+            card.innerHTML = `
+                <div class="scenario-image">${imgHtml}</div>
+                <div class="scenario-details">
+                    <h4 class="scenario-title">${name}</h4>
+                    <div class="scenario-description">${desc}</div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // --- Main ---
+
+    // --- Main ---
+
+    function init() {
+        const loaded = { D2E: false, MOM: false };
+
+        // Determine language
+        const pageLang = document.documentElement.lang;
+        let userLang = 'English';
+        if (pageLang === 'es') userLang = 'Spanish';
+        else if (pageLang === 'de') userLang = 'German';
+        else if (pageLang === 'fr') userLang = 'French';
+        else if (pageLang === 'it') userLang = 'Italian';
+        else if (pageLang === 'pl') userLang = 'Polish';
+        else if (pageLang === 'pt') userLang = 'Portuguese';
+
+        // Filter Logic
+        // Filter Logic
+        const state = {
+            D2E: { data: [], filters: { duration: '', difficulty: '', language: '', expansion: [], author: '' }, sort: { field: 'last_updated', dir: 'desc' } },
+            MOM: { data: [], filters: { duration: '', difficulty: '', language: '', expansion: [], author: '' }, sort: { field: 'last_updated', dir: 'desc' } }
+        };
+
+        const applyFilters = (type, userLang) => {
+            const s = state[type];
+            let filtered = s.data.slice(); // Copy
+
+            // Duration
+            if (s.filters.duration) {
+                const [min, max] = s.filters.duration.split('-').map(Number);
+                filtered = filtered.filter(item => {
+                    const lMin = parseFloat(item.lengthmin) || 0;
+                    const lMax = parseFloat(item.lengthmax) || 0;
+                    if (s.filters.duration === '180+') return lMax >= 180;
+                    return lMax >= min && lMin <= max;
+                });
+            }
+
+            // Difficulty
+            if (s.filters.difficulty) {
+                const diff = parseFloat(s.filters.difficulty);
+                filtered = filtered.filter(item => {
+                    const itemDiff = parseFloat(item.difficulty) || 0;
+                    return (itemDiff / 0.2) >= diff;
+                });
+            }
+
+            // Language
+            if (s.filters.language) {
+                filtered = filtered.filter(item => {
+                    const hasLang = Object.keys(item).some(k => k === `name.${s.filters.language}`);
+                    if (s.filters.language === 'English' && !hasLang) return true;
+                    return hasLang;
+                });
+            }
+
+            // Author
+            if (s.filters.author) {
+                filtered = filtered.filter(item => {
+                    let auth = getLocalizedValue(item, 'authors_short', userLang) || getLocalizedValue(item, 'authors', userLang) || 'Community';
+                    auth = formatText(auth);
+                    return auth === s.filters.author;
+                });
+            }
+
+            // Expansion
+            if (s.filters.expansion && s.filters.expansion.length > 0) {
+                filtered = filtered.filter(item => {
+                    // Start with basic check
+                    if (!item.packs) return false;
+                    const itemPacks = item.packs.split(' ');
+                    // Check intersection: Keep if item has ANY of the selected packs
+                    return s.filters.expansion.some(code => itemPacks.includes(code));
+                });
+            }
+
+            // Sorting
+            filtered.sort((a, b) => {
+                let valA, valB;
+                const field = s.sort.field;
+
+                if (field === 'last_updated') {
+                    // Date comparison
+                    valA = a.latest_update || '';
+                    valB = b.latest_update || '';
+                } else if (field === 'author') {
+                    // Author comparison
+                    valA = getLocalizedValue(a, 'authors_short', userLang) || getLocalizedValue(a, 'authors', userLang) || '';
+                    valB = getLocalizedValue(b, 'authors_short', userLang) || getLocalizedValue(b, 'authors', userLang) || '';
+                } else {
+                    // Name comparison (default)
+                    valA = getLocalizedValue(a, 'name', userLang) || a.id;
+                    valB = getLocalizedValue(b, 'name', userLang) || b.id;
+                }
+
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    return s.sort.dir === 'asc'
+                        ? valA.localeCompare(valB, undefined, { sensitivity: 'base' })
+                        : valB.localeCompare(valA, undefined, { sensitivity: 'base' });
+                }
+
+                if (valA < valB) return s.sort.dir === 'asc' ? -1 : 1;
+                if (valA > valB) return s.sort.dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderScenarios(filtered, `scenarios-${type.toLowerCase()}-list`, userLang);
+        };
+
+        const renderFilters = (type, data, packs, userLang) => {
+            const containerId = `scenarios-${type.toLowerCase()}-list`;
+            const listContainer = document.getElementById(containerId);
+            if (!listContainer) return;
+
+            // Check if filters already exist
+            const parent = listContainer.parentElement;
+            if (parent.querySelector('.filter-bar')) return;
+
+            // Collect Languages, Authors & Expansions
+            const languages = new Set(['English']);
+            const expansionCodes = new Set();
+            const authors = new Set();
+
+            data.forEach(item => {
+                Object.keys(item).forEach(key => {
+                    if (key.startsWith('name.')) {
+                        languages.add(key.split('.')[1]);
+                    }
+                });
+                // Collect expansions from item.packs string (space separated)
+                if (item.packs) {
+                    item.packs.split(' ').forEach(ex => {
+                        if (ex.trim()) expansionCodes.add(ex.trim());
+                    });
+                }
+                // Collect Authors
+                let auth = getLocalizedValue(item, 'authors_short', userLang) || getLocalizedValue(item, 'authors', userLang) || 'Community';
+                // Sanitize [b], [i], etc.
+                if (auth) {
+                    auth = formatText(auth);
+                    authors.add(auth);
+                }
+            });
+
+            // Resolve Expansions
+            const expansionOptions = [];
+            expansionCodes.forEach(code => {
+                // Find pack name
+                const pack = packs.find(p => p.id === code);
+                let name = code;
+                if (pack) {
+                    // Try to get localized name
+                    name = getLocalizedValue(pack, 'name', userLang) || code;
+                }
+                expansionOptions.push({ code, name });
+            });
+            expansionOptions.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+            // Sort Authors
+            const authorOptions = Array.from(authors).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+            // Translations
+            const lblDuration = getTransitionLabel('Duration', userLang);
+            const lblDifficulty = getTransitionLabel('Difficulty', userLang);
+            const lblLanguage = getTransitionLabel('Language', userLang);
+            const lblExpansions = getTransitionLabel('Expansions', userLang);
+            const lblAny = getTransitionLabel('Any', userLang);
+            const lblSortBy = getTransitionLabel('SortBy', userLang);
+            const lblName = getTransitionLabel('Name', userLang);
+            const lblLastUpdated = getTransitionLabel('LastUpdated', userLang);
+            const lblAuthor = getTransitionLabel('Author', userLang);
+            const lblAsc = getTransitionLabel('Ascending', userLang);
+            const lblDesc = getTransitionLabel('Descending', userLang);
+
+            const filterBar = document.createElement('div');
+            // Added filter-bar-sticky class
+            filterBar.className = 'filter-bar filter-bar-sticky d-flex flex-wrap align-items-center mb-3 p-3 bg-dark rounded';
+            filterBar.style.gap = '1rem';
+
+            // Inline sticky styles removed in favor of CSS class for responsiveness
+
+            filterBar.innerHTML = `
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblDuration}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-duration">
+                        <option value="">${lblAny}</option>
+                        <option value="0-60">&lt; 60 min</option>
+                        <option value="60-120">60 - 120 min</option>
+                        <option value="120-180">120 - 180 min</option>
+                        <option value="180+">&gt; 180 min</option>
+                    </select>
+                </div>
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblDifficulty}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-difficulty">
+                        <option value="">${lblAny}</option>
+                        <option value="1">1+ &#9733;</option>
+                        <option value="2">2+ &#9733;</option>
+                        <option value="3">3+ &#9733;</option>
+                        <option value="4">4+ &#9733;</option>
+                        <option value="5">5 &#9733;</option>
+                    </select>
+                </div>
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblLanguage}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-language">
+                        <option value="">${lblAny}</option>
+                        ${Array.from(languages).sort().map(l => `<option value="${l}">${LANG_FLAGS[l] || ''} ${l}</option>`).join('')}
+                    </select>
+                </div>
+                <!-- Author Filter -->
+                <div class="d-flex flex-column" style="max-width: 150px;">
+                    <label class="mb-1 text-muted small">${lblAuthor}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-author">
+                        <option value="">${lblAny}</option>
+                        ${authorOptions.map(a => `<option value="${a}">${a}</option>`).join('')}
+                    </select>
+                </div>
+                 <!-- Expansions Multi-Select -->
+                <div class="d-flex flex-column position-relative" style="min-width: 200px;">
+                    <label class="mb-1 text-muted small">${lblExpansions}</label>
+                    <button class="form-control form-control-sm bg-secondary text-light border-0 text-left d-flex justify-content-between align-items-center exp-dropdown-btn">
+                        <span>${lblAny}</span>
+                        <span class="small">&#9662;</span>
+                    </button>
+                    <div class="exp-dropdown-menu bg-dark border border-secondary p-2 rounded shadow text-light" style="display:none; position:absolute; top: 100%; left:0; width:100%; z-index:1000; max-height: 300px; overflow-y: auto;">
+                        ${expansionOptions.map(e => `
+                            <div class="form-check">
+                                <input class="form-check-input exp-checkbox" type="checkbox" value="${e.code}" id="exp-${type}-${e.code}">
+                                <label class="form-check-label small" for="exp-${type}-${e.code}" style="cursor:pointer;">
+                                    ${e.name}
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <!-- Sort -->
+                <div class="d-flex flex-column ml-auto border-left pl-3" style="border-color: #444 !important;">
+                    <label class="mb-1 text-muted small">${lblSortBy}</label>
+                    <div class="d-flex" style="gap: 0.5rem">
+                         <select class="form-control form-control-sm bg-secondary text-light border-0 sort-field" style="width: auto;">
+                            <option value="name">${lblName}</option>
+                            <option value="last_updated">${lblLastUpdated}</option>
+                            <option value="author">${lblAuthor}</option>
+                        </select>
+                        <select class="form-control form-control-sm bg-secondary text-light border-0 sort-dir" style="width: auto;">
+                            <option value="asc">${lblAsc}</option>
+                            <option value="desc">${lblDesc}</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+
+            parent.insertBefore(filterBar, listContainer);
+
+            // Set initial sort values from state
+            filterBar.querySelector('.sort-field').value = state[type].sort.field;
+            filterBar.querySelector('.sort-dir').value = state[type].sort.dir;
+
+            // Listeners
+            filterBar.querySelector('.filter-duration').addEventListener('change', (e) => {
+                state[type].filters.duration = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-difficulty').addEventListener('change', (e) => {
+                state[type].filters.difficulty = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-language').addEventListener('change', (e) => {
+                state[type].filters.language = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-author').addEventListener('change', (e) => {
+                state[type].filters.author = e.target.value;
+                applyFilters(type, userLang);
+            });
+
+            // Expansion Logic
+            const btn = filterBar.querySelector('.exp-dropdown-btn');
+            const menu = filterBar.querySelector('.exp-dropdown-menu');
+            const checkboxes = filterBar.querySelectorAll('.exp-checkbox');
+            const btnSpan = btn.querySelector('span');
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!filterBar.contains(e.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+                    state[type].filters.expansion = selected;
+                    applyFilters(type, userLang);
+
+                    // Update Button Text
+                    if (selected.length === 0) {
+                        btnSpan.textContent = lblAny;
+                    } else if (selected.length === 1) {
+                        const code = selected[0];
+                        const name = expansionOptions.find(o => o.code === code).name;
+                        // Truncate if long
+                        btnSpan.textContent = name.length > 20 ? name.substring(0, 18) + '...' : name;
+                    } else {
+                        btnSpan.textContent = `${selected.length} Selected`;
+                    }
+                });
+            });
+
+
+            // Sort Listeners
+            filterBar.querySelector('.sort-field').addEventListener('change', (e) => {
+                state[type].sort.field = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.sort-dir').addEventListener('change', (e) => {
+                state[type].sort.dir = e.target.value;
+                applyFilters(type, userLang);
+            });
+        };
+
+        // Loaders
+        const loadD2E = () => {
+            if (loaded.D2E) return;
+            loaded.D2E = true;
+            Promise.all([
+                loadData(URLS.D2E),
+                loadData(URLS.D2E_PACKS)
+            ]).then(([scenarios, packs]) => {
+                state.D2E.data = scenarios;
+                renderFilters('D2E', scenarios, packs, userLang);
+                applyFilters('D2E', userLang); // Initial render via filter
+                renderPacks(packs, 'scenarios-d2e-packs', userLang);
+            }).catch(e => console.error(e));
+        };
+
+        const loadMOM = () => {
+            if (loaded.MOM) return;
+            loaded.MOM = true;
+            Promise.all([
+                loadData(URLS.MOM),
+                loadData(URLS.MOM_PACKS)
+            ]).then(([scenarios, packs]) => {
+                state.MOM.data = scenarios;
+                renderFilters('MOM', scenarios, packs, userLang);
+                applyFilters('MOM', userLang); // Initial render via filter
+                renderPacks(packs, 'scenarios-mom-packs', userLang);
+            }).catch(e => console.error(e));
+        };
+
+
+        // Activate Tab Helper
+        const activateTab = (type) => { // type: 'd2e' or 'mom'
+            const tabId = `tab-${type}`;
+            const targetPaneId = `scenarios-${type}-tab`;
+
+            // UI Update
+            document.querySelectorAll('#scenarioTabs .nav-link').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('show', 'active'));
+
+            const tab = document.getElementById(tabId);
+            const pane = document.getElementById(targetPaneId);
+
+            if (tab) tab.classList.add('active');
+            if (pane) pane.classList.add('show', 'active');
+
+            // Load Data
+            if (type === 'mom') {
+                loadMOM();
+            } else {
+                loadD2E();
+            }
+        };
+
+        // Event Listeners
+        document.querySelectorAll('#scenarioTabs .nav-link').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const type = tab.id.replace('tab-', '');
+                activateTab(type);
+                // Update Hash
+                window.location.hash = `type=${type}`;
+            });
+        });
+
+        // Initial Load based on Hash
+        const hash = window.location.hash;
+        if (hash.includes('type=mom')) {
+            activateTab('mom');
+        } else {
+            activateTab('d2e');
+        }
+    }
+
+    init();
+
+});
