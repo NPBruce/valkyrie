@@ -172,6 +172,69 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Cerca per nome',
             'Polish': 'Szukaj według nazwy',
             'Portuguese': 'Procurar por nome'
+        },
+        'AverageDuration': {
+            'English': 'Average Duration',
+            'German': 'Durchschnittliche Dauer',
+            'Spanish': 'Duración Media',
+            'French': 'Durée Moyenne',
+            'Italian': 'Durata Media',
+            'Polish': 'Średni Czas',
+            'Portuguese': 'Duração Média'
+        },
+        'UserReviews': {
+            'English': 'user reviews',
+            'German': 'Nutzerbewertungen',
+            'Spanish': 'reseñas de usuarios',
+            'French': 'avis utilisateurs',
+            'Italian': 'recensioni utenti',
+            'Polish': 'recenzji użytkowników',
+            'Portuguese': 'análises de usuários'
+        },
+        'WinRatio': {
+            'English': 'Win Ratio',
+            'German': 'Gewinnrate',
+            'Spanish': 'Ratio de Victoria',
+            'French': 'Taux de Victoire',
+            'Italian': 'Percentuale di Vittoria',
+            'Polish': 'Współczynnik Wygranych',
+            'Portuguese': 'Taxa de Vitória'
+        },
+        'Rating': {
+            'English': 'Rating',
+            'German': 'Bewertung',
+            'Spanish': 'Valoración',
+            'French': 'Évaluation',
+            'Italian': 'Valutazione',
+            'Polish': 'Ocena',
+            'Portuguese': 'Avaliação'
+        },
+        'PlayCount': {
+            'English': 'Play Count',
+            'German': 'Anzahl Spiele',
+            'Spanish': 'Partidas Jugadas',
+            'French': 'Nombre de Parties',
+            'Italian': 'Partite Giocate',
+            'Polish': 'Liczba Gier',
+            'Portuguese': 'Contagem de Jogos'
+        },
+        'CommunityRating': {
+            'English': 'Community Rating',
+            'German': 'Community-Bewertung',
+            'Spanish': 'Valoración de la Comunidad',
+            'French': 'Note de la Communauté',
+            'Italian': 'Valutazione della Comunità',
+            'Polish': 'Ocena Społeczności',
+            'Portuguese': 'Avaliação da Comunidade'
+        },
+        'Reset': {
+            'English': 'Reset',
+            'German': 'Zurücksetzen',
+            'Spanish': 'Restablecer',
+            'French': 'Réinitialiser',
+            'Italian': 'Reimposta',
+            'Polish': 'Resetuj',
+            'Portuguese': 'Redefinir'
         }
     };
 
@@ -229,6 +292,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function getHardwareStars(difficulty) {
         const val = parseFloat(difficulty) || 0;
         const stars = Math.round(val / 0.2);
+        const count = Math.max(0, Math.min(5, stars));
+        return {
+            filled: '★'.repeat(count),
+            empty: '☆'.repeat(5 - count)
+        };
+    }
+
+    function getRatingStars(rating) {
+        const val = parseFloat(rating) || 0;
+        // Rating is 0-10, we want 0-5 stars
+        const stars = Math.round(val / 2);
         const count = Math.max(0, Math.min(5, stars));
         return {
             filled: '★'.repeat(count),
@@ -336,8 +410,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const flagsHtml = getFlagIcons(item);
                 const min = item.lengthmin || '?';
                 const max = item.lengthmax || '?';
-                const stars = getHardwareStars(item.difficulty);
+
+                // Difficulty Stars
+                const diffStars = getHardwareStars(item.difficulty);
                 const diffLabel = getTransitionLabel('Difficulty', lang);
+
+                // Rating Stars
+                const ratingStars = getRatingStars(item.rating);
 
                 // Packs logic
                 let packsHtml = '';
@@ -346,22 +425,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     packsHtml = `<div class="meta-item"><span title="${packsLabel}">${packsLabel}: ${item.packs}</span></div>`;
                 }
 
+                // New items
                 const durationLabel = getTransitionLabel('Duration', lang);
+                const avgDurationLabel = getTransitionLabel('AverageDuration', lang);
+                const playCountLabel = getTransitionLabel('PlayCount', lang);
+                const winRatioLabel = getTransitionLabel('WinRatio', lang);
+                const communityRatingLabel = getTransitionLabel('CommunityRating', lang); // New Label
                 const authorLabel = getTransitionLabel('Author', lang);
                 const updatedLabel = getTransitionLabel('LastUpdated', lang);
+
+                const playCount = item.play_count || 0;
+                const avgDuration = item.duration ? Math.round(item.duration) : null;
+                const winRatio = item.win_ratio ? Math.round(item.win_ratio * 100) : null;
 
                 card.innerHTML = `
                     <div class="scenario-image">${imgHtml}</div>
                     <div class="scenario-details">
-                        <h4 class="scenario-title">${name}</h4>
+                        <h4 class="scenario-title">
+                            ${name} 
+                        </h4>
                         <div class="scenario-meta">
                             <div class="d-flex flex-wrap align-items-center w-100">
                                 <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
-                                <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${stars.filled}<span style="opacity:0.5">${stars.empty}</span></span></span></div>
+                                <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${diffStars.filled}<span style="opacity:0.5">${diffStars.empty}</span></span></span></div>
                                 <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
                                 ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
                             </div>
-                            <div class="d-flex flex-wrap align-items-center mt-1 w-100">
+                            <div class="d-flex flex-wrap align-items-center mt-2 w-100">
+                                ${item.rating ? `<div class="meta-item">${communityRatingLabel}:&nbsp;<span class="text-warning" title="Rating: ${parseFloat(item.rating).toFixed(1)}/10">${ratingStars.filled}<span style="opacity:0.5">${ratingStars.empty}</span></span></div>` : ''}
+                                ${avgDuration ? `<div class="meta-item">${avgDurationLabel}: ${avgDuration} min</div>` : ''}
+                                ${playCount > 0 ? `<div class="meta-item">${playCountLabel}: ${playCount}</div>` : ''}
+                                ${winRatio !== null ? `<div class="meta-item">${winRatioLabel}: ${winRatio}%</div>` : ''}
                                 <div class="meta-item meta-langs">${flagsHtml}</div>
                                 ${packsHtml}
                             </div>
@@ -383,20 +477,20 @@ document.addEventListener('DOMContentLoaded', function () {
         container.classList.remove('d-flex', 'flex-wrap'); // Remove badge-style classes if present
 
         container.innerHTML = '';
-        if (!data || data.length === 0) {
-            const msg = getTransitionLabel('NoPacks', lang);
-            container.innerHTML = `<p class="text-center">${msg}</p>`;
-            return;
-        }
-
         // Filter by Search Term
-        let filtered = data;
+        let filtered = data || [];
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            filtered = data.filter(item => {
+            filtered = filtered.filter(item => {
                 const name = (getLocalizedValue(item, 'name', lang) || item.id).toLowerCase();
                 return name.includes(term);
             });
+        }
+
+        if (filtered.length === 0) {
+            const msg = getTransitionLabel('NoPacks', lang);
+            container.innerHTML = `<p class="text-center">${msg}</p>`;
+            return;
         }
 
         // Sort Packs Alphabetically by Name
@@ -465,8 +559,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 language: params.get('language') || '',
                 expansion: params.get('expansions') ? params.get('expansions').split(',') : [],
                 author: params.get('author') || '',
+
+                // New filters
                 sortField: params.get('sort') || 'last_updated',
-                sortDir: params.get('sort_direction') || 'desc'
+                sortDir: params.get('sort_direction') || 'desc',
+                minRating: params.get('min_rating') || '',
+                minWinRatio: params.get('min_win_ratio') || '',
+                avgDuration: params.get('avg_duration') || '',
+                minPlayCount: params.get('min_play_count') || ''
             };
         };
 
@@ -483,7 +583,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     difficulty: initialParams.difficulty,
                     language: initialParams.language,
                     expansion: initialParams.expansion,
-                    author: initialParams.author
+                    author: initialParams.author,
+                    minRating: initialParams.minRating,
+                    minWinRatio: initialParams.minWinRatio,
+                    avgDuration: initialParams.avgDuration,
+                    minPlayCount: initialParams.minPlayCount
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -499,7 +603,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     difficulty: initialParams.difficulty,
                     language: initialParams.language,
                     expansion: initialParams.expansion,
-                    author: initialParams.author
+                    author: initialParams.author,
+                    minRating: initialParams.minRating,
+                    minWinRatio: initialParams.minWinRatio,
+                    avgDuration: initialParams.avgDuration,
+                    minPlayCount: initialParams.minPlayCount
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -519,6 +627,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (s.filters.language) params.set('language', s.filters.language);
             if (s.filters.author) params.set('author', s.filters.author);
             if (s.filters.expansion && s.filters.expansion.length > 0) params.set('expansions', s.filters.expansion.join(','));
+            if (s.filters.minRating) params.set('min_rating', s.filters.minRating);
+            if (s.filters.minWinRatio) params.set('min_win_ratio', s.filters.minWinRatio);
+            if (s.filters.avgDuration) params.set('avg_duration', s.filters.avgDuration);
+            if (s.filters.minPlayCount) params.set('min_play_count', s.filters.minPlayCount);
 
             if (s.sort.field !== 'last_updated') params.set('sort', s.sort.field);
             if (s.sort.dir !== 'desc') params.set('sort_direction', s.sort.dir);
@@ -595,6 +707,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
+            // Min Rating
+            if (s.filters.minRating) {
+                const minR = parseFloat(s.filters.minRating);
+                filtered = filtered.filter(item => {
+                    const r = parseFloat(item.rating) || 0;
+                    return r >= minR;
+                });
+            }
+
+            // Min Win Ratio
+            if (s.filters.minWinRatio) {
+                const minW = parseFloat(s.filters.minWinRatio);
+                filtered = filtered.filter(item => {
+                    const w = item.win_ratio ? item.win_ratio * 100 : 0;
+                    return w >= minW;
+                });
+            }
+
+            // Average Duration
+            if (s.filters.avgDuration) {
+                const minD = parseFloat(s.filters.avgDuration);
+                filtered = filtered.filter(item => {
+                    const d = parseFloat(item.duration) || 0;
+                    return d >= minD;
+                });
+            }
+
+            // Min Play Count
+            if (s.filters.minPlayCount) {
+                const minPC = parseInt(s.filters.minPlayCount);
+                filtered = filtered.filter(item => {
+                    const pc = parseInt(item.play_count) || 0;
+                    return pc >= minPC;
+                });
+            }
+
             // Sorting
             filtered.sort((a, b) => {
                 let valA, valB;
@@ -608,6 +756,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Author comparison
                     valA = getLocalizedValue(a, 'authors_short', userLang) || getLocalizedValue(a, 'authors', userLang) || '';
                     valB = getLocalizedValue(b, 'authors_short', userLang) || getLocalizedValue(b, 'authors', userLang) || '';
+                } else if (field === 'rating') {
+                    valA = parseFloat(a.rating) || 0;
+                    valB = parseFloat(b.rating) || 0;
+                } else if (field === 'play_count') {
+                    valA = parseInt(a.play_count) || 0;
+                    valB = parseInt(b.play_count) || 0;
+                } else if (field === 'duration') {
+                    valA = parseFloat(a.duration) || 0;
+                    valB = parseFloat(b.duration) || 0;
+                } else if (field === 'win_ratio') {
+                    valA = parseFloat(a.win_ratio) || 0;
+                    valB = parseFloat(b.win_ratio) || 0;
                 } else {
                     // Name comparison (default)
                     valA = getLocalizedValue(a, 'name', userLang) || a.id;
@@ -701,12 +861,41 @@ document.addEventListener('DOMContentLoaded', function () {
             const lblSearch = getTransitionLabel('Search', userLang);
             const lblSearchHint = getTransitionLabel('SearchHint', userLang);
 
+            const lblRating = getTransitionLabel('Rating', userLang);
+            const lblPlayCount = getTransitionLabel('PlayCount', userLang);
+            const lblWinRatio = getTransitionLabel('WinRatio', userLang);
+
+            const lblCommunityRating = getTransitionLabel('CommunityRating', userLang); // Re-use label for Title if needed, or just Rating
+            const lblAvgDuration = getTransitionLabel('AverageDuration', userLang);
+            const lblReset = getTransitionLabel('Reset', userLang);
+            const lblPlayCountLabel = getTransitionLabel('PlayCount', userLang);
+
+            // Calculate Avg Duration Options (30+, 60+ ... 600+)
+            let avgDurOptions = `<option value="">${lblAny}</option>`;
+            for (let i = 30; i <= 600; i += 30) {
+                avgDurOptions += `<option value="${i}">${i}+ min</option>`;
+            }
+
+            // Calculate Play Count Options (10-50, 100-2000)
+            let playCountOptions = `<option value="">${lblAny}</option>`;
+            for (let i = 10; i <= 50; i += 10) {
+                playCountOptions += `<option value="${i}">${i}+</option>`;
+            }
+            for (let i = 100; i <= 2000; i += 100) {
+                playCountOptions += `<option value="${i}">${i}+</option>`;
+            }
+
+
             const filterBar = document.createElement('div');
             // Added filter-bar-sticky class
-            filterBar.className = 'filter-bar filter-bar-sticky d-flex flex-wrap align-items-center mb-3 p-3 bg-dark rounded';
-            filterBar.style.gap = '1rem';
+            filterBar.className = 'filter-bar filter-bar-sticky mb-3 p-3 bg-dark rounded';
 
-            filterBar.innerHTML = `
+            // Row 1
+            const row1 = document.createElement('div');
+            row1.className = 'd-flex flex-wrap align-items-center';
+            row1.style.gap = '1rem';
+
+            row1.innerHTML = `
                 <style>
                     .filter-search::placeholder {
                         color: rgba(255, 255, 255, 0.5) !important;
@@ -717,7 +906,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="text" class="form-control form-control-sm bg-secondary text-light border-0 filter-search" placeholder="${lblSearchHint}...">
                 </div>
                 <div class="d-flex flex-column">
-                    <label class="mb-1 text-muted small">${lblDuration}</label>
+                    <label class="mb-1 text-muted small">${lblDuration} (Manifest)</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-duration">
                         <option value="">${lblAny}</option>
                         <option value="0-60">&lt; 60 min</option>
@@ -754,7 +943,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </select>
                 </div>
                  <!-- Expansions Multi-Select -->
-                <div class="d-flex flex-column position-relative" style="min-width: 200px;">
+                <div class="d-flex flex-column position-relative" style="min-width: 180px;">
                     <label class="mb-1 text-muted small">${lblExpansions}</label>
                     <button class="form-control form-control-sm bg-secondary text-light border-0 text-left d-flex justify-content-between align-items-center exp-dropdown-btn">
                         <span>${lblAny}</span>
@@ -771,14 +960,66 @@ document.addEventListener('DOMContentLoaded', function () {
                         `).join('')}
                     </div>
                 </div>
-                <!-- Sort -->
+                
+                </div>
+            `;
+
+            // Row 2
+            const row2 = document.createElement('div');
+            row2.className = 'd-flex flex-wrap align-items-center mt-3 pt-3 border-top';
+            row2.style.borderColor = '#444';
+            row2.style.gap = '1rem';
+
+            row2.innerHTML = `
+                <!-- Min Rating -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblRating} (Min)</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-rating">
+                        <option value="">${lblAny}</option>
+                        <option value="9">9+ &#9733;</option>
+                        <option value="8">8+ &#9733;</option>
+                        <option value="7">7+ &#9733;</option>
+                        <option value="6">6+ &#9733;</option>
+                        <option value="5">5+ &#9733;</option>
+                    </select>
+                </div>
+                <!-- Min Win Ratio -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblWinRatio} (Min)</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-win-ratio">
+                        <option value="">${lblAny}</option>
+                        <option value="90">90%+</option>
+                        <option value="75">75%+</option>
+                        <option value="50">50%+</option>
+                        <option value="25">25%+</option>
+                    </select>
+                </div>
+                <!-- Average Duration -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblAvgDuration}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-avg-duration">
+                        ${avgDurOptions}
+                    </select>
+                </div>
+                <!-- Play Count (Min) -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblPlayCountLabel}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-play-count">
+                        ${playCountOptions}
+                    </select>
+                </div>
+                <!-- Sort (Moved to Row 2) -->
                 <div class="d-flex flex-column ml-auto border-left pl-3" style="border-color: #444 !important;">
                     <label class="mb-1 text-muted small">${lblSortBy}</label>
                     <div class="d-flex" style="gap: 0.5rem">
                          <select class="form-control form-control-sm bg-secondary text-light border-0 sort-field" style="width: auto;">
-                            <option value="name">${lblName}</option>
                             <option value="last_updated">${lblLastUpdated}</option>
+                            <option value="name">${lblName}</option>
                             <option value="author">${lblAuthor}</option>
+                            <option value="rating">${lblRating}</option>
+                            <option value="play_count">${lblPlayCount}</option>
+                            <option value="duration">${lblDuration}</option>
+                            <option value="win_ratio">${lblWinRatio}</option>
                         </select>
                         <select class="form-control form-control-sm bg-secondary text-light border-0 sort-dir" style="width: auto;">
                             <option value="asc">${lblAsc}</option>
@@ -786,8 +1027,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         </select>
                     </div>
                 </div>
+                <!-- Reset Button -->
+                <div class="d-flex flex-column ml-3" style="margin-top: auto; margin-bottom: 2px;">
+                     <button class="btn btn-sm btn-outline-danger border-0 btn-reset" title="${lblReset}">
+                        <i class="fas fa-undo mr-1"></i> ${lblReset}
+                     </button>
+                </div>
             `;
 
+            filterBar.appendChild(row1);
+            filterBar.appendChild(row2);
             parent.insertBefore(filterBar, listContainer);
 
             // Set initial sort values from state
@@ -800,6 +1049,10 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.filter-difficulty').value = state[type].filters.difficulty;
             filterBar.querySelector('.filter-language').value = state[type].filters.language;
             filterBar.querySelector('.filter-author').value = state[type].filters.author;
+            filterBar.querySelector('.filter-min-rating').value = state[type].filters.minRating;
+            filterBar.querySelector('.filter-min-win-ratio').value = state[type].filters.minWinRatio;
+            filterBar.querySelector('.filter-avg-duration').value = state[type].filters.avgDuration;
+            filterBar.querySelector('.filter-min-play-count').value = state[type].filters.minPlayCount;
 
             // Listeners
             filterBar.querySelector('.filter-search').addEventListener('input', (e) => {
@@ -820,6 +1073,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             filterBar.querySelector('.filter-author').addEventListener('change', (e) => {
                 state[type].filters.author = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-min-rating').addEventListener('change', (e) => {
+                state[type].filters.minRating = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-min-win-ratio').addEventListener('change', (e) => {
+                state[type].filters.minWinRatio = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-avg-duration').addEventListener('change', (e) => {
+                state[type].filters.avgDuration = e.target.value;
+                applyFilters(type, userLang);
+            });
+            filterBar.querySelector('.filter-min-play-count').addEventListener('change', (e) => {
+                state[type].filters.minPlayCount = e.target.value;
                 applyFilters(type, userLang);
             });
 
@@ -883,6 +1152,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             filterBar.querySelector('.sort-dir').addEventListener('change', (e) => {
                 state[type].sort.dir = e.target.value;
+                applyFilters(type, userLang);
+            });
+
+            // Reset Button Listener
+            filterBar.querySelector('.btn-reset').addEventListener('click', () => {
+                resetFilters(type);
                 applyFilters(type, userLang);
             });
         };
@@ -950,7 +1225,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 difficulty: '',
                 language: '',
                 expansion: [],
-                author: ''
+                author: '',
+                minRating: '',
+                minWinRatio: '',
+                avgDuration: '',
+                minPlayCount: ''
+            };
+            // Reset Sort
+            state[type].sort = {
+                field: 'last_updated',
+                dir: 'desc'
             };
 
             // Update UI Inputs if they exist
@@ -964,12 +1248,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     filterBar.querySelector('.filter-difficulty').value = '';
                     filterBar.querySelector('.filter-language').value = '';
                     filterBar.querySelector('.filter-author').value = '';
+                    filterBar.querySelector('.filter-min-rating').value = '';
+                    filterBar.querySelector('.filter-min-win-ratio').value = '';
+                    filterBar.querySelector('.filter-avg-duration').value = '';
+                    filterBar.querySelector('.filter-min-play-count').value = '';
 
                     // Reset checkboxes
                     filterBar.querySelectorAll('.exp-checkbox').forEach(cb => cb.checked = false);
                     const btnSpan = filterBar.querySelector('.exp-dropdown-btn span');
                     const lblAny = getTransitionLabel('Any', userLang);
                     if (btnSpan) btnSpan.textContent = lblAny;
+
+                    // Reset Sort UI
+                    filterBar.querySelector('.sort-field').value = 'last_updated';
+                    filterBar.querySelector('.sort-dir').value = 'desc';
                 }
             }
         };
