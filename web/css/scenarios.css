@@ -191,6 +191,31 @@
         top: 55px;
         /* Offset for fixed navbar */
         z-index: 1020;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Mobile Adjustments (e.g. iPhone SE) */
+@media (max-width: 576px) {
+    .scenario-image {
+        /* Ensure container doesn't shrink below image size */
+        min-width: 60px;
+    }
+
+    .scenario-image img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .scenario-card {
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .scenario-title {
+        font-size: 1.1rem;
+    }
+
+    .scenario-meta {
+        font-size: 0.8rem;
     }
 }
