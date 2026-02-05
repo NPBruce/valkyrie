@@ -878,14 +878,50 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
+        const resetFilters = (type) => {
+            // Reset State
+            state[type].filters = {
+                duration: '',
+                difficulty: '',
+                language: '',
+                expansion: [],
+                author: ''
+            };
+            // Keep Sort or Reset? "Reset all filters" usually implies search criteria. 
+            // I will keep sort for now as it's less intrusive, but reset all dropdowns.
+
+            // Update UI Inputs if they exist
+            const containerId = `scenarios-${type.toLowerCase()}-list`;
+            const listContainer = document.getElementById(containerId);
+            if (listContainer && listContainer.parentElement) {
+                const filterBar = listContainer.parentElement.querySelector('.filter-bar');
+                if (filterBar) {
+                    filterBar.querySelector('.filter-duration').value = '';
+                    filterBar.querySelector('.filter-difficulty').value = '';
+                    filterBar.querySelector('.filter-language').value = '';
+                    filterBar.querySelector('.filter-author').value = '';
+
+                    // Reset checkboxes
+                    filterBar.querySelectorAll('.exp-checkbox').forEach(cb => cb.checked = false);
+                    const btnSpan = filterBar.querySelector('.exp-dropdown-btn span');
+                    const lblAny = getTransitionLabel('Any', userLang);
+                    if (btnSpan) btnSpan.textContent = lblAny;
+                }
+            }
+        };
+
         // Event Listeners
         document.querySelectorAll('#scenarioTabs .nav-link').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 e.preventDefault();
                 const type = tab.id.replace('tab-', '');
+                const typeUpper = type.toUpperCase();
+
+                resetFilters(typeUpper);
                 activateTab(type);
-                // Update Hash
-                window.location.hash = `type=${type}`;
+
+                // Update List and Hash
+                applyFilters(typeUpper, userLang);
             });
         });
 
