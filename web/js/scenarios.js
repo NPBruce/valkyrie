@@ -235,6 +235,33 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Reimposta',
             'Polish': 'Resetuj',
             'Portuguese': 'Redefinir'
+        },
+        'LabelScenarios': {
+            'English': 'Scenarios',
+            'German': 'Szenarien',
+            'Spanish': 'Escenarios',
+            'French': 'Scénarios',
+            'Italian': 'Scenari',
+            'Polish': 'Scenariusze',
+            'Portuguese': 'Cenários'
+        },
+        'LabelPacks': {
+            'English': 'Content Packs',
+            'German': 'Inhaltspakete',
+            'Spanish': 'Paquetes de Contenido',
+            'French': 'Packs de Contenu',
+            'Italian': 'Pacchetti di Contenuto',
+            'Polish': 'Pakiety Zawartości',
+            'Portuguese': 'Pacotes de Conteúdo'
+        },
+        'LabelFilteredOut': {
+            'English': 'Filtered out',
+            'German': 'Gefiltert',
+            'Spanish': 'Filtrado',
+            'French': 'Filtré',
+            'Italian': 'Filtrato',
+            'Polish': 'Odfiltrowane',
+            'Portuguese': 'Filtrado'
         }
     };
 
@@ -360,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Rendering ---
 
-    function renderScenarios(data, containerId, lang = 'English') {
+    function renderScenarios(data, totalCount, containerId, lang = 'English') {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -370,9 +397,27 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             container.innerHTML = '';
 
+            // Header: "X SCENARIOS (+Y SCENARIOS FILTERED OUT)"
+            const count = data ? data.length : 0;
+            const filteredOut = totalCount - count;
+
+            const lblScenarios = getTransitionLabel('LabelScenarios', lang).toUpperCase();
+            const lblFiltered = getTransitionLabel('LabelFilteredOut', lang).toUpperCase();
+
+            let headerText = `${count} ${lblScenarios}`;
+            if (filteredOut > 0) {
+                headerText += ` <span style="opacity:0.7">(+${filteredOut} ${lblScenarios} ${lblFiltered})</span>`;
+            }
+
+            // Create Header Element
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'w-100 mb-3';
+            headerDiv.innerHTML = `<h5 class="scenario-list-header text-light">${headerText}</h5>`;
+            container.appendChild(headerDiv);
+
             if (!data || data.length === 0) {
                 const msg = getTransitionLabel('NoContent', lang);
-                container.innerHTML = `<p class="text-center">${msg}</p>`;
+                container.innerHTML += `<p class="text-center">${msg}</p>`;
                 return;
             }
 
@@ -478,6 +523,7 @@ document.addEventListener('DOMContentLoaded', function () {
         container.innerHTML = '';
         // Filter by Search Term
         let filtered = data || [];
+
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
             filtered = filtered.filter(item => {
@@ -486,9 +532,26 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        // Header
+        const count = filtered.length;
+        const filteredOut = (data ? data.length : 0) - count;
+
+        const lblPacks = getTransitionLabel('LabelPacks', lang).toUpperCase();
+        const lblFiltered = getTransitionLabel('LabelFilteredOut', lang).toUpperCase();
+
+        let headerText = `${count} ${lblPacks}`;
+        if (filteredOut > 0) {
+            headerText += ` <span style="opacity:0.7">(+${filteredOut} ${lblPacks} ${lblFiltered})</span>`;
+        }
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'w-100 mb-3';
+        headerDiv.innerHTML = `<h5 class="scenario-list-header text-light">${headerText}</h5>`;
+        container.appendChild(headerDiv);
+
         if (filtered.length === 0) {
             const msg = getTransitionLabel('NoPacks', lang);
-            container.innerHTML = `<p class="text-center">${msg}</p>`;
+            container.innerHTML += `<p class="text-center">${msg}</p>`;
             return;
         }
 
@@ -792,7 +855,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return 0;
             });
 
-            renderScenarios(filtered, `scenarios-${type.toLowerCase()}-list`, userLang);
+            renderScenarios(filtered, (s.data ? s.data.length : 0), `scenarios-${type.toLowerCase()}-list`, userLang);
 
             // Filter Content Packs List
             if (s.packs) {
