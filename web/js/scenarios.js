@@ -277,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function loadData(url) {
-        console.log(`Fetching ${url}...`);
         return fetch(url)
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -681,9 +680,17 @@ document.addEventListener('DOMContentLoaded', function () {
             // Language
             if (s.filters.language) {
                 filtered = filtered.filter(item => {
-                    const hasLang = Object.keys(item).some(k => k === `name.${s.filters.language}`);
-                    if (s.filters.language === 'English' && !hasLang) return true;
-                    return hasLang;
+                    const hasExplicitLang = Object.keys(item).includes(`name.${s.filters.language}`);
+                    if (hasExplicitLang) return true;
+
+                    // Check default language
+                    if (item.defaultlanguage && item.defaultlanguage === s.filters.language) return true;
+
+                    // Fallback: If filtering for English and no default language is specified, include it
+                    // This excludes cases where defaultlanguage is set to something else (e.g. Spanish)
+                    if (s.filters.language === 'English' && !item.defaultlanguage) return true;
+
+                    return false;
                 });
             }
 
