@@ -154,6 +154,24 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Discendente',
             'Polish': 'Malejąco',
             'Portuguese': 'Descendente'
+        },
+        'Search': {
+            'English': 'Search',
+            'German': 'Suche',
+            'Spanish': 'Buscar',
+            'French': 'Recherche',
+            'Italian': 'Cerca',
+            'Polish': 'Szukaj',
+            'Portuguese': 'Procurar'
+        },
+        'SearchHint': {
+            'English': 'Search by Name',
+            'German': 'Suche nach Name',
+            'Spanish': 'Buscar por nombre',
+            'French': 'Recherche par nom',
+            'Italian': 'Cerca per nome',
+            'Polish': 'Szukaj według nazwy',
+            'Portuguese': 'Procurar por nome'
         }
     };
 
@@ -196,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function loadData(url) {
-        // No caching found here anymore!
         console.log(`Fetching ${url}...`);
         return fetch(url)
             .then(response => {
@@ -357,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 50);
     }
 
-    function renderPacks(data, containerId, lang = 'English') {
+    function renderPacks(data, containerId, lang, searchTerm = '') {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -372,8 +389,18 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Filter by Search Term
+        let filtered = data;
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = data.filter(item => {
+                const name = (getLocalizedValue(item, 'name', lang) || item.id).toLowerCase();
+                return name.includes(term);
+            });
+        }
+
         // Sort Packs Alphabetically by Name
-        data.sort((a, b) => {
+        filtered.sort((a, b) => {
             const nameA = getLocalizedValue(a, 'name', lang) || a.id;
             const nameB = getLocalizedValue(b, 'name', lang) || b.id;
             return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
@@ -382,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const noImageText = getTransitionLabel('NoImage', lang);
         const placeholderSvg = getPlaceholderSvg(noImageText);
 
-        data.forEach(item => {
+        filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'scenario-card';
 
@@ -432,6 +459,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(hash);
             return {
                 type: params.get('type') || (hash.includes('type=mom') ? 'mom' : 'd2e'), // Fallback for old style
+                search: params.get('search') || '',
                 duration: params.get('duration') || '',
                 difficulty: params.get('difficulty') || '',
                 language: params.get('language') || '',
@@ -448,7 +476,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const state = {
             D2E: {
                 data: [],
+                packs: [],
                 filters: {
+                    search: initialParams.search,
                     duration: initialParams.duration,
                     difficulty: initialParams.difficulty,
                     language: initialParams.language,
@@ -462,7 +492,9 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             MOM: {
                 data: [],
+                packs: [],
                 filters: {
+                    search: initialParams.search,
                     duration: initialParams.duration,
                     difficulty: initialParams.difficulty,
                     language: initialParams.language,
@@ -481,6 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams();
             params.set('type', type.toLowerCase());
 
+            if (s.filters.search) params.set('search', s.filters.search);
             if (s.filters.duration) params.set('duration', s.filters.duration);
             if (s.filters.difficulty) params.set('difficulty', s.filters.difficulty);
             if (s.filters.language) params.set('language', s.filters.language);
@@ -501,6 +534,15 @@ document.addEventListener('DOMContentLoaded', function () {
             updateHash(type);
             const s = state[type];
             let filtered = s.data.slice(); // Copy
+
+            // Search (Name)
+            if (s.filters.search) {
+                const term = s.filters.search.toLowerCase();
+                filtered = filtered.filter(item => {
+                    const name = (getLocalizedValue(item, 'name', userLang) || item.id).toLowerCase();
+                    return name.includes(term);
+                });
+            }
 
             // Duration
             if (s.filters.duration) {
@@ -584,6 +626,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             renderScenarios(filtered, `scenarios-${type.toLowerCase()}-list`, userLang);
+
+            // Filter Content Packs List
+            if (s.packs) {
+                renderPacks(s.packs, `scenarios-${type.toLowerCase()}-packs`, userLang, s.filters.search);
+            }
         };
 
         const renderFilters = (type, data, packs, userLang) => {
@@ -651,14 +698,24 @@ document.addEventListener('DOMContentLoaded', function () {
             const lblAsc = getTransitionLabel('Ascending', userLang);
             const lblDesc = getTransitionLabel('Descending', userLang);
 
+            const lblSearch = getTransitionLabel('Search', userLang);
+            const lblSearchHint = getTransitionLabel('SearchHint', userLang);
+
             const filterBar = document.createElement('div');
             // Added filter-bar-sticky class
             filterBar.className = 'filter-bar filter-bar-sticky d-flex flex-wrap align-items-center mb-3 p-3 bg-dark rounded';
             filterBar.style.gap = '1rem';
 
-            // Inline sticky styles removed in favor of CSS class for responsiveness
-
             filterBar.innerHTML = `
+                <style>
+                    .filter-search::placeholder {
+                        color: rgba(255, 255, 255, 0.5) !important;
+                    }
+                </style>
+                <div class="d-flex flex-column" style="min-width: 150px;">
+                    <label class="mb-1 text-muted small">${lblSearch}</label>
+                    <input type="text" class="form-control form-control-sm bg-secondary text-light border-0 filter-search" placeholder="${lblSearchHint}...">
+                </div>
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblDuration}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-duration">
@@ -738,12 +795,17 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.sort-dir').value = state[type].sort.dir;
 
             // Set initial filter values from state
+            filterBar.querySelector('.filter-search').value = state[type].filters.search;
             filterBar.querySelector('.filter-duration').value = state[type].filters.duration;
             filterBar.querySelector('.filter-difficulty').value = state[type].filters.difficulty;
             filterBar.querySelector('.filter-language').value = state[type].filters.language;
             filterBar.querySelector('.filter-author').value = state[type].filters.author;
 
             // Listeners
+            filterBar.querySelector('.filter-search').addEventListener('input', (e) => {
+                state[type].filters.search = e.target.value;
+                applyFilters(type, userLang);
+            });
             filterBar.querySelector('.filter-duration').addEventListener('change', (e) => {
                 state[type].filters.duration = e.target.value;
                 applyFilters(type, userLang);
@@ -834,6 +896,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadData(URLS.D2E_PACKS)
             ]).then(([scenarios, packs]) => {
                 state.D2E.data = scenarios;
+                state.D2E.packs = packs;
                 renderFilters('D2E', scenarios, packs, userLang);
                 applyFilters('D2E', userLang); // Initial render via filter
                 renderPacks(packs, 'scenarios-d2e-packs', userLang);
@@ -848,6 +911,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 loadData(URLS.MOM_PACKS)
             ]).then(([scenarios, packs]) => {
                 state.MOM.data = scenarios;
+                state.MOM.packs = packs;
                 renderFilters('MOM', scenarios, packs, userLang);
                 applyFilters('MOM', userLang); // Initial render via filter
                 renderPacks(packs, 'scenarios-mom-packs', userLang);
@@ -881,14 +945,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const resetFilters = (type) => {
             // Reset State
             state[type].filters = {
+                search: '',
                 duration: '',
                 difficulty: '',
                 language: '',
                 expansion: [],
                 author: ''
             };
-            // Keep Sort or Reset? "Reset all filters" usually implies search criteria. 
-            // I will keep sort for now as it's less intrusive, but reset all dropdowns.
 
             // Update UI Inputs if they exist
             const containerId = `scenarios-${type.toLowerCase()}-list`;
@@ -896,6 +959,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (listContainer && listContainer.parentElement) {
                 const filterBar = listContainer.parentElement.querySelector('.filter-bar');
                 if (filterBar) {
+                    filterBar.querySelector('.filter-search').value = '';
                     filterBar.querySelector('.filter-duration').value = '';
                     filterBar.querySelector('.filter-difficulty').value = '';
                     filterBar.querySelector('.filter-language').value = '';
