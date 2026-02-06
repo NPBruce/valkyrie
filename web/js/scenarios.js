@@ -280,6 +280,33 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Numero di utenti che hanno completato con successo lo scenario',
             'Polish': 'Liczba użytkowników, którzy pomyślnie ukończyli scenariusz',
             'Portuguese': 'Número de usuários que terminaram o cenário com sucesso'
+        },
+        'LabelPlayerCount': {
+            'English': 'Player Count',
+            'German': 'Anzahl Spieler',
+            'Spanish': 'Cantidad de Jugadores',
+            'French': 'Nombre de Joueurs',
+            'Italian': 'Numero di Giocatori',
+            'Polish': 'Liczba Graczy',
+            'Portuguese': 'Número de Jogadores'
+        },
+        'LabelMinPlayerCount': {
+            'English': 'Minimum Player count',
+            'German': 'Min. Spieleranzahl',
+            'Spanish': 'Mín. Jugadores',
+            'French': 'Min Joueurs',
+            'Italian': 'Min Giocatori',
+            'Polish': 'Min. Liczba Graczy',
+            'Portuguese': 'Min. Jogadores'
+        },
+        'LabelMaxPlayerCount': {
+            'English': 'Maximum Player count',
+            'German': 'Max. Spieleranzahl',
+            'Spanish': 'Max. Jugadores',
+            'French': 'Max Joueurs',
+            'Italian': 'Max Giocatori',
+            'Polish': 'Max. Liczba Graczy',
+            'Portuguese': 'Max. Jogadores'
         }
     };
 
@@ -524,6 +551,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const communityRatingLabel = getTransitionLabel('CommunityRating', lang); // New Label
                 const authorLabel = getTransitionLabel('Author', lang);
                 const updatedLabel = getTransitionLabel('LastUpdated', lang);
+                const labelPlayerCount = getTransitionLabel('LabelPlayerCount', lang);
 
                 const playCount = item.play_count || 0;
                 const avgDuration = item.duration ? Math.round(item.duration) : 0;
@@ -540,6 +568,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="d-flex flex-wrap align-items-center w-100">
                                 <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
                                 <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${diffStars.filled}<span style="opacity:0.5">${diffStars.empty}</span></span></span></div>
+                                ${(item.minhero && item.maxhero) ? `<div class="meta-item"><span title="${labelPlayerCount}">${labelPlayerCount}: ${item.minhero}-${item.maxhero}</span></div>` : ''}
                                 <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
                                 ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
                             </div>
@@ -676,7 +705,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 minRating: params.get('min_rating') || '',
                 minWinRatio: params.get('min_win_ratio') || '',
                 avgDuration: params.get('avg_duration') || '',
-                minPlayCount: params.get('min_play_count') || ''
+                minPlayCount: params.get('min_play_count') || '',
+                minPlayers: params.get('min_players') || '',
+                maxPlayers: params.get('max_players') || ''
             };
         };
 
@@ -697,7 +728,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     minRating: initialParams.minRating,
                     minWinRatio: initialParams.minWinRatio,
                     avgDuration: initialParams.avgDuration,
-                    minPlayCount: initialParams.minPlayCount
+                    minPlayCount: initialParams.minPlayCount,
+                    minPlayers: initialParams.minPlayers,
+                    maxPlayers: initialParams.maxPlayers
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -717,7 +750,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     minRating: initialParams.minRating,
                     minWinRatio: initialParams.minWinRatio,
                     avgDuration: initialParams.avgDuration,
-                    minPlayCount: initialParams.minPlayCount
+                    minPlayCount: initialParams.minPlayCount,
+                    minPlayers: initialParams.minPlayers,
+                    maxPlayers: initialParams.maxPlayers
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -867,6 +902,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
+            // Min Players
+            if (s.filters.minPlayers) {
+                const minP = parseInt(s.filters.minPlayers);
+                filtered = filtered.filter(item => {
+                    // Strict Subset: Scenario Min must be >= Filter Min
+                    // Default to 0 if missing, so 0 >= X fails (unless X is 0)
+                    const mp = item.minhero ? parseInt(item.minhero) : 0;
+                    return mp >= minP;
+                });
+            }
+
+            // Max Players
+            if (s.filters.maxPlayers) {
+                const maxP = parseInt(s.filters.maxPlayers);
+                filtered = filtered.filter(item => {
+                    // Strict Subset: Scenario Max must be <= Filter Max
+                    // Default to 99 if missing, so 99 <= X fails
+                    const mp = item.maxhero ? parseInt(item.maxhero) : 99;
+                    return mp <= maxP;
+                });
+            }
+
             // Sorting
             filtered.sort((a, b) => {
                 let valA, valB;
@@ -908,6 +965,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (valA > valB) return s.sort.dir === 'asc' ? 1 : -1;
                 return 0;
             });
+
+            // Update Hash
+            const params = new URLSearchParams();
+            if (s.filters.search) params.set('search', s.filters.search);
+            if (s.filters.duration) params.set('duration', s.filters.duration);
+            if (s.filters.difficulty) params.set('difficulty', s.filters.difficulty);
+            if (s.filters.language) params.set('language', s.filters.language);
+            if (s.filters.expansion && s.filters.expansion.length > 0) params.set('expansion', s.filters.expansion.join(' '));
+            if (s.filters.author) params.set('author', s.filters.author);
+            if (s.filters.minRating) params.set('min_rating', s.filters.minRating);
+            if (s.filters.minWinRatio) params.set('min_win_ratio', s.filters.minWinRatio);
+            if (s.filters.avgDuration) params.set('avg_duration', s.filters.avgDuration);
+            if (s.filters.minPlayCount) params.set('min_play_count', s.filters.minPlayCount);
+            if (s.filters.minPlayers) params.set('min_players', s.filters.minPlayers);
+            if (s.filters.maxPlayers) params.set('max_players', s.filters.maxPlayers);
+
+            if (s.sort.field !== 'last_updated') params.set('sort', s.sort.field);
+            if (s.sort.dir !== 'desc') params.set('sort_direction', s.sort.dir);
+
+            if (type.toLowerCase() === 'mom') params.set('type', 'mom');
+
+            window.location.hash = params.toString();
 
             renderScenarios(filtered, (s.data ? s.data.length : 0), `scenarios-${type.toLowerCase()}-list`, userLang);
 
@@ -994,6 +1073,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const lblReset = getTransitionLabel('Reset', userLang);
             const lblPlayCountLabel = getTransitionLabel('PlayCount', userLang);
             const lblPlayCountTooltip = getTransitionLabel('PlayCountTooltip', userLang);
+            const lblMinPlayerCount = getTransitionLabel('LabelMinPlayerCount', userLang);
+            const lblMaxPlayerCount = getTransitionLabel('LabelMaxPlayerCount', userLang);
 
             // Calculate Avg Duration Options (30+, 60+ ... 600+)
             let avgDurOptions = `<option value="">${lblAny}</option>`;
@@ -1110,6 +1191,32 @@ document.addEventListener('DOMContentLoaded', function () {
             row2.style.gap = '1rem';
 
             row2.innerHTML = `
+                <!-- Min Player Count -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblMinPlayerCount}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-players">
+                        <option value="">${lblAny}</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+                <!-- Max Player Count -->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblMaxPlayerCount}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-max-players">
+                        <option value="">${lblAny}</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
                 <!-- Min Rating -->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblRating} (Min)</label>
@@ -1195,6 +1302,8 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.filter-min-win-ratio').value = state[type].filters.minWinRatio;
             filterBar.querySelector('.filter-avg-duration').value = state[type].filters.avgDuration;
             filterBar.querySelector('.filter-min-play-count').value = state[type].filters.minPlayCount;
+            filterBar.querySelector('.filter-min-players').value = state[type].filters.minPlayers;
+            filterBar.querySelector('.filter-max-players').value = state[type].filters.maxPlayers;
 
             // Listeners
             filterBar.querySelector('.filter-search').addEventListener('input', (e) => {
@@ -1231,6 +1340,16 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             filterBar.querySelector('.filter-min-play-count').addEventListener('change', (e) => {
                 state[type].filters.minPlayCount = e.target.value;
+                applyFilters(type, userLang);
+            });
+
+            filterBar.querySelector('.filter-min-players').addEventListener('change', (e) => {
+                state[type].filters.minPlayers = e.target.value;
+                applyFilters(type, userLang);
+            });
+
+            filterBar.querySelector('.filter-max-players').addEventListener('change', (e) => {
+                state[type].filters.maxPlayers = e.target.value;
                 applyFilters(type, userLang);
             });
 
@@ -1392,7 +1511,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 minRating: '',
                 minWinRatio: '',
                 avgDuration: '',
-                minPlayCount: ''
+                minPlayCount: '',
+                minPlayers: '',
+                maxPlayers: ''
             };
             // Reset Sort
             state[type].sort = {
@@ -1414,7 +1535,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     filterBar.querySelector('.filter-min-rating').value = '';
                     filterBar.querySelector('.filter-min-win-ratio').value = '';
                     filterBar.querySelector('.filter-avg-duration').value = '';
+                    filterBar.querySelector('.filter-avg-duration').value = '';
+                    filterBar.querySelector('.filter-avg-duration').value = '';
                     filterBar.querySelector('.filter-min-play-count').value = '';
+                    filterBar.querySelector('.filter-min-players').value = '';
+                    filterBar.querySelector('.filter-max-players').value = '';
+                    filterBar.querySelector('.filter-min-players').value = '';
+                    filterBar.querySelector('.filter-max-players').value = '';
 
                     // Reset checkboxes
                     filterBar.querySelectorAll('.exp-checkbox').forEach(cb => cb.checked = false);
