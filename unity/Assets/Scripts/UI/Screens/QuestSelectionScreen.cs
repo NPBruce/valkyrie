@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using ValkyrieTools;
 using Object = UnityEngine.Object;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -244,19 +245,11 @@ namespace Assets.Scripts.UI.Screens
             reloadIcon.SetImage(reloadTex);
             reloadIcon.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
 
-            // Search Button
-            ui = new UIElement(Game.QUESTUI);
-            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetButton(delegate { PerformSearch(); });
-            new UIElementBorder(ui);
-            UIElement searchIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
-            searchIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
-            searchIcon.SetImage(button_search);
-            searchIcon.SetButton(delegate { PerformSearch(); });
+
 
             // Search Input
-            uiSearchInput = new UIElementEditable(Game.QUESTUI);
-            uiSearchInput.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 1.5f - 8f, 3.5f, 8f, 1.5f);
+            uiSearchInput = new UIElementSearchBox(Game.QUESTUI);
+            uiSearchInput.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 9.5f, 3.5f, 9.5f, 1.5f);
             uiSearchInput.SetText(searchFilter);
             uiSearchInput.SetSingleLine();
             uiSearchInput.SetPlaceholder(SEARCH_BY_NAME);
