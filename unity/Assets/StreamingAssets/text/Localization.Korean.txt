@@ -680,3 +680,5 @@ CLICK_STATIC,정적 / 이벤트 없음
 REQUIRED,필수
 FILTER_TEXT_TOTAL_ONLY,{0} 시나리오
 SELECT_GAME_TYPE,게임 유형 선택
+
+SEARCH_BY_NAME,이름으로 검색...

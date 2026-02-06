@@ -491,3 +491,5 @@ CLICK_BLINK,Miganie / wyzwalanie zdarzenia
 CLICK_STATIC,Statyczne / Brak zdarzeniaREQUIRED,Wymagane
 FILTER_TEXT_TOTAL_ONLY,{0} scenariuszy
 SELECT_GAME_TYPE,Wybierz typ gry
+
+SEARCH_BY_NAME,Szukaj według nazwy...

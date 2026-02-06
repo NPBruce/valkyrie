@@ -687,3 +687,5 @@ CLICK_STATIC,Statické / Žádná událost
 REQUIRED,Vyžadováno
 FILTER_TEXT_TOTAL_ONLY,{0} scenářů
 SELECT_GAME_TYPE,Vybrat typ hry
+
+SEARCH_BY_NAME,Hledat podle názvu...

@@ -58,7 +58,9 @@ namespace Assets.Scripts.UI.Screens
 
         private readonly StringKey STATS_NO_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_NO_AVERAGE_WIN_RATIO");
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
-
+        
+        private readonly StringKey SEARCH_BY_NAME = new StringKey("val", "SEARCH_BY_NAME");
+        
         private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
         private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
@@ -96,6 +98,11 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_play = null;
         Texture2D button_no_entry = null;
         Texture2D button_hole = null;
+        Texture2D button_search = null;
+
+        // Search
+        string searchFilter = "";
+        UIElementEditable uiSearchInput = null;
 
         public void Start()
         {
@@ -134,12 +141,16 @@ namespace Assets.Scripts.UI.Screens
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
             button_no_entry = Resources.Load("sprites/scenario_list/button_no_entry") as Texture2D;
+            button_search = Resources.Load("sprites/search") as Texture2D;
 
             Show();
         }
 
         public void Show()
         {
+            // Reset search filter on screen entry
+            searchFilter = "";
+
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Destroy(go);
@@ -226,6 +237,22 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
             new UIElementBorder(ui);
+
+            // Search Button
+            ui = new UIElement(Game.QUESTUI);
+            ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
+            ui.SetImage(button_search);
+            ui.SetButton(delegate { PerformSearch(); });
+            new UIElementBorder(ui);
+
+            // Search Input
+            uiSearchInput = new UIElementEditable(Game.QUESTUI);
+            uiSearchInput.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 1.5f - 8f, 3.5f, 8f, 1.5f);
+            uiSearchInput.SetText(searchFilter);
+            uiSearchInput.SetSingleLine();
+            uiSearchInput.SetPlaceholder(SEARCH_BY_NAME);
+            uiSearchInput.SetButton(delegate { PerformSearch(); });
+            new UIElementBorder(uiSearchInput);
 
             // Show sort button
             ui = new UIElement(Game.QUESTUI);
@@ -335,6 +362,13 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions = true;
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             }
+        }
+
+        private void PerformSearch()
+        {
+            if (uiSearchInput == null) return;
+            searchFilter = uiSearchInput.GetText();
+            ReloadQuestList();
         }
 
         private void DrawOnlineModeButton()
@@ -773,6 +807,8 @@ namespace Assets.Scripts.UI.Screens
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
             Destroy(go);
 
+
+
         scrollArea = null;
         questActionButtons.Clear();
 
@@ -938,6 +974,18 @@ namespace Assets.Scripts.UI.Screens
             {
                 nb_filtered_out_quest++;
                 continue;
+            }
+
+            // Filter search
+            if (!searchFilter.Equals(""))
+            {
+                string name_translation, synopsys_translation;
+                QuestGetTranslations(q, out name_translation, out synopsys_translation);
+                if (!name_translation.ToLower().Contains(searchFilter.ToLower()))
+                {
+                    nb_filtered_out_quest++;
+                    continue;
+                }
             }
 
             try

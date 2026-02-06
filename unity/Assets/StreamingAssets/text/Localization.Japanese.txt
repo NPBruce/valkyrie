@@ -714,3 +714,5 @@ CLICK_STATIC,静的 / イベントなし
 REQUIRED,必須
 FILTER_TEXT_TOTAL_ONLY,{0} シナリオ
 SELECT_GAME_TYPE,ゲームタイプを選択
+
+SEARCH_BY_NAME,名前で検索...
