@@ -219,3 +219,24 @@
         font-size: 0.8rem;
     }
 }
+
+/* Info Modal */
+#info-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-modal-dialog {
+    width: 85%;
+    max-width: 320px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}

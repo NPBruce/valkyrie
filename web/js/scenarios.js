@@ -271,6 +271,15 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Nessuno',
             'Polish': 'Żaden',
             'Portuguese': 'Nenhum'
+        },
+        'PlayCountTooltip': {
+            'English': 'Number of users who successfully finished the scenario',
+            'German': 'Anzahl der Benutzer, die das Szenario erfolgreich abgeschlossen haben',
+            'Spanish': 'Número de usuarios que terminaron con éxito el escenario',
+            'French': 'Nombre d\'utilisateurs ayant terminé le scénario avec succès',
+            'Italian': 'Numero di utenti che hanno completato con successo lo scenario',
+            'Polish': 'Liczba użytkowników, którzy pomyślnie ukończyli scenariusz',
+            'Portuguese': 'Número de usuários que terminaram o cenário com sucesso'
         }
     };
 
@@ -358,6 +367,35 @@ document.addEventListener('DOMContentLoaded', function () {
         // Remove <size=46>, <b>, <i>, <color=red>, etc.
         return val.replace(/<[^>]+>/g, '');
     }
+
+    const showInfoDialog = (title, message) => {
+        // Remove existing modal if any
+        const existing = document.getElementById('info-modal-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'info-modal-overlay';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'bg-dark border border-secondary p-3 rounded shadow text-light info-modal-dialog';
+
+        dialog.innerHTML = `
+            <h6 class="mb-2 font-weight-bold">${title}</h6>
+            <p class="mb-3 small">${message}</p>
+            <div class="text-right text-end">
+                <button class="btn btn-sm btn-light py-0 px-2" id="info-modal-close">OK</button>
+            </div>
+        `;
+
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        const close = () => overlay.remove();
+        dialog.querySelector('#info-modal-close').addEventListener('click', close);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) close();
+        });
+    };
 
     function getFlagIcons(item) {
         const languages = new Set();
@@ -955,6 +993,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const lblAvgDuration = getTransitionLabel('AverageDuration', userLang);
             const lblReset = getTransitionLabel('Reset', userLang);
             const lblPlayCountLabel = getTransitionLabel('PlayCount', userLang);
+            const lblPlayCountTooltip = getTransitionLabel('PlayCountTooltip', userLang);
 
             // Calculate Avg Duration Options (30+, 60+ ... 600+)
             let avgDurOptions = `<option value="">${lblAny}</option>`;
@@ -1103,7 +1142,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <!-- Play Count (Min) -->
                 <div class="d-flex flex-column">
-                    <label class="mb-1 text-muted small">${lblPlayCountLabel}</label>
+                    <label class="mb-1 text-muted small">
+                        ${lblPlayCountLabel}
+                        <i class="fas fa-info-circle ml-1 info-playcount" style="cursor: pointer;"></i>
+                    </label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-play-count">
                         ${playCountOptions}
                     </select>
@@ -1190,6 +1232,13 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.filter-min-play-count').addEventListener('change', (e) => {
                 state[type].filters.minPlayCount = e.target.value;
                 applyFilters(type, userLang);
+            });
+
+            // Info Dialog Listener
+            filterBar.querySelector('.info-playcount').addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showInfoDialog(lblPlayCountLabel, lblPlayCountTooltip);
             });
 
             // Expansion Logic
