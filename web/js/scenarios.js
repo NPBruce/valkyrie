@@ -28,288 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'Japanese': '🇯🇵'
     };
 
-    const TRANSLATIONS = {
-        'Difficulty': {
-            'English': 'Difficulty',
-            'German': 'Schwierigkeit',
-            'Spanish': 'Dificultad',
-            'French': 'Difficulté',
-            'Italian': 'Difficoltà',
-            'Polish': 'Trudność',
-            'Portuguese': 'Dificuldade'
-        },
-        'Expansions': {
-            'English': 'Required Content Packs',
-            'German': 'Benötigte Inhaltspakete',
-            'Spanish': 'Paquetes de Contenido Requeridos',
-            'French': 'Packs de Contenu Requis',
-            'Italian': 'Pacchetti di Contenuto Richiesti',
-            'Polish': 'Wymagane Pakiety Zawartości',
-            'Portuguese': 'Pacotes de Conteúdo Necessários'
-        },
-        'NoImage': {
-            'English': 'No Image',
-            'German': 'Kein Bild',
-            'Spanish': 'Sin Imagen',
-            'French': 'Pas d\'Image',
-            'Italian': 'Nessuna Immagine',
-            'Polish': 'Brak Obrazu',
-            'Portuguese': 'Sem Imagem'
-        },
-        'NoContent': {
-            'English': 'No content found.',
-            'German': 'Kein Inhalt gefunden.',
-            'Spanish': 'No se encontró contenido.',
-            'French': 'Aucun contenu trouvé.',
-            'Italian': 'Nessun contenuto trovato.',
-            'Polish': 'Nie znaleziono zawartości.',
-            'Portuguese': 'Nenhum conteúdo encontrado.'
-        },
-        'NoPacks': {
-            'English': 'No content packs found.',
-            'German': 'Keine Inhaltspakete gefunden.',
-            'Spanish': 'No se encontraron paquetes de contenido.',
-            'French': 'Aucun pack de contenu trouvé.',
-            'Italian': 'Nessun pacchetto di contenuto trovato.',
-            'Polish': 'Nie znaleziono pakietów zawartości.',
-            'Portuguese': 'Nenhum pacote de conteúdo encontrado.'
-        },
-        'Duration': {
-            'English': 'Duration',
-            'German': 'Dauer',
-            'Spanish': 'Duración',
-            'French': 'Durée',
-            'Italian': 'Durata',
-            'Polish': 'Czas trwania',
-            'Portuguese': 'Duração'
-        },
-        'Author': {
-            'English': 'Author',
-            'German': 'Autor',
-            'Spanish': 'Autor',
-            'French': 'Auteur',
-            'Italian': 'Autore',
-            'Polish': 'Autor',
-            'Portuguese': 'Autor'
-        },
-        'LastUpdated': {
-            'English': 'Last Updated',
-            'German': 'Letzte Aktualisierung',
-            'Spanish': 'Última Actualización',
-            'French': 'Dernière mise à jour',
-            'Italian': 'Ultimo aggiornamento',
-            'Polish': 'Ostatnia aktualizacja',
-            'Portuguese': 'Última atualização'
-        },
-        'Language': {
-            'English': 'Language',
-            'German': 'Sprache',
-            'Spanish': 'Idioma',
-            'French': 'Langue',
-            'Italian': 'Lingua',
-            'Polish': 'Język',
-            'Portuguese': 'Idioma'
-        },
-        'Any': {
-            'English': 'Any',
-            'German': 'Beliebig',
-            'Spanish': 'Cualquiera',
-            'French': 'Tout',
-            'Italian': 'Qualsiasi',
-            'Polish': 'Dowolny',
-            'Portuguese': 'Qualquer'
-        },
-        'SortBy': {
-            'English': 'Sort By',
-            'German': 'Sortieren nach',
-            'Spanish': 'Ordenar por',
-            'French': 'Trier par',
-            'Italian': 'Ordina per',
-            'Polish': 'Sortuj według',
-            'Portuguese': 'Ordenar por'
-        },
-        'Name': {
-            'English': 'Name',
-            'German': 'Name',
-            'Spanish': 'Nombre',
-            'French': 'Nom',
-            'Italian': 'Nome',
-            'Polish': 'Nazwa',
-            'Portuguese': 'Nome'
-        },
-        'Ascending': {
-            'English': 'Ascending',
-            'German': 'Aufsteigend',
-            'Spanish': 'Ascendente',
-            'French': 'Croissant',
-            'Italian': 'Ascendente',
-            'Polish': 'Rosnąco',
-            'Portuguese': 'Ascendente'
-        },
-        'Descending': {
-            'English': 'Descending',
-            'German': 'Absteigend',
-            'Spanish': 'Descendente',
-            'French': 'Décroissant',
-            'Italian': 'Discendente',
-            'Polish': 'Malejąco',
-            'Portuguese': 'Descendente'
-        },
-        'Search': {
-            'English': 'Search',
-            'German': 'Suche',
-            'Spanish': 'Buscar',
-            'French': 'Recherche',
-            'Italian': 'Cerca',
-            'Polish': 'Szukaj',
-            'Portuguese': 'Procurar'
-        },
-        'SearchHint': {
-            'English': 'Search by Name',
-            'German': 'Suche nach Name',
-            'Spanish': 'Buscar por nombre',
-            'French': 'Recherche par nom',
-            'Italian': 'Cerca per nome',
-            'Polish': 'Szukaj według nazwy',
-            'Portuguese': 'Procurar por nome'
-        },
-        'AverageDuration': {
-            'English': 'Average Duration',
-            'German': 'Durchschnittliche Dauer',
-            'Spanish': 'Duración Media',
-            'French': 'Durée Moyenne',
-            'Italian': 'Durata Media',
-            'Polish': 'Średni Czas',
-            'Portuguese': 'Duração Média'
-        },
-        'UserReviews': {
-            'English': 'user reviews',
-            'German': 'Nutzerbewertungen',
-            'Spanish': 'reseñas de usuarios',
-            'French': 'avis utilisateurs',
-            'Italian': 'recensioni utenti',
-            'Polish': 'recenzji użytkowników',
-            'Portuguese': 'análises de usuários'
-        },
-        'WinRatio': {
-            'English': 'Win Ratio',
-            'German': 'Gewinnrate',
-            'Spanish': 'Ratio de Victoria',
-            'French': 'Taux de Victoire',
-            'Italian': 'Percentuale di Vittoria',
-            'Polish': 'Współczynnik Wygranych',
-            'Portuguese': 'Taxa de Vitória'
-        },
-        'Rating': {
-            'English': 'Rating',
-            'German': 'Bewertung',
-            'Spanish': 'Valoración',
-            'French': 'Évaluation',
-            'Italian': 'Valutazione',
-            'Polish': 'Ocena',
-            'Portuguese': 'Avaliação'
-        },
-        'PlayCount': {
-            'English': 'Play Count',
-            'German': 'Anzahl Spiele',
-            'Spanish': 'Partidas Jugadas',
-            'French': 'Nombre de Parties',
-            'Italian': 'Partite Giocate',
-            'Polish': 'Liczba Gier',
-            'Portuguese': 'Contagem de Jogos'
-        },
-        'CommunityRating': {
-            'English': 'Community Rating',
-            'German': 'Community-Bewertung',
-            'Spanish': 'Valoración de la Comunidad',
-            'French': 'Note de la Communauté',
-            'Italian': 'Valutazione della Comunità',
-            'Polish': 'Ocena Społeczności',
-            'Portuguese': 'Avaliação da Comunidade'
-        },
-        'Reset': {
-            'English': 'Reset',
-            'German': 'Zurücksetzen',
-            'Spanish': 'Restablecer',
-            'French': 'Réinitialiser',
-            'Italian': 'Reimposta',
-            'Polish': 'Resetuj',
-            'Portuguese': 'Redefinir'
-        },
-        'LabelScenarios': {
-            'English': 'Scenarios',
-            'German': 'Szenarien',
-            'Spanish': 'Escenarios',
-            'French': 'Scénarios',
-            'Italian': 'Scenari',
-            'Polish': 'Scenariusze',
-            'Portuguese': 'Cenários'
-        },
-        'LabelPacks': {
-            'English': 'Content Packs',
-            'German': 'Inhaltspakete',
-            'Spanish': 'Paquetes de Contenido',
-            'French': 'Packs de Contenu',
-            'Italian': 'Pacchetti di Contenuto',
-            'Polish': 'Pakiety Zawartości',
-            'Portuguese': 'Pacotes de Conteúdo'
-        },
-        'LabelFilteredOut': {
-            'English': 'Filtered out',
-            'German': 'Gefiltert',
-            'Spanish': 'Filtrado',
-            'French': 'Filtré',
-            'Italian': 'Filtrato',
-            'Polish': 'Odfiltrowane',
-            'Portuguese': 'Filtrado'
-        },
-        'LabelNone': {
-            'English': 'None',
-            'German': 'Keine',
-            'Spanish': 'Ninguno',
-            'French': 'Aucun',
-            'Italian': 'Nessuno',
-            'Polish': 'Żaden',
-            'Portuguese': 'Nenhum'
-        },
-        'PlayCountTooltip': {
-            'English': 'Number of users who successfully finished the scenario',
-            'German': 'Anzahl der Benutzer, die das Szenario erfolgreich abgeschlossen haben',
-            'Spanish': 'Número de usuarios que terminaron con éxito el escenario',
-            'French': 'Nombre d\'utilisateurs ayant terminé le scénario avec succès',
-            'Italian': 'Numero di utenti che hanno completato con successo lo scenario',
-            'Polish': 'Liczba użytkowników, którzy pomyślnie ukończyli scenariusz',
-            'Portuguese': 'Número de usuários que terminaram o cenário com sucesso'
-        },
-        'LabelPlayerCount': {
-            'English': 'Player Count',
-            'German': 'Anzahl Spieler',
-            'Spanish': 'Cantidad de Jugadores',
-            'French': 'Nombre de Joueurs',
-            'Italian': 'Numero di Giocatori',
-            'Polish': 'Liczba Graczy',
-            'Portuguese': 'Número de Jogadores'
-        },
-        'LabelMinPlayerCount': {
-            'English': 'Minimum Player count',
-            'German': 'Min. Spieleranzahl',
-            'Spanish': 'Mín. Jugadores',
-            'French': 'Min Joueurs',
-            'Italian': 'Min Giocatori',
-            'Polish': 'Min. Liczba Graczy',
-            'Portuguese': 'Min. Jogadores'
-        },
-        'LabelMaxPlayerCount': {
-            'English': 'Maximum Player count',
-            'German': 'Max. Spieleranzahl',
-            'Spanish': 'Max. Jugadores',
-            'French': 'Max Joueurs',
-            'Italian': 'Max Giocatori',
-            'Polish': 'Max. Liczba Graczy',
-            'Portuguese': 'Max. Jogadores'
-        }
-    };
-
     // --- Helpers ---
 
     function parseINI(data) {
@@ -391,38 +109,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fallbackKey) val = item[fallbackKey];
             else val = item[fieldPrefix] || '';
         }
-        // Remove <size=46>, <b>, <i>, <color=red>, etc.
+        // Remove <size=...>, <b>, <i>, <color=red>, etc.
         return val.replace(/<[^>]+>/g, '');
     }
 
-    const showInfoDialog = (title, message) => {
-        // Remove existing modal if any
-        const existing = document.getElementById('info-modal-overlay');
-        if (existing) existing.remove();
-
-        const overlay = document.createElement('div');
-        overlay.id = 'info-modal-overlay';
-
-        const dialog = document.createElement('div');
-        dialog.className = 'bg-dark border border-secondary p-3 rounded shadow text-light info-modal-dialog';
-
-        dialog.innerHTML = `
-            <h6 class="mb-2 font-weight-bold">${title}</h6>
-            <p class="mb-3 small">${message}</p>
-            <div class="text-right text-end">
-                <button class="btn btn-sm btn-light py-0 px-2" id="info-modal-close">OK</button>
-            </div>
-        `;
-
-        overlay.appendChild(dialog);
-        document.body.appendChild(overlay);
-
-        const close = () => overlay.remove();
-        dialog.querySelector('#info-modal-close').addEventListener('click', close);
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) close();
-        });
-    };
+    // DEBUG: Error Handler
+    window.onerror = null;
 
     function getFlagIcons(item) {
         const languages = new Set();
@@ -435,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return Array.from(languages).map(l => {
             const flag = LANG_FLAGS[l] || l;
-            return `<span title="${l}" style="margin-right:4px; cursor:help;">${flag}</span>`;
+            return `<span title="${l}" class="scenario-flag-icon">${flag}</span>`;
         }).join('');
     }
 
@@ -469,123 +161,147 @@ document.addEventListener('DOMContentLoaded', function () {
         container.innerHTML = '<div class="text-center w-100 py-5"><div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
 
         setTimeout(() => {
-            container.innerHTML = '';
+            try {
+                container.innerHTML = '';
 
-            // Header: "X SCENARIOS (+Y SCENARIOS FILTERED OUT)"
-            const count = data ? data.length : 0;
-            const filteredOut = totalCount - count;
+                // Header: "X SCENARIOS (+Y SCENARIOS FILTERED OUT)"
+                const count = data ? data.length : 0;
+                const filteredOut = totalCount - count;
 
-            const lblScenarios = getTransitionLabel('LabelScenarios', lang).toUpperCase();
-            const lblFiltered = getTransitionLabel('LabelFilteredOut', lang).toUpperCase();
+                const lblScenarios = getTransitionLabel('LabelScenarios', lang).toUpperCase();
+                const lblFiltered = getTransitionLabel('LabelFilteredOut', lang).toUpperCase();
 
-            let headerText = `${count} ${lblScenarios}`;
-            if (filteredOut > 0) {
-                headerText += ` <span style="opacity:0.7">(+${filteredOut} ${lblScenarios} ${lblFiltered})</span>`;
-            }
-
-            // Create Header Element
-            const headerDiv = document.createElement('div');
-            headerDiv.className = 'w-100 mb-3';
-            headerDiv.innerHTML = `<h5 class="scenario-list-header text-light">${headerText}</h5>`;
-            container.appendChild(headerDiv);
-
-            if (!data || data.length === 0) {
-                const msg = getTransitionLabel('NoContent', lang);
-                container.innerHTML += `<p class="text-center">${msg}</p>`;
-                return;
-            }
-
-            const noImageText = getTransitionLabel('NoImage', lang);
-            const placeholderSvg = getPlaceholderSvg(noImageText);
-
-            data.forEach(item => {
-                if (item.hidden === 'True') return;
-
-                const card = document.createElement('div');
-                card.className = 'scenario-card';
-
-                const name = getLocalizedValue(item, 'name', lang) || item.id;
-                let desc = getLocalizedValue(item, 'synopsys', lang) || getLocalizedValue(item, 'description', lang) || '';
-                // Changed from 'authors' to 'authors_short' as requested
-                let authors = getLocalizedValue(item, 'authors_short', lang) || getLocalizedValue(item, 'authors', lang) || 'Community';
-
-                // Format text
-                desc = formatText(desc);
-                authors = formatText(authors);
-
-                let authorsDisplay = authors;
-                if (authors.length > 50) {
-                    authorsDisplay = authors.substring(0, 50) + '...';
-                }
-                const authorsTitle = authors.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;');
-
-                // Image logic
-                let imgHtml = `<img src="${placeholderSvg}" alt="${name}" class="img-placeholder">`;
-                if (item.url && item.image) {
-                    imgHtml = `<img src="${item.url}${item.image}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${placeholderSvg}';">`;
+                let headerText = `${count} ${lblScenarios}`;
+                if (filteredOut > 0) {
+                    headerText += ` <span class="header-filtered-text">(+${filteredOut} ${lblScenarios} ${lblFiltered})</span>`;
                 }
 
-                const flagsHtml = getFlagIcons(item);
-                const min = item.lengthmin || '?';
-                const max = item.lengthmax || '?';
+                const lblClickHint = getTransitionLabel('ClickForDetails', lang);
 
-                // Difficulty Stars
-                const diffStars = getHardwareStars(item.difficulty);
-                const diffLabel = getTransitionLabel('Difficulty', lang);
-
-                // Rating Stars
-                const ratingStars = getRatingStars(item.rating);
-
-                // Packs logic
-                let packsHtml = '';
-                if (item.packs) {
-                    const packsLabel = getTransitionLabel('Expansions', lang);
-                    packsHtml = `<div class="meta-item"><span title="${packsLabel}">${packsLabel}: ${item.packs}</span></div>`;
-                }
-
-                // New items
-                const durationLabel = getTransitionLabel('Duration', lang);
-                const avgDurationLabel = getTransitionLabel('AverageDuration', lang);
-                const playCountLabel = getTransitionLabel('PlayCount', lang);
-                const winRatioLabel = getTransitionLabel('WinRatio', lang);
-                const communityRatingLabel = getTransitionLabel('CommunityRating', lang); // New Label
-                const authorLabel = getTransitionLabel('Author', lang);
-                const updatedLabel = getTransitionLabel('LastUpdated', lang);
-                const labelPlayerCount = getTransitionLabel('LabelPlayerCount', lang);
-
-                const playCount = item.play_count || 0;
-                const avgDuration = item.duration ? Math.round(item.duration) : 0;
-                const winRatio = item.win_ratio ? Math.round(item.win_ratio * 100) : 0;
-                const ratingValue = parseFloat(item.rating) || 0;
-
-                card.innerHTML = `
-                    <div class="scenario-image">${imgHtml}</div>
-                    <div class="scenario-details">
-                        <h4 class="scenario-title">
-                            ${name} 
-                        </h4>
-                        <div class="scenario-meta">
-                            <div class="d-flex flex-wrap align-items-center w-100">
-                                <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
-                                <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${diffStars.filled}<span style="opacity:0.5">${diffStars.empty}</span></span></span></div>
-                                ${(item.minhero && item.maxhero) ? `<div class="meta-item"><span title="${labelPlayerCount}">${labelPlayerCount}: ${item.minhero}-${item.maxhero}</span></div>` : ''}
-                                <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
-                                ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
-                            </div>
-                            <div class="d-flex flex-wrap align-items-center mt-2 w-100">
-                                <div class="meta-item">${communityRatingLabel}:&nbsp;<span class="text-warning" title="Rating: ${ratingValue.toFixed(1)}/10">${ratingStars.filled}<span style="opacity:0.5">${ratingStars.empty}</span></span></div>
-                                <div class="meta-item">${avgDurationLabel}: ${avgDuration} min</div>
-                                <div class="meta-item">${playCountLabel}: ${playCount}</div>
-                                <div class="meta-item">${winRatioLabel}: ${winRatio}%</div>
-                                <div class="meta-item meta-langs">${flagsHtml}</div>
-                                ${packsHtml}
-                            </div>
-                        </div>
-                        <div class="scenario-description">${desc.split('\n')[0]}...</div>
-                    </div>
+                // Create Header Element
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'w-100 mb-3';
+                headerDiv.innerHTML = `
+                    <h5 class="scenario-list-header text-light mb-1">${headerText}</h5>
+                    <div class="text-white-50 small font-italic scenario-click-hint">${lblClickHint}</div>
                 `;
-                container.appendChild(card);
-            });
+                container.appendChild(headerDiv);
+
+                if (!data || data.length === 0) {
+                    const msg = getTransitionLabel('NoContent', lang);
+                    container.innerHTML += `<p class="text-center">${msg}</p>`;
+                    return;
+                }
+
+
+                const noImageText = getTransitionLabel('NoImage', lang);
+                const placeholderSvg = getPlaceholderSvg(noImageText);
+
+                data.forEach((item, index) => {
+                    try {
+                        if (item.hidden === 'True') return;
+
+                        const card = document.createElement('div');
+                        card.className = 'scenario-card';
+
+                        const name = getLocalizedValue(item, 'name', lang) || item.id;
+                        // For list view: Priority is Synopsys -> Description
+                        let synopsys = getLocalizedValue(item, 'synopsys', lang) || getLocalizedValue(item, 'description', lang) || 'No description available.';
+                        // For dialog view: Priority is Description -> Synopsys
+                        const fullDescription = getLocalizedValue(item, 'description', lang) || getLocalizedValue(item, 'synopsys', lang) || 'No description available.';
+
+                        // Changed from 'authors' to 'authors_short' as requested
+                        let authors = getLocalizedValue(item, 'author', lang) || 'Unknown';
+
+                        // Format text
+                        synopsys = formatText(synopsys);
+                        authors = formatText(authors);
+
+                        let authorsDisplay = authors;
+                        if (authors.length > 50) {
+                            authorsDisplay = authors.substring(0, 50) + '...';
+                        }
+                        const authorsTitle = authors.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;');
+
+                        // Image logic
+                        let imgHtml = `<img src="${placeholderSvg}" alt="${name}" class="img-placeholder">`;
+                        if (item.url && item.image) {
+                            imgHtml = `<img src="${item.url}${item.image}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='${placeholderSvg}';">`;
+                        }
+
+                        const flagsHtml = getFlagIcons(item);
+                        const min = item.lengthmin || '?';
+                        const max = item.lengthmax || '?';
+
+                        // Difficulty Stars
+                        const diffStars = getHardwareStars(item.difficulty);
+                        const diffLabel = getTransitionLabel('Difficulty', lang);
+
+                        // Rating Stars
+                        const ratingStars = getRatingStars(item.rating);
+
+                        // Packs logic
+                        let packsHtml = '';
+                        if (item.packs) {
+                            const packsLabel = getTransitionLabel('Expansions', lang);
+                            packsHtml = `<div class="meta-item"><span title="${packsLabel}">${packsLabel}: ${item.packs}</span></div>`;
+                        }
+
+                        // New items
+                        const durationLabel = getTransitionLabel('Duration', lang);
+                        const avgDurationLabel = getTransitionLabel('AverageDuration', lang);
+                        const playCountLabel = getTransitionLabel('PlayCount', lang);
+                        const winRatioLabel = getTransitionLabel('WinRatio', lang);
+                        const communityRatingLabel = getTransitionLabel('CommunityRating', lang); // New Label
+                        const authorLabel = getTransitionLabel('Author', lang);
+                        const updatedLabel = getTransitionLabel('LastUpdated', lang);
+                        const labelPlayerCount = getTransitionLabel('LabelPlayerCount', lang);
+
+                        const playCount = item.play_count || 0;
+                        const avgDuration = item.duration ? Math.round(item.duration) : 0;
+                        const winRatio = item.win_ratio ? Math.round(item.win_ratio * 100) : 0;
+                        const ratingValue = parseFloat(item.rating) || 0;
+
+                        card.innerHTML = `
+                            <div class="scenario-image">${imgHtml}</div>
+                            <div class="scenario-details">
+                                <h4 class="scenario-title">
+                                    ${name} 
+                                </h4>
+                                <div class="scenario-meta">
+                                    <div class="d-flex flex-wrap align-items-center w-100">
+                                        <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
+                                        <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${diffStars.filled}<span class="star-empty">${diffStars.empty}</span></span></span></div>
+                                        ${(item.minhero && item.maxhero) ? `<div class="meta-item"><span title="${labelPlayerCount}">${labelPlayerCount}: ${item.minhero}-${item.maxhero}</span></div>` : ''}
+                                        <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
+                                        ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
+                                    </div>
+                                    <div class="d-flex flex-wrap align-items-center mt-2 w-100">
+                                        <div class="meta-item">${communityRatingLabel}:&nbsp;<span class="text-warning" title="Rating: ${ratingValue.toFixed(1)}/10">${ratingStars.filled}<span class="star-empty">${ratingStars.empty}</span></span></div>
+                                        <div class="meta-item">${avgDurationLabel}: ${avgDuration} min</div>
+                                        <div class="meta-item">${playCountLabel}: ${playCount}</div>
+                                        <div class="meta-item">${winRatioLabel}: ${winRatio}%</div>
+                                        <div class="meta-item meta-langs">${flagsHtml}</div>
+                                        ${packsHtml}
+                                    </div>
+                                </div>
+                                <div class="scenario-description">${synopsys.split('\n')[0]}</div>
+                            </div>
+                        `;
+                        card.style.cursor = 'pointer';
+                        card.onclick = () => {
+                            showInfoDialog(name, formatText(fullDescription));
+                        };
+
+                        container.appendChild(card);
+
+
+                    } catch (e) { console.error('Error rendering item:', e); }
+                });
+            } catch (err) {
+                console.error(`Error in renderScenarios loop:`, err);
+                container.innerHTML += `<p class="text-error">Error: ${err.message}</p>`;
+            }
         }, 50);
     }
 
@@ -618,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let headerText = `${count} ${lblPacks}`;
         if (filteredOut > 0) {
-            headerText += ` <span style="opacity:0.7">(+${filteredOut} ${lblPacks} ${lblFiltered})</span>`;
+            headerText += ` <span class="header-filtered-text">(+${filteredOut} ${lblPacks} ${lblFiltered})</span>`;
         }
 
         const headerDiv = document.createElement('div');
@@ -665,11 +381,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="scenario-description">${desc}</div>
                 </div>
             `;
+
+            // Interaction: Click to show details
             container.appendChild(card);
         });
     }
-
-    // --- Main ---
 
     // --- Main ---
 
@@ -790,6 +506,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const applyFilters = (type, userLang) => {
             updateHash(type);
             const s = state[type];
+            if (!s.data) { console.warn('No data for', type); return; }
+
             let filtered = s.data.slice(); // Copy
 
             // Search (Name)
@@ -826,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Language
             if (s.filters.language) {
                 filtered = filtered.filter(item => {
-                    const hasExplicitLang = Object.keys(item).includes(`name.${s.filters.language}`);
+                    const hasExplicitLang = Object.keys(item).includes(`name.${s.filters.language} `);
                     if (hasExplicitLang) return true;
 
                     // Check default language
@@ -1098,8 +816,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Row 1
             const row1 = document.createElement('div');
-            row1.className = 'd-flex flex-wrap align-items-center';
-            row1.style.gap = '1rem';
+            row1.className = 'd-flex flex-wrap align-items-center filter-row-gap';
 
             const lblNone = getTransitionLabel('LabelNone', userLang);
 
@@ -1107,7 +824,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const noneOptionHtml = `
                 <div class="form-check">
                     <input class="form-check-input exp-checkbox" type="checkbox" value="NONE" id="exp-${type}-NONE">
-                    <label class="form-check-label small" for="exp-${type}-NONE" style="cursor:pointer;">
+                    <label class="form-check-label small cursor-pointer" for="exp-${type}-NONE">
                         ${lblNone}
                     </label>
                 </div>
@@ -1115,12 +832,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             row1.innerHTML = `
-                <style>
-                    .filter-search::placeholder {
-                        color: rgba(255, 255, 255, 0.5) !important;
-                    }
-                </style>
-                <div class="d-flex flex-column" style="min-width: 150px;">
+                <div class="d-flex flex-column filter-col-search">
                     <label class="mb-1 text-muted small">${lblSearch}</label>
                     <input type="text" class="form-control form-control-sm bg-secondary text-light border-0 filter-search" placeholder="${lblSearchHint}...">
                 </div>
@@ -1153,27 +865,30 @@ document.addEventListener('DOMContentLoaded', function () {
                         ${Array.from(languages).sort().map(l => `<option value="${l}">${LANG_FLAGS[l] || ''} ${l}</option>`).join('')}
                     </select>
                 </div>
-                <!-- Author Filter -->
-                <div class="d-flex flex-column" style="max-width: 150px;">
+                <!--Author Filter-->
+                <div class="d-flex flex-column filter-col-author">
                     <label class="mb-1 text-muted small">${lblAuthor}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-author">
                         <option value="">${lblAny}</option>
-                        ${authorOptions.map(a => `<option value="${a}">${a}</option>`).join('')}
+                        ${authorOptions.map(a => {
+                const safeA = a.replace(/"/g, '&quot;');
+                return `<option value="${safeA}">${a}</option>`;
+            }).join('')}
                     </select>
                 </div>
-                 <!-- Expansions Multi-Select -->
-                <div class="d-flex flex-column position-relative" style="min-width: 180px;">
+                 <!--Expansions Multi-Select-->
+                <div class="d-flex flex-column position-relative filter-col-expansions">
                     <label class="mb-1 text-muted small">${lblExpansions}</label>
                     <button class="form-control form-control-sm bg-secondary text-light border-0 text-left d-flex justify-content-between align-items-center exp-dropdown-btn">
                         <span>${lblAny}</span>
                         <span class="small">&#9662;</span>
                     </button>
-                    <div class="exp-dropdown-menu bg-dark border border-secondary p-2 rounded shadow text-light" style="display:none; position:absolute; top: 100%; left:0; width:100%; z-index:1000; max-height: 300px; overflow-y: auto;">
+                    <div class="exp-dropdown-menu bg-dark border border-secondary p-2 rounded shadow text-light">
                         ${noneOptionHtml}
                         ${expansionOptions.map(e => `
                             <div class="form-check">
                                 <input class="form-check-input exp-checkbox" type="checkbox" value="${e.code}" id="exp-${type}-${e.code}">
-                                <label class="form-check-label small" for="exp-${type}-${e.code}" style="cursor:pointer;">
+                                <label class="form-check-label small cursor-pointer" for="exp-${type}-${e.code}">
                                     ${e.name}
                                 </label>
                             </div>
@@ -1182,16 +897,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 
                 </div>
-            `;
+                `;
 
             // Row 2
             const row2 = document.createElement('div');
-            row2.className = 'd-flex flex-wrap align-items-center mt-3 pt-3 border-top';
-            row2.style.borderColor = '#444';
-            row2.style.gap = '1rem';
+            row2.className = 'd-flex flex-wrap align-items-center mt-3 pt-3 border-top filter-row-gap filter-separator';
 
             row2.innerHTML = `
-                <!-- Min Player Count -->
+                <!--Min Player Count-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblMinPlayerCount}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-players">
@@ -1204,7 +917,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="6">6</option>
                     </select>
                 </div>
-                <!-- Max Player Count -->
+                <!--Max Player Count-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblMaxPlayerCount}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-max-players">
@@ -1217,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="6">6</option>
                     </select>
                 </div>
-                <!-- Min Rating -->
+                <!--Min Rating-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblRating} (Min)</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-rating">
@@ -1229,7 +942,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="5">5+ &#9733;</option>
                     </select>
                 </div>
-                <!-- Min Win Ratio -->
+                <!--Min Win Ratio-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblWinRatio} (Min)</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-win-ratio">
@@ -1240,28 +953,28 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="25">25%+</option>
                     </select>
                 </div>
-                <!-- Average Duration -->
+                <!--Average Duration-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblAvgDuration}</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-avg-duration">
                         ${avgDurOptions}
                     </select>
                 </div>
-                <!-- Play Count (Min) -->
+                <!--Play Count(Min)-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">
                         ${lblPlayCountLabel}
-                        <i class="fas fa-info-circle ml-1 info-playcount" style="cursor: pointer;"></i>
+                        <i class="fas fa-info-circle ml-1 info-playcount cursor-pointer"></i>
                     </label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-play-count">
                         ${playCountOptions}
                     </select>
                 </div>
-                <!-- Sort (Moved to Row 2) -->
-                <div class="d-flex flex-column ml-auto border-left pl-3" style="border-color: #444 !important;">
+                <!--Sort(Moved to Row 2)-->
+                <div class="d-flex flex-column ml-auto border-left pl-3 filter-separator">
                     <label class="mb-1 text-muted small">${lblSortBy}</label>
                     <div class="d-flex" style="gap: 0.5rem">
-                         <select class="form-control form-control-sm bg-secondary text-light border-0 sort-field" style="width: auto;">
+                         <select class="form-control form-control-sm bg-secondary text-light border-0 sort-field width-auto">
                             <option value="last_updated">${lblLastUpdated}</option>
                             <option value="name">${lblName}</option>
                             <option value="author">${lblAuthor}</option>
@@ -1270,17 +983,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             <option value="duration">${lblDuration}</option>
                             <option value="win_ratio">${lblWinRatio}</option>
                         </select>
-                        <select class="form-control form-control-sm bg-secondary text-light border-0 sort-dir" style="width: auto;">
+                         <select class="form-control form-control-sm bg-secondary text-light border-0 sort-dir width-auto">
                             <option value="asc">${lblAsc}</option>
                             <option value="desc">${lblDesc}</option>
                         </select>
                     </div>
                 </div>
-                <!-- Reset Button -->
-                <div class="d-flex flex-column ml-3" style="margin-top: auto; margin-bottom: 2px;">
-                     <button class="btn btn-sm btn-outline-danger border-0 btn-reset" title="${lblReset}">
+                <!--Reset Button-->
+                <div class="d-flex flex-column ml-3 reset-button-container">
+                    <button class="btn btn-sm btn-outline-danger border-0 btn-reset" title="${lblReset}">
                         <i class="fas fa-undo mr-1"></i> ${lblReset}
-                     </button>
+                    </button>
                 </div>
             `;
 
@@ -1288,16 +1001,23 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.appendChild(row2);
             parent.insertBefore(filterBar, listContainer);
 
+            // Helper to safely set value
+            const safeSetValue = (selector, value) => {
+                const el = filterBar.querySelector(selector);
+                if (el) el.value = (value || '').replace(/"/g, '&quot;');
+            };
+
             // Set initial sort values from state
-            filterBar.querySelector('.sort-field').value = state[type].sort.field;
-            filterBar.querySelector('.sort-dir').value = state[type].sort.dir;
+            safeSetValue('.sort-field', state[type].sort.field);
+            safeSetValue('.sort-dir', state[type].sort.dir);
 
             // Set initial filter values from state
-            filterBar.querySelector('.filter-search').value = state[type].filters.search;
-            filterBar.querySelector('.filter-duration').value = state[type].filters.duration;
-            filterBar.querySelector('.filter-difficulty').value = state[type].filters.difficulty;
-            filterBar.querySelector('.filter-language').value = state[type].filters.language;
-            filterBar.querySelector('.filter-author').value = state[type].filters.author;
+            safeSetValue('.filter-search', state[type].filters.search);
+            safeSetValue('.filter-duration', state[type].filters.duration);
+            safeSetValue('.filter-difficulty', state[type].filters.difficulty);
+            safeSetValue('.filter-language', state[type].filters.language);
+            safeSetValue('.filter-author', state[type].filters.author);
+
             filterBar.querySelector('.filter-min-rating').value = state[type].filters.minRating;
             filterBar.querySelector('.filter-min-win-ratio').value = state[type].filters.minWinRatio;
             filterBar.querySelector('.filter-avg-duration').value = state[type].filters.avgDuration;
@@ -1305,56 +1025,62 @@ document.addEventListener('DOMContentLoaded', function () {
             filterBar.querySelector('.filter-min-players').value = state[type].filters.minPlayers;
             filterBar.querySelector('.filter-max-players').value = state[type].filters.maxPlayers;
 
+            // Helper to safely add listener
+            const safeAddListener = (selector, event, callback) => {
+                const el = filterBar.querySelector(selector);
+                if (el) el.addEventListener(event, callback);
+            };
+
             // Listeners
-            filterBar.querySelector('.filter-search').addEventListener('input', (e) => {
+            safeAddListener('.filter-search', 'input', (e) => {
                 state[type].filters.search = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-duration').addEventListener('change', (e) => {
+            safeAddListener('.filter-duration', 'change', (e) => {
                 state[type].filters.duration = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-difficulty').addEventListener('change', (e) => {
+            safeAddListener('.filter-difficulty', 'change', (e) => {
                 state[type].filters.difficulty = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-language').addEventListener('change', (e) => {
+            safeAddListener('.filter-language', 'change', (e) => {
                 state[type].filters.language = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-author').addEventListener('change', (e) => {
+            safeAddListener('.filter-author', 'change', (e) => {
                 state[type].filters.author = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-min-rating').addEventListener('change', (e) => {
+            safeAddListener('.filter-min-rating', 'change', (e) => {
                 state[type].filters.minRating = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-min-win-ratio').addEventListener('change', (e) => {
+            safeAddListener('.filter-min-win-ratio', 'change', (e) => {
                 state[type].filters.minWinRatio = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-avg-duration').addEventListener('change', (e) => {
+            safeAddListener('.filter-avg-duration', 'change', (e) => {
                 state[type].filters.avgDuration = e.target.value;
                 applyFilters(type, userLang);
             });
-            filterBar.querySelector('.filter-min-play-count').addEventListener('change', (e) => {
+            safeAddListener('.filter-min-play-count', 'change', (e) => {
                 state[type].filters.minPlayCount = e.target.value;
                 applyFilters(type, userLang);
             });
 
-            filterBar.querySelector('.filter-min-players').addEventListener('change', (e) => {
+            safeAddListener('.filter-min-players', 'change', (e) => {
                 state[type].filters.minPlayers = e.target.value;
                 applyFilters(type, userLang);
             });
 
-            filterBar.querySelector('.filter-max-players').addEventListener('change', (e) => {
+            safeAddListener('.filter-max-players', 'change', (e) => {
                 state[type].filters.maxPlayers = e.target.value;
                 applyFilters(type, userLang);
             });
 
             // Info Dialog Listener
-            filterBar.querySelector('.info-playcount').addEventListener('click', (e) => {
+            safeAddListener('.info-playcount', 'click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 showInfoDialog(lblPlayCountLabel, lblPlayCountTooltip);

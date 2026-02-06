@@ -236,7 +236,140 @@
 
 .info-modal-dialog {
     width: 85%;
-    max-width: 320px;
+    max-width: 600px;
     box-sizing: border-box;
     word-wrap: break-word;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Info Modal Content */
+.info-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #3b3749;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom: 1px solid #484459;
+    flex-shrink: 0;
+}
+
+.info-modal-title {
+    margin: 0;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.info-modal-close {
+    background: #fff;
+    border: none;
+    color: #333;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.info-modal-close:hover {
+    background: #e0e0e0;
+}
+
+.info-modal-body {
+    padding: 1.5rem;
+    background-color: #2f2c3d;
+    /* Match Card Background */
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    color: #dcdcdc;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-y: auto;
+}
+
+margin: 0;
+white-space: pre-wrap;
+/* Preserve formatting */
+}
+
+/* Utilities extracted from inline styles */
+.scenario-flag-icon {
+    margin-right: 4px;
+    cursor: help;
+}
+
+.text-error {
+    color: red;
+}
+
+.header-filtered-text {
+    opacity: 0.7;
+}
+
+.scenario-click-hint {
+    font-weight: normal;
+    font-size: 0.8em;
+}
+
+.star-empty {
+    opacity: 0.5;
+}
+
+.filter-search::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.filter-col-search {
+    min-width: 150px;
+}
+
+.filter-col-author {
+    max-width: 150px;
+}
+
+.filter-col-expansions {
+    min-width: 180px;
+}
+
+.exp-dropdown-menu {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.filter-row-gap {
+    gap: 1rem;
+}
+
+.filter-separator {
+    border-color: #444 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.width-auto {
+    width: auto;
+}
+
+.reset-button-container {
+    margin-top: auto;
+    margin-bottom: 2px;
 }
