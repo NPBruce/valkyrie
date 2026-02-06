@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
-using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
@@ -63,17 +62,9 @@ namespace Assets.Scripts.UI
 
                 uiInput.onValueChanged.AddListener(delegate { OnValueChanged(); });
                 
-                // Add listener to hide placeholder on select if configured
-                EventTrigger trigger = input.AddComponent<EventTrigger>();
-                EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.Select;
-                entry.callback.AddListener((data) => { OnSelect((BaseEventData)data); });
-                trigger.triggers.Add(entry);
-                
-                entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.Deselect;
-                entry.callback.AddListener((data) => { OnDeselect((BaseEventData)data); });
-                trigger.triggers.Add(entry);
+                // Add listeners to hide/show placeholder
+                uiInput.onSelectEvent.AddListener(OnSelect);
+                uiInput.onDeselectEvent.AddListener(OnDeselect);
             }
 
             this.SetColor(textColor);
@@ -167,7 +158,7 @@ namespace Assets.Scripts.UI
             // but we might want to enforce visibility rules if needed.
         }
 
-        private void OnSelect(BaseEventData data)
+        private void OnSelect()
         {
             if (placeholderHiddenOnFocus && placeholderObject != null)
             {
@@ -175,7 +166,7 @@ namespace Assets.Scripts.UI
             }
         }
 
-        private void OnDeselect(BaseEventData data)
+        private void OnDeselect()
         {
             if (placeholderHiddenOnFocus && placeholderObject != null && GetText().Length == 0)
             {

@@ -215,7 +215,7 @@ namespace Assets.Scripts.UI.Screens
 
             // initialize text indicator for filtered scenario
             text_number_of_filtered_scenario = new UIElement(Game.QUESTUI);
-            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
+            text_number_of_filtered_scenario.SetLocation(1, 3.6f, UIScaler.GetWidthUnits() - 17f, 1.2f);
             text_number_of_filtered_scenario.SetText(" ");
             text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
             text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
@@ -226,24 +226,33 @@ namespace Assets.Scripts.UI.Screens
             Texture2D filterTex = null;
             filterTex = Resources.Load("sprites/filter") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetImage(filterTex);
             ui.SetButton(delegate { FilterPopup(); });
             new UIElementBorder(ui);
+            UIElement filterIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            filterIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            filterIcon.SetImage(filterTex);
+            filterIcon.SetButton(delegate { FilterPopup(); });
 
             // Show reload button
             ui = new UIElement(Game.QUESTUI);
             Texture2D reloadTex = Resources.Load("sprites/refresh") as Texture2D; // Assuming a sprite exists, or use text "R"
-            ui.SetImage(reloadTex);
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
             new UIElementBorder(ui);
+            UIElement reloadIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            reloadIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            reloadIcon.SetImage(reloadTex);
+            reloadIcon.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
 
             // Search Button
             ui = new UIElement(Game.QUESTUI);
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetImage(button_search);
             ui.SetButton(delegate { PerformSearch(); });
             new UIElementBorder(ui);
+            UIElement searchIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            searchIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            searchIcon.SetImage(button_search);
+            searchIcon.SetButton(delegate { PerformSearch(); });
 
             // Search Input
             uiSearchInput = new UIElementEditable(Game.QUESTUI);
@@ -259,9 +268,12 @@ namespace Assets.Scripts.UI.Screens
             Texture2D sortTex = null;
             sortTex = Resources.Load("sprites/sort") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetImage(sortTex);
             ui.SetButton(delegate { SortByPopup(); });
             new UIElementBorder(ui);
+            UIElement sortIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            sortIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            sortIcon.SetImage(sortTex);
+            sortIcon.SetButton(delegate { SortByPopup(); });
 
             // Show offline/online button (or info)
             DrawOnlineModeButton();
@@ -367,7 +379,9 @@ namespace Assets.Scripts.UI.Screens
         private void PerformSearch()
         {
             if (uiSearchInput == null) return;
-            searchFilter = uiSearchInput.GetText();
+            string newFilter = uiSearchInput.GetText().Trim();
+            if (newFilter.Equals(searchFilter)) return;
+            searchFilter = newFilter;
             ReloadQuestList();
         }
 
@@ -879,7 +893,7 @@ namespace Assets.Scripts.UI.Screens
             new UIElementBorder(scrollArea, Color.grey);
         }
         // Add "Loading..." text for all modes
-        UIElement loadingText = new UIElement();
+        UIElement loadingText = new UIElement(Game.QUESTLIST);
         loadingText.SetLocation(UIScaler.GetHCenter() - 5, 10, 10, 2);
         loadingText.SetText(CommonStringKeys.LOADINGSCENARIOS, Color.white);
         loadingText.SetFont(game.gameType.GetHeaderFont());
