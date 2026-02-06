@@ -479,8 +479,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const updatedLabel = getTransitionLabel('LastUpdated', lang);
 
                 const playCount = item.play_count || 0;
-                const avgDuration = item.duration ? Math.round(item.duration) : null;
-                const winRatio = item.win_ratio ? Math.round(item.win_ratio * 100) : null;
+                const avgDuration = item.duration ? Math.round(item.duration) : 0;
+                const winRatio = item.win_ratio ? Math.round(item.win_ratio * 100) : 0;
+                const ratingValue = parseFloat(item.rating) || 0;
 
                 card.innerHTML = `
                     <div class="scenario-image">${imgHtml}</div>
@@ -496,10 +497,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                 ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
                             </div>
                             <div class="d-flex flex-wrap align-items-center mt-2 w-100">
-                                ${item.rating ? `<div class="meta-item">${communityRatingLabel}:&nbsp;<span class="text-warning" title="Rating: ${parseFloat(item.rating).toFixed(1)}/10">${ratingStars.filled}<span style="opacity:0.5">${ratingStars.empty}</span></span></div>` : ''}
-                                ${avgDuration ? `<div class="meta-item">${avgDurationLabel}: ${avgDuration} min</div>` : ''}
-                                ${playCount > 0 ? `<div class="meta-item">${playCountLabel}: ${playCount}</div>` : ''}
-                                ${winRatio !== null ? `<div class="meta-item">${winRatioLabel}: ${winRatio}%</div>` : ''}
+                                <div class="meta-item">${communityRatingLabel}:&nbsp;<span class="text-warning" title="Rating: ${ratingValue.toFixed(1)}/10">${ratingStars.filled}<span style="opacity:0.5">${ratingStars.empty}</span></span></div>
+                                <div class="meta-item">${avgDurationLabel}: ${avgDuration} min</div>
+                                <div class="meta-item">${playCountLabel}: ${playCount}</div>
+                                <div class="meta-item">${winRatioLabel}: ${winRatio}%</div>
                                 <div class="meta-item meta-langs">${flagsHtml}</div>
                                 ${packsHtml}
                             </div>
