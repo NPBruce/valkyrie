@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const fullDescription = getLocalizedValue(item, 'description', lang) || getLocalizedValue(item, 'synopsys', lang) || 'No description available.';
 
                         // Changed from 'authors' to 'authors_short' as requested
-                        let authors = getLocalizedValue(item, 'author', lang) || 'Unknown';
+                        let authors = getLocalizedValue(item, 'authors_short', lang) || getLocalizedValue(item, 'authors', lang) || 'Unknown';
 
                         // Format text
                         synopsys = formatText(synopsys);
