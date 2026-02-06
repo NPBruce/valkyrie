@@ -36,16 +36,8 @@ function showInfoDialog(title, content) {
     const textEl = overlay.querySelector('.info-modal-text');
 
     titleEl.textContent = title;
-    // Allow basic HTML in content (e.g. line breaks) or just text
-    // The previous implementation used textContent, but description might have formatting.
-    // Let's use innerHTML but be careful, or textContent if we want to be safe.
-    // For now, let's assume textContent to match previous behavior for Play Count, 
-    // but descriptions might need formatting.
-    // However, synopsys is usually plain text in standard Valkyrie? 
-    // Let's use innerText or textContent to escape HTML for safety, unless user wants HTML.
-    // The request mentions "fallback logic... e.g. synopsys.English".
-    // Let's stick to textContent for safety unless needed.
-    textEl.textContent = content;
+
+    textEl.innerHTML = content;
 
     // Show
     overlay.style.display = 'flex';

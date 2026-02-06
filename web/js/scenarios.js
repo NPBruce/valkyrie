@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    function getLocalizedValue(item, fieldPrefix, lang) {
+    function getLocalizedValue(item, fieldPrefix, lang, keepTags = false) {
         let val = '';
         if (item[`${fieldPrefix}.${lang}`]) val = item[`${fieldPrefix}.${lang}`];
         else if (item[`${fieldPrefix}.English`]) val = item[`${fieldPrefix}.English`];
@@ -109,8 +109,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fallbackKey) val = item[fallbackKey];
             else val = item[fieldPrefix] || '';
         }
-        // Remove <size=...>, <b>, <i>, <color=red>, etc.
-        return val.replace(/<[^>]+>/g, '');
+
+        if (!keepTags) {
+            // Remove <size=...>, <b>, <i>, <color=red>, etc.
+            return val.replace(/<[^>]+>/g, '');
+        }
+        return val;
     }
 
     // DEBUG: Error Handler
@@ -145,6 +149,23 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/\[\/b\]/g, '')
             .replace(/\[i\]/g, '')
             .replace(/\[\/i\]/g, '');
+    }
+
+    function formatDescription(text) {
+        if (!text) return '';
+        let val = text
+            .replace(/\[b\]/g, '<b>')
+            .replace(/\[\/b\]/g, '</b>')
+            .replace(/\[i\]/g, '<i>')
+            .replace(/\[\/i\]/g, '</i>');
+
+        // Strip tags EXCEPT b, i, br, /b, /i
+        val = val.replace(/<(?!(\/?(b|i|br)\b))[^>]+>/gi, '');
+
+        // Convert newlines to <br>
+        val = val.replace(/\r?\n/g, '<br>');
+
+        return val;
     }
 
     function getPlaceholderSvg(text) {
@@ -206,9 +227,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         const name = getLocalizedValue(item, 'name', lang) || item.id;
                         // For list view: Priority is Synopsys -> Description
+                        // For list view: Priority is Synopsys -> Description
                         let synopsys = getLocalizedValue(item, 'synopsys', lang) || getLocalizedValue(item, 'description', lang) || 'No description available.';
-                        // For dialog view: Priority is Description -> Synopsys
-                        const fullDescription = getLocalizedValue(item, 'description', lang) || getLocalizedValue(item, 'synopsys', lang) || 'No description available.';
+                        // For dialog view: Priority is Description -> Synopsys (Keep tags for formatting)
+                        const fullDescription = getLocalizedValue(item, 'description', lang, true) || getLocalizedValue(item, 'synopsys', lang, true) || 'No description available.';
 
                         // Changed from 'authors' to 'authors_short' as requested
                         let authors = getLocalizedValue(item, 'authors_short', lang) || getLocalizedValue(item, 'authors', lang) || 'Unknown';
@@ -290,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                         card.style.cursor = 'pointer';
                         card.onclick = () => {
-                            showInfoDialog(name, formatText(fullDescription));
+                            showInfoDialog(name, formatDescription(fullDescription));
                         };
 
                         container.appendChild(card);
