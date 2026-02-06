@@ -1562,6 +1562,10 @@ namespace Assets.Scripts.UI.Screens
         // Return to main menu
         public void Cancel()
         {
+            // Valid because calling MainMenu destroys the object
+            // This prevents the OnEndEdit event from triggering a search with empty text
+            uiSearchInput = null;
+
             CleanQuestList();
 
             GameStateManager.MainMenu();
