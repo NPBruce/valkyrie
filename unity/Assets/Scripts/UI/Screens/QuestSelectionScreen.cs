@@ -884,6 +884,18 @@ namespace Assets.Scripts.UI.Screens
             scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
             scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
             new UIElementBorder(scrollArea, Color.grey);
+
+            // Fix Z-order: Put scroll area behind all other UI elements (Header, Buttons) to prevent text leaking over them
+            int minIndex = scrollArea.GetTransform().GetSiblingIndex();
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+            {
+                if (go.transform.parent == scrollArea.GetTransform().parent)
+                {
+                    if (go.transform.GetSiblingIndex() < minIndex)
+                        minIndex = go.transform.GetSiblingIndex();
+                }
+            }
+            scrollArea.GetTransform().SetSiblingIndex(minIndex);
         }
         // Add "Loading..." text for all modes
         UIElement loadingText = new UIElement(Game.QUESTLIST);

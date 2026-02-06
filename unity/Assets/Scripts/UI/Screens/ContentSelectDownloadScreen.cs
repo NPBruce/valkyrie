@@ -53,8 +53,8 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             game = Game.Get();
 
-            DrawHeadingAndButtons();
             DrawContentPackList();
+            DrawHeadingAndButtons();
         }
 
         private static void CleanUpDialogs()
