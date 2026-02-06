@@ -262,6 +262,15 @@ document.addEventListener('DOMContentLoaded', function () {
             'Italian': 'Filtrato',
             'Polish': 'Odfiltrowane',
             'Portuguese': 'Filtrado'
+        },
+        'LabelNone': {
+            'English': 'None',
+            'German': 'Keine',
+            'Spanish': 'Ninguno',
+            'French': 'Aucun',
+            'Italian': 'Nessuno',
+            'Polish': 'Żaden',
+            'Portuguese': 'Nenhum'
         }
     };
 
@@ -770,8 +779,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // Expansion
             if (s.filters.expansion && s.filters.expansion.length > 0) {
                 filtered = filtered.filter(item => {
-                    // Start with basic check
-                    if (!item.packs) return false;
+                    // Check if 'NONE' is selected
+                    const noneSelected = s.filters.expansion.includes('NONE');
+                    const hasPacks = item.packs && item.packs.trim().length > 0;
+
+                    if (noneSelected && !hasPacks) return true;
+
+                    // Basic intersection logic
+                    if (!hasPacks) return false;
                     const itemPacks = item.packs.split(' ');
                     // Check intersection: Keep if item has ANY of the selected packs
                     return s.filters.expansion.some(code => itemPacks.includes(code));
@@ -966,6 +981,19 @@ document.addEventListener('DOMContentLoaded', function () {
             row1.className = 'd-flex flex-wrap align-items-center';
             row1.style.gap = '1rem';
 
+            const lblNone = getTransitionLabel('LabelNone', userLang);
+
+            // Expansion Dropdown - Prepend "None" option
+            const noneOptionHtml = `
+                <div class="form-check">
+                    <input class="form-check-input exp-checkbox" type="checkbox" value="NONE" id="exp-${type}-NONE">
+                    <label class="form-check-label small" for="exp-${type}-NONE" style="cursor:pointer;">
+                        ${lblNone}
+                    </label>
+                </div>
+                <div class="dropdown-divider border-secondary my-1"></div>
+            `;
+
             row1.innerHTML = `
                 <style>
                     .filter-search::placeholder {
@@ -1021,6 +1049,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <span class="small">&#9662;</span>
                     </button>
                     <div class="exp-dropdown-menu bg-dark border border-secondary p-2 rounded shadow text-light" style="display:none; position:absolute; top: 100%; left:0; width:100%; z-index:1000; max-height: 300px; overflow-y: auto;">
+                        ${noneOptionHtml}
                         ${expansionOptions.map(e => `
                             <div class="form-check">
                                 <input class="form-check-input exp-checkbox" type="checkbox" value="${e.code}" id="exp-${type}-${e.code}">
@@ -1188,6 +1217,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 cb.addEventListener('change', () => {
+                    if (cb.checked) {
+                        if (cb.value === 'NONE') {
+                            // If NONE selected, uncheck everything else
+                            checkboxes.forEach(c => {
+                                if (c !== cb) c.checked = false;
+                            });
+                        } else {
+                            // If other selected, uncheck NONE
+                            checkboxes.forEach(c => {
+                                if (c.value === 'NONE') c.checked = false;
+                            });
+                        }
+                    }
+
                     const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
                     state[type].filters.expansion = selected;
                     applyFilters(type, userLang);
