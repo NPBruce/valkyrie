@@ -1,6 +1,6 @@
 ---
 trigger: model_decision
-description: When implementing/changing UI components
+description: When implementing/changing UI components (app only not Valkyrie website)
 ---
 
 # UI Guide
