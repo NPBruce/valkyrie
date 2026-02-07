@@ -21,7 +21,8 @@ The website is a static site built with HTML, CSS (Bootstrap 4), and Vanilla Jav
     - `styles.css`: Custom styles for the landing page.
     - `scenarios.css`: Specific styles for the scenario browser.
 - **web/js/**: JavaScript logic.
-    - `vanilla-scripts.js`: Logic for `index.html` (scroll, tabs, mobile menu). Replaces previous jQuery scripts.
+    - `navigation.js`: Common logic for Navbar, Mobile Menu, and Preloader. Used on all pages.
+    - `index.js`: Landing page specific logic (Tabs, Download Links).
     - `scenarios.js`: Core logic for `scenarios.html`. Fetches manifest data, parses INI-like content, and renders the list.
     - `translations.js`: Contains the `TRANSLATIONS` object for localizing dynamic UI elements on the scenarios page.
     - `dialog.js`: Simple modal/dialog implementation for showing scenario details.
