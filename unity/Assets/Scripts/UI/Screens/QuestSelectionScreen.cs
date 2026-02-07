@@ -228,7 +228,7 @@ namespace Assets.Scripts.UI.Screens
             filterTex = Resources.Load("sprites/filter") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { FilterPopup(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
             UIElement filterIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
             filterIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
             filterIcon.SetImage(filterTex);
@@ -239,7 +239,7 @@ namespace Assets.Scripts.UI.Screens
             Texture2D reloadTex = Resources.Load("sprites/refresh") as Texture2D; // Assuming a sprite exists, or use text "R"
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
             UIElement reloadIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
             reloadIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
             reloadIcon.SetImage(reloadTex);
@@ -254,7 +254,7 @@ namespace Assets.Scripts.UI.Screens
             uiSearchInput.SetSingleLine();
             uiSearchInput.SetPlaceholder(SEARCH_BY_NAME);
             uiSearchInput.SetButton(delegate { PerformSearch(); });
-            new UIElementBorder(uiSearchInput);
+            new UIElementBorder(uiSearchInput, Color.grey);
 
             // Show sort button
             ui = new UIElement(Game.QUESTUI);
@@ -262,7 +262,7 @@ namespace Assets.Scripts.UI.Screens
             sortTex = Resources.Load("sprites/sort") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { SortByPopup(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
             UIElement sortIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
             sortIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
             sortIcon.SetImage(sortTex);
