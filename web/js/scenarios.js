@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Language
             if (s.filters.language) {
                 filtered = filtered.filter(item => {
-                    const hasExplicitLang = Object.keys(item).includes(`name.${s.filters.language} `);
+                    const hasExplicitLang = Object.keys(item).includes(`name.${s.filters.language}`);
                     if (hasExplicitLang) return true;
 
                     // Check default language
@@ -957,11 +957,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label class="mb-1 text-muted small">${lblRating} (Min)</label>
                     <select class="form-control form-control-sm bg-secondary text-light border-0 filter-min-rating">
                         <option value="">${lblAny}</option>
-                        <option value="9">9+ &#9733;</option>
-                        <option value="8">8+ &#9733;</option>
-                        <option value="7">7+ &#9733;</option>
-                        <option value="6">6+ &#9733;</option>
-                        <option value="5">5+ &#9733;</option>
+                        <option value="9">5 &#9733;</option>
+                        <option value="8">4+ &#9733;</option>
+                        <option value="7">3+ &#9733;</option>
+                        <option value="6">2+ &#9733;</option>
+                        <option value="5">1+ &#9733;</option>
                     </select>
                 </div>
                 <!--Min Win Ratio-->
