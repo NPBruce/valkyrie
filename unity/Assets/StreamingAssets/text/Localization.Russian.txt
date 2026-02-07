@@ -516,3 +516,5 @@ FILTER_TEXT_TOTAL_ONLY,{0} сценариев
 SELECT_GAME_TYPE,Выбрать тип игры
 
 SEARCH_BY_NAME,Поиск по имени...
+
+SEARCH_BY_ID,Поиск по ID

@@ -513,3 +513,5 @@ FILTER_TEXT_TOTAL_ONLY,{0} Szenarien
 SELECT_GAME_TYPE,Spieltyp auswählen
 
 SEARCH_BY_NAME,Suche nach Name...
+
+SEARCH_BY_ID,Suche nach ID

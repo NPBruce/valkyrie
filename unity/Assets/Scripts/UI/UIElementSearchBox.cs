@@ -45,33 +45,32 @@ namespace Assets.Scripts.UI
                 iconRect.anchorMax = new Vector2(1, 1);
                 iconRect.pivot = new Vector2(1, 0.5f);
                 
-                float buttonWidthUnits = 1.5f;
-                float buttonWidth = buttonWidthUnits * UIScaler.GetPixelsPerUnit();
-                
+                float buttonWidth = input.GetComponent<RectTransform>().rect.height;
+                // Fallback if height is not set yet
+                if (buttonWidth == 0) buttonWidth = 1.5f * UIScaler.GetPixelsPerUnit();
+
                 iconRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, buttonWidth);
                 iconRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 0, iconRect.parent.GetComponent<RectTransform>().rect.height);
                 
                 iconRect.anchorMin = new Vector2(1f, 0.5f);
                 iconRect.anchorMax = new Vector2(1f, 0.5f);
                 iconRect.pivot = new Vector2(1f, 0.5f);
-                iconRect.sizeDelta = new Vector2(1.2f * UIScaler.GetPixelsPerUnit(), 1.2f * UIScaler.GetPixelsPerUnit());
-                iconRect.anchoredPosition = new Vector2(-0.15f * UIScaler.GetPixelsPerUnit(), 0);
+                
+                float iconSize = buttonWidth * 0.8f;
+                iconRect.sizeDelta = new Vector2(iconSize, iconSize);
+                iconRect.anchoredPosition = new Vector2(-0.1f * buttonWidth, 0);
 
                 // Now adjust the text padding so it doesn't overlap the icon
                 if (text != null)
                 {
                     RectTransform textRect = text.GetComponent<RectTransform>();
                     float currentOffsetMaxY = textRect.offsetMax.y;
-                    textRect.offsetMax = new Vector2(-1.5f * UIScaler.GetPixelsPerUnit(), currentOffsetMaxY);
+                    textRect.offsetMax = new Vector2(-buttonWidth, currentOffsetMaxY);
                 }
             }
         }
 
-        public override void SetButton(UnityEngine.Events.UnityAction call)
-        {
-            base.SetButton(call);
-            UpdateIconState();
-        }
+
 
         private void UpdateIconState()
         {
@@ -105,6 +104,21 @@ namespace Assets.Scripts.UI
                     if(buttonCall != null) buttonCall(); 
                 });
             }
+        }
+
+        public override void SetButton(UnityEngine.Events.UnityAction call)
+        {
+            buttonCall = call;
+            if (input != null)
+            {
+                input.GetComponent<PanCancelInputField>().onEndEdit.AddListener(delegate {
+                    if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                    {
+                        if (buttonCall != null) buttonCall();
+                    }
+                });
+            }
+            UpdateIconState();
         }
     }
 }

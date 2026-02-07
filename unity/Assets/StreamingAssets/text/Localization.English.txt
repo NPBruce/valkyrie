@@ -686,3 +686,5 @@ FILTER_TEXT_TOTAL_ONLY,{0} scenarios
 SELECT_GAME_TYPE,Select Game Type
 
 SEARCH_BY_NAME,Search by Name...
+
+SEARCH_BY_ID,Search by id

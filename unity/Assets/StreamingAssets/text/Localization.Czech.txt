@@ -689,3 +689,5 @@ FILTER_TEXT_TOTAL_ONLY,{0} scenářů
 SELECT_GAME_TYPE,Vybrat typ hry
 
 SEARCH_BY_NAME,Hledat podle názvu...
+
+SEARCH_BY_ID,Hledat podle ID

@@ -459,3 +459,5 @@ FILTER_TEXT_TOTAL_ONLY,{0} scenari
 SELECT_GAME_TYPE,Seleziona tipo di gioco
 
 SEARCH_BY_NAME,Cerca per nome...
+
+SEARCH_BY_ID,Cerca per ID
