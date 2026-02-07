@@ -121,9 +121,14 @@ namespace Assets.Scripts.UI
 
         public void SetPlaceholder(StringKey placeholder)
         {
+            SetPlaceholder(placeholder.Translate());
+        }
+
+        public void SetPlaceholder(string placeholder)
+        {
             if (input == null) return;
             PanCancelInputField uiInput = input.GetComponent<PanCancelInputField>();
-            
+
             if (placeholderObject == null)
             {
                 placeholderObject = new GameObject("UIPlaceholder");
@@ -135,7 +140,7 @@ namespace Assets.Scripts.UI
                 uiText.fontStyle = FontStyle.Italic;
                 uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
                 uiText.color = new Color(0.5f, 0.5f, 0.5f, 0.8f); // Grey color for placeholder
-                
+
                 placeholderObject.transform.SetParent(input.transform);
                 RectTransform transform = placeholderObject.GetComponent<RectTransform>();
                 transform.anchorMin = Vector2.zero;
@@ -147,8 +152,8 @@ namespace Assets.Scripts.UI
 
                 uiInput.placeholder = uiText;
             }
-            
-            placeholderObject.GetComponent<UnityEngine.UI.Text>().text = placeholder.Translate();
+
+            placeholderObject.GetComponent<UnityEngine.UI.Text>().text = placeholder;
             placeholderHiddenOnFocus = true;
         }
 

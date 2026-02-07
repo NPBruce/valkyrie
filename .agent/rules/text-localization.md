@@ -1,10 +1,10 @@
 ---
 trigger: model_decision
-description: When it is necessary to add UI related texts
+description: When adding ANY text that is visible in the UI
 ---
 
 ### Localization files
-UI text should always get localized. Localization files are located in `Assets/StreamingAssets/text/`.
+UI text MUST ALWAYS be localized. Do NOT use hardcoded strings for UI elements. Localization files are located in `Assets/StreamingAssets/text/`.
 - `Localization.English.txt` is the master file.
 - The format is `KEY,Value`.
 - When adding new text:

@@ -26,6 +26,9 @@ namespace Assets.Scripts.UI
         string val_traits_translated = null;
         string val_type_translated = null;
 
+        protected UIElementSearchBox searchUI;
+        protected string searchString = "";
+
         private static readonly Color DISABLED_TRAIT_COLOR = new Color(0.5f, 0, 0);
         private static readonly Color SELECTED_TRAIT_COLOR = Color.white;
         private static readonly Color NOT_SELECTED_TRAIT_COLOR = Color.grey;
@@ -116,6 +119,15 @@ namespace Assets.Scripts.UI
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-10), 0, 20, 1);
             ui.SetText(_title);
+
+            // Search Box
+            searchUI = new UIElementSearchBox("", null);
+            searchUI.SetLocation(UIScaler.GetHCenter(6.5f), 1, 9, 1);
+            searchUI.SetText(searchString);
+            searchUI.SetPlaceholder(new StringKey("val","SEARCH_BY_ID"));
+            searchUI.SetSingleLine();
+            searchUI.SetButton(delegate { searchString = searchUI.GetText(); Update(); });
+            new UIElementBorder(searchUI);
 
             // Sort Buttons
             ui = new UIElement();
@@ -308,6 +320,15 @@ namespace Assets.Scripts.UI
         protected virtual float DrawItem(SelectionItemTraits item, Transform transform, float offset)
         {
             string key = item.GetKey();
+            // Filter by ID (Key)
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                if (key == null || !key.IndexOf(searchString, StringComparison.OrdinalIgnoreCase).Equals(-1) == false)
+                {
+                    return offset;
+                }
+            }
+
             UIElement ui = new UIElement(transform);
             ui.SetLocation(0, offset, 20, 1);
             if (key != null)
