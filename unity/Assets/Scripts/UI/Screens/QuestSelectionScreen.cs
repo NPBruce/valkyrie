@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using ValkyrieTools;
 using Object = UnityEngine.Object;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -58,7 +59,9 @@ namespace Assets.Scripts.UI.Screens
 
         private readonly StringKey STATS_NO_AVERAGE_WIN_RATIO = new StringKey("val", "STATS_NO_AVERAGE_WIN_RATIO");
         private readonly StringKey STATS_NO_AVERAGE_DURATION = new StringKey("val", "STATS_NO_AVERAGE_DURATION");
-
+        
+        private readonly StringKey SEARCH_BY_NAME = new StringKey("val", "SEARCH_BY_NAME");
+        
         private readonly StringKey GO_OFFLINE = new StringKey("val", "GO_OFFLINE");
         private readonly StringKey GO_ONLINE = new StringKey("val", "GO_ONLINE");
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
@@ -96,6 +99,11 @@ namespace Assets.Scripts.UI.Screens
         Texture2D button_play = null;
         Texture2D button_no_entry = null;
         Texture2D button_hole = null;
+        Texture2D button_search = null;
+
+        // Search
+        string searchFilter = "";
+        UIElementEditable uiSearchInput = null;
 
         public void Start()
         {
@@ -134,12 +142,16 @@ namespace Assets.Scripts.UI.Screens
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
             button_play = Resources.Load("sprites/scenario_list/button_play") as Texture2D;
             button_no_entry = Resources.Load("sprites/scenario_list/button_no_entry") as Texture2D;
+            button_search = Resources.Load("sprites/search") as Texture2D;
 
             Show();
         }
 
         public void Show()
         {
+            // Reset search filter on screen entry
+            searchFilter = "";
+
             // If a dialog window is open we force it closed (this shouldn't happen)
             foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
                 Destroy(go);
@@ -204,7 +216,7 @@ namespace Assets.Scripts.UI.Screens
 
             // initialize text indicator for filtered scenario
             text_number_of_filtered_scenario = new UIElement(Game.QUESTUI);
-            text_number_of_filtered_scenario.SetLocation(1, 3.6f, 20, 1.2f);
+            text_number_of_filtered_scenario.SetLocation(1, 3.6f, UIScaler.GetWidthUnits() - 17f, 1.2f);
             text_number_of_filtered_scenario.SetText(" ");
             text_number_of_filtered_scenario.SetTextAlignment(TextAnchor.MiddleLeft);
             text_number_of_filtered_scenario.SetFont(Game.Get().gameType.GetHeaderFont());
@@ -215,26 +227,46 @@ namespace Assets.Scripts.UI.Screens
             Texture2D filterTex = null;
             filterTex = Resources.Load("sprites/filter") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetImage(filterTex);
             ui.SetButton(delegate { FilterPopup(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
+            UIElement filterIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            filterIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            filterIcon.SetImage(filterTex);
+            filterIcon.SetButton(delegate { FilterPopup(); });
 
             // Show reload button
             ui = new UIElement(Game.QUESTUI);
             Texture2D reloadTex = Resources.Load("sprites/refresh") as Texture2D; // Assuming a sprite exists, or use text "R"
-            ui.SetImage(reloadTex);
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f, 3.5f, 1.5f, 1.5f);
             ui.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
+            UIElement reloadIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            reloadIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            reloadIcon.SetImage(reloadTex);
+            reloadIcon.SetButton(delegate { game.questsList.UnloadLocalQuests(); ReloadQuestList(); });
+
+
+
+            // Search Input
+            uiSearchInput = new UIElementSearchBox(Game.QUESTUI);
+            uiSearchInput.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f - 1.5f - 1.5f - 9.5f, 3.5f, 9.5f, 1.5f);
+            uiSearchInput.SetText(searchFilter);
+            uiSearchInput.SetSingleLine();
+            uiSearchInput.SetPlaceholder(SEARCH_BY_NAME);
+            uiSearchInput.SetButton(delegate { PerformSearch(); });
+            new UIElementBorder(uiSearchInput, Color.grey);
 
             // Show sort button
             ui = new UIElement(Game.QUESTUI);
             Texture2D sortTex = null;
             sortTex = Resources.Load("sprites/sort") as Texture2D;
             ui.SetLocation(UIScaler.GetWidthUnits() - 1f - 1.5f, 3.5f, 1.5f, 1.5f);
-            ui.SetImage(sortTex);
             ui.SetButton(delegate { SortByPopup(); });
-            new UIElementBorder(ui);
+            new UIElementBorder(ui, Color.grey);
+            UIElement sortIcon = new UIElement(Game.QUESTUI, ui.GetTransform());
+            sortIcon.SetLocation(0.15f, 0.15f, 1.2f, 1.2f);
+            sortIcon.SetImage(sortTex);
+            sortIcon.SetButton(delegate { SortByPopup(); });
 
             // Show offline/online button (or info)
             DrawOnlineModeButton();
@@ -335,6 +367,15 @@ namespace Assets.Scripts.UI.Screens
                 filter_missing_expansions = true;
                 filter_missing_expansions_text.SetText(FILTER_MISSING_EXPANSIONS_ON);
             }
+        }
+
+        private void PerformSearch()
+        {
+            if (uiSearchInput == null) return;
+            string newFilter = uiSearchInput.GetText().Trim();
+            if (newFilter.Equals(searchFilter)) return;
+            searchFilter = newFilter;
+            ReloadQuestList();
         }
 
         private void DrawOnlineModeButton()
@@ -773,6 +814,8 @@ namespace Assets.Scripts.UI.Screens
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
             Destroy(go);
 
+
+
         scrollArea = null;
         questActionButtons.Clear();
 
@@ -841,9 +884,21 @@ namespace Assets.Scripts.UI.Screens
             scrollArea = new UIElementScrollVertical(Game.QUESTLIST);
             scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, UIScaler.GetHeightUnits() - 6f);
             new UIElementBorder(scrollArea, Color.grey);
+
+            // Fix Z-order: Put scroll area behind all other UI elements (Header, Buttons) to prevent text leaking over them
+            int minIndex = scrollArea.GetTransform().GetSiblingIndex();
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
+            {
+                if (go.transform.parent == scrollArea.GetTransform().parent)
+                {
+                    if (go.transform.GetSiblingIndex() < minIndex)
+                        minIndex = go.transform.GetSiblingIndex();
+                }
+            }
+            scrollArea.GetTransform().SetSiblingIndex(minIndex);
         }
         // Add "Loading..." text for all modes
-        UIElement loadingText = new UIElement();
+        UIElement loadingText = new UIElement(Game.QUESTLIST);
         loadingText.SetLocation(UIScaler.GetHCenter() - 5, 10, 10, 2);
         loadingText.SetText(CommonStringKeys.LOADINGSCENARIOS, Color.white);
         loadingText.SetFont(game.gameType.GetHeaderFont());
@@ -938,6 +993,18 @@ namespace Assets.Scripts.UI.Screens
             {
                 nb_filtered_out_quest++;
                 continue;
+            }
+
+            // Filter search
+            if (!searchFilter.Equals(""))
+            {
+                string name_translation, synopsys_translation;
+                QuestGetTranslations(q, out name_translation, out synopsys_translation);
+                if (!name_translation.ToLower().Contains(searchFilter.ToLower()))
+                {
+                    nb_filtered_out_quest++;
+                    continue;
+                }
             }
 
             try
@@ -1507,6 +1574,10 @@ namespace Assets.Scripts.UI.Screens
         // Return to main menu
         public void Cancel()
         {
+            // Valid because calling MainMenu destroys the object
+            // This prevents the OnEndEdit event from triggering a search with empty text
+            uiSearchInput = null;
+
             CleanQuestList();
 
             GameStateManager.MainMenu();

@@ -1,5 +1,7 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.UI
 {
@@ -9,12 +11,11 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class PanCancelInputField : InputField
     {
-        public PanCancelInputField() : base() {}
+        // Constructor removed as it is invalid for MonoBehaviours
+        
+        public UnityEvent onSelectEvent = new UnityEvent();
+        public UnityEvent onDeselectEvent = new UnityEvent();
 
-        /// <summary>
-        /// When selecting the component, the pan is disabled
-        /// </summary>
-        /// <param name="eventData"></param>
         public override void OnSelect(BaseEventData eventData)
         {
             CameraController.panDisable = true;
@@ -22,29 +23,22 @@ namespace Assets.Scripts.UI
             this.caretPosition = lastCaretPosition;
             this.selectionAnchorPosition = lastCaretPosition;
             this.selectionFocusPosition = lastCaretPosition;
+            onSelectEvent.Invoke();
         }
 
         private int lastCaretPosition = 0;
 
-        /// <summary>
-        /// The caret reset after deselect. We must store one
-        /// in order to know where to insert special characters.
-        /// </summary>
-        /// <returns></returns>
         public int getLastCaretPosition()
         {
             return lastCaretPosition;
         }
 
-        /// <summary>
-        /// When deselecting the component, the pan is enabled
-        /// </summary>
-        /// <param name="eventData"></param>
         public override void OnDeselect(BaseEventData eventData)
         {
             lastCaretPosition = this.caretPosition;
             CameraController.panDisable = false;
             base.OnDeselect(eventData);
+            onDeselectEvent.Invoke();
         }
     }
 

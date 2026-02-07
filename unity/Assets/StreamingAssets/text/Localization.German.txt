@@ -511,3 +511,5 @@ CLICK_STATIC,Statisch / Kein Ereignis
 REQUIRED,Erforderlich
 FILTER_TEXT_TOTAL_ONLY,{0} Szenarien
 SELECT_GAME_TYPE,Spieltyp auswählen
+
+SEARCH_BY_NAME,Suche nach Name...
