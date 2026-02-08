@@ -204,12 +204,7 @@ namespace Valkyrie.UnitTests
 
         #region FormatVersions Tests
 
-        [Test]
-        public void QuestFormat_CurrentVersion_IsRelease300()
-        {
-            // Assert
-            Assert.AreEqual((int)QuestFormat.Versions.RELEASE_3_0_0, QuestFormat.CURRENT_VERSION);
-        }
+
 
         [Test]
         public void QuestFormat_VersionOrdering_IsCorrect()
@@ -218,6 +213,7 @@ namespace Valkyrie.UnitTests
             Assert.IsTrue((int)QuestFormat.Versions.RICH_TEXT < (int)QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT);
             Assert.IsTrue((int)QuestFormat.Versions.SPLIT_BASE_MOM_AND_CONVERSION_KIT < (int)QuestFormat.Versions.RELEASE_2_5_4);
             Assert.IsTrue((int)QuestFormat.Versions.RELEASE_2_5_4 < (int)QuestFormat.Versions.RELEASE_3_0_0);
+            Assert.IsTrue((int)QuestFormat.Versions.RELEASE_3_0_0 < (int)QuestFormat.Versions.RELEASE_3_1_5);
         }
 
         [Test]
@@ -246,6 +242,13 @@ namespace Valkyrie.UnitTests
         {
             // Assert
             Assert.AreEqual(19, (int)QuestFormat.Versions.RELEASE_3_0_0);
+        }
+
+        [Test]
+        public void QuestFormat_Release315Version_Is20()
+        {
+            // Assert
+            Assert.AreEqual(20, (int)QuestFormat.Versions.RELEASE_3_1_5);
         }
 
         [Test]
