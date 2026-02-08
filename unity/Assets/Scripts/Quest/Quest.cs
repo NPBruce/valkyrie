@@ -1244,6 +1244,110 @@ public class Quest
             boardItems.Clear();
             ordered_boardItems.Clear();
         }
+
+        if (name.Equals("#uicomponents"))
+        {
+            List<string> toRemove = new List<string>();
+            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            {
+                if (kv.Value is UI)
+                {
+                    kv.Value.Remove();
+                    toRemove.Add(kv.Key);
+                }
+            }
+
+            foreach (string s in toRemove)
+            {
+                boardItems.Remove(s);
+                ordered_boardItems.Remove(s);
+            }
+        }
+
+        if (name.Equals("#doors"))
+        {
+            List<string> toRemove = new List<string>();
+            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            {
+                if (kv.Value is Door)
+                {
+                    kv.Value.Remove();
+                    toRemove.Add(kv.Key);
+                }
+            }
+
+            foreach (string s in toRemove)
+            {
+                boardItems.Remove(s);
+                ordered_boardItems.Remove(s);
+            }
+        }
+
+        if (name.Equals("#tiles"))
+        {
+            List<string> toRemove = new List<string>();
+            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            {
+                if (kv.Value is Tile)
+                {
+                    kv.Value.Remove();
+                    toRemove.Add(kv.Key);
+                }
+            }
+
+            foreach (string s in toRemove)
+            {
+                boardItems.Remove(s);
+                ordered_boardItems.Remove(s);
+            }
+        }
+
+        if (name.Equals("#qitems"))
+        {
+            List<string> toRemove = new List<string>();
+            foreach (KeyValuePair<string, string> kv in itemSelect)
+            {
+                if (items.Contains(kv.Value))
+                {
+                    items.Remove(kv.Value);
+                    if (itemInspect.ContainsKey(kv.Value))
+                    {
+                        itemInspect.Remove(kv.Value);
+                    }
+                    toRemove.Add(kv.Key);
+                }
+            }
+            
+            // We should probably remove the QItem from itemSelect?
+            // "Remove" function usually removes components from "active" lists.
+            // But QItems are not in BoardItems.
+            // If we remove from itemSelect, we lose the mapping?
+            // But the item is gone from inventory.
+            // If the QItem is triggered again, it will try to re-add?
+            // "Remove" means revert the effect of adding.
+            // So removing from "items" is correct.
+            // Wait, "itemSelect" is populated at quest start based on available items.
+            // Should not modify "itemSelect".
+        }
+
+        if (name.Equals("#tokens"))
+        {
+            List<string> toRemove = new List<string>();
+            foreach (KeyValuePair<string, BoardComponent> kv in boardItems)
+            {
+                if (kv.Value is Token)
+                {
+                    kv.Value.Remove();
+                    toRemove.Add(kv.Key);
+                }
+            }
+
+            foreach (string s in toRemove)
+            {
+                boardItems.Remove(s);
+                ordered_boardItems.Remove(s);
+            }
+        }
     }
 
     public bool UIItemsPresent()
@@ -1849,16 +1953,16 @@ public class Quest
             game.tokenBoard.Add(this);
         }
 
-        private TextAlignmentOptions ConvertRichTextAlignment(TextAlignment qUITextAlignment)
+        private TMPro.TextAlignmentOptions ConvertRichTextAlignment(TextAlignment qUITextAlignment)
         {
             switch (qUITextAlignment)
             {
                 case TextAlignment.TOP:
-                    return TextAlignmentOptions.Top;
+                    return TMPro.TextAlignmentOptions.Top;
                 case TextAlignment.BOTTOM:
-                    return TextAlignmentOptions.Bottom;
+                    return TMPro.TextAlignmentOptions.Bottom;
             }
-            return TextAlignmentOptions.Center;
+            return TMPro.TextAlignmentOptions.Center;
         }
 
         private TextAnchor ConvertStandardTextAlignment(TextAlignment qUITextAlignment)
