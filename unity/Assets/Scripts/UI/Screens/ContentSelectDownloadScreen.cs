@@ -222,12 +222,12 @@ namespace Assets.Scripts.UI.Screens
             {
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(6.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 6, 2f);
+                ui.SetLocation(6.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 6, 4.5f);
                 ui.SetTextPadding(0.5f);
-                if (description.Length >= 105)
-                    description = description.Substring(0, 100) + "(...)";
+                if (description.Length >= 400)
+                    description = description.Substring(0, 395) + "(...)";
                 ui.SetText(description, Color.black);
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                ui.SetTextAlignment(TextAnchor.UpperLeft);
                 if (game.gameType.TypeName() == "MoM")
                     ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.87f));
                 if (game.gameType.TypeName() == "D2E")
