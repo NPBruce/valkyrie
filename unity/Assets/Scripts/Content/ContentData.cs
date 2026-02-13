@@ -273,6 +273,18 @@ public class ContentData
 
     private void AddPackToAllPacksAndPackSymbol(ContentPack pack, List<ContentPack> allPacksList, Dictionary<string, StringKey> packSymbolDict)
     {
+        // Remove existing pack if present (update scenario)
+        var existingPack = allPacksList.FirstOrDefault(p => p.id.Equals(pack.id));
+        if (existingPack != null)
+        {
+            allPacksList.Remove(existingPack);
+        }
+        
+        if (packSymbolDict.ContainsKey(pack.id))
+        {
+            packSymbolDict.Remove(pack.id);
+        }
+
         // Add content pack
         allPacksList.Add(pack);
 

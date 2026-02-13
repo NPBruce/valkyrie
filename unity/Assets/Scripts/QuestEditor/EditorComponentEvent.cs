@@ -918,6 +918,11 @@ public class EditorComponentEvent : EditorComponent
             select.AddItem("#boardcomponents", traits);
             select.AddItem("#monsters", traits);
             select.AddItem("#shop", traits);
+            select.AddItem("#uicomponents", traits);
+            select.AddItem("#doors", traits);
+            select.AddItem("#tiles", traits);
+            select.AddItem("#qitems", traits);
+            select.AddItem("#tokens", traits);
         }
 
         if (game.gameType is D2EGameType)

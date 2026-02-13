@@ -544,6 +544,7 @@ namespace Assets.Scripts.UI.Screens
 
                 // Download quests list
                 game.questsList = new QuestsManager();
+                game.remoteContentPackManager = new RemoteContentPackManager();
                 // MoM also has a special reound controller
                 game.roundControl = new RoundControllerMoM();
                 Texture2D cursor = Resources.Load("sprites/CursorMoM") as Texture2D;

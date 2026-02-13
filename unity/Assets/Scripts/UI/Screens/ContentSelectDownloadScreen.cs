@@ -27,11 +27,12 @@ namespace Assets.Scripts.UI.Screens
         ImgAsyncLoader images_list = null;
 
         // textures
+        Texture2D scroll_paper = null;
         Texture2D picture_shadow = null;
         Texture2D picture_pin = null;
         private Texture2D button_download = null;
         private Texture2D button_update = null;
-        private Texture2D button_no_entry = null;
+        private Texture2D button_delete = null;
         // Display coroutine
 
         // Create page
@@ -43,11 +44,12 @@ namespace Assets.Scripts.UI.Screens
             images_list = new ImgAsyncLoader(this);
 
             //preload textures
+            scroll_paper = Resources.Load("sprites/scenario_list/scroll_paper") as Texture2D;
             picture_shadow = Resources.Load("sprites/scenario_list/picture_shadow") as Texture2D;
             picture_pin = Resources.Load("sprites/scenario_list/picture_pin") as Texture2D;
             button_download = Resources.Load("sprites/scenario_list/button_download") as Texture2D;
             button_update = Resources.Load("sprites/scenario_list/button_update") as Texture2D;
-            button_no_entry = Resources.Load("sprites/scenario_list/button_no_entry") as Texture2D;
+            button_delete = Resources.Load("sprites/scenario_list/button_delete") as Texture2D;
 
             // Clean everything up
             Destroyer.Destroy();
@@ -89,6 +91,12 @@ namespace Assets.Scripts.UI.Screens
             var localContentPackList = game.cd.Values<PackTypeData>();
             foreach (var contentPack in game.remoteContentPackManager.remote_RemoteContentPack_data)
             {
+                // Background Frame
+                UIElement frame = new UIElement(scrollArea.GetScrollTransform());
+                frame.SetLocation(0, offset, UIScaler.GetWidthUnits() - 2, 7);
+                frame.SetImage(scroll_paper);
+                frame.SetBGColor(Color.white);
+                frame.GetTransform().SetAsFirstSibling();
 
                 ui = RenderContentPackNameAndDescription(offset, contentPack);
                 ui = RenderImage(offset, contentPack);
@@ -110,9 +118,14 @@ namespace Assets.Scripts.UI.Screens
                 return;
             }
 
+            // Background
+            var bgDisplay = new UIElement(scrollArea.GetScrollTransform());
+            bgDisplay.SetBGColor(Color.black);
+            bgDisplay.SetLocation(UIScaler.GetRight(-10.0f) + 0.65f, offset + 2.65f, 1.2f, 1.2f);
+
             var ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
-            ui.SetLocation(UIScaler.GetRight(-8.1f), offset + 1.4f, 1.8f, 1.8f);
+            ui.SetLocation(UIScaler.GetRight(-10.0f), offset + 2.0f, 2.5f, 2.5f);
 
             if (contentPack.Value.downloaded)
             {
@@ -130,11 +143,15 @@ namespace Assets.Scripts.UI.Screens
         {
             if (contentPack.Value.downloaded)
             {
+                // Background
+                var bgDisplay = new UIElement(scrollArea.GetScrollTransform());
+                bgDisplay.SetBGColor(Color.black);
+                bgDisplay.SetLocation(UIScaler.GetRight(-7.0f) + 0.65f, offset + 2.65f, 1.2f, 1.2f);
 
                 var ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(UIScaler.GetRight(-6.0f), offset + 1.4f, 1.8f, 1.8f);
-                ui.SetImage(button_no_entry);
+                ui.SetLocation(UIScaler.GetRight(-7.0f), offset + 2.0f, 2.5f, 2.5f);
+                ui.SetImage(button_delete);
                 ui.SetButton(delegate { Delete(contentPack.Value.identifier); });
             }
         }
@@ -186,12 +203,12 @@ namespace Assets.Scripts.UI.Screens
             // Content pack name
             UIElement ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetBGColor(Color.clear);
-            ui.SetLocation(5.5f, offset + 0.9f, UIScaler.GetWidthUnits() - 8, 1.5f);
+            ui.SetLocation(6.5f, offset + 0.9f, UIScaler.GetWidthUnits() - 9, 1.5f);
             ui.SetTextPadding(0.5f);
 
             string name = remoteContentPack.Value.languages_name.FirstOrDefault().Value;
 
-            ui.SetText(name, Color.red);
+            ui.SetText(name, Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
             if (game.gameType.TypeName() == "MoM")
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.4f));
@@ -205,12 +222,12 @@ namespace Assets.Scripts.UI.Screens
             {
                 ui = new UIElement(scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
+                ui.SetLocation(6.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 6, 4.5f);
                 ui.SetTextPadding(0.5f);
-                if (description.Length >= 105)
-                    description = description.Substring(0, 100) + "(...)";
-                ui.SetText(description, Color.red);
-                ui.SetTextAlignment(TextAnchor.MiddleLeft);
+                if (description.Length >= 400)
+                    description = description.Substring(0, 395) + "(...)";
+                ui.SetText(description, Color.black);
+                ui.SetTextAlignment(TextAnchor.UpperLeft);
                 if (game.gameType.TypeName() == "MoM")
                     ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 0.87f));
                 if (game.gameType.TypeName() == "D2E")
