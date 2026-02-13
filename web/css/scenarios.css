@@ -297,14 +297,15 @@
     overflow-y: auto;
 }
 
-margin: 0;
-white-space: pre-wrap;
-/* Preserve formatting */
+.info-modal-text {
+    margin: 0;
+    white-space: pre-wrap;
+    /* Preserve formatting */
 }
 
 /* Utilities extracted from inline styles */
 .scenario-flag-icon {
-    margin-right: 4px;
+    margin-right: 8px;
     cursor: help;
 }
 
