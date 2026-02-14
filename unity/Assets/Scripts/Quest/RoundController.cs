@@ -278,7 +278,7 @@ public class RoundController
         int round = Mathf.RoundToInt(game.CurrentQuest.vars.GetValue("#round"));
         game.CurrentQuest.eManager.EventTriggerType("EndRound" + round, false);
 
-        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0)
+        if (game.CurrentQuest.vars.GetValue("#eliminatedprev") > 0 && game.CurrentQuest.vars.GetValue("#eliminatedcomplete") <= 0)
         {
             game.CurrentQuest.vars.SetValue("#eliminatedcomplete", 1);
             game.CurrentQuest.eManager.EventTriggerType("Eliminated", false);
