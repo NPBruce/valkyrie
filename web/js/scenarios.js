@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             let descContent = formatDescription(fullDescription);
                             const authorLong = getAuthorLongValue(item, lang);
                             if (authorLong) {
-                                descContent += `<br><br><b>${authorLabel}:</b> ${authorLong}`;
+                                descContent += `<br><br><b>${authorLabel}:</b> ${formatDescription(authorLong)}`;
                             }
                             showInfoDialog(name, descContent);
                         };
