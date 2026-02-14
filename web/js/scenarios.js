@@ -142,6 +142,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return TRANSLATIONS[key]['English'] || key;
     }
 
+    function getAuthorValue(item, lang) {
+        if (item[`authors_short.${lang}`]) return item[`authors_short.${lang}`];
+        if (item[`authors.${lang}`]) return item[`authors.${lang}`];
+        if (item[`authors_short.English`]) return item[`authors_short.English`];
+        if (item[`authors.English`]) return item[`authors.English`];
+        if (item['authors_short']) return item['authors_short'];
+        return item['authors'] || '';
+    }
+
+    function getAuthorLongValue(item, lang) {
+        if (item[`authors.${lang}`]) return item[`authors.${lang}`];
+        if (item[`authors.English`]) return item[`authors.English`];
+        return item['authors'] || '';
+    }
+
     function formatText(text) {
         if (!text) return '';
         return text
@@ -232,8 +247,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         // For dialog view: Priority is Description -> Synopsys (Keep tags for formatting)
                         const fullDescription = getLocalizedValue(item, 'description', lang, true) || getLocalizedValue(item, 'synopsys', lang, true) || 'No description available.';
 
-                        // Changed from 'authors' to 'authors_short' as requested
-                        let authors = getLocalizedValue(item, 'authors_short', lang) || getLocalizedValue(item, 'authors', lang) || 'Unknown';
+                        // Changed from 'authors' to 'authors_short' with fallback logic
+                        let authors = getAuthorValue(item, lang) || 'Unknown';
 
                         // Format text
                         synopsys = formatText(synopsys);
@@ -312,7 +327,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                         card.style.cursor = 'pointer';
                         card.onclick = () => {
-                            showInfoDialog(name, formatDescription(fullDescription));
+                            let descContent = formatDescription(fullDescription);
+                            const authorLong = getAuthorLongValue(item, lang);
+                            if (authorLong) {
+                                descContent += `<br><br><b>${authorLabel}:</b> ${authorLong}`;
+                            }
+                            showInfoDialog(name, descContent);
                         };
 
                         container.appendChild(card);
@@ -583,7 +603,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Author
             if (s.filters.author) {
                 filtered = filtered.filter(item => {
-                    let auth = getLocalizedValue(item, 'authors_short', userLang) || getLocalizedValue(item, 'authors', userLang) || 'Community';
+                    let auth = getAuthorValue(item, userLang) || 'Community';
                     auth = formatText(auth);
                     return auth === s.filters.author;
                 });
@@ -675,8 +695,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     valB = b.latest_update || '';
                 } else if (field === 'author') {
                     // Author comparison
-                    valA = getLocalizedValue(a, 'authors_short', userLang) || getLocalizedValue(a, 'authors', userLang) || '';
-                    valB = getLocalizedValue(b, 'authors_short', userLang) || getLocalizedValue(b, 'authors', userLang) || '';
+                    valA = getAuthorValue(a, userLang);
+                    valB = getAuthorValue(b, userLang);
                 } else if (field === 'rating') {
                     valA = parseFloat(a.rating) || 0;
                     valB = parseFloat(b.rating) || 0;
@@ -763,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
                 // Collect Authors
-                let auth = getLocalizedValue(item, 'authors_short', userLang) || getLocalizedValue(item, 'authors', userLang) || 'Community';
+                let auth = getAuthorValue(item, userLang) || 'Community';
                 // Sanitize [b], [i], etc.
                 if (auth) {
                     auth = formatText(auth);
