@@ -93,7 +93,7 @@ public class TokenBoard : MonoBehaviour {
 
         if (game.gameType is MoMGameType)
         {
-            Texture2D newTex = ContentData.FileToTexture(me.cMonster.image);
+            Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
             AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
         }
         // Check for a placement list at this hero count
@@ -101,7 +101,7 @@ public class TokenBoard : MonoBehaviour {
         {
             if (me.cMonster.ContainsTrait("lieutenant"))
             {
-                Texture2D newTex = ContentData.FileToTexture(me.cMonster.image);
+                Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
                 AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
             }
             else
