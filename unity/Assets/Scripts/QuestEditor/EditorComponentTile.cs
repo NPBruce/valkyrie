@@ -67,22 +67,21 @@ public class EditorComponentTile : EditorComponent
             offset += 2;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 5, 1);
+            ui.SetLocation(0, offset, 4, 1);
             ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TOP));
             
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
+            ui.SetLocation(4, offset, 5, 1);
             ui.SetText(tileComponent.top.ToString());
             ui.SetButton(delegate { SetTop(); });
             new UIElementBorder(ui);
-            offset += 2;
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 5, 1);
+            ui.SetLocation(10, offset, 4, 1);
             ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.LEFT));
             
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
+            ui.SetLocation(14, offset, 5, 1);
             ui.SetText(tileComponent.left.ToString());
             ui.SetButton(delegate { SetLeft(); });
             new UIElementBorder(ui);
@@ -301,10 +300,11 @@ public class EditorComponentTile : EditorComponent
             new StringKey("val", "X_COLON", CommonStringKeys.TOP), 
             initial,
             delegate(string s) 
-            { 
+            {
                  float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.top); 
                  Update(); 
             });
+        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
         db.EditText();
     }
 
@@ -318,10 +318,11 @@ public class EditorComponentTile : EditorComponent
             new StringKey("val", "X_COLON", CommonStringKeys.LEFT), 
             initial,
             delegate(string s) 
-            { 
+            {
                  float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.left); 
                  Update(); 
             });
+        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
         db.EditText();
     }
 }
