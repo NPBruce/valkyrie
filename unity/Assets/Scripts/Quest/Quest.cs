@@ -1723,8 +1723,17 @@ public class Quest
             // Check that token exists
             if (qToken.customImage.Length > 0)
             {
-                 string path = System.IO.Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
-                 newTex = ContentData.FileToTexture(path);
+                if (game.cd.TryGet(qToken.customImage, out ImageData imageData))
+                {
+                    Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                    Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                    newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);
+                }
+                else
+                {
+                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
+                    newTex = ContentData.FileToTexture(path);
+                }
             }
             else if (game.cd.ContainsKey<TokenData>(tokenName))
             {
