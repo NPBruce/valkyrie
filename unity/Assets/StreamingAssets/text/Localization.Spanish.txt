@@ -521,3 +521,9 @@ SELECT_GAME_TYPE,Seleccionar tipo de juego
 SEARCH_BY_NAME,Buscar por nombre...
 
 SEARCH_BY_ID,Buscar por ID...
+
+DEFAULT,Default
+SMALL,Pequeño
+MEDIUM,Mediano
+HUGE,Gigante
+MASSIVE,Masivo

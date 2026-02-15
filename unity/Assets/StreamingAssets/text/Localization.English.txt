@@ -244,6 +244,11 @@ HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Align
 SIZE,Size
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
 TEXT_SIZE,Text Size
 BACKGROUND_COLOUR,Background colour
 ASPECT,Aspect

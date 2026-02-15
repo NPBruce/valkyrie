@@ -93,5 +93,12 @@ namespace Assets.Scripts.Content
         public static readonly StringKey LOADINGCONTENTPACKS = new StringKey(VAL, "LOADINGCONTENTPACKS");
         public static readonly StringKey REQUIRED = new StringKey(VAL, "REQUIRED");
 
+        public static readonly StringKey SIZE = new StringKey(VAL, "SIZE");
+        public static readonly StringKey DEFAULT = new StringKey(VAL, "DEFAULT");
+        public static readonly StringKey SMALL = new StringKey(VAL, "SMALL");
+        public static readonly StringKey MEDIUM = new StringKey(VAL, "MEDIUM");
+        public static readonly StringKey HUGE = new StringKey(VAL, "HUGE");
+        public static readonly StringKey MASSIVE = new StringKey(VAL, "MASSIVE");
+
     }
 }

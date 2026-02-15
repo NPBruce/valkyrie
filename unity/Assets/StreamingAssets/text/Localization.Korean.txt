@@ -684,3 +684,9 @@ SELECT_GAME_TYPE,게임 유형 선택
 SEARCH_BY_NAME,이름으로 검색...
 
 SEARCH_BY_ID,ID로 검색...
+
+DEFAULT,Default
+SMALL,소형
+MEDIUM,중형
+HUGE,대형
+MASSIVE,무거운

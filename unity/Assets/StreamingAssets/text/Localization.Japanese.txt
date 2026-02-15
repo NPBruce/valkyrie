@@ -718,3 +718,9 @@ SELECT_GAME_TYPE,ゲームタイプを選択
 SEARCH_BY_NAME,名前で検索...
 
 SEARCH_BY_ID,IDで検索...
+
+DEFAULT,Default
+SMALL,小型
+MEDIUM,中型
+HUGE,大型
+MASSIVE,巨大

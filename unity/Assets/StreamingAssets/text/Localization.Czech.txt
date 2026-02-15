@@ -691,3 +691,9 @@ SELECT_GAME_TYPE,Vybrat typ hry
 SEARCH_BY_NAME,Hledat podle názvu...
 
 SEARCH_BY_ID,Hledat podle ID...
+
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive

@@ -161,7 +161,34 @@ public class TokenBoard : MonoBehaviour {
         Sprite iconSprite;
 
         // Check that placement name exists
-        if (!game.CurrentQuest.qd.components.ContainsKey(place) && place.Length > 0)
+        if (game.CurrentQuest.qd.components.ContainsKey(place))
+        {
+            QuestData.MPlace mp = game.CurrentQuest.qd.components[place] as QuestData.MPlace;
+            if (mp != null)
+            {
+                if (mp.tokenSize.Equals("small"))
+                {
+                    sizeX = 1;
+                    sizeY = 1;
+                }
+                else if (mp.tokenSize.Equals("medium"))
+                {
+                    sizeX = 2;
+                    sizeY = 1;
+                }
+                else if (mp.tokenSize.Equals("huge"))
+                {
+                    sizeX = 2;
+                    sizeY = 2;
+                }
+                else if (mp.tokenSize.Equals("massive"))
+                {
+                    sizeX = 3;
+                    sizeY = 2;
+                }
+            }
+        }
+        else if (place.Length > 0)
         {
             ValkyrieDebug.Log("Error: Invalid moster place: " + place);
             Application.Quit();

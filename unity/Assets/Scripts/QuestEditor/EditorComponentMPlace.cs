@@ -66,6 +66,23 @@ public class EditorComponentMPlace : EditorComponent
         new UIElementBorder(ui);
         offset += 2;
 
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
+        
+        StringKey sizeKey = new StringKey("val","DEFAULT");
+        if (!mPlaceComponent.tokenSize.Equals(""))
+        {
+            sizeKey = new StringKey("val", mPlaceComponent.tokenSize.ToUpper());
+        }
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 5, 1);
+        ui.SetText(sizeKey);
+        ui.SetButton(delegate { CycleSize(); });
+        new UIElementBorder(ui);
+        offset += 2;
+
         game.tokenBoard.AddHighlight(mPlaceComponent.location, "MonsterLoc", Game.EDITOR);
 
         return offset;
@@ -80,6 +97,31 @@ public class EditorComponentMPlace : EditorComponent
     public void MasterToggle()
     {
         mPlaceComponent.master = !mPlaceComponent.master;
+        Update();
+    }
+
+    public void CycleSize()
+    {
+        if (mPlaceComponent.tokenSize.Equals(""))
+        {
+            mPlaceComponent.tokenSize = "small";
+        }
+        else if (mPlaceComponent.tokenSize.Equals("small"))
+        {
+            mPlaceComponent.tokenSize = "medium";
+        }
+        else if (mPlaceComponent.tokenSize.Equals("medium"))
+        {
+            mPlaceComponent.tokenSize = "huge";
+        }
+        else if (mPlaceComponent.tokenSize.Equals("huge"))
+        {
+            mPlaceComponent.tokenSize = "massive";
+        }
+        else
+        {
+            mPlaceComponent.tokenSize = "";
+        }
         Update();
     }
 }

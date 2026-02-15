@@ -1167,6 +1167,7 @@ public class QuestData
         public bool master = false;
         new public static string type = "MPlace";
         public bool rotate = false;
+        public string tokenSize = "";
 
         // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
@@ -1191,6 +1192,10 @@ public class QuestData
             {
                 bool.TryParse(data["rotate"], out rotate);
             }
+            if (data.ContainsKey("tokensize"))
+            {
+                tokenSize = data["tokensize"];
+            }
         }
 
         // Save to string (editor)
@@ -1205,6 +1210,10 @@ public class QuestData
             if (rotate)
             {
                 r += "rotate=true" + nl;
+            }
+            if (tokenSize.Length > 0)
+            {
+                r += "tokensize=" + tokenSize + nl;
             }
             return r;
         }
