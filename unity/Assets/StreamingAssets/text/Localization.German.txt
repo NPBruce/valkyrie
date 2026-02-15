@@ -521,3 +521,5 @@ SMALL,Klein
 MEDIUM,Mittel
 HUGE,Groß
 MASSIVE,Massiv
+
+CUSTOM_IMAGE,Benutzerdefiniertes Bild

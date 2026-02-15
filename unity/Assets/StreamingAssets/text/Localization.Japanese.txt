@@ -724,3 +724,5 @@ SMALL,小型
 MEDIUM,中型
 HUGE,大型
 MASSIVE,巨大
+
+CUSTOM_IMAGE,カスタムイメージ

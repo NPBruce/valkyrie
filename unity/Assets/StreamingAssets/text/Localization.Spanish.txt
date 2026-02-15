@@ -527,3 +527,5 @@ SMALL,Pequeño
 MEDIUM,Mediano
 HUGE,Gigante
 MASSIVE,Masivo
+
+CUSTOM_IMAGE,Imagen personalizada

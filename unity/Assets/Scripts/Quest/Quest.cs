@@ -1721,7 +1721,12 @@ public class Quest
             float PPS = 0;
 
             // Check that token exists
-            if (game.cd.ContainsKey<TokenData>(tokenName))
+            if (qToken.customImage.Length > 0)
+            {
+                 string path = System.IO.Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
+                 newTex = ContentData.FileToTexture(path);
+            }
+            else if (game.cd.ContainsKey<TokenData>(tokenName))
             {
                 // Get texture for token
                 var tokenData = game.cd.Get<TokenData>(tokenName);

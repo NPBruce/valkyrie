@@ -53,16 +53,56 @@ public class EditorComponentToken : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
+        // Type Label (disable if custom image set?)
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TYPE));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(4, offset, 12, 1);
-        ui.SetText(tokenComponent.tokenName);
-        ui.SetButton(delegate { Type(); });
+        if (tokenComponent.customImage.Length > 0)
+        {
+             ui.SetText(CommonStringKeys.NONE);
+             ui.SetButton(delegate { }); // No action
+             ui.SetBGColor(Color.grey);
+        }
+        else
+        {
+             ui.SetText(tokenComponent.tokenName);
+             ui.SetButton(delegate { Type(); });
+        }
         new UIElementBorder(ui);
         offset += 2;
+
+        // Custom Image
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CUSTOM_IMAGE")));
+
+        if (tokenComponent.customImage.Length > 0)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 11, 1);
+            ui.SetText(tokenComponent.customImage);
+            ui.SetButton(delegate { SetCustomImage(); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.RESET);
+            ui.SetButton(delegate { ClearCustomImage(); });
+            new UIElementBorder(ui);
+        }
+        else
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetCustomImage(); });
+            new UIElementBorder(ui);
+        }
+        offset += 2;
+
 
         // Click Behavior Label
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -196,6 +236,52 @@ public class EditorComponentToken : EditorComponentEvent
     public void ToggleClickEffect()
     {
         tokenComponent.enableClick = !tokenComponent.enableClick;
+        Update();
+    }
+
+    public void SetCustomImage()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectCustomImage, new StringKey("val", "SELECT", new StringKey("val", "CUSTOM_IMAGE")));
+        select.AddItem("{NONE}", "", true);
+
+        string relativePath = new System.IO.FileInfo(System.IO.Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
+        
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
+
+        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.png", System.IO.SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.jpg", System.IO.SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
+        {
+            select.AddItem(imageData);
+        }
+        select.ExcludeExpansions();
+        select.Draw();
+    }
+
+    public void SelectCustomImage(string image)
+    {
+        tokenComponent.customImage = image;
+        tokenComponent.tokenName = ""; // Clear Type
+        Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
+        Update();
+    }
+
+    public void ClearCustomImage()
+    {
+        tokenComponent.customImage = "";
         Update();
     }
 }

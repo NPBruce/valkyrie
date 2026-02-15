@@ -467,3 +467,5 @@ SMALL,Piccolo
 MEDIUM,Medio
 HUGE,Gigante
 MASSIVE,Massivo
+
+CUSTOM_IMAGE,Immagine personalizzata

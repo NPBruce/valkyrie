@@ -501,3 +501,5 @@ SMALL,Mały
 MEDIUM,Średni
 HUGE,Duży
 MASSIVE,Masywny
+
+CUSTOM_IMAGE,Niestandardowy obraz

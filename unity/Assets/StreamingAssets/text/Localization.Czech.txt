@@ -697,3 +697,5 @@ SMALL,Small
 MEDIUM,Medium
 HUGE,Huge
 MASSIVE,Massive
+
+CUSTOM_IMAGE,Vlastní obrázek

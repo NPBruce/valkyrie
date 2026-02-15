@@ -690,3 +690,5 @@ SMALL,소형
 MEDIUM,중형
 HUGE,대형
 MASSIVE,무거운
+
+CUSTOM_IMAGE,사용자 지정 이미지

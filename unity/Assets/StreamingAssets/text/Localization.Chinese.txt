@@ -502,3 +502,5 @@ SMALL,Small
 MEDIUM,Medium
 HUGE,Huge
 MASSIVE,Massive
+
+CUSTOM_IMAGE,自定义图片

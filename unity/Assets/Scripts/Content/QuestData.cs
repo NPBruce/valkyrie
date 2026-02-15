@@ -350,6 +350,7 @@ public class QuestData
         new public static string type = "Token";
         public int rotation = 0;
         public string tokenName;
+        public string customImage = "";
         public string tokenSize = "";
         public bool enableClick = true;
 
@@ -393,6 +394,10 @@ public class QuestData
             {
                 bool.TryParse(data["clickeffect"], out enableClick);
             }
+            if (data.ContainsKey("customImage"))
+            {
+                customImage = data["customImage"];
+            }
         }
 
         // Save to string (for editor)
@@ -413,6 +418,10 @@ public class QuestData
             if (!enableClick)
             {
                 r += "clickeffect=false" + nl;
+            }
+            if (customImage.Length > 0)
+            {
+                r += "customImage=" + customImage + nl;
             }
             return r;
         }
