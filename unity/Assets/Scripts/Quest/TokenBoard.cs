@@ -57,6 +57,13 @@ public class TokenBoard : MonoBehaviour {
                     return;
                 }
             }
+            else if (component is Quest.Token)
+            {
+                if (!((Quest.Token)component).qToken.enableClick)
+                {
+                    return;
+                }
+            }
 
             UnityEngine.UI.Button button = c.unityObject.AddComponent<UnityEngine.UI.Button>();
             button.interactable = true;

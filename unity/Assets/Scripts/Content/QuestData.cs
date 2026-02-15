@@ -351,6 +351,7 @@ public class QuestData
         public int rotation = 0;
         public string tokenName;
         public string tokenSize = "";
+        public bool enableClick = true;
 
         // Create new with name (used by editor)
         public Token(string s) : base(s)
@@ -360,6 +361,7 @@ public class QuestData
             typeDynamic = type;
             tokenName = "TokenSearch";
             cancelable = true;
+            enableClick = true;
         }
 
         // Create from ini data
@@ -387,6 +389,10 @@ public class QuestData
             {
                 tokenSize = data["tokensize"];
             }
+            if (data.ContainsKey("clickeffect"))
+            {
+                bool.TryParse(data["clickeffect"], out enableClick);
+            }
         }
 
         // Save to string (for editor)
@@ -403,6 +409,10 @@ public class QuestData
             if (tokenSize.Length > 0)
             {
                 r += "tokensize=" + tokenSize + nl;
+            }
+            if (!enableClick)
+            {
+                r += "clickeffect=false" + nl;
             }
             return r;
         }

@@ -64,6 +64,26 @@ public class EditorComponentToken : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
+        // Click Behavior Label
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
+
+        // Click Behavior Button
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 14, 1);
+        if (tokenComponent.enableClick)
+        {
+            ui.SetText(new StringKey("val", "CLICK_BLINK"));
+        }
+        else
+        {
+            ui.SetText(new StringKey("val", "CLICK_STATIC"));
+        }
+        ui.SetButton(delegate { ToggleClickEffect(); });
+        new UIElementBorder(ui);
+        offset += 2;
+
         game.CurrentQuest.ChangeAlpha(tokenComponent.sectionName, 1f);
 
         return offset;
@@ -142,6 +162,12 @@ public class EditorComponentToken : EditorComponentEvent
         }
         Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
         Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
+        Update();
+    }
+
+    public void ToggleClickEffect()
+    {
+        tokenComponent.enableClick = !tokenComponent.enableClick;
         Update();
     }
 }

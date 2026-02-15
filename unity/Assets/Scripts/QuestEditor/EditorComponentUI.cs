@@ -48,42 +48,39 @@ public class EditorComponentUI : EditorComponentEvent
         new UIElementBorder(ui);
         offset += 2;
 
-        if (uiComponent.imageName.Length > 0)
+        // Label
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "FADE")));
+
+        // Button/Dropdown
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 4, 1);
+        ui.SetText(new StringKey("val", "FADE_" + uiComponent.fadeSpeed.ToUpper()));
+        ui.SetButton(delegate { SetFadeSpeed(); });
+        new UIElementBorder(ui);
+
+        offset += 2;
+
+        // Click Behavior Label
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
+
+        // Click Behavior Button
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(5, offset, 14, 1);
+        if (uiComponent.enableClick)
         {
-            // Label
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 5, 1);
-            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "FADE")));
-
-            // Button/Dropdown
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 4, 1);
-            ui.SetText(new StringKey("val", "FADE_" + uiComponent.fadeSpeed.ToUpper()));
-            ui.SetButton(delegate { SetFadeSpeed(); });
-            new UIElementBorder(ui);
-
-            offset += 2;
-
-            // Click Behavior Label
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 5, 1);
-            ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
-
-            // Click Behavior Button
-            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
-            if (uiComponent.enableClick)
-            {
-                ui.SetText(new StringKey("val", "CLICK_BLINK"));
-            }
-            else
-            {
-                ui.SetText(new StringKey("val", "CLICK_STATIC"));
-            }
-            ui.SetButton(delegate { ToggleClickEffect(); });
-            new UIElementBorder(ui);
-            offset += 2;
+            ui.SetText(new StringKey("val", "CLICK_BLINK"));
         }
+        else
+        {
+            ui.SetText(new StringKey("val", "CLICK_STATIC"));
+        }
+        ui.SetButton(delegate { ToggleClickEffect(); });
+        new UIElementBorder(ui);
+        offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 6, 1);
