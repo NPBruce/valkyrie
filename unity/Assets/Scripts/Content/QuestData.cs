@@ -265,6 +265,7 @@ public class QuestData
             }
 
             // Find the tileside that is used
+            tileSideName = "";
             if (data.ContainsKey("side"))
             {
                 tileSideName = data["side"];
@@ -281,7 +282,8 @@ public class QuestData
             {
                 float.TryParse(data["left"], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out left);
             }
-            else
+
+            if (tileSideName.Length == 0 && customImage.Length == 0)
             {
                 // Fatal if missing
                 ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);

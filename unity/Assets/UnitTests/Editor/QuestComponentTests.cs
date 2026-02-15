@@ -405,6 +405,163 @@ namespace Valkyrie.UnitTests
             Assert.AreEqual(0, tile.rotation);
         }
 
+        [Test]
+        public void Tile_ParsesCustomImage()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "path/to/image.png" }
+            };
+
+            // Act
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Assert
+            Assert.AreEqual("path/to/image.png", tile.customImage);
+        }
+
+        [Test]
+        public void Tile_ParsesTop()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "top", "105.5" }
+            };
+
+            // Act
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Assert
+            Assert.AreEqual(105.5f, tile.top, 0.001f);
+        }
+
+        [Test]
+        public void Tile_ParsesLeft()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "left", "-50.2" }
+            };
+
+            // Act
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Assert
+            Assert.AreEqual(-50.2f, tile.left, 0.001f);
+        }
+
+        [Test]
+        public void Tile_ToStringContainsCustomImage()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" }
+            };
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("customImage=myimage.png"));
+        }
+
+        [Test]
+        public void Tile_ToStringContainsTopWhenCustomImageSet()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" },
+                { "top", "10.5" }
+            };
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("top=10.5"));
+        }
+
+        [Test]
+        public void Tile_ToStringContainsLeftWhenCustomImageSet()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" },
+                { "left", "-5.5" }
+            };
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("left=-5.5"));
+        }
+
+        [Test]
+        public void Tile_ToStringOmitsSideWhenSideEmpty()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" }
+                // side is not set, so tileSideName is parsed as empty or from side if present
+            };
+            // Manually ensure tileSideName is empty as logic might default it if not present
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+            tile.tileSideName = "";
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsFalse(result.Contains("side="));
+        }
+
+        [Test]
+        public void Tile_ToStringOmitsTopWhenZero()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" }
+            };
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+            // top defaults to 0
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsFalse(result.Contains("top="));
+        }
+
+        [Test]
+        public void Tile_ToStringOmitsLeftWhenZero()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "myimage.png" }
+            };
+            var tile = new QuestData.Tile("Tile1", data, "test.ini");
+            // left defaults to 0
+
+            // Act
+            string result = tile.ToString();
+
+            // Assert
+            Assert.IsFalse(result.Contains("left="));
+        }
+
         #endregion
 
         #region MPlace Tests
