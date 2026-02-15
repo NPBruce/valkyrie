@@ -126,6 +126,10 @@ public class EditorComponentToken : EditorComponentEvent
         {
             select.AddItem(kv);
         }
+        foreach (MonsterData kv in game.cd.Values<MonsterData>())
+        {
+            select.AddItem(kv);
+        }
         select.ExcludeExpansions();
         select.Draw();
     }

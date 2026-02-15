@@ -1717,8 +1717,26 @@ public class Quest
             qToken = questToken;
 
             string tokenName = qToken.tokenName;
+            Texture2D newTex = null;
+            float PPS = 0;
+
             // Check that token exists
-            if (!game.cd.ContainsKey<TokenData>(tokenName))
+            if (game.cd.ContainsKey<TokenData>(tokenName))
+            {
+                // Get texture for token
+                var tokenData = game.cd.Get<TokenData>(tokenName);
+                Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+                Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+                newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
+                PPS = tokenData.pxPerSquare;
+            }
+            else if (game.cd.ContainsKey<MonsterData>(tokenName))
+            {
+                var monsterData = game.cd.Get<MonsterData>(tokenName);
+                newTex = ContentData.FileToTexture(monsterData.image);
+            }
+            
+            if (newTex == null)
             {
                 game.CurrentQuest.log.Add(new LogEntry(
                     "Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName,
@@ -1727,14 +1745,14 @@ public class Quest
                 if (game.cd.ContainsKey<TokenData>("TokenSearch"))
                 {
                     tokenName = "TokenSearch";
+                    var tokenData = game.cd.Get<TokenData>(tokenName);
+                    Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+                    Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+                    newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
+                    PPS = tokenData.pxPerSquare;
                 }
             }
 
-            // Get texture for token
-            var tokenData = game.cd.Get<TokenData>(tokenName);
-            Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
-            Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
-            Texture2D newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
             if (newTex == null)
             {
                 ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
@@ -1753,7 +1771,6 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
-            float PPS = tokenData.pxPerSquare;
             if (PPS == 0)
             {
                 PPS = (float) newTex.width;
