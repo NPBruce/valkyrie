@@ -299,13 +299,13 @@ public class EditorComponentTile : EditorComponent
         QuestEditorTextEdit db = new QuestEditorTextEdit(
             new StringKey("val", "X_COLON", CommonStringKeys.TOP), 
             initial,
-            delegate(string s) 
+            delegate(string s)
             {
                  float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.top); 
                  Update(); 
             });
-        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
         db.EditText();
+        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
     }
 
     public void SetLeft()
@@ -317,12 +317,12 @@ public class EditorComponentTile : EditorComponent
         QuestEditorTextEdit db = new QuestEditorTextEdit(
             new StringKey("val", "X_COLON", CommonStringKeys.LEFT), 
             initial,
-            delegate(string s) 
+            delegate(string s)
             {
                  float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.left); 
                  Update(); 
             });
-        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
         db.EditText();
+        db.iField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Decimal;
     }
 }
