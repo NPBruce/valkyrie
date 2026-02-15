@@ -350,6 +350,7 @@ public class QuestData
         new public static string type = "Token";
         public int rotation = 0;
         public string tokenName;
+        public string tokenSize = "";
 
         // Create new with name (used by editor)
         public Token(string s) : base(s)
@@ -382,6 +383,10 @@ public class QuestData
             {
                 int.TryParse(data["rotation"], out rotation);
             }
+            if (data.ContainsKey("tokensize"))
+            {
+                tokenSize = data["tokensize"];
+            }
         }
 
         // Save to string (for editor)
@@ -394,6 +399,10 @@ public class QuestData
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
+            }
+            if (tokenSize.Length > 0)
+            {
+                r += "tokensize=" + tokenSize + nl;
             }
             return r;
         }

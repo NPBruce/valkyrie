@@ -1760,9 +1760,37 @@ public class Quest
             }
 
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float) newTex.width / PPS, (float) newTex.height / PPS);
+            if (qToken.tokenSize.Equals("small"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(0.95f, 0.95f);
+            }
+            else if (qToken.tokenSize.Equals("medium"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(1.95f, 0.95f);
+            }
+            else if (qToken.tokenSize.Equals("huge"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(1.95f, 1.95f);
+            }
+            else if (qToken.tokenSize.Equals("massive"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(2.95f, 1.95f);
+            }
+            else
+            {
+                image.rectTransform.sizeDelta = new Vector2((float)newTex.width / PPS, (float)newTex.height / PPS);
+            }
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
+
+            // Move to square
+            // If we have a custom size we need to align top left
+            if (qToken.tokenSize.Length > 0)
+            {
+                unityObject.transform.Translate(Vector3.right * (float)(image.rectTransform.sizeDelta.x - 1) / 2f, Space.World);
+                unityObject.transform.Translate(Vector3.down * (float)(image.rectTransform.sizeDelta.y - 1) / 2f, Space.World);
+            }
+
             // Move to square
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 

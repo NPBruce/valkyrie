@@ -37,6 +37,23 @@ public class EditorComponentToken : EditorComponentEvent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 6, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
+
+        StringKey sizeKey = new StringKey("val", "DEFAULT");
+        if (!tokenComponent.tokenSize.Equals(""))
+        {
+            sizeKey = new StringKey("val", tokenComponent.tokenSize.ToUpper());
+        }
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(6, offset, 5, 1);
+        ui.SetText(sizeKey);
+        ui.SetButton(delegate { CycleSize(); });
+        new UIElementBorder(ui);
+        offset += 2;
+
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TYPE));
 
@@ -96,6 +113,33 @@ public class EditorComponentToken : EditorComponentEvent
     public void SelectType(string token)
     {
         tokenComponent.tokenName = token.Split(" ".ToCharArray())[0];
+        Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
+        Update();
+    }
+
+    public void CycleSize()
+    {
+        if (tokenComponent.tokenSize.Equals(""))
+        {
+            tokenComponent.tokenSize = "small";
+        }
+        else if (tokenComponent.tokenSize.Equals("small"))
+        {
+            tokenComponent.tokenSize = "medium";
+        }
+        else if (tokenComponent.tokenSize.Equals("medium"))
+        {
+            tokenComponent.tokenSize = "huge";
+        }
+        else if (tokenComponent.tokenSize.Equals("huge"))
+        {
+            tokenComponent.tokenSize = "massive";
+        }
+        else
+        {
+            tokenComponent.tokenSize = "";
+        }
         Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
         Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
         Update();
