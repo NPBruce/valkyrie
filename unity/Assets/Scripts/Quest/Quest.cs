@@ -1602,6 +1602,44 @@ public class Quest
         {
             qTile = questTile;
 
+            Texture2D newTex;
+            if (qTile.customImage.Length > 0)
+            {
+                if (game.cd.TryGet(qTile.customImage, out ImageData imageData))
+                {
+                    // For tiles, we might need a way to specify crop if it's an atlas. 
+                    // But assume full image for now as per Token implementation.
+                    // If the user selects a base game image that is an atlas, it will render the whole atlas.
+                    // This is acceptable for now.
+                    Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                    Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                    newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);
+                }
+                else
+                {
+                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qTile.customImage;
+                    newTex = ContentData.FileToTexture(path);
+                }
+                
+                // If we have a custom image, we create a dummy TileSideData to steer rendering
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                if (qTile.top == 0 && qTile.left == 0)
+                {
+                    // Default to center if not set
+                    dict.Add("top", (newTex.height / 2f).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    dict.Add("left", (newTex.width / 2f).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    // Use values from editor
+                    dict.Add("top", qTile.top.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    dict.Add("left", qTile.left.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
+                cTile = new TileSideData(qTile.customImage, dict, "");
+            }
+            else
+            {
+
             // Search for tile in content
             if (!game.cd.TryGet(qTile.tileSideName, out cTile))
             {
@@ -1618,7 +1656,9 @@ public class Quest
             }
 
             // Attempt to load image
-            Texture2D newTex = ContentData.FileToTexture(cTile.image);
+            newTex = ContentData.FileToTexture(cTile.image);
+            }
+
             if (newTex == null)
             {
                 // Fatal if missing

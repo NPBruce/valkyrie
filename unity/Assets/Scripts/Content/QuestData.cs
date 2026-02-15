@@ -238,6 +238,9 @@ public class QuestData
         new public static string type = "Tile";
         public int rotation = 0;
         public string tileSideName;
+        public string customImage = "";
+        public float top = 0;
+        public float left = 0;
 
         // Create new with name (used by editor)
         public Tile(string s) : base(s)
@@ -266,6 +269,18 @@ public class QuestData
             {
                 tileSideName = data["side"];
             }
+            if (data.ContainsKey("customImage"))
+            {
+                customImage = data["customImage"];
+            }
+            if (data.ContainsKey("top"))
+            {
+                float.TryParse(data["top"], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out top);
+            }
+            if (data.ContainsKey("left"))
+            {
+                float.TryParse(data["left"], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out left);
+            }
             else
             {
                 // Fatal if missing
@@ -280,10 +295,25 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "side=" + tileSideName + nl;
+            if (tileSideName.Length > 0)
+            {
+                r += "side=" + tileSideName + nl;
+            }
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
+            }
+            if (customImage.Length > 0)
+            {
+                r += "customImage=" + customImage + nl;
+                if (top != 0)
+                {
+                    r += "top=" + top.ToString(System.Globalization.CultureInfo.InvariantCulture) + nl;
+                }
+                if (left != 0)
+                {
+                    r += "left=" + left.ToString(System.Globalization.CultureInfo.InvariantCulture) + nl;
+                }
             }
             return r;
         }

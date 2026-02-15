@@ -34,9 +34,67 @@ public class EditorComponentTile : EditorComponent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 14, 1);
-        ui.SetText(tileComponent.tileSideName);
+        if (tileComponent.tileSideName.Length == 0)
+        {
+            ui.SetText("{NONE}");
+        }
+        else
+        {
+            ui.SetText(tileComponent.tileSideName);
+        }
         ui.SetButton(delegate { ChangeTileSide(); });
         new UIElementBorder(ui);
+        offset += 2;
+
+        // Custom Image
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 5, 1);
+        ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CUSTOM_IMAGE")));
+
+        if (tileComponent.customImage.Length > 0)
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 11, 1);
+            ui.SetText(tileComponent.customImage);
+            ui.SetButton(delegate { SetCustomImage(); });
+            new UIElementBorder(ui);
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.RESET);
+            ui.SetButton(delegate { ClearCustomImage(); });
+            new UIElementBorder(ui);
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TOP));
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 14, 1);
+            ui.SetText(tileComponent.top.ToString());
+            ui.SetButton(delegate { SetTop(); });
+            new UIElementBorder(ui);
+            offset += 2;
+
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(0, offset, 5, 1);
+            ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.LEFT));
+            
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(5, offset, 14, 1);
+            ui.SetText(tileComponent.left.ToString());
+            ui.SetButton(delegate { SetLeft(); });
+            new UIElementBorder(ui);
+        }
+        else
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetCustomImage(); });
+            new UIElementBorder(ui);
+        }
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
@@ -88,10 +146,13 @@ public class EditorComponentTile : EditorComponent
         foreach (KeyValuePair<string, QuestData.QuestComponent> kv in game.CurrentQuest.qd.components)
         {
             QuestData.Tile t = kv.Value as QuestData.Tile;
-            if (t != null)
+            if (t != null && t.tileSideName.Length > 0)
             {
                 usedSides.Add(t.tileSideName);
-                usedSides.Add(game.cd.Get<TileSideData>(t.tileSideName).reverse);
+                if (game.cd.ContainsKey<TileSideData>(t.tileSideName))
+                {
+                    usedSides.Add(game.cd.Get<TileSideData>(t.tileSideName).reverse);
+                }
             }
         }
 
@@ -134,6 +195,9 @@ public class EditorComponentTile : EditorComponent
     {
         Game game = Game.Get();
         tileComponent.tileSideName = tile.Split(" ".ToCharArray())[0];
+        tileComponent.customImage = "";
+        tileComponent.top = 0;
+        tileComponent.left = 0;
         game.CurrentQuest.Remove(tileComponent.sectionName);
         game.CurrentQuest.Add(tileComponent.sectionName);
         Update();
@@ -162,6 +226,102 @@ public class EditorComponentTile : EditorComponent
         game.CurrentQuest.Remove(tileComponent.sectionName);
         game.CurrentQuest.Add(tileComponent.sectionName);
 
+        game.CurrentQuest.Remove(tileComponent.sectionName);
+        game.CurrentQuest.Add(tileComponent.sectionName);
+
         Update();
+    }
+
+    public void SetCustomImage()
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectCustomImage, new StringKey("val", "SELECT", new StringKey("val", "CUSTOM_IMAGE")));
+        select.AddItem("{NONE}", "", true);
+
+        string relativePath = new System.IO.FileInfo(System.IO.Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
+        
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
+
+        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.png", System.IO.SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.jpg", System.IO.SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
+        {
+            select.AddItem(imageData);
+        }
+        select.ExcludeExpansions();
+        select.Draw();
+    }
+
+    public void SelectCustomImage(string image)
+    {
+        if (image.Equals("{NONE}"))
+        {
+            tileComponent.customImage = "";
+            tileComponent.top = 0;
+            tileComponent.left = 0;
+        }
+        else
+        {
+            tileComponent.customImage = image;
+            tileComponent.tileSideName = "";
+        }
+        Game.Get().CurrentQuest.Remove(tileComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tileComponent.sectionName);
+        Update();
+    }
+
+    public void ClearCustomImage()
+    {
+        tileComponent.customImage = "";
+        tileComponent.top = 0;
+        tileComponent.left = 0;
+        Game.Get().CurrentQuest.Remove(tileComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tileComponent.sectionName);
+        Update();
+    }
+
+    public void SetTop()
+    {
+        Game game = Game.Get();
+        string initial = tileComponent.top.ToString();
+        // Allow negative numbers
+        initial = initial.Replace(",", ".");
+        QuestEditorTextEdit db = new QuestEditorTextEdit(
+            new StringKey("val", "X_COLON", CommonStringKeys.TOP), 
+            initial,
+            delegate(string s) 
+            { 
+                 float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.top); 
+                 Update(); 
+            });
+        db.EditText();
+    }
+
+    public void SetLeft()
+    {
+        Game game = Game.Get();
+        string initial = tileComponent.left.ToString();
+        // Allow negative numbers
+        initial = initial.Replace(",", ".");
+        QuestEditorTextEdit db = new QuestEditorTextEdit(
+            new StringKey("val", "X_COLON", CommonStringKeys.LEFT), 
+            initial,
+            delegate(string s) 
+            { 
+                 float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out tileComponent.left); 
+                 Update(); 
+            });
+        db.EditText();
     }
 }
