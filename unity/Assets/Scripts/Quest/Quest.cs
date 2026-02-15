@@ -1787,8 +1787,14 @@ public class Quest
             // If we have a custom size we need to align top left
             if (qToken.tokenSize.Length > 0)
             {
-                unityObject.transform.Translate(Vector3.right * (float)(image.rectTransform.sizeDelta.x - 1) / 2f, Space.World);
-                unityObject.transform.Translate(Vector3.down * (float)(image.rectTransform.sizeDelta.y - 1) / 2f, Space.World);
+                float width = 1f;
+                float height = 1f;
+                if (qToken.tokenSize.Equals("medium")) width = 2f;
+                if (qToken.tokenSize.Equals("huge")) { width = 2f; height = 2f; }
+                if (qToken.tokenSize.Equals("massive")) { width = 3f; height = 2f; }
+
+                unityObject.transform.Translate(Vector3.right * (width - 1) / 2f, Space.World);
+                unityObject.transform.Translate(Vector3.down * (height - 1) / 2f, Space.World);
             }
 
             // Move to square
