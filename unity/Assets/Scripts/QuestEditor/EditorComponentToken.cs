@@ -132,6 +132,30 @@ public class EditorComponentToken : EditorComponentEvent
         }
         select.ExcludeExpansions();
         select.Draw();
+
+        // Auto selection of source
+        GenericData currentTokenData = null;
+        if (game.cd.ContainsKey<TokenData>(tokenComponent.tokenName))
+        {
+            currentTokenData = game.cd.Get<TokenData>(tokenComponent.tokenName);
+        }
+        else if (game.cd.ContainsKey<MonsterData>(tokenComponent.tokenName))
+        {
+            currentTokenData = game.cd.Get<MonsterData>(tokenComponent.tokenName);
+        }
+        if (currentTokenData != null)
+        {
+            string setID = "";
+            if (currentTokenData.sets.Count > 0)
+            {
+                setID = currentTokenData.sets[0];
+            }
+            if (setID.Equals(""))
+            {
+                setID = "base";
+            }
+            select.SelectTrait(CommonStringKeys.SOURCE.Translate(), new StringKey("val", setID).Translate());
+        }
     }
 
     public void SelectType(string token)

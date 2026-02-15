@@ -108,6 +108,26 @@ public class EditorComponentTile : EditorComponent
         }
         select.ExcludeExpansions();
         select.Draw();
+
+        // Auto selection of source
+        TileSideData currentTileData = null;
+        if (game.cd.ContainsKey<TileSideData>(tileComponent.tileSideName))
+        {
+            currentTileData = game.cd.Get<TileSideData>(tileComponent.tileSideName);
+        }
+        if (currentTileData != null)
+        {
+            string setID = "";
+            if (currentTileData.sets.Count > 0)
+            {
+                setID = currentTileData.sets[0];
+            }
+            if (setID.Equals(""))
+            {
+                setID = "base";
+            }
+            select.SelectTrait(CommonStringKeys.SOURCE.Translate(), new StringKey("val", setID).Translate());
+        }
     }
 
     public void SelectTileSide(string tile)
