@@ -241,33 +241,7 @@ public class EditorComponentToken : EditorComponentEvent
 
     public void SetCustomImage()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
-        UIWindowSelectionListImage select = new UIWindowSelectionListImage(SelectCustomImage, new StringKey("val", "SELECT", new StringKey("val", "CUSTOM_IMAGE")));
-        select.AddItem("{NONE}", "", true);
-
-        string relativePath = new System.IO.FileInfo(System.IO.Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
-        
-        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
-        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
-
-        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.png", System.IO.SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1), traits);
-        }
-        foreach (string s in System.IO.Directory.GetFiles(relativePath, "*.jpg", System.IO.SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1), traits);
-        }
-        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
-        {
-            select.AddItem(imageData);
-        }
-        select.ExcludeExpansions();
-        select.Draw();
+        base.SetCustomImage(SelectCustomImage);
     }
 
     public void SelectCustomImage(string image)

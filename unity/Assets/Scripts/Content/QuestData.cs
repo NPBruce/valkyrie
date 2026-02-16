@@ -416,7 +416,7 @@ public class QuestData
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
             {
-                int.TryParse(data["rotation"], out rotation);
+                rotation = ParseInt(data["rotation"]);
             }
             if (data.ContainsKey("tokensize"))
             {
@@ -424,7 +424,7 @@ public class QuestData
             }
             if (data.ContainsKey("clickeffect"))
             {
-                bool.TryParse(data["clickeffect"], out enableClick);
+                enableClick = ParseBool(data["clickeffect"]);
             }
             if (data.ContainsKey("customImage"))
             {
@@ -1224,6 +1224,10 @@ public class QuestData
     // MPlaces are used to position individual monsters
     public class MPlace : QuestComponent
     {
+        public const string KEY_MASTER = "master";
+        public const string KEY_ROTATE = "rotate";
+        public const string KEY_TOKENSIZE = "tokensize";
+
         public bool master = false;
         new public static string type = "MPlace";
         public bool rotate = false;
@@ -1244,17 +1248,18 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             master = false;
-            if (data.ContainsKey("master"))
+            
+            if (data.ContainsKey(KEY_MASTER))
             {
-                bool.TryParse(data["master"], out master);
+                master = ParseBool(data[KEY_MASTER]);
             }
-            if (data.ContainsKey("rotate"))
+            if (data.ContainsKey(KEY_ROTATE))
             {
-                bool.TryParse(data["rotate"], out rotate);
+                rotate = ParseBool(data[KEY_ROTATE]);
             }
-            if (data.ContainsKey("tokensize"))
+            if (data.ContainsKey(KEY_TOKENSIZE))
             {
-                tokenSize = data["tokensize"];
+                tokenSize = data[KEY_TOKENSIZE];
             }
         }
 
@@ -1265,15 +1270,15 @@ public class QuestData
             string r = base.ToString();
             if (master)
             {
-                r += "master=true" + nl;
+                r += KEY_MASTER + "=true" + nl;
             }
             if (rotate)
             {
-                r += "rotate=true" + nl;
+                r += KEY_ROTATE + "=true" + nl;
             }
             if (tokenSize.Length > 0)
             {
-                r += "tokensize=" + tokenSize + nl;
+                r += KEY_TOKENSIZE + "=" + tokenSize + nl;
             }
             return r;
         }
@@ -1522,6 +1527,48 @@ public class QuestData
         {
             // Rename to "" is taken to be delete
             ChangeReference(refName, "");
+        }
+
+        // Helper for parsing floats with logging
+        public static float ParseFloat(string s)
+        {
+            if (float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse float: " + s);
+            }
+            return 0;
+        }
+
+        // Helper for parsing ints with logging
+        public static int ParseInt(string s)
+        {
+            if (int.TryParse(s, out int result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse int: " + s);
+            }
+            return 0;
+        }
+
+        // Helper for parsing bools with logging
+        public static bool ParseBool(string s)
+        {
+            if (bool.TryParse(s, out bool result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse bool: " + s);
+            }
+            return false;
         }
 
         // Save to string (editor)

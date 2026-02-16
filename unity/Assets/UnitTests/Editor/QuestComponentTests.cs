@@ -684,6 +684,39 @@ namespace Valkyrie.UnitTests
             Assert.IsTrue(result.Contains("rotate=true"));
         }
 
+        [Test]
+        public void MPlace_ParsesTokenSize()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "tokensize", "2x2" }
+            };
+
+            // Act
+            var mplace = new QuestData.MPlace("MPlace1", data, "test.ini");
+
+            // Assert
+            Assert.AreEqual("2x2", mplace.tokenSize);
+        }
+
+        [Test]
+        public void MPlace_ToStringContainsTokenSize()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "tokensize", "3x3" }
+            };
+            var mplace = new QuestData.MPlace("MPlace1", data, "test.ini");
+
+            // Act
+            string result = mplace.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("tokensize=3x3"));
+        }
+
         #endregion
 
         #region QItem Tests
@@ -2194,6 +2227,105 @@ namespace Valkyrie.UnitTests
 
             // Assert
             Assert.IsTrue(result.Contains("type=TokenExplore"));
+        }
+
+        [Test]
+        public void Token_ParsesTokenSize()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "tokensize", "2x2" }
+            };
+
+            // Act
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Assert
+            Assert.AreEqual("2x2", token.tokenSize);
+        }
+
+        [Test]
+        public void Token_ParsesCustomImage()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "tokens/mytoken.png" }
+            };
+
+            // Act
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Assert
+            Assert.AreEqual("tokens/mytoken.png", token.customImage);
+        }
+
+        [Test]
+        public void Token_ParsesClickEffect()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "clickeffect", "false" }
+            };
+
+            // Act
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Assert
+            Assert.IsFalse(token.enableClick);
+        }
+
+        [Test]
+        public void Token_ToStringContainsTokenSize()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "tokensize", "4x4" }
+            };
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Act
+            string result = token.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("tokensize=4x4"));
+        }
+
+        [Test]
+        public void Token_ToStringContainsCustomImage()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "customImage", "token.png" }
+            };
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Act
+            string result = token.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("customImage=token.png"));
+        }
+
+        [Test]
+        public void Token_ToStringContainsClickEffectWhenFalse()
+        {
+            // Arrange
+            var data = new Dictionary<string, string>
+            {
+                { "clickeffect", "false" }
+            };
+            var token = new QuestData.Token("Token1", data, null, "test.ini");
+
+            // Act
+            string result = token.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("clickeffect=false"));
         }
 
         #endregion
