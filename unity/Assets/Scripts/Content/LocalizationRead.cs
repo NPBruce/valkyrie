@@ -302,6 +302,18 @@ namespace Assets.Scripts.Content
         }
 
         /// <summary>
+        /// Remove a dictionary
+        /// </summary>
+        /// <param name="name">dictionary name</param>
+        public static void RemoveDictionary(string name)
+        {
+            if (dicts.ContainsKey(name))
+            {
+                dicts.Remove(name);
+            }
+        }
+
+        /// <summary>
         /// Get a regex pattern to check if is it a valid lookup key
         /// </summary>
         /// <returns>regex string</returns>
