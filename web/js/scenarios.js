@@ -148,7 +148,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (item[`authors_short.English`]) return item[`authors_short.English`];
         if (item[`authors.English`]) return item[`authors.English`];
         if (item['authors_short']) return item['authors_short'];
-        return item['authors'] || '';
+        if (item['authors']) return item['authors'];
+
+        // Fallback: Find any authors key
+        const keys = Object.keys(item);
+        const shortKey = keys.find(k => k.startsWith('authors_short.'));
+        if (shortKey) return item[shortKey];
+        const longKey = keys.find(k => k.startsWith('authors.'));
+        if (longKey) return item[longKey];
+
+        return '';
     }
 
     function getAuthorLongValue(item, lang) {
