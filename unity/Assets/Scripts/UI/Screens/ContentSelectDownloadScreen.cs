@@ -206,7 +206,9 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(6.5f, offset + 0.9f, UIScaler.GetWidthUnits() - 9, 1.5f);
             ui.SetTextPadding(0.5f);
 
-            string name = remoteContentPack.Value.languages_name.FirstOrDefault().Value;
+            ui.SetTextPadding(0.5f);
+
+            string name = remoteContentPack.Value.GetTitle(game.currentLang);
 
             ui.SetText(name, Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
@@ -216,7 +218,7 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetSmallFont() * 1.28f));
             ui.SetFont(game.gameType.GetHeaderFont());
 
-            string description = remoteContentPack.Value.languages_description.FirstOrDefault().Value;
+            string description = remoteContentPack.Value.GetDescription(game.currentLang);
 
             if (description != null)
             {
