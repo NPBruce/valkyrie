@@ -1,5 +1,11 @@
 .,Portuguese
 
+// ICONS
+CUSTOM_IMAGE,Imagem personalizada
+ACTUAL,Real
+IMAGE_PLACE,Colocação de imagem
+IMAGE_PLACE_SIZE,Tamanho da colocação de imagem
+
 // TEXTS
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie

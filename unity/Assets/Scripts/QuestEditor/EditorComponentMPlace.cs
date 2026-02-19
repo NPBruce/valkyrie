@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using System.Collections.Generic;
+using System.Globalization;
 
 public class EditorComponentMPlace : EditorComponent
 {
@@ -73,13 +75,20 @@ public class EditorComponentMPlace : EditorComponent
         StringKey sizeKey = new StringKey("val","DEFAULT");
         if (!mPlaceComponent.tokenSize.Equals(""))
         {
-            sizeKey = new StringKey("val", mPlaceComponent.tokenSize.ToUpper());
+            if (float.TryParse(mPlaceComponent.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+            {
+                sizeKey = new StringKey(null, mPlaceComponent.tokenSize, false);
+            }
+            else
+            {
+                sizeKey = new StringKey("val", mPlaceComponent.tokenSize.ToUpper());
+            }
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(6, offset, 5, 1);
         ui.SetText(sizeKey);
-        ui.SetButton(delegate { CycleSize(); });
+        ui.SetButton(delegate { ClickSize(); });
         new UIElementBorder(ui);
         offset += 2;
 
@@ -100,28 +109,23 @@ public class EditorComponentMPlace : EditorComponent
         Update();
     }
 
-    public void CycleSize()
+    public void ClickSize()
     {
-        if (mPlaceComponent.tokenSize.Equals(""))
-        {
-            mPlaceComponent.tokenSize = "small";
-        }
-        else if (mPlaceComponent.tokenSize.Equals("small"))
-        {
-            mPlaceComponent.tokenSize = "medium";
-        }
-        else if (mPlaceComponent.tokenSize.Equals("medium"))
-        {
-            mPlaceComponent.tokenSize = "huge";
-        }
-        else if (mPlaceComponent.tokenSize.Equals("huge"))
-        {
-            mPlaceComponent.tokenSize = "massive";
-        }
-        else
-        {
-            mPlaceComponent.tokenSize = "";
-        }
+        UIWindowSelectionList select = new UIWindowSelectionList(SelectSize, new StringKey("val", "SELECT", new StringKey("val", "SIZE")));
+        
+        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
+        select.AddItem(CommonStringKeys.DEFAULT.Translate(), "");
+        select.AddItem(new StringKey("val", "SMALL").Translate(), "small");
+        select.AddItem(new StringKey("val", "MEDIUM").Translate(), "medium");
+        select.AddItem(new StringKey("val", "HUGE").Translate(), "huge");
+        select.AddItem(new StringKey("val", "MASSIVE").Translate(), "massive");
+
+        select.Draw();
+    }
+
+    public void SelectSize(string size)
+    {
+        mPlaceComponent.tokenSize = size;
         Update();
     }
 }

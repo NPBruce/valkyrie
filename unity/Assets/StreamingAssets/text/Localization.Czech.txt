@@ -1,6 +1,11 @@
 .,Czech
 // Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
 // ICONS
+CUSTOM_IMAGE,Vlastní obrázek
+ACTUAL,Skutečná
+IMAGE_PLACE,Umístění obrázku
+IMAGE_PLACE_SIZE,Velikost umístění obrázku
+
 ICON_SKILL_STRENGTH,
 ICON_SKILL_AGILITY,
 ICON_SKILL_OBSERVATION,

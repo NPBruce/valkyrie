@@ -1,5 +1,11 @@
 .,Russian
 
+// ICONS
+CUSTOM_IMAGE,Пользовательское изображение
+ACTUAL,Фактический
+IMAGE_PLACE,Место изображения
+IMAGE_PLACE_SIZE,Размер места изображения
+
 // TEXTS
 ABILITY,Способность
 ABOUT,О приложении

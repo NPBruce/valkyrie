@@ -1,4 +1,10 @@
 .,Polish
+// ICONS
+CUSTOM_IMAGE,Własny obraz
+ACTUAL,Rzeczywisty
+IMAGE_PLACE,Umieszczenie obrazu
+IMAGE_PLACE_SIZE,Rozmiar umieszczenia obrazu
+
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie

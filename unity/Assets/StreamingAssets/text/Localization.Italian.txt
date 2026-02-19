@@ -1,9 +1,15 @@
 .,Italian
+// ICONS
+CUSTOM_IMAGE,Immagine personalizzata
+ACTUAL,Reale
+IMAGE_PLACE,Posizionamento immagine
+IMAGE_PLACE_SIZE,Dimensione posizionamento immagine
+
 // TEXTS
 ABILITY,Abilità
 ABOUT,Informazioni su
-ABOUT_FFG,Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games.  Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ABOUT_FFG,Valkyrie è uno strumento di supporto ispirato da Descent: La Via per la Leggenda della Fantasy Flight Games. Molte delle immagini utilizzate sono importate dalle applicazioni FFG che sono soggette a copyright FFG e diritti di terzi. Languages flags are made by Freepik from www.flaticon.com.
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc e codici derivati da Unity Studio e .NET Ogg Vorbis Encoder
 ACTIONS,Azioni
 ACTIVATED,Attivo
 ACTIVATION,Attivazione

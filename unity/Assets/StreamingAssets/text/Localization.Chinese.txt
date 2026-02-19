@@ -1,4 +1,10 @@
 .,Chinese
+// ICONS
+CUSTOM_IMAGE,自定义图像
+ACTUAL,实际
+IMAGE_PLACE,图像放置
+IMAGE_PLACE_SIZE,图像放置大小
+
 // TEXTS
 ABILITY,Ability
 ABOUT,關於

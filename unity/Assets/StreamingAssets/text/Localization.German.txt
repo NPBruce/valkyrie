@@ -1,5 +1,11 @@
 .,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
+// ICONS
+CUSTOM_IMAGE,Benutzerdefiniertes Bild
+ACTUAL,Tatsächlich
+IMAGE_PLACE,Bildplatzierung
+IMAGE_PLACE_SIZE,Bildplatzierungsgröße
+
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie

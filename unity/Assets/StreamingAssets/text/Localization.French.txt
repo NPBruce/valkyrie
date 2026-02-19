@@ -1,4 +1,10 @@
 .,French
+// ICONS
+CUSTOM_IMAGE,Image personnalisée
+ACTUAL,Réelle
+IMAGE_PLACE,Placement de l'image
+IMAGE_PLACE_SIZE,Taille de placement de l'image
+
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos

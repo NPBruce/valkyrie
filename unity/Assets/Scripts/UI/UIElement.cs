@@ -641,5 +641,36 @@ namespace Assets.Scripts.UI
             GetRectTransform().sizeDelta = new Vector2(GetRectTransform().sizeDelta.x, newHeightPixels);
             return newHeight;
         }
+        /// <summary>
+        /// Set element text, truncating if it exceeds width.</summary>
+        /// <param name="content">Text to display.</param>
+        public virtual void SetTextFileName(string content)
+        {
+            if (content.Length > 20)
+            {
+                // This is a rough estimation/hack because we don't have the exact width calculation easily accessible vs the rect transform before layout is finalized in some cases.
+                // However, we can try to be smarter.
+                // Or we can just use a fixed length truncate which is often sufficient for "too long paths".
+                // Given the screenshot, the paths are VERY long.
+                // Let's try to keep the filename and some of the path.
+                
+                string filename = System.IO.Path.GetFileName(content);
+                string directory = System.IO.Path.GetDirectoryName(content);
+                
+                if (content.Length > 40)
+                {
+                    if (filename.Length > 20)
+                    {
+                        content = "..." + System.IO.Path.DirectorySeparatorChar + filename;
+                    }
+                    else
+                    {
+                        // keep the last 30 chars
+                        content = "..." + content.Substring(content.Length - 30);
+                    }
+                }
+            }
+            SetText(content, Color.white);
+        }
     }
 }

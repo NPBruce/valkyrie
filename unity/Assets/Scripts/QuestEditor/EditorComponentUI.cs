@@ -43,7 +43,7 @@ public class EditorComponentUI : EditorComponentEvent
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
         ui.SetLocation(5, offset, 14, 1);
-        ui.SetText(uiComponent.imageName);
+        ui.SetTextFileName(uiComponent.imageName);
         ui.SetButton(delegate { SetImage(); });
         new UIElementBorder(ui);
         offset += 2;

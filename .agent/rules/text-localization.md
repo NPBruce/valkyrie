@@ -1,6 +1,6 @@
 ---
 trigger: model_decision
-description: When adding ANY text that is visible in the UI
+description: When adding ANY text that is visible in the User interface (ALWAYS check for any changes in folders unity\Assets\Scripts\QuestEditor or unity\Assets\Scripts\UI)
 ---
 
 ### Localization files

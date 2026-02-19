@@ -1673,6 +1673,7 @@ public class QuestData
                 imagePlace = data["imageplace"];
             }
 
+
             activations = new string[0];
             if (data.ContainsKey("activation"))
             {

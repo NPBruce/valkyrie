@@ -55,7 +55,7 @@ public class EditorComponentTile : EditorComponent
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
             ui.SetLocation(5, offset, 11, 1);
-            ui.SetText(tileComponent.customImage);
+            ui.SetTextFileName(tileComponent.customImage);
             ui.SetButton(delegate { SetCustomImage(); });
             new UIElementBorder(ui);
 
