@@ -29,11 +29,11 @@ public class EditorComponentTile : EditorComponent
         CameraController.SetCamera(tileComponent.location);
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 4.5f, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14, 1);
+        ui.SetLocation(4, offset, 15, 1);
         if (tileComponent.tileSideName.Length == 0)
         {
             ui.SetText("{NONE}");
@@ -48,13 +48,13 @@ public class EditorComponentTile : EditorComponent
 
         // Custom Image
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CUSTOM_IMAGE")));
 
         if (tileComponent.customImage.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 11, 1);
+            ui.SetLocation(4, offset, 12, 1);
             ui.SetTextFileName(tileComponent.customImage);
             ui.SetButton(delegate { SetCustomImage(); });
             new UIElementBorder(ui);
@@ -114,11 +114,11 @@ public class EditorComponentTile : EditorComponent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 3, 1);
+        ui.SetLocation(4, offset, 3, 1);
         ui.SetText(tileComponent.rotation.ToString());
         ui.SetButton(delegate { TileRotate(); });
         new UIElementBorder(ui);

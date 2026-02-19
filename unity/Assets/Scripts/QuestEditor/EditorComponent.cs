@@ -165,11 +165,11 @@ public class EditorComponent {
     virtual public float AddComment(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset++, 5, 1);
+        ui.SetLocation(0, offset++, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
         commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-        commentUIE.SetLocation(0.5f, offset, 19, 15);
+        commentUIE.SetLocation(0, offset, 19, 15);
         commentUIE.SetText(component.comment.Replace("\\n", "\n"));
         offset += commentUIE.HeightToTextPadding(1);
         commentUIE.SetButton(delegate { SetComment(); });

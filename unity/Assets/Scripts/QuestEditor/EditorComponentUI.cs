@@ -38,11 +38,11 @@ public class EditorComponentUI : EditorComponentEvent
         uiComponent = component as QuestData.UI;
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 4.5f, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "IMAGE")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14, 1);
+        ui.SetLocation(4, offset, 15, 1);
         ui.SetTextFileName(uiComponent.imageName);
         ui.SetButton(delegate { SetImage(); });
         new UIElementBorder(ui);
@@ -50,12 +50,12 @@ public class EditorComponentUI : EditorComponentEvent
 
         // Label
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "FADE")));
 
         // Button/Dropdown
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 4, 1);
+        ui.SetLocation(4, offset, 5, 1);
         ui.SetText(new StringKey("val", "FADE_" + uiComponent.fadeSpeed.ToUpper()));
         ui.SetButton(delegate { SetFadeSpeed(); });
         new UIElementBorder(ui);
@@ -64,12 +64,12 @@ public class EditorComponentUI : EditorComponentEvent
 
         // Click Behavior Label
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
 
         // Click Behavior Button
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14, 1);
+        ui.SetLocation(4, offset, 15, 1);
         if (uiComponent.enableClick)
         {
             ui.SetText(new StringKey("val", "CLICK_BLINK"));
@@ -83,11 +83,11 @@ public class EditorComponentUI : EditorComponentEvent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "UNITS")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 6, 1);
+        ui.SetLocation(4, offset, 6, 1);
         ui.SetButton(delegate { ChangeUnits(); });
         new UIElementBorder(ui);
         if (uiComponent.verticalUnits)

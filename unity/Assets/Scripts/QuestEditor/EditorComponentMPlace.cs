@@ -40,7 +40,7 @@ public class EditorComponentMPlace : EditorComponent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
         StringKey rotateKey = new StringKey("val","RIGHT");
@@ -50,7 +50,7 @@ public class EditorComponentMPlace : EditorComponent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 4, 1);
+        ui.SetLocation(4, offset, 4, 1);
         ui.SetText(rotateKey);
         ui.SetButton(delegate { Rotate(); });
         new UIElementBorder(ui);
@@ -69,7 +69,7 @@ public class EditorComponentMPlace : EditorComponent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
         
         StringKey sizeKey = new StringKey("val","DEFAULT");
@@ -86,7 +86,7 @@ public class EditorComponentMPlace : EditorComponent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 5, 1);
+        ui.SetLocation(4, offset, 5, 1);
         ui.SetText(sizeKey);
         ui.SetButton(delegate { ClickSize(); });
         new UIElementBorder(ui);
