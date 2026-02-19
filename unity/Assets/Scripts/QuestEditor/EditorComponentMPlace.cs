@@ -113,12 +113,12 @@ public class EditorComponentMPlace : EditorComponent
     {
         UIWindowSelectionList select = new UIWindowSelectionList(SelectSize, new StringKey("val", "SELECT", new StringKey("val", "SIZE")));
         
-        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
         select.AddItem(CommonStringKeys.DEFAULT.Translate(), "");
         select.AddItem(new StringKey("val", "SMALL").Translate(), "small");
         select.AddItem(new StringKey("val", "MEDIUM").Translate(), "medium");
         select.AddItem(new StringKey("val", "HUGE").Translate(), "huge");
         select.AddItem(new StringKey("val", "MASSIVE").Translate(), "massive");
+        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
 
         select.Draw();
     }

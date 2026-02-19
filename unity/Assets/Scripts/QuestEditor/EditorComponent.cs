@@ -181,11 +181,11 @@ public class EditorComponent {
     virtual public float AddSource(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", (CommonStringKeys.SOURCE)));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14.5f, 1);
+        ui.SetLocation(4, offset, 14.5f, 1);
         ui.SetText(component.source.Replace("\\n", "\n"));
         ui.SetButton(delegate { ChangeSource(); });
         new UIElementBorder(ui);

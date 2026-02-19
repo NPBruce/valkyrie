@@ -27,20 +27,20 @@ public class EditorComponentToken : EditorComponentEvent
         tokenComponent = component as QuestData.Token;
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 3, 1);
+        ui.SetLocation(4, offset, 3, 1);
         ui.SetText(tokenComponent.rotation.ToString());
         ui.SetButton(delegate { Rotate(); });
         new UIElementBorder(ui);
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
-
+        
         StringKey sizeKey = new StringKey("val", "ACTUAL");
         if (!tokenComponent.tokenSize.Equals(""))
         {
@@ -55,7 +55,7 @@ public class EditorComponentToken : EditorComponentEvent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 5, 1);
+        ui.SetLocation(4, offset, 5, 1);
         ui.SetText(sizeKey);
         ui.SetButton(delegate { ClickSize(); });
         new UIElementBorder(ui);
@@ -84,13 +84,13 @@ public class EditorComponentToken : EditorComponentEvent
 
         // Custom Image
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CUSTOM_IMAGE")));
 
         if (tokenComponent.customImage.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 11, 1);
+            ui.SetLocation(4, offset, 11, 1);
             ui.SetTextFileName(tokenComponent.customImage);
             ui.SetButton(delegate { SetCustomImage(); });
             new UIElementBorder(ui);
@@ -114,12 +114,12 @@ public class EditorComponentToken : EditorComponentEvent
 
         // Click Behavior Label
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "CLICK_BEHAVIOR")));
 
         // Click Behavior Button
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14, 1);
+        ui.SetLocation(4, offset, 14, 1);
         if (tokenComponent.enableClick)
         {
             ui.SetText(new StringKey("val", "CLICK_BLINK"));
@@ -218,11 +218,11 @@ public class EditorComponentToken : EditorComponentEvent
     {
         UIWindowSelectionList select = new UIWindowSelectionList(SelectSize, new StringKey("val", "SELECT", new StringKey("val", "SIZE")));
         
-        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual"); // "Actual" maps to "Actual" string logic we added
         select.AddItem(new StringKey("val", "SMALL").Translate(), "small");
         select.AddItem(new StringKey("val", "MEDIUM").Translate(), "medium");
         select.AddItem(new StringKey("val", "HUGE").Translate(), "huge");
         select.AddItem(new StringKey("val", "MASSIVE").Translate(), "massive");
+        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
 
         select.Draw();
     }
@@ -258,6 +258,9 @@ public class EditorComponentToken : EditorComponentEvent
     public void ClearCustomImage()
     {
         tokenComponent.customImage = "";
+        tokenComponent.tokenName = "TokenSearch";
+        Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
+        Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
         Update();
     }
 }

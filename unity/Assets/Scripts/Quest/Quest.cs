@@ -1854,13 +1854,12 @@ public class Quest
                 if (qToken.tokenSize.Equals("Actual"))
                 {
                     // Actual size logic
-                    if (PPS == 0)
+                    float pps = game.gameType.TilePixelPerSquare();
+                    if (pps == 0) pps = PPS; // Fallback to current PPS (likely image width) if game type doesn't specify
+                    
+                    if (pps > 0)
                     {
-                        PPS = game.gameType.TilePixelPerSquare();
-                    }
-                    if (PPS > 0)
-                    {
-                        image.rectTransform.sizeDelta = new Vector2(newTex.width / PPS, newTex.height / PPS);
+                        image.rectTransform.sizeDelta = new Vector2(newTex.width / pps, newTex.height / pps);
                     }
                     size = 0; // Mark as handled
                 }
