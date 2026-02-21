@@ -1,11 +1,11 @@
 param (
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$RepoUrl,
 
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$IssueNumber,
 
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$RunnerRepo
 )
 
@@ -13,7 +13,8 @@ param (
 if ($RepoUrl -match "https://github\.com/([^/]+)/([^/]+)") {
     $Owner = $Matches[1]
     $Repo = $Matches[2]
-} else {
+}
+else {
     Write-Error "Invalid GitHub Repository URL: $RepoUrl"
     exit 1
 }
@@ -40,7 +41,8 @@ try {
     
     # In PowerShell, $TreeResponse.tree is an array of objects
     $Paths = @($TreeResponse.tree | Select-Object -ExpandProperty path)
-} catch {
+}
+catch {
     $Results += "- ❌ error accessing repository tree: $_"
     $Paths = @()
 }
@@ -49,14 +51,24 @@ if ($Paths.Count -gt 0) {
     # ------------------------------------------------------------------
     # Generic presence checks
     # ------------------------------------------------------------------
-    $Exts = @("ini", "valkyrie", "jpg")
+    $Exts = @("ini", "valkyrie")
     foreach ($Ext in $Exts) {
         $Matches = @($Paths | Where-Object { $_.ToLower().EndsWith(".$Ext") })
         if ($Matches.Count -eq 0) {
             $Results += "- ❌ no *.$Ext file found"
-        } else {
+        }
+        else {
             $Results += "- ✅ $($Matches.Count) *.$Ext file(s) found:`n" + ($Matches -join "`n")
         }
+    }
+
+    # Check for image file (jpg or png)
+    $ImageMatches = @($Paths | Where-Object { $_.ToLower().EndsWith(".jpg") -or $_.ToLower().EndsWith(".png") })
+    if ($ImageMatches.Count -eq 0) {
+        $Results += "- ❌ no *.jpg or *.png image file found"
+    }
+    else {
+        $Results += "- ✅ $($ImageMatches.Count) image file(s) (*.jpg, *.png) found:`n" + ($ImageMatches -join "`n")
     }
 
     # ------------------------------------------------------------------
@@ -82,7 +94,8 @@ if ($Paths.Count -gt 0) {
                     $Results += "- ⚠️ ini file '$IniPath' has default language set to English"
                 }
             }
-        } catch {
+        }
+        catch {
             $Results += "- ⚠️ unable to read ini file '$IniPath': $_"
         }
     }
@@ -112,6 +125,7 @@ $BodyJson = @{
 try {
     Invoke-RestMethod -Uri $CommentUrl -Headers $Headers -Method Post -Body $BodyJson -ContentType "application/json" | Out-Null
     Write-Host "Successfully posted comment to issue #$IssueNumber"
-} catch {
+}
+catch {
     Write-Error "Failed to post comment: $_"
 }
