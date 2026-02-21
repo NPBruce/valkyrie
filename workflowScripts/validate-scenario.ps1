@@ -2,7 +2,7 @@ param (
     [Parameter(Mandatory = $true)]
     [string]$RepoUrl,
 
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $false)]
     [string]$IssueNumber,
 
     [Parameter(Mandatory = $true)]
@@ -113,19 +113,33 @@ if ($Paths.Count -gt 0) {
 }
 
 # ------------------------------------------------------------------
-# Comment results on issue
+# Output results
 # ------------------------------------------------------------------
 $CommentBody = "**Scenario repository validation**`n`nRepository: $RepoUrl`n`n" + ($Results -join "`n")
-$CommentUrl = "https://api.github.com/repos/$RunnerRepo/issues/$IssueNumber/comments"
 
-$BodyJson = @{
-    body = $CommentBody
-} | ConvertTo-Json
+# Always write to the GitHub Actions Console
+Write-Host "========================================="
+Write-Host "Validation Results for $RepoUrl"
+Write-Host "========================================="
+Write-Host $CommentBody
+Write-Host "========================================="
 
-try {
-    Invoke-RestMethod -Uri $CommentUrl -Headers $Headers -Method Post -Body $BodyJson -ContentType "application/json" | Out-Null
-    Write-Host "Successfully posted comment to issue #$IssueNumber"
+# If an Issue Number was provided (i.e. not a manual dispatch), post a comment
+if ($IssueNumber) {
+    $CommentUrl = "https://api.github.com/repos/$RunnerRepo/issues/$IssueNumber/comments"
+
+    $BodyJson = @{
+        body = $CommentBody
+    } | ConvertTo-Json
+
+    try {
+        Invoke-RestMethod -Uri $CommentUrl -Headers $Headers -Method Post -Body $BodyJson -ContentType "application/json" | Out-Null
+        Write-Host "Successfully posted comment to issue #$IssueNumber"
+    }
+    catch {
+        Write-Error "Failed to post comment to #$IssueNumber : $_"
+    }
 }
-catch {
-    Write-Error "Failed to post comment: $_"
+else {
+    Write-Host "No IssueNumber provided. Skipping GitHub issue comment."
 }

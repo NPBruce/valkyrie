@@ -47,7 +47,7 @@ jobs:
           echo "url=$url" >> $GITHUB_OUTPUT
 
       - name: Validate scenario and comment
-        if: steps.extract.outputs.url != '' && github.event.issue
+        if: steps.extract.outputs.url != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
