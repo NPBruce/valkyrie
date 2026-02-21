@@ -7,9 +7,9 @@ body:
       value: |
         Thank you for proposing a new content pack! To streamline our efforts, please read this short paragraph. If you can check all the boxes below, go for it and propose the new content pack!
 
-        - [ ] Please ensure you have added a unique content pack id. You can check the existing content pack ids for [Descent here](https://github.com/NPBruce/valkyrie-store/blob/master/D2E/contentPacksManifest.ini) and for [Mansions of Madness here](https://github.com/NPBruce/valkyrie-store/blob/master/MoM/contentPacksManifest.ini).
-        - [ ] Please replace **YourContentPackName** in the Issue-Title with your actual content pack name.
-        - [ ] Please ensure your GitHub project repository is public.
+        - Please ensure you have added a unique content pack id. You can check the existing content pack ids for [Descent here](https://github.com/NPBruce/valkyrie-store/blob/master/D2E/contentPacksManifest.ini) and for [Mansions of Madness here](https://github.com/NPBruce/valkyrie-store/blob/master/MoM/contentPacksManifest.ini).
+        - Please replace **YourContentPackName** in the Issue-Title with your actual content pack name.
+        - Please ensure your GitHub project repository is public.
 
   - type: dropdown
     id: contentpack_type
