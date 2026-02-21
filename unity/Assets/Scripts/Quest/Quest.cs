@@ -1608,10 +1608,6 @@ public class Quest
             {
                 if (game.cd.TryGet(qTile.customImage, out ImageData imageData))
                 {
-                    // For tiles, we might need a way to specify crop if it's an atlas. 
-                    // But assume full image for now as per Token implementation.
-                    // If the user selects a base game image that is an atlas, it will render the whole atlas.
-                    // This is acceptable for now.
                     Vector2 texPos = new Vector2(imageData.x, imageData.y);
                     Vector2 texSize = new Vector2(imageData.width, imageData.height);
                     newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Assets.Scripts.Content;
 using UnityEditor;
 using UnityEngine.UI;
@@ -648,12 +648,6 @@ namespace Assets.Scripts.UI
         {
             if (content.Length > 20)
             {
-                // This is a rough estimation/hack because we don't have the exact width calculation easily accessible vs the rect transform before layout is finalized in some cases.
-                // However, we can try to be smarter.
-                // Or we can just use a fixed length truncate which is often sufficient for "too long paths".
-                // Given the screenshot, the paths are VERY long.
-                // Let's try to keep the filename and some of the path.
-                
                 string filename = System.IO.Path.GetFileName(content);
                 string directory = System.IO.Path.GetDirectoryName(content);
                 
