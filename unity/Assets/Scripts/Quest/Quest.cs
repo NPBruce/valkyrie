@@ -1650,7 +1650,7 @@ public class Quest
             if (cTile == null)
             {
                 // Fatal if not found
-                ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName +
+                ValkyrieDebug.Log("Error: Failed to locate TileSide: '" + qTile.tileSideName +
                                   "' in quest component: '" + qTile.sectionName + "'");
                 Application.Quit();
                 return;

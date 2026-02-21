@@ -248,8 +248,16 @@ public class EditorComponentToken : EditorComponentEvent
 
     public void SelectCustomImage(string image)
     {
-        tokenComponent.customImage = image;
-        tokenComponent.tokenName = ""; // Clear Type
+        if (image.Equals("{NONE}"))
+        {
+            tokenComponent.customImage = "";
+        }
+        else
+        {
+            tokenComponent.customImage = image;
+            tokenComponent.tokenName = "TokenSearch";
+            tokenComponent.tokenSize = "Actual";
+        }
         Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
         Game.Get().CurrentQuest.Add(tokenComponent.sectionName);
         Update();

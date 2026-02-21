@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
 
@@ -257,6 +258,8 @@ public class EditorComponentTile : EditorComponent
     public void ClearCustomImage()
     {
         tileComponent.customImage = "";
+        tileComponent.tileSideName = Game.Get().cd.Keys<TileSideData>().FirstOrDefault();
+        if (tileComponent.tileSideName == null) tileComponent.tileSideName = "";
         tileComponent.top = 0;
         tileComponent.left = 0;
         Game.Get().CurrentQuest.Remove(tileComponent.sectionName);
