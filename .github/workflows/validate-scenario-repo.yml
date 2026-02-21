@@ -1,0 +1,54 @@
+name: Validate scenario repository
+
+# triggered when a new issue is opened or edited (template use)
+# will look for the first GitHub URL in the body and then clone
+# that repository to verify it contains at least one .ini, .valkyrie and .jpg file
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: 'Optionally provide a repository URL to validate (overrides issue body)'
+        required: false
+        default: ''
+
+jobs:
+  check-scenario:
+    name: Check scenario repository files
+    runs-on: ubuntu-latest
+    # only run when issue title begins with [Scenario] and body contains a GitHub URL
+    if: |
+      startsWith(github.event.issue.title, '[Scenario]') &&
+      contains(github.event.issue.body, 'https://github.com/')
+
+    steps:
+      - name: Checkout (needed for workspace)
+        uses: actions/checkout@v4
+
+      - name: Extract scenario repo URL
+        id: extract
+        run: |
+          echo "Extracting URL..."
+          # allow manual override
+          if [ -n "${{ github.event.inputs.repo_url || '' }}" ]; then
+            url="${{ github.event.inputs.repo_url }}"
+            echo "Using provided input URL: $url"
+          else
+            body='${{ github.event.issue.body || '' }}'
+            # Look for the header text and then extract the first GitHub URL that follows it
+            url=$(echo "$body" | awk '/### GitHub Repository URL/{flag=1; next} flag && match($0, /https:\/\/github\.com\/[^\/ ]+\/[^\/ ]+/) {print substr($0, RSTART, RLENGTH); exit}')
+          fi
+          if [ -z "$url" ]; then
+            echo "No valid GitHub URL found, skipping."
+            exit 0
+          fi
+          echo "url=$url" >> $GITHUB_OUTPUT
+
+      - name: Validate scenario and comment
+        if: steps.extract.outputs.url != '' && github.event.issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pwsh ./workflowScripts/validate-scenario.ps1 -RepoUrl "${{ steps.extract.outputs.url }}" -IssueNumber "${{ github.event.issue.number }}" -RunnerRepo "${{ github.repository }}"

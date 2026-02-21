@@ -1,0 +1,62 @@
+name: New Scenario
+description: Request to add a new scenario to the Valkyrie mission overview
+title: "[Scenario] YourScenarioName"
+labels: ["scenario"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new scenario! To streamline our efforts, please read this short paragraph. If you can check all the boxes below, go for it and propose the new scenario!
+
+        - [ ] Please ensure you have renamed your scenario folder so that it does **not** equal the default mission name **EditorQuest1.valkyrie** or **EditorQuest1.ini**.
+        - [ ] Please replace **YourScenarioName** in the Issue-Title with your actual scenario name.
+        - [ ] Please ensure your GitHub project repository is public.
+
+  - type: dropdown
+    id: mission_type
+    attributes:
+      label: What kind of mission do you want to add?
+      options:
+        - Mansions of Madness
+        - Descent
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: required_expansions
+    attributes:
+      label: What expansions does the scenario conditionally require?
+      options:
+        - label: Conversion Kit (CK)
+        - label: First Edition (MoM1E) - Also Recurring Nightmares
+        - label: Fatal Alchemy (FA) - Also Suppressed Memories
+        - label: Call of the Wild (CotW) - Also Suppressed Memories
+        - label: Beyond the Threshold (BtT)
+        - label: Streets of Arkham (SoA)
+        - label: Sanctum of Twilight (SoT)
+        - label: Horrific Journeys (HJ)
+        - label: Path of the Serpent (PotS)
+
+  - type: checkboxes
+    id: optional_expansions
+    attributes:
+      label: What expansions can the scenario optionally use?
+      options:
+        - label: Conversion Kit (CK)
+        - label: First Edition (MoM1E) - Also Recurring Nightmares
+        - label: Fatal Alchemy (FA) - Also Suppressed Memories
+        - label: Call of the Wild (CotW) - Also Suppressed Memories
+        - label: Beyond the Threshold (BtT)
+        - label: Streets of Arkham (SoA)
+        - label: Sanctum of Twilight (SoT)
+        - label: Horrific Journeys (HJ)
+        - label: Path of the Serpent (PotS)
+
+  - type: input
+    id: repo_url
+    attributes:
+      label: GitHub Repository URL
+      description: Please enter the full URL to the GitHub repository containing your scenario files.
+      placeholder: https://github.com/YourUsername/YourScenarioRepo
+    validations:
+      required: true

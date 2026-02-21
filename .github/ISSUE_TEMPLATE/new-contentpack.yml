@@ -1,0 +1,31 @@
+name: New custom content pack
+description: Request to add a new custom content pack to the Valkyrie community content pack list
+title: "[ContentPack] YourContentPackName"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new content pack! To streamline our efforts, please read this short paragraph. If you can check all the boxes below, go for it and propose the new content pack!
+
+        - [ ] Please ensure you have added a unique content pack id. You can check the existing content pack ids for [Descent here](https://github.com/NPBruce/valkyrie-store/blob/master/D2E/contentPacksManifest.ini) and for [Mansions of Madness here](https://github.com/NPBruce/valkyrie-store/blob/master/MoM/contentPacksManifest.ini).
+        - [ ] Please replace **YourContentPackName** in the Issue-Title with your actual content pack name.
+        - [ ] Please ensure your GitHub project repository is public.
+
+  - type: dropdown
+    id: contentpack_type
+    attributes:
+      label: What kind of content pack do you want to add?
+      options:
+        - Mansions of Madness
+        - Descent
+    validations:
+      required: true
+
+  - type: input
+    id: repo_url
+    attributes:
+      label: GitHub Repository URL
+      description: Please enter the full URL to the GitHub repository containing your content pack files.
+      placeholder: https://github.com/YourUsername/YourContentPackRepo
+    validations:
+      required: true
