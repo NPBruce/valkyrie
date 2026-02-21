@@ -77,6 +77,8 @@ CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
 DEFAULTMUSICON,Turn on default music
+ACTUAL,Actual
+DEFAULT,Default
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
@@ -244,6 +246,11 @@ HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Align
 SIZE,Size
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
 TEXT_SIZE,Text Size
 BACKGROUND_COLOUR,Background colour
 ASPECT,Aspect
@@ -688,3 +695,8 @@ SELECT_GAME_TYPE,Select Game Type
 SEARCH_BY_NAME,Search by Name...
 
 SEARCH_BY_ID,Search by id...
+
+CUSTOM_IMAGE,Custom Image
+ACTUAL,Actual
+IMAGE_PLACE,Image Place
+IMAGE_PLACE_SIZE,Image Place Size

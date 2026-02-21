@@ -1,4 +1,10 @@
 .,Polish
+// ICONS
+CUSTOM_IMAGE,Własny obraz
+ACTUAL,Rzeczywisty
+IMAGE_PLACE,Umieszczenie obrazu
+IMAGE_PLACE_SIZE,Rozmiar umieszczenia obrazu
+
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
@@ -495,3 +501,11 @@ SELECT_GAME_TYPE,Wybierz typ gry
 SEARCH_BY_NAME,Szukaj według nazwy...
 
 SEARCH_BY_ID,Szukaj po ID...
+
+DEFAULT,Default
+SMALL,Mały
+MEDIUM,Średni
+HUGE,Duży
+MASSIVE,Masywny
+
+CUSTOM_IMAGE,Niestandardowy obraz

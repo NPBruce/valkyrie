@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
+using System.Globalization;
 
 public class EditorComponentCustomMonster : EditorComponent
 {
@@ -17,6 +18,8 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
     private readonly StringKey PLACE_IMG = new StringKey("val", "PLACE_IMG");
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
+    private readonly StringKey ACTUAL = new StringKey("val", "ACTUAL");
+    private readonly StringKey DEFAULT = new StringKey("val", "DEFAULT");
 
     QuestData.CustomMonster monsterComponent;
 
@@ -51,24 +54,24 @@ public class EditorComponentCustomMonster : EditorComponent
         Game game = Game.Get();
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 3, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", BASE));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(3, offset, 16.5f, 1);
+        ui.SetLocation(4, offset, 15.5f, 1);
         ui.SetText(monsterComponent.baseMonster);
         ui.SetButton(delegate { SetBase(); });
         new UIElementBorder(ui);
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 3, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", NAME));
 
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.monsterName.KeyExists())
         {
             nameUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-            nameUIE.SetLocation(3, offset, 13.5f, 1);
+            nameUIE.SetLocation(4, offset, 12.5f, 1);
             nameUIE.SetText(monsterComponent.monsterName.Translate());
             nameUIE.SetSingleLine();
             nameUIE.SetButton(delegate { UpdateName(); });
@@ -134,11 +137,11 @@ public class EditorComponentCustomMonster : EditorComponent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(12.5f, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", CommonStringKeys.TRAITS));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(18.5f, offset++, 1, 1);
+        ui.SetLocation(4, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddTrait(); });
         new UIElementBorder(ui, Color.green);
@@ -147,12 +150,12 @@ public class EditorComponentCustomMonster : EditorComponent
         {
             int i = index;
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(12.5f, offset, 6, 1);
+            ui.SetLocation(0.5f, offset, 6, 1);
             ui.SetText(new StringKey("val", monsterComponent.traits[index]));
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(18.5f, offset++, 1, 1);
+            ui.SetLocation(6.5f, offset++, 1, 1);
             ui.SetText(CommonStringKeys.MINUS, Color.red);
             ui.SetButton(delegate { RemoveTrait(i); });
             new UIElementBorder(ui, Color.red);
@@ -160,24 +163,24 @@ public class EditorComponentCustomMonster : EditorComponent
         offset += 1;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", HEALTH));
 
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.healthDefined)
         {
             healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-            healthUIE.SetLocation(5, offset, 3, 1);
+            healthUIE.SetLocation(4, offset, 3, 1);
             healthUIE.SetText(monsterComponent.healthBase.ToString());
             healthUIE.SetSingleLine();
             healthUIE.SetButton(delegate { UpdateHealth(); });
             new UIElementBorder(healthUIE);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(8, offset, 6, 1);
+            ui.SetLocation(7, offset, 6, 1);
             ui.SetText(new StringKey("val", "X_COLON", HEALTH_HERO));
 
             healthHeroUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-            healthHeroUIE.SetLocation(14, offset, 2.5f, 1);
+            healthHeroUIE.SetLocation(13, offset, 2.5f, 1);
             healthHeroUIE.SetText(monsterComponent.healthPerHero.ToString());
             healthHeroUIE.SetSingleLine();
             healthHeroUIE.SetButton(delegate { UpdateHealthHero(); });
@@ -271,13 +274,13 @@ public class EditorComponentCustomMonster : EditorComponent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 3, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", IMAGE));
         if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePath.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(5, offset, 14, 1);
-            ui.SetText(monsterComponent.imagePath);
+            ui.SetLocation(4, offset, 11, 1);
+            ui.SetTextFileName(monsterComponent.imagePath);
             ui.SetButton(delegate { SetImage(); });
             new UIElementBorder(ui);
             if (monsterComponent.baseMonster.Length > 0)
@@ -299,37 +302,36 @@ public class EditorComponentCustomMonster : EditorComponent
         }
         offset += 2;
 
-        if (game.gameType is D2EGameType)
+        ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+        ui.SetLocation(0, offset, 4, 1);
+        ui.SetText(new StringKey("val", "X_COLON", PLACE_IMG));
+        if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 4, 1);
-            ui.SetText(new StringKey("val", "X_COLON", PLACE_IMG));
-            if (monsterComponent.baseMonster.Length == 0 || monsterComponent.imagePlace.Length > 0)
-            {
-                ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(4, offset, 12.5f, 1);
-                ui.SetText(monsterComponent.imagePlace);
-                ui.SetButton(delegate { SetImagePlace(); });
-                new UIElementBorder(ui);
-                if (monsterComponent.baseMonster.Length > 0)
-                {
-                    ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                    ui.SetLocation(16.5f, offset, 3, 1);
-                    ui.SetText(CommonStringKeys.RESET);
-                    ui.SetButton(delegate { ClearImagePlace(); });
-                    new UIElementBorder(ui);
-                }
-            }
-            else
+            ui.SetLocation(4, offset, 12.5f, 1);
+            ui.SetTextFileName(monsterComponent.imagePlace);
+            ui.SetButton(delegate { SetImagePlace(); });
+            new UIElementBorder(ui);
+            if (monsterComponent.baseMonster.Length > 0)
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
                 ui.SetLocation(16.5f, offset, 3, 1);
-                ui.SetText(CommonStringKeys.SET);
-                ui.SetButton(delegate { SetImagePlace(); });
+                ui.SetText(CommonStringKeys.RESET);
+                ui.SetButton(delegate { ClearImagePlace(); });
                 new UIElementBorder(ui);
             }
-            offset += 2;
         }
+        else
+        {
+            ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
+            ui.SetLocation(16.5f, offset, 3, 1);
+            ui.SetText(CommonStringKeys.SET);
+            ui.SetButton(delegate { SetImagePlace(); });
+            new UIElementBorder(ui);
+        }
+        offset += 2;
+
+        offset += 2;
 
         if (game.gameType is MoMGameType)
         {
@@ -936,23 +938,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImage()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectImage, SELECT_IMAGE);
-
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
-        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1));
-        }
-        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1));
-        }
-        select.Draw();
+        base.SetCustomImage(SelectImage);
     }
 
     public void SelectImage(string image)
@@ -969,23 +955,7 @@ public class EditorComponentCustomMonster : EditorComponent
 
     public void SetImagePlace()
     {
-        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
-        {
-            return;
-        }
-
-        UIWindowSelectionList select = new UIWindowSelectionList(SelectImagePlace, SELECT_IMAGE);
-
-        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
-        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1));
-        }
-        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
-        {
-            select.AddItem(s.Substring(relativePath.Length + 1));
-        }
-        select.Draw();
+        base.SetCustomImage(SelectImagePlace);
     }
 
     public void SelectImagePlace(string image)
@@ -999,6 +969,7 @@ public class EditorComponentCustomMonster : EditorComponent
         monsterComponent.imagePlace = "";
         Update();
     }
+
 
     public void SetEvade()
     {

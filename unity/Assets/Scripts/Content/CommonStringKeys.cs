@@ -27,6 +27,8 @@ namespace Assets.Scripts.Content
         public static readonly StringKey TAB = new StringKey(null, "➤", false);
         public static readonly StringKey UP = new StringKey(null, "▲", false);
         public static readonly StringKey DOWN = new StringKey(null, "▼", false);
+        public static readonly StringKey TOP = new StringKey(VAL, "TOP");
+        public static readonly StringKey LEFT = new StringKey(VAL, "LEFT");
         public static readonly StringKey EVENT = new StringKey(VAL, "EVENT");
         public static readonly StringKey OK = new StringKey(VAL, "OK");
         public static readonly StringKey CANCEL = new StringKey(VAL, "CANCEL");
@@ -92,6 +94,13 @@ namespace Assets.Scripts.Content
         public static readonly StringKey LOADINGSCENARIOS = new StringKey(VAL, "LOADINGSCENARIOS");
         public static readonly StringKey LOADINGCONTENTPACKS = new StringKey(VAL, "LOADINGCONTENTPACKS");
         public static readonly StringKey REQUIRED = new StringKey(VAL, "REQUIRED");
+
+        public static readonly StringKey SIZE = new StringKey(VAL, "SIZE");
+        public static readonly StringKey DEFAULT = new StringKey(VAL, "DEFAULT");
+        public static readonly StringKey SMALL = new StringKey(VAL, "SMALL");
+        public static readonly StringKey MEDIUM = new StringKey(VAL, "MEDIUM");
+        public static readonly StringKey HUGE = new StringKey(VAL, "HUGE");
+        public static readonly StringKey MASSIVE = new StringKey(VAL, "MASSIVE");
 
     }
 }

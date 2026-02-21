@@ -1,5 +1,11 @@
 .,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
+// ICONS
+CUSTOM_IMAGE,Benutzerdefiniertes Bild
+ACTUAL,Tatsächlich
+IMAGE_PLACE,Bildplatzierung
+IMAGE_PLACE_SIZE,Bildplatzierungsgröße
+
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
@@ -515,3 +521,11 @@ SELECT_GAME_TYPE,Spieltyp auswählen
 SEARCH_BY_NAME,Suche nach Name...
 
 SEARCH_BY_ID,Suche nach ID...
+
+DEFAULT,Standard
+SMALL,Klein
+MEDIUM,Mittel
+HUGE,Groß
+MASSIVE,Massiv
+
+CUSTOM_IMAGE,Benutzerdefiniertes Bild

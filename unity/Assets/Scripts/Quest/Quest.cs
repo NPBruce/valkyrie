@@ -11,6 +11,7 @@ using ValkyrieTools;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 using TextAlignment = Assets.Scripts.Content.TextAlignment;
+using System.Globalization;
 
 // Class to manage all data for the current quest
 public class Quest
@@ -1602,6 +1603,40 @@ public class Quest
         {
             qTile = questTile;
 
+            Texture2D newTex;
+            if (qTile.customImage.Length > 0)
+            {
+                if (game.cd.TryGet(qTile.customImage, out ImageData imageData))
+                {
+                    Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                    Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                    newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);
+                }
+                else
+                {
+                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qTile.customImage;
+                    newTex = ContentData.FileToTexture(path);
+                }
+                
+                // If we have a custom image, we create a dummy TileSideData to steer rendering
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                if (qTile.top == 0 && qTile.left == 0)
+                {
+                    // Default to center if not set
+                    dict.Add("top", (newTex.height / 2f).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    dict.Add("left", (newTex.width / 2f).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    // Use values from editor
+                    dict.Add("top", qTile.top.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    dict.Add("left", qTile.left.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
+                cTile = new TileSideData(qTile.customImage, dict, "");
+            }
+            else
+            {
+
             // Search for tile in content
             if (!game.cd.TryGet(qTile.tileSideName, out cTile))
             {
@@ -1611,14 +1646,16 @@ public class Quest
             if (cTile == null)
             {
                 // Fatal if not found
-                ValkyrieDebug.Log("Error: Failed to located TileSide: '" + qTile.tileSideName +
+                ValkyrieDebug.Log("Error: Failed to locate TileSide: '" + qTile.tileSideName +
                                   "' in quest component: '" + qTile.sectionName + "'");
                 Application.Quit();
                 return;
             }
 
             // Attempt to load image
-            Texture2D newTex = ContentData.FileToTexture(cTile.image);
+            newTex = ContentData.FileToTexture(cTile.image);
+            }
+
             if (newTex == null)
             {
                 // Fatal if missing
@@ -1717,8 +1754,40 @@ public class Quest
             qToken = questToken;
 
             string tokenName = qToken.tokenName;
+            Texture2D newTex = null;
+            float PPS = 0;
+
             // Check that token exists
-            if (!game.cd.ContainsKey<TokenData>(tokenName))
+            if (qToken.customImage.Length > 0)
+            {
+                if (game.cd.TryGet(qToken.customImage, out ImageData imageData))
+                {
+                    Vector2 texPos = new Vector2(imageData.x, imageData.y);
+                    Vector2 texSize = new Vector2(imageData.width, imageData.height);
+                    newTex = ContentData.FileToTexture(imageData.image, texPos, texSize);
+                }
+                else
+                {
+                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
+                    newTex = ContentData.FileToTexture(path);
+                }
+            }
+            else if (game.cd.ContainsKey<TokenData>(tokenName))
+            {
+                // Get texture for token
+                var tokenData = game.cd.Get<TokenData>(tokenName);
+                Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+                Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+                newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
+                PPS = tokenData.pxPerSquare;
+            }
+            else if (game.cd.ContainsKey<MonsterData>(tokenName))
+            {
+                var monsterData = game.cd.Get<MonsterData>(tokenName);
+                newTex = ContentData.FileToTexture(monsterData.image);
+            }
+            
+            if (newTex == null)
             {
                 game.CurrentQuest.log.Add(new LogEntry(
                     "Warning: Quest component " + qToken.sectionName + " is using missing token type: " + tokenName,
@@ -1727,14 +1796,14 @@ public class Quest
                 if (game.cd.ContainsKey<TokenData>("TokenSearch"))
                 {
                     tokenName = "TokenSearch";
+                    var tokenData = game.cd.Get<TokenData>(tokenName);
+                    Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
+                    Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+                    newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
+                    PPS = tokenData.pxPerSquare;
                 }
             }
 
-            // Get texture for token
-            var tokenData = game.cd.Get<TokenData>(tokenName);
-            Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
-            Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
-            Texture2D newTex = ContentData.FileToTexture(tokenData.image, texPos, texSize);
             if (newTex == null)
             {
                 ValkyrieDebug.Log("Error: Token " + tokenName + " does not have a valid picture");
@@ -1753,16 +1822,86 @@ public class Quest
             image.color = new Color(1, 1, 1, 0);
             image.sprite = tileSprite;
 
-            float PPS = tokenData.pxPerSquare;
             if (PPS == 0)
             {
                 PPS = (float) newTex.width;
             }
 
             // Set the size to the image size
-            image.rectTransform.sizeDelta = new Vector2((float) newTex.width / PPS, (float) newTex.height / PPS);
+            if (qToken.tokenSize.Equals("small"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(0.95f, 0.95f);
+            }
+            else if (qToken.tokenSize.Equals("medium"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(1.95f, 0.95f);
+            }
+            else if (qToken.tokenSize.Equals("huge"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(1.95f, 1.95f);
+            }
+            else if (qToken.tokenSize.Equals("massive"))
+            {
+               image.rectTransform.sizeDelta = new Vector2(2.95f, 1.95f);
+            }
+            else
+            {
+                float size = 1;
+                if (qToken.tokenSize.Equals("Actual"))
+                {
+                    // Actual size logic
+                    float pps = game.gameType.TilePixelPerSquare();
+                    if (pps == 0) pps = PPS; // Fallback to current PPS (likely image width) if game type doesn't specify
+                    
+                    if (pps > 0)
+                    {
+                        image.rectTransform.sizeDelta = new Vector2(newTex.width / pps, newTex.height / pps);
+                    }
+                    size = 0; // Mark as handled
+                }
+                else if (!float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out size))
+                {
+                    // Default logic
+                    size = 1;
+                }
+                
+                if (size > 0)
+                {
+                    image.rectTransform.sizeDelta = new Vector2(size * 0.95f, size * 0.95f);
+                }
+            }
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
+
+            // Move to square
+            // If we have a custom size we need to align top left
+            if (qToken.tokenSize.Length > 0)
+            {
+                float width = 1f;
+                float height = 1f;
+                if (qToken.tokenSize.Equals("medium")) width = 2f;
+                if (qToken.tokenSize.Equals("huge")) { width = 2f; height = 2f; }
+                if (qToken.tokenSize.Equals("massive")) { width = 3f; height = 2f; }
+                
+                if (float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out float size))
+                {
+                    width = size;
+                    height = size;
+                }
+                else if (qToken.tokenSize.Equals("Actual"))
+                {
+                    if (PPS == 0) PPS = game.gameType.TilePixelPerSquare();
+                    if (PPS > 0)
+                    {
+                        width = newTex.width / PPS;
+                        height = newTex.height / PPS;
+                    }
+                }
+
+                unityObject.transform.Translate(Vector3.right * (width - 1) / 2f, Space.World);
+                unityObject.transform.Translate(Vector3.down * (height - 1) / 2f, Space.World);
+            }
+
             // Move to square
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 

@@ -19,7 +19,9 @@ The CI pipeline (`.github/workflows/CodeAndSecurityValidation.yml`) uses a Power
 & 'C:\Program Files\Unity\Hub\Editor\2019.4.41f1\Editor\Unity.exe' -batchmode -nographics -projectPath ".\unity" -runTests -testPlatform EditMode -testResults "test-results.xml" -logFile "test-results.log"
 ```
 
-*Note: Ensure the Unity Editor is closed to prevent file lock issues.*
+Before running Unit Tests ALWAYS ask if you should run them or the user will do it manually.
+*Note: Ensure the Unity Editor is closed to prevent file lock issues. E.g. by checking if editor process is running (if yes warn user to close it)*
+
 
 #### Test Structure
 - Tests are located in `Assets/UnitTests/Editor`.

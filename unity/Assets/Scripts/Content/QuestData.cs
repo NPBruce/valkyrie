@@ -238,6 +238,9 @@ public class QuestData
         new public static string type = "Tile";
         public int rotation = 0;
         public string tileSideName;
+        public string customImage = "";
+        public float top = 0;
+        public float left = 0;
 
         // Create new with name (used by editor)
         public Tile(string s) : base(s)
@@ -262,11 +265,25 @@ public class QuestData
             }
 
             // Find the tileside that is used
+            tileSideName = "";
             if (data.ContainsKey("side"))
             {
                 tileSideName = data["side"];
             }
-            else
+            if (data.ContainsKey("customImage"))
+            {
+                customImage = data["customImage"];
+            }
+            if (data.ContainsKey("top"))
+            {
+                float.TryParse(data["top"], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out top);
+            }
+            if (data.ContainsKey("left"))
+            {
+                float.TryParse(data["left"], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out left);
+            }
+
+            if (tileSideName.Length == 0 && customImage.Length == 0)
             {
                 // Fatal if missing
                 ValkyrieDebug.Log("Error: No TileSide specified in quest component: " + name);
@@ -280,10 +297,25 @@ public class QuestData
             string nl = System.Environment.NewLine;
             string r = base.ToString();
 
-            r += "side=" + tileSideName + nl;
+            if (tileSideName.Length > 0)
+            {
+                r += "side=" + tileSideName + nl;
+            }
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
+            }
+            if (customImage.Length > 0)
+            {
+                r += "customImage=" + customImage + nl;
+                if (top != 0)
+                {
+                    r += "top=" + top.ToString(System.Globalization.CultureInfo.InvariantCulture) + nl;
+                }
+                if (left != 0)
+                {
+                    r += "left=" + left.ToString(System.Globalization.CultureInfo.InvariantCulture) + nl;
+                }
             }
             return r;
         }
@@ -350,6 +382,9 @@ public class QuestData
         new public static string type = "Token";
         public int rotation = 0;
         public string tokenName;
+        public string customImage = "";
+        public string tokenSize = "small";
+        public bool enableClick = true;
 
         // Create new with name (used by editor)
         public Token(string s) : base(s)
@@ -359,6 +394,8 @@ public class QuestData
             typeDynamic = type;
             tokenName = "TokenSearch";
             cancelable = true;
+            enableClick = true;
+            tokenSize = "small";
         }
 
         // Create from ini data
@@ -380,7 +417,19 @@ public class QuestData
             // Get rotation if specified
             if (data.ContainsKey("rotation"))
             {
-                int.TryParse(data["rotation"], out rotation);
+                rotation = ParseInt(data["rotation"]);
+            }
+            if (data.ContainsKey("tokensize"))
+            {
+                tokenSize = data["tokensize"];
+            }
+            if (data.ContainsKey("clickeffect"))
+            {
+                enableClick = ParseBool(data["clickeffect"]);
+            }
+            if (data.ContainsKey("customImage"))
+            {
+                customImage = data["customImage"];
             }
         }
 
@@ -394,6 +443,18 @@ public class QuestData
             if (rotation != 0)
             {
                 r += "rotation=" + rotation + nl;
+            }
+            if (tokenSize.Length > 0)
+            {
+                r += "tokensize=" + tokenSize + nl;
+            }
+            if (!enableClick)
+            {
+                r += "clickeffect=false" + nl;
+            }
+            if (customImage.Length > 0)
+            {
+                r += "customImage=" + customImage + nl;
             }
             return r;
         }
@@ -1164,9 +1225,14 @@ public class QuestData
     // MPlaces are used to position individual monsters
     public class MPlace : QuestComponent
     {
+        public const string KEY_MASTER = "master";
+        public const string KEY_ROTATE = "rotate";
+        public const string KEY_TOKENSIZE = "tokensize";
+
         public bool master = false;
         new public static string type = "MPlace";
         public bool rotate = false;
+        public string tokenSize = "";
 
         // Create a new mplace with name (editor)
         public MPlace(string s) : base(s)
@@ -1183,13 +1249,18 @@ public class QuestData
             locationSpecified = true;
             typeDynamic = type;
             master = false;
-            if (data.ContainsKey("master"))
+            
+            if (data.ContainsKey(KEY_MASTER))
             {
-                bool.TryParse(data["master"], out master);
+                master = ParseBool(data[KEY_MASTER]);
             }
-            if (data.ContainsKey("rotate"))
+            if (data.ContainsKey(KEY_ROTATE))
             {
-                bool.TryParse(data["rotate"], out rotate);
+                rotate = ParseBool(data[KEY_ROTATE]);
+            }
+            if (data.ContainsKey(KEY_TOKENSIZE))
+            {
+                tokenSize = data[KEY_TOKENSIZE];
             }
         }
 
@@ -1200,11 +1271,15 @@ public class QuestData
             string r = base.ToString();
             if (master)
             {
-                r += "master=true" + nl;
+                r += KEY_MASTER + "=true" + nl;
             }
             if (rotate)
             {
-                r += "rotate=true" + nl;
+                r += KEY_ROTATE + "=true" + nl;
+            }
+            if (tokenSize.Length > 0)
+            {
+                r += KEY_TOKENSIZE + "=" + tokenSize + nl;
             }
             return r;
         }
@@ -1455,6 +1530,48 @@ public class QuestData
             ChangeReference(refName, "");
         }
 
+        // Helper for parsing floats with logging
+        public static float ParseFloat(string s)
+        {
+            if (float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse float: " + s);
+            }
+            return 0;
+        }
+
+        // Helper for parsing ints with logging
+        public static int ParseInt(string s)
+        {
+            if (int.TryParse(s, out int result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse int: " + s);
+            }
+            return 0;
+        }
+
+        // Helper for parsing bools with logging
+        public static bool ParseBool(string s)
+        {
+            if (bool.TryParse(s, out bool result))
+            {
+                return result;
+            }
+            if (!string.IsNullOrEmpty(s))
+            {
+                ValkyrieDebug.Log("Warning: Failed to parse bool: " + s);
+            }
+            return false;
+        }
+
         // Save to string (editor)
         override public string ToString()
         {
@@ -1556,6 +1673,7 @@ public class QuestData
             {
                 imagePlace = data["imageplace"];
             }
+
 
             activations = new string[0];
             if (data.ContainsKey("activation"))

@@ -1,4 +1,10 @@
 .,Spanish
+// ICONS
+CUSTOM_IMAGE,Imagen personalizada
+ACTUAL,Real
+IMAGE_PLACE,Colocación de imagen
+IMAGE_PLACE_SIZE,Tamaño de colocación de imagen
+
 // TEXTS
 ABILITY,Capacidad
 ABOUT,Acerca de
@@ -521,3 +527,11 @@ SELECT_GAME_TYPE,Seleccionar tipo de juego
 SEARCH_BY_NAME,Buscar por nombre...
 
 SEARCH_BY_ID,Buscar por ID...
+
+DEFAULT,Default
+SMALL,Pequeño
+MEDIUM,Mediano
+HUGE,Gigante
+MASSIVE,Masivo
+
+CUSTOM_IMAGE,Imagen personalizada

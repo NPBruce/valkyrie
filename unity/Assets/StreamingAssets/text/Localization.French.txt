@@ -1,4 +1,10 @@
 .,French
+// ICONS
+CUSTOM_IMAGE,Image personnalisée
+ACTUAL,Réelle
+IMAGE_PLACE,Placement de l'image
+IMAGE_PLACE_SIZE,Taille de placement de l'image
+
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos
@@ -519,3 +525,11 @@ SELECT_GAME_TYPE,Sélectionner le type de jeu
 SEARCH_BY_NAME,Recherche par nom...
 
 SEARCH_BY_ID,Rechercher par ID...
+
+DEFAULT,Défaut
+SMALL,Petit
+MEDIUM,Moyen
+HUGE,Grand
+MASSIVE,Massif
+
+CUSTOM_IMAGE,Image personnalisée

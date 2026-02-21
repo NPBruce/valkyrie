@@ -1,5 +1,11 @@
 .,Russian
 
+// ICONS
+CUSTOM_IMAGE,Пользовательское изображение
+ACTUAL,Фактический
+IMAGE_PLACE,Место изображения
+IMAGE_PLACE_SIZE,Размер места изображения
+
 // TEXTS
 ABILITY,Способность
 ABOUT,О приложении
@@ -518,3 +524,11 @@ SELECT_GAME_TYPE,Выбрать тип игры
 SEARCH_BY_NAME,Поиск по имени...
 
 SEARCH_BY_ID,Поиск по ID...
+
+DEFAULT,Default
+SMALL,Маленький
+MEDIUM,Средний
+HUGE,Огромный
+MASSIVE,Массивный
+
+CUSTOM_IMAGE,Пользовательское изображение

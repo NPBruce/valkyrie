@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Assets.Scripts.UI;
+using System.Globalization;
 using System.Collections;
 using System.Collections.Generic;
 using ValkyrieTools;
@@ -53,6 +55,13 @@ public class TokenBoard : MonoBehaviour {
             if (component is Quest.UI)
             {
                 if (!((Quest.UI)component).qUI.enableClick)
+                {
+                    return;
+                }
+            }
+            else if (component is Quest.Token)
+            {
+                if (!((Quest.Token)component).qToken.enableClick)
                 {
                     return;
                 }
@@ -117,9 +126,9 @@ public class TokenBoard : MonoBehaviour {
         }
     }
 
-    // Add individual monster placements for hero count
     public void AddPlacedMonsters(EventManager.MonsterEvent me, int count)
     {
+        Game game = Game.Get();
         // Get monster placement image
         Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
 
@@ -131,8 +140,8 @@ public class TokenBoard : MonoBehaviour {
         }
 
         // Get placement dimensions
-        int x = 1;
-        int y = 1;
+        float x = 1;
+        float y = 1;
 
         if (me.cMonster.ContainsTrait("medium") || me.cMonster.ContainsTrait("huge"))
         {
@@ -146,6 +155,7 @@ public class TokenBoard : MonoBehaviour {
         {
             x = 3;
         }
+        
 
         // All all placements
         foreach (string s in me.qMonster.placement[count])
@@ -155,13 +165,54 @@ public class TokenBoard : MonoBehaviour {
     }
 
     // Add a placement image
-    public void AddPlacedMonsterImg(string place, Texture2D newTex, int sizeX, int sizeY, float posX = 0, float posY = 0)
+    public void AddPlacedMonsterImg(string place, Texture2D newTex, float sizeX, float sizeY, float posX = 0, float posY = 0)
     {
         Game game = Game.Get();
         Sprite iconSprite;
 
         // Check that placement name exists
-        if (!game.CurrentQuest.qd.components.ContainsKey(place) && place.Length > 0)
+        if (game.CurrentQuest.qd.components.ContainsKey(place))
+        {
+            QuestData.MPlace mp = game.CurrentQuest.qd.components[place] as QuestData.MPlace;
+            if (mp != null)
+            {
+                if (mp.tokenSize.Equals("small"))
+                {
+                    sizeX = 1;
+                    sizeY = 1;
+                }
+                else if (mp.tokenSize.Equals("medium"))
+                {
+                    sizeX = 2;
+                    sizeY = 1;
+                }
+                else if (mp.tokenSize.Equals("huge"))
+                {
+                    sizeX = 2;
+                    sizeY = 2;
+                }
+                else if (mp.tokenSize.Equals("massive"))
+                {
+                    sizeX = 3;
+                    sizeY = 2;
+                }
+                else if (mp.tokenSize.Equals("Actual"))
+                {
+                    float pps = game.gameType.TilePixelPerSquare();
+                    if (pps > 0)
+                    {
+                        sizeX = newTex.width / pps;
+                        sizeY = newTex.height / pps;
+                    }
+                }
+                else if (float.TryParse(mp.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out float size))
+                {
+                    sizeX = size;
+                    sizeY = size;
+                }
+            }
+        }
+        else if (place.Length > 0)
         {
             ValkyrieDebug.Log("Error: Invalid moster place: " + place);
             Application.Quit();
@@ -200,11 +251,11 @@ public class TokenBoard : MonoBehaviour {
 
             iconFrame = borderObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D frameTex = Resources.Load("sprites/borders/Frame_Monster_1x1") as Texture2D;
-            if (sizeX == 3)
+            if (Mathf.Approximately(sizeX, 3))
             {
                 frameTex = Resources.Load("sprites/borders/Frame_Monster_2x3") as Texture2D;
             }
-            if (sizeX == 2 && sizeY == 1)
+            if (Mathf.Approximately(sizeX, 2) && Mathf.Approximately(sizeY, 1))
             {
                 frameTex = Resources.Load("sprites/borders/Frame_Monster_1x2") as Texture2D;
             }
@@ -226,7 +277,7 @@ public class TokenBoard : MonoBehaviour {
 
             UnityEngine.UI.Image iconCicle = circleObject.AddComponent<UnityEngine.UI.Image>();
             Texture2D circleTex = Resources.Load("sprites/target") as Texture2D;
-            if (sizeX == 2 && sizeY == 1)
+            if (Mathf.Approximately(sizeX, 2) && Mathf.Approximately(sizeY, 1))
             {
                 circleTex = Resources.Load("sprites/borders/Empty_Monster_1x2") as Texture2D;
             }

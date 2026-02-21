@@ -1,5 +1,11 @@
 .,Portuguese
 
+// ICONS
+CUSTOM_IMAGE,Imagem personalizada
+ACTUAL,Real
+IMAGE_PLACE,Colocação de imagem
+IMAGE_PLACE_SIZE,Tamanho da colocação de imagem
+
 // TEXTS
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie
@@ -522,3 +528,11 @@ SELECT_GAME_TYPE,Selecionar tipo de jogo
 SEARCH_BY_NAME,Pesquisar por nome...
 
 SEARCH_BY_ID,Pesquisar por ID...
+
+DEFAULT,Default
+SMALL,Pequeno
+MEDIUM,Médio
+HUGE,Gigante
+MASSIVE,Massivo
+
+CUSTOM_IMAGE,Imagem personalizada

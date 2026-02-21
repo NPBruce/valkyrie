@@ -1,4 +1,10 @@
 .,Chinese
+// ICONS
+CUSTOM_IMAGE,自定义图像
+ACTUAL,实际
+IMAGE_PLACE,图像放置
+IMAGE_PLACE_SIZE,图像放置大小
+
 // TEXTS
 ABILITY,Ability
 ABOUT,關於
@@ -496,3 +502,11 @@ SELECT_GAME_TYPE,选择游戏类型
 SEARCH_BY_NAME,按名称搜索...
 
 SEARCH_BY_ID,按ID搜索...
+
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
+
+CUSTOM_IMAGE,自定义图片

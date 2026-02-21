@@ -165,11 +165,11 @@ public class EditorComponent {
     virtual public float AddComment(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset++, 5, 1);
+        ui.SetLocation(0, offset++, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", (new StringKey("val", "COMMENT"))));
 
         commentUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-        commentUIE.SetLocation(0.5f, offset, 19, 15);
+        commentUIE.SetLocation(0, offset, 19, 15);
         commentUIE.SetText(component.comment.Replace("\\n", "\n"));
         offset += commentUIE.HeightToTextPadding(1);
         commentUIE.SetButton(delegate { SetComment(); });
@@ -181,11 +181,11 @@ public class EditorComponent {
     virtual public float AddSource(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", (CommonStringKeys.SOURCE)));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(5, offset, 14.5f, 1);
+        ui.SetLocation(4, offset, 14.5f, 1);
         ui.SetText(component.source.Replace("\\n", "\n"));
         ui.SetButton(delegate { ChangeSource(); });
         new UIElementBorder(ui);
@@ -421,5 +421,41 @@ public class EditorComponent {
         if (component.operations.Contains(op))
             component.operations.Remove(op);
         Update();
+    }
+
+
+    
+    // Helper for selecting custom images
+    protected void SetCustomImage(System.Action<string> onSelect)
+    {
+        if (GameObject.FindGameObjectWithTag(Game.DIALOG) != null)
+        {
+            return;
+        }
+
+        UIWindowSelectionListImage select = new UIWindowSelectionListImage(new UnityEngine.Events.UnityAction<string>(onSelect), new StringKey("val", "SELECT", new StringKey("val", "CUSTOM_IMAGE")));
+        select.AddItem("{NONE}", "", true);
+
+        Dictionary<string, IEnumerable<string>> traits = new Dictionary<string, IEnumerable<string>>();
+        traits.Add(CommonStringKeys.SOURCE.Translate(), new string[] { CommonStringKeys.FILE.Translate() });
+
+        string relativePath = new FileInfo(Path.GetDirectoryName(Game.Get().CurrentQuest.qd.questPath)).FullName;
+        foreach (string s in Directory.GetFiles(relativePath, "*.png", SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+        foreach (string s in Directory.GetFiles(relativePath, "*.jpg", SearchOption.AllDirectories))
+        {
+            select.AddItem(s.Substring(relativePath.Length + 1), traits);
+        }
+
+
+
+        foreach (ImageData imageData in Game.Get().cd.Values<ImageData>())
+        {
+            select.AddItem(imageData);
+        }
+        select.ExcludeExpansions();
+        select.Draw();
     }
 }
