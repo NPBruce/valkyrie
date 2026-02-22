@@ -506,6 +506,8 @@ FULLSCREEN,Pantalla completa
 ON,Activado
 OFF,Desactivado
 EXPORT_LOG,Exportar log
+ADVANCED_OPTIONS,Opciones Avanzadas
+VIEW_LOCK,Bloquear movimiento automático de cámara de escenario
 
 LOADINGSCENARIOS,Cargando escenarios...
 LOADINGCONTENTPACKS,Cargando paquetes de contenido...

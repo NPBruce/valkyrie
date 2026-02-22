@@ -674,6 +674,8 @@ FULLSCREEN,Fullscreen
 ON,ON
 OFF,OFF
 EXPORT_LOG,Export Log
+ADVANCED_OPTIONS,Advanced Options
+VIEW_LOCK,Block automatic scenario camera movement
 
 LOADINGSCENARIOS,Loading scenarios...
 LOADINGCONTENTPACKS,Loading content packs...

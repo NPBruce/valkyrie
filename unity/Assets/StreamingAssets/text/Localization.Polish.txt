@@ -481,6 +481,8 @@ FULLSCREEN,Pełny ekran
 ON,Wł.
 OFF,Wył.
 EXPORT_LOG,Eksportuj log
+ADVANCED_OPTIONS,Opcje Zaawansowane
+VIEW_LOCK,Zablokuj automatyczny ruch kamery w scenariuszu
 
 LOADINGSCENARIOS,Wczytywanie scenariuszy...
 LOADINGCONTENTPACKS,Wczytywanie pakietów zawartości...
