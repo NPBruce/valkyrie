@@ -20,9 +20,11 @@ else {
 }
 
 $Headers = @{
-    "Authorization" = "token $env:GH_TOKEN"
-    "Accept"        = "application/vnd.github.v3+json"
-    "User-Agent"    = "Valkyrie-Actions"
+    "Accept"     = "application/vnd.github.v3+json"
+    "User-Agent" = "Valkyrie-Actions"
+}
+if ($env:GH_TOKEN) {
+    $Headers["Authorization"] = "token $env:GH_TOKEN"
 }
 
 $Results = @()
@@ -88,10 +90,109 @@ if ($Paths.Count -gt 0) {
             $FileResponse = Invoke-RestMethod -Uri $FileUrl -Headers $Headers -Method Get
             $Content = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($FileResponse.content))
 
-            if ($Content -match "(?im)^Language\s*=\s*(.*)$") {
-                $Lang = $Matches[1].Trim()
-                if ($Lang.ToLower() -eq "english") {
-                    $Results += "- ⚠️ ini file '$IniPath' has default language set to English"
+            if ($Content -match "(?i)^\s*\[Quest\]") {
+                # Check Language
+                if ($Content -match "(?im)^(?:defaultlanguage|Language)\s*=\s*(.*)$") {
+                    $Lang = $Matches[1].Trim()
+                    if ($Lang.ToLower() -eq "english") {
+                        $Results += "- ℹ️ ini file '$IniPath' has default language set to English (Make sure this is correct for your scenario)"
+                    }
+                    else {
+                        $Results += "- ✅ Default language set to '$Lang'"
+                    }
+                }
+                else {
+                    $Results += "- ⚠️ ini file '$IniPath' is missing a 'defaultlanguage' property."
+                }
+
+                # Check Packs
+                if ($Content -match "(?im)^packs\s*=\s*(.*)$") {
+                    $Packs = $Matches[1].Trim()
+                    $Results += "- ℹ️ Required Expansions (packs) defined in '$IniPath': **$Packs**"
+                }
+                else {
+                    $Results += "- ℹ️ No 'packs' property defined in '$IniPath' (Base game only)"
+                }
+
+                # Check Image
+                if ($Content -match "(?im)^image\s*=\s*(.*)$") {
+                    $Image = $Matches[1].Trim()
+                    $ImageMatch = @($Paths | Where-Object { $_ -eq $Image -or $_.EndsWith("/$Image") -or $_.EndsWith("\$Image") })
+                    if ($ImageMatch.Count -gt 0) {
+                        $Results += "- ✅ Thumbnail image '$Image' found in repository."
+                    }
+                    else {
+                        $Results += "- ⚠️ Thumbnail image '$Image' defined in '$IniPath', but not found in repository."
+                    }
+                }
+                else {
+                    $Results += "- ℹ️ No thumbnail 'image' defined in '$IniPath'. Consider adding one to improve scenario visibility."
+                }
+
+                # Check Type and Duplicates
+                $Type = ""
+                if ($Content -match "(?im)^type\s*=\s*(.*)$") {
+                    $Type = $Matches[1].Trim()
+                    if ($Type -notin @("MoM", "D2E")) {
+                        $Results += "- ❌ Invalid 'type=$Type' in '$IniPath'. Must be 'MoM' or 'D2E'."
+                        $Type = ""
+                    }
+                    else {
+                        $Results += "- ✅ Scenario type identified as '$Type'"
+                    }
+                }
+                else {
+                    $Results += "- ❌ Missing 'type' property in '$IniPath'. Must define 'type=MoM' or 'type=D2E'."
+                }
+
+                if ($Type) {
+                    $ScenarioId = ""
+                    $ValkPathsTmp = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyrie") })
+                    if ($ValkPathsTmp.Count -gt 0) {
+                        $ValkFile = $ValkPathsTmp[0]
+                        $ValkBase = [System.IO.Path]::GetFileName($ValkFile)
+                        $ScenarioId = $ValkBase.Substring(0, $ValkBase.Length - 9)
+                    }
+                    else {
+                        $ScenarioId = $Base.Substring(0, $Base.Length - 4)
+                    }
+
+                    try {
+                        $ManifestUrl = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/$Type/manifest.ini"
+                        $StoreManifest = Invoke-RestMethod -Uri $ManifestUrl -Method Get
+                        $SafeId = [regex]::Escape($ScenarioId)
+                        if ($StoreManifest -match "(?im)^\[$SafeId\]") {
+                            $Results += "- ❌ Scenario ID '$ScenarioId' already exists in the valkyrie-store $Type manifest. Please rename your scenario files to ensure a unique ID."
+                        }
+                        else {
+                            $Results += "- ✅ Scenario ID '$ScenarioId' is unique for $Type."
+                            
+                            $DefaultBranch = ""
+                            try {
+                                $RepoInfoUrl = "https://api.github.com/repos/$Owner/$Repo"
+                                $RepoInfoResponse = Invoke-RestMethod -Uri $RepoInfoUrl -Headers $Headers -Method Get
+                                $DefaultBranch = $RepoInfoResponse.default_branch
+                            }
+                            catch {
+                                $DefaultBranch = "master"
+                            }
+                            
+                            $Results += "`n---`n💡 **For Valkyrie Admins:** You can copy the following block to add this scenario for Valkyrie Scenario repository:`n"
+                            $Results += "``````ini`n[$ScenarioId]`nexternal=https://raw.githubusercontent.com/$Owner/$Repo/$DefaultBranch/`n```````n"
+                            $Results += "[👉 Quick Edit $Type manifest.ini](https://github.com/NPBruce/valkyrie-store/edit/master/$Type/manifest.ini)`n---"
+                        }
+                    }
+                    catch {
+                        $Results += "- ⚠️ Could not fetch $Type manifest.ini from valkyrie-store to check for duplicate ID: $_"
+                    }
+                }
+            }
+            else {
+                if ($Content -match "(?im)^Language\s*=\s*(.*)$") {
+                    $Lang = $Matches[1].Trim()
+                    if ($Lang.ToLower() -eq "english") {
+                        $Results += "- ⚠️ ini file '$IniPath' has default language set to English"
+                    }
                 }
             }
         }
