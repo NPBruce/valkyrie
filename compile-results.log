@@ -1,0 +1,894 @@
+[LicensingClient] ERROR Error 10 while verifying Licensing Client signature (path: 15264, process Id: C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe)
+[Licensing::Module] LicensingClient has failed validation
+[LicensingClient] ERROR Failed to connect to local IPC
+[Licensing::Module] Failed to connect to channel: LicenseClient-Quantum-2019.4.41
+[Licensing::Module] Successfully launched the LicensingClient
+[LicensingClient] ERROR Error 10 while verifying Licensing Client signature (path: 23004, process Id: C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe)
+[Licensing::Module] LicensingClient has failed validation
+IPC channel to LicensingClient doesn't exist; falling back to Legacy licensing
+[LicensingClient] ERROR Failed to disconnect local IPC connection
+
+LICENSE SYSTEM [2026222 12:43:16] Next license update check is after 2025-11-30T23:28:13
+
+
+LICENSE SYSTEM [2026222 12:43:16] Machine binding 1 mismatch: (value of current machine) 00331-20020-00000-AA495 != 00331-20020-00000-AA412 (value in license file). Reason might be there is a hardware change on this machine after the license was activated.
+
+
+LICENSE SYSTEM [2026222 12:43:16] Current license is already valid and activated. Skipping license activation process (Provided username/password will be ignored).
+Built from 'HEAD' branch; Version is '2019.4.41f1 (fb553f8fdd6c) revision 16471359'; Using compiler version '191627012'
+OS: 'Windows 11  (10.0.26200) 64bit Professional' Language: 'de' Physical Memory: 16310 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+[Package Manager] Server::Start -- Port 61180 was selected
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2019.4.41f1\Editor\Unity.exe
+-batchmode
+-nographics
+-projectPath
+.\unity
+-executeMethod
+UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation
+-quit
+-logFile
+compile-results.log
+Successfully changed project path to: E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity
+E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity
+Using Asset Import Pipeline V2.
+DisplayProgressbar: Unity Package Manager
+Adding genesis user token [Package Manager] Done resolving packages in 1.06s seconds
+[Package Manager] Done checking package constraints in 0.00s seconds
+[Package Manager] 
+Registered 52 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ide.rider@1.2.1 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.ide.rider@1.2.1)
+    com.unity.ide.visualstudio@2.0.15 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.ide.visualstudio@2.0.15)
+    com.unity.ide.vscode@1.2.5 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.ide.vscode@1.2.5)
+    com.unity.multiplayer-hlapi@1.0.8 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.8)
+    com.unity.test-framework@1.1.31 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.test-framework@1.1.31)
+    com.unity.textmeshpro@2.1.4 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.textmeshpro@2.1.4)
+    com.unity.timeline@1.2.18 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.timeline@1.2.18)
+    com.unity.toolchain.win-x86_64-linux-x86_64@2.0.10 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.toolchain.win-x86_64-linux-x86_64@2.0.10)
+    com.unity.xr.legacyinputhelpers@2.1.9 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.xr.legacyinputhelpers@2.1.9)
+    com.unity.sysroot@2.0.10 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.sysroot@2.0.10)
+    com.unity.sysroot.linux-x86_64@2.0.9 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.sysroot.linux-x86_64@2.0.9)
+    com.unity.ext.nunit@1.0.6 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.ext.nunit@1.0.6)
+    nuget.mono-cecil@0.1.6-preview (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\nuget.mono-cecil@0.1.6-preview)
+  Built-in packages:
+    com.unity.2d.sprite@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.2d.sprite@1.0.0)
+    com.unity.2d.tilemap@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.2d.tilemap@1.0.0)
+    com.unity.ugui@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.ugui@1.0.0)
+    com.unity.modules.ai@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.ai@1.0.0)
+    com.unity.modules.androidjni@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.androidjni@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.animation@1.0.0)
+    com.unity.modules.assetbundle@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.assetbundle@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.audio@1.0.0)
+    com.unity.modules.cloth@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.cloth@1.0.0)
+    com.unity.modules.director@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.director@1.0.0)
+    com.unity.modules.imageconversion@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.imageconversion@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.particlesystem@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.particlesystem@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.physics@1.0.0)
+    com.unity.modules.physics2d@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.physics2d@1.0.0)
+    com.unity.modules.screencapture@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.screencapture@1.0.0)
+    com.unity.modules.terrain@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.terrain@1.0.0)
+    com.unity.modules.terrainphysics@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.terrainphysics@1.0.0)
+    com.unity.modules.tilemap@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.tilemap@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.uielements@1.0.0)
+    com.unity.modules.umbra@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.umbra@1.0.0)
+    com.unity.modules.unityanalytics@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unityanalytics@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unitywebrequest@1.0.0)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle@1.0.0)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unitywebrequestaudio@1.0.0)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unitywebrequesttexture@1.0.0)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.unitywebrequestwww@1.0.0)
+    com.unity.modules.vehicles@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.vehicles@1.0.0)
+    com.unity.modules.video@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.video@1.0.0)
+    com.unity.modules.vr@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.vr@1.0.0)
+    com.unity.modules.wind@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.wind@1.0.0)
+    com.unity.modules.xr@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.xr@1.0.0)
+    com.unity.modules.subsystems@1.0.0 (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.unity.modules.subsystems@1.0.0)
+  Embedded packages:
+    com.android.test.accessactivity@file:E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Packages\AccessActivity (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Packages\AccessActivity)
+  Local Tarball packages:
+    com.google.external-dependency-manager@file:E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\GooglePackages\com.google.external-dependency-manager-1.2.156.tgz (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.google.external-dependency-manager@005aabd48922)
+    com.google.firebase.app@file:E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\GooglePackages\com.google.firebase.app-6.15.2.tgz (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.google.firebase.app@f6e0ecce76ac)
+    com.google.firebase.crashlytics@file:E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\GooglePackages\com.google.firebase.crashlytics-6.15.2.tgz (location: E:\Eigene Dokumente\Max\Programmierung\Projekte\Valkyrie App\valkyrie\unity\Library\PackageCache\com.google.firebase.crashlytics@fb265001d26f)
+
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.05s seconds
+Refreshing native plugins compatible for Editor in 53.06 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2019.4.41f1 (fb553f8fdd6c)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56264
+ImportWorker Server TCP listen port: 61184
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001981 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 32.02 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.081 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1099ms)
+		BeginReloadAssembly (42ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (312ms)
+			LoadAssemblies (39ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (119ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (29ms)
+			SetupLoadedEditorAssemblies (118ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (32ms)
+				BeforeProcessingInitializeOnLoad (1ms)
+				ProcessInitializeOnLoadAttributes (75ms)
+				ProcessInitializeOnLoadMethodAttributes (6ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Registering precompiled user dll's ...
+Registered in 0.057319 seconds.
+Platform modules already initialized, skipping
+Validating Project structure ... 0.009274 seconds.
+Shader import version has changed; will reimport all shaders...
+Upgrading shader files ...0.017951 seconds.
+Start importing Assets/Scripts/UI/Screens/OptionsScreen.cs using Guid(9a973f4c1eafd0b47a3f011afa861810) Importer(-1,00000000000000000000000000000000)
+Done importing asset: 'Assets/Scripts/UI/Screens/OptionsScreen.cs' (target hash: 'a7b640ff51cfcdb4956550fd489d2d9d') in 0.053864 seconds
+Begin MonoManager ReloadAssembly
+Failed loading assembly Assets/Plugins/System.IO.Compression.dll
+Loading assembly failed: "Assets/Plugins/System.IO.Compression.dll" 
+(Filename: C:\build\output\unity\unity\Runtime/Mono/MonoManager.cpp Line: 1005)
+
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.48 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.863 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1889ms)
+		BeginReloadAssembly (61ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (1ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (18ms)
+		EndReloadAssembly (1762ms)
+			LoadAssemblies (51ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (173ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (29ms)
+			SetupLoadedEditorAssemblies (1473ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (72ms)
+				ProcessInitializeOnLoadAttributes (1381ms)
+				ProcessInitializeOnLoadMethodAttributes (3ms)
+				AfterProcessingInitializeOnLoad (8ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (1ms)
+Platform modules already initialized, skipping
+- Starting script compilation
+- Starting compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+- Starting compile Library/ScriptAssemblies/UnityEngine.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll in 0,378342 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.UI.dll in 0,454599 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll in 0,316116 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.UI.dll in 0,249108 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.dll
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.Rider.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll in 0,668573 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll in 0,640034 seconds
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll in 0,48661 seconds
+- Starting compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll
+- Starting compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+- Finished compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll in 0,697103 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Rider.Editor.dll in 0,772087 seconds
+- Finished compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll in 0,872449 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.dll in 1,129618 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll in 0,989422 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll
+- Finished compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll in 1,138854 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll in 1,126383 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll in 1,275069 seconds
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll in 0,647442 seconds
+- Finished compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll in 0,610239 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+- Starting compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll in 0,708782 seconds
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.dll in 1,490303 seconds
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+- Finished compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll in 0,454835 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll in 0,573268 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll in 0,526499 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll in 0,259589 seconds
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll in 0,592255 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll in 0,924987 seconds
+- Finished script compilation in 3,157809 seconds
+Begin MonoManager ReloadAssembly
+Failed loading assembly Assets/Plugins/System.IO.Compression.dll
+Loading assembly failed: "Assets/Plugins/System.IO.Compression.dll" 
+(Filename: C:\build\output\unity\unity\Runtime/Mono/MonoManager.cpp Line: 1005)
+
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.25 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.444 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2473ms)
+		BeginReloadAssembly (68ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (1ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (25ms)
+		EndReloadAssembly (2332ms)
+			LoadAssemblies (571ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (203ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (45ms)
+			SetupLoadedEditorAssemblies (1476ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (70ms)
+				ProcessInitializeOnLoadAttributes (1382ms)
+				ProcessInitializeOnLoadMethodAttributes (8ms)
+				AfterProcessingInitializeOnLoad (8ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (1ms)
+Platform modules already initialized, skipping
+[ScriptCompilation] Recompiling all scripts because: Reload of assemblies failed
+AssetDatabase: script compilation time: 5.829004s
+- Starting script compilation
+- Starting compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+- Starting compile Library/ScriptAssemblies/UnityEngine.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll in 0,577882 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.UI.dll in 0,699322 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll in 0,332902 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.UI.dll in 0,335576 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.dll
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.Rider.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll in 0,433121 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll in 0,623748 seconds
+- Starting compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll in 0,91935 seconds
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll in 0,735509 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+- Finished compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll in 0,925472 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll in 1,100824 seconds
+- Finished compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll in 0,84299 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.dll in 1,264636 seconds
+- Finished compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll in 1,23733 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Rider.Editor.dll in 1,200102 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll in 1,184929 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll in 1,141063 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
+- Starting compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.dll in 1,471691 seconds
+- Finished compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll in 0,793454 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll in 0,53239 seconds
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll in 0,39983 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll in 0,594751 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll in 0,78827 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll in 0,762883 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll in 0,334833 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll in 1,164657 seconds
+- Starting compile Library/ScriptAssemblies/Assembly-CSharp.dll
+Symbols will be read from Library/ScriptAssemblies/Assembly-CSharp.pdb
+Script Module: Assembly-CSharp.dll
+Pass: 0 took 16 milliseconds
+Pass: 1 took 20 milliseconds
+- Finished compile Library/ScriptAssemblies/Assembly-CSharp.dll in 1,05772 seconds
+- Starting compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+- Finished compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll in 0,335472 seconds
+- Finished script compilation in 5,245203 seconds
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Failed loading assembly Assets/Plugins/System.IO.Compression.dll
+Loading assembly failed: "Assets/Plugins/System.IO.Compression.dll" 
+(Filename: C:\build\output\unity\unity\Runtime/Mono/MonoManager.cpp Line: 1005)
+
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.26 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.982 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2013ms)
+		BeginReloadAssembly (76ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (1ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (34ms)
+		EndReloadAssembly (1870ms)
+			LoadAssemblies (146ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (211ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (45ms)
+			SetupLoadedEditorAssemblies (1422ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (70ms)
+				ProcessInitializeOnLoadAttributes (1329ms)
+				ProcessInitializeOnLoadMethodAttributes (6ms)
+				AfterProcessingInitializeOnLoad (8ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (2ms)
+Refreshing native plugins compatible for Editor in 1.04 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+RefreshInfo: InitialScriptRefreshV2(NoUpdateAssetOptions)
+RefreshProfiler: Total: 15807.947ms
+	InvokeBeforeRefreshCallbacks: 51.283ms
+	ApplyChangesToAssetFolders: 0.075ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 31.678ms
+	OnSourceAssetsModified: 1.071ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 0.306ms
+	GetAllGuidsForCategorization: 0.102ms
+	CategorizeAssets: 30.733ms
+	ImportAndPostprocessOutOfDateAssets: 15682.126ms (4393.748ms without children)
+		ImportManagerImport: 54.837ms (0.562ms without children)
+			ImportInProcess: 54.251ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.024ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 11182.256ms
+		PostProcessAllAssets: 48.000ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.232ms
+		InitializingProgressBar: 0.002ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.184ms
+		OnDemandSchedulerStart: 0.000ms
+		RestoreLoadedAssetsState: 0.075ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 2.792ms
+	ReloadSourceAssets: 0.833ms
+	UnloadImportedAssets: 0.009ms
+	Hotreload: 1.492ms
+	FixTempGuids: 0.002ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.001ms
+	UnloadStreamsBegin: 0.809ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.182ms
+	GetLoadedSourceAssetsSnapshot: 0.589ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 6.686ms
+	GenerateScriptTypeHashes: 0.135ms
+	Untracked: -0.032ms
+Refreshing native plugins compatible for Editor in 1.35 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Refresh completed in 0.254685 seconds.
+RefreshInfo: RefreshV2(ForceSynchronousImport)
+RefreshProfiler: Total: 254.671ms
+	InvokeBeforeRefreshCallbacks: 50.881ms
+	ApplyChangesToAssetFolders: 0.083ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 29.941ms
+	OnSourceAssetsModified: 0.000ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 2.764ms
+	GetAllGuidsForCategorization: 0.079ms
+	CategorizeAssets: 29.136ms
+	ImportAndPostprocessOutOfDateAssets: 137.382ms (1.667ms without children)
+		ImportManagerImport: 0.000ms (0.000ms without children)
+			ImportInProcess: 0.000ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.000ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 0.000ms
+		PostProcessAllAssets: 131.866ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.199ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.144ms
+		OnDemandSchedulerStart: 0.426ms
+		RestoreLoadedAssetsState: 1.078ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 2.002ms
+	ReloadSourceAssets: 0.341ms
+	UnloadImportedAssets: 0.082ms
+	Hotreload: 1.485ms
+	FixTempGuids: 0.003ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.172ms
+	UnloadStreamsBegin: 0.013ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.280ms
+	GetLoadedSourceAssetsSnapshot: 1.874ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 0.057ms
+	GenerateScriptTypeHashes: 0.226ms
+	Untracked: 0.099ms
+RefreshInfo: StopAssetImportingV2(ForceSynchronousImport)
+RefreshProfiler: Total: 58.965ms
+	InvokeBeforeRefreshCallbacks: 51.047ms
+	ApplyChangesToAssetFolders: 0.076ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 3.471ms
+	OnSourceAssetsModified: 0.000ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 2.493ms
+	GetAllGuidsForCategorization: 0.000ms
+	CategorizeAssets: 0.000ms
+	ImportAndPostprocessOutOfDateAssets: 0.000ms (0.000ms without children)
+		ImportManagerImport: 0.000ms (0.000ms without children)
+			ImportInProcess: 0.000ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.000ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 0.000ms
+		PostProcessAllAssets: 0.000ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.000ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.000ms
+		RestoreLoadedAssetsState: 0.000ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 0.000ms
+	ReloadSourceAssets: 0.000ms
+	UnloadImportedAssets: 0.000ms
+	Hotreload: 0.018ms
+	FixTempGuids: 0.003ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.166ms
+	UnloadStreamsBegin: 0.179ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.427ms
+	GetLoadedSourceAssetsSnapshot: 0.348ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 0.009ms
+	GenerateScriptTypeHashes: 0.000ms
+	Untracked: 0.726ms
+Refresh completed in 0.066008 seconds.
+RefreshInfo: RefreshV2(NoUpdateAssetOptions)
+RefreshProfiler: Total: 65.988ms
+	InvokeBeforeRefreshCallbacks: 0.001ms
+	ApplyChangesToAssetFolders: 0.068ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 29.848ms
+	OnSourceAssetsModified: 0.000ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 2.406ms
+	GetAllGuidsForCategorization: 0.066ms
+	CategorizeAssets: 28.383ms
+	ImportAndPostprocessOutOfDateAssets: 1.979ms (0.359ms without children)
+		ImportManagerImport: 0.000ms (0.000ms without children)
+			ImportInProcess: 0.000ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.000ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 0.000ms
+		PostProcessAllAssets: 0.000ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.191ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.143ms
+		OnDemandSchedulerStart: 0.186ms
+		RestoreLoadedAssetsState: 1.100ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 0.000ms
+	ReloadSourceAssets: 0.347ms
+	UnloadImportedAssets: 0.080ms
+	Hotreload: 0.051ms
+	FixTempGuids: 0.003ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.169ms
+	UnloadStreamsBegin: 0.031ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.465ms
+	GetLoadedSourceAssetsSnapshot: 1.471ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 0.009ms
+	GenerateScriptTypeHashes: 0.000ms
+	Untracked: 0.611ms
+Initializing Unity extensions:
+ 'C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll'  GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+Unloading 92 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 53.3 MB.
+System memory in use after: 52.1 MB.
+
+Unloading 300 unused Assets to reduce memory usage. Loaded Objects now: 1868.
+Total: 2.761500 ms (FindLiveObjects: 0.217200 ms CreateObjectMapping: 0.027500 ms MarkObjects: 1.805000 ms  DeleteObjects: 0.711400 ms)
+
+- Starting script compilation
+- Starting compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+- Starting compile Library/ScriptAssemblies/UnityEngine.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll in 0,526004 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.UI.dll in 0,647473 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll in 0,419409 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.UI.dll in 0,480239 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.dll
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.Rider.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll in 0,450437 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll in 0,602074 seconds
+- Starting compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll in 1,046134 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.dll in 1,066958 seconds
+- Finished compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll in 1,263757 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Rider.Editor.dll in 1,2363 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll in 1,22197 seconds
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll in 1,159548 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll in 0,934761 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll in 0,322501 seconds
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.dll in 1,394826 seconds
+- Finished compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll in 0,813704 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll in 1,421947 seconds
+- Finished compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll in 1,364494 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll in 1,452076 seconds
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
+- Starting compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+- Starting compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll
+- Finished compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll in 0,408447 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll in 0,531821 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll in 0,711345 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll in 1,146991 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll in 1,419362 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll in 0,420546 seconds
+- Finished script compilation in 4,318697 seconds
+Begin MonoManager ReloadAssembly
+Failed loading assembly Assets/Plugins/System.IO.Compression.dll
+Loading assembly failed: "Assets/Plugins/System.IO.Compression.dll" 
+(Filename: C:\build\output\unity\unity\Runtime/Mono/MonoManager.cpp Line: 1005)
+
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 14.94 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+RefreshInfo: StopAssetImportingV2(NoUpdateAssetOptions)
+RefreshProfiler: Total: 44.033ms
+	InvokeBeforeRefreshCallbacks: 0.000ms
+	ApplyChangesToAssetFolders: 0.076ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 3.962ms
+	OnSourceAssetsModified: 0.000ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 2.608ms
+	GetAllGuidsForCategorization: 0.172ms
+	CategorizeAssets: 30.790ms
+	ImportAndPostprocessOutOfDateAssets: 2.020ms (0.361ms without children)
+		ImportManagerImport: 0.000ms (0.000ms without children)
+			ImportInProcess: 0.000ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.000ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 0.000ms
+		PostProcessAllAssets: 0.000ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.224ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.142ms
+		OnDemandSchedulerStart: 0.185ms
+		RestoreLoadedAssetsState: 1.108ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 0.000ms
+	ReloadSourceAssets: 0.348ms
+	UnloadImportedAssets: 0.107ms
+	Hotreload: 0.044ms
+	FixTempGuids: 0.003ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.180ms
+	UnloadStreamsBegin: 1.188ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.578ms
+	GetLoadedSourceAssetsSnapshot: 1.520ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 0.009ms
+	GenerateScriptTypeHashes: 0.274ms
+	Untracked: 0.427ms
+- Completed reload, in  2.087 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2116ms)
+		BeginReloadAssembly (89ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (1ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (1961ms)
+			LoadAssemblies (56ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (210ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (53ms)
+			SetupLoadedEditorAssemblies (1505ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (7ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (15ms)
+				BeforeProcessingInitializeOnLoad (103ms)
+				ProcessInitializeOnLoadAttributes (1365ms)
+				ProcessInitializeOnLoadMethodAttributes (6ms)
+				AfterProcessingInitializeOnLoad (8ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (6ms)
+Platform modules already initialized, skipping
+[ScriptCompilation] Recompiling all scripts because: Reload of assemblies failed
+- Starting script compilation
+- Starting compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+- Starting compile Library/ScriptAssemblies/UnityEngine.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.TestRunner.dll in 0,396232 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+- Finished compile Library/ScriptAssemblies/UnityEngine.UI.dll in 0,482259 seconds
+- Finished compile Library/ScriptAssemblies/UnityEditor.TestRunner.dll in 0,315409 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.UI.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.UI.dll in 0,239848 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.dll
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll
+- Starting compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.Rider.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll
+- Starting compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
+- Starting compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Runtime.dll in 0,576166 seconds
+- Starting compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll
+- Finished compile Library/ScriptAssemblies/NativeFilePicker.Editor.dll in 0,497093 seconds
+- Finished compile Library/ScriptAssemblies/Unity.VSCode.Editor.dll in 0,587757 seconds
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll in 0,721038 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Rider.Editor.dll in 0,915329 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll in 0,900042 seconds
+- Finished compile Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll in 1,375764 seconds
+- Starting compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+- Starting compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+- Finished compile Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll in 1,358647 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.dll in 1,442596 seconds
+- Finished compile Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll in 1,405554 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll in 1,541589 seconds
+- Starting compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
+- Finished compile Library/ScriptAssemblies/Unity.SysrootPackage.Editor.dll in 1,013405 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.dll in 1,728074 seconds
+- Starting compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll in 0,375292 seconds
+- Finished compile Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll in 0,425145 seconds
+- Starting compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+- Finished compile Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll in 0,452107 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll in 0,404036 seconds
+- Starting compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll
+- Finished compile Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll in 0,479488 seconds
+- Finished compile Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll in 0,610228 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Toolchain.Win-x86_64-Linux-x86_64.dll in 0,346798 seconds
+- Finished compile Library/ScriptAssemblies/Unity.Timeline.Editor.dll in 0,948389 seconds
+- Starting compile Library/ScriptAssemblies/Assembly-CSharp.dll
+Symbols will be read from Library/ScriptAssemblies/Assembly-CSharp.pdb
+Script Module: Assembly-CSharp.dll
+Pass: 0 took 16 milliseconds
+Pass: 1 took 17 milliseconds
+- Finished compile Library/ScriptAssemblies/Assembly-CSharp.dll in 1,077415 seconds
+- Starting compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+- Finished compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll in 0,308073 seconds
+- Finished script compilation in 4,907812 seconds
+Reloading assemblies after script compilation.
+Begin MonoManager ReloadAssembly
+Failed loading assembly Assets/Plugins/System.IO.Compression.dll
+Loading assembly failed: "Assets/Plugins/System.IO.Compression.dll" 
+(Filename: C:\build\output\unity\unity\Runtime/Mono/MonoManager.cpp Line: 1005)
+
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.26 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+RefreshInfo: StopAssetImportingV2(NoUpdateAssetOptions)
+RefreshProfiler: Total: 39.517ms
+	InvokeBeforeRefreshCallbacks: 0.001ms
+	ApplyChangesToAssetFolders: 0.073ms
+	WriteModifiedImportersToTextMetaFiles: 0.000ms
+	CleanLegacyArtifacts: 0.000ms
+	Scan: 3.702ms
+	OnSourceAssetsModified: 0.000ms
+	UnregisterDeletedAssets: 0.000ms
+	InitializeImportedAssetsSnapshot: 2.453ms
+	GetAllGuidsForCategorization: 0.174ms
+	CategorizeAssets: 28.232ms
+	ImportAndPostprocessOutOfDateAssets: 1.986ms (0.364ms without children)
+		ImportManagerImport: 0.000ms (0.000ms without children)
+			ImportInProcess: 0.000ms
+			ImportOutOfProcess: 0.000ms
+			UpdateCategorizedAssets: 0.000ms
+			RemoteAssetCacheGetArtifact: 0.000ms (0.000ms without children)
+				RemoteAssetCacheResolve: 0.000ms
+				RemoteAssetCacheDownloadFile: 0.000ms
+		CompileScripts: 0.000ms
+		PostProcessAllAssets: 0.000ms
+		ReloadImportedAssets: 0.000ms
+		VerifyAssetsAreUpToDateAndCorrect: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.213ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.142ms
+		OnDemandSchedulerStart: 0.178ms
+		RestoreLoadedAssetsState: 1.089ms
+	InvokeProjectHasChanged: 0.000ms
+	UpdateImportedAssetsSnapshot: 0.000ms
+	ReloadSourceAssets: 0.351ms
+	UnloadImportedAssets: 0.087ms
+	Hotreload: 0.043ms
+	FixTempGuids: 0.003ms
+	VerifyGuidPMRegistrations: 0.000ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.175ms
+	UnloadStreamsBegin: 0.012ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 0.462ms
+	GetLoadedSourceAssetsSnapshot: 1.437ms
+	PersistCurrentRevisions: 0.000ms
+	UnloadStreamsEnd: 0.009ms
+	GenerateScriptTypeHashes: 0.197ms
+	Untracked: 0.317ms
+- Completed reload, in  2.138 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2167ms)
+		BeginReloadAssembly (76ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (1ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (34ms)
+		EndReloadAssembly (2026ms)
+			LoadAssemblies (153ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (200ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (45ms)
+			SetupLoadedEditorAssemblies (1501ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (9ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (103ms)
+				ProcessInitializeOnLoadAttributes (1374ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (8ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Batchmode quit successfully invoked - shutting down!
+[Performance] WinEditorMain                                               :        1 samples, Peak.   605 ms (1.0x), Avg.   605 ms, Total. 604.8 ms (1.7%)
+[Performance] WinEditorMain.ConfigureCrashHandler                         :        1 samples, Peak.  29.9 us (1.0x), Avg.  29.9 us, Total. 29.90 us (0.0%)
+[Performance] WinEditorMain.CurlRequestInitialize                         :        1 samples, Peak.  1.32 ms (1.0x), Avg.  1.32 ms, Total. 1.316 ms (0.0%)
+[Performance] WinEditorMain.SetupLogFile                                  :        1 samples, Peak.   369 us (1.0x), Avg.   369 us, Total. 368.5 us (0.0%)
+[Performance] WinEditorMain.RunNativeTestsIfRequiredAndExit               :        1 samples, Peak.  3.50 us (1.0x), Avg.  3.50 us, Total. 3.500 us (0.0%)
+[Performance] WinEditorMain.Licensing                                     :        1 samples, Peak.   601 ms (1.0x), Avg.   601 ms, Total. 601.1 ms (1.7%)
+[Performance] WinEditorMain.InitializeCrashHandler                        :        1 samples, Peak.   471 us (1.0x), Avg.   471 us, Total. 470.8 us (0.0%)
+[Performance] WinEditorMain.CreateApplication                             :        1 samples, Peak.   196 us (1.0x), Avg.   196 us, Total. 196.1 us (0.0%)
+[Performance] Application.InitializeProject                               :        1 samples, Peak.  20.1 s (1.0x), Avg.  20.1 s, Total. 20.06 s (58.0%)
+[Performance] Application.PackageManager.StartServer                      :        1 samples, Peak.  4.79 ms (1.0x), Avg.  4.79 ms, Total. 4.793 ms (0.0%)
+[Performance] Application.IsBrowserCacheEmpty                             :        1 samples, Peak.   662 us (1.0x), Avg.   662 us, Total. 662.3 us (0.0%)
+[Performance] Application.AcquireProjectLock                              :        1 samples, Peak.  13.5 ms (1.0x), Avg.  13.5 ms, Total. 13.48 ms (0.0%)
+[Performance] Application.InitializeEngineNoGraphics                      :        1 samples, Peak.  17.0 ms (1.0x), Avg.  17.0 ms, Total. 16.97 ms (0.0%)
+[Performance] Application.PackageManager.Initialize                       :        1 samples, Peak.  1.05 s (1.0x), Avg.  1.05 s, Total. 1.048 s (3.0%)
+[Performance] CurlRequestCheck                                            :       18 samples, Peak. 100.0 us (3.7x), Avg.  26.9 us, Total. 484.2 us (0.0%)
+[Performance] PackageManager::RunRequestSynchronously                     :       19 samples, Peak.   910 us (14.3x), Avg.  63.7 us, Total. 1.211 ms (0.0%)
+[Performance] Application.EngineGraphics.Initialize                       :        1 samples, Peak.  25.2 ms (1.0x), Avg.  25.2 ms, Total. 25.19 ms (0.1%)
+[Performance] Application.GI.Initialize                                   :        1 samples, Peak.  1.58 ms (1.0x), Avg.  1.58 ms, Total. 1.585 ms (0.0%)
+[Performance] Application.LoadAllDefaultResourcesFromEditor               :        1 samples, Peak.  2.32 ms (1.0x), Avg.  2.32 ms, Total. 2.321 ms (0.0%)
+[Performance] Application.LoadMonoAssemblies                              :        1 samples, Peak.  1.18 s (1.0x), Avg.  1.18 s, Total. 1.185 s (3.4%)
+[Performance] RestoreManagedReferences                                    :        6 samples, Peak.  44.0 ms (2.6x), Avg.  16.7 ms, Total. 99.98 ms (0.3%)
+[Performance] ProcessService.EditorAfterLoadAllAssemblies                 :        6 samples, Peak.  29.8 ms (1.1x), Avg.  26.4 ms, Total. 158.7 ms (0.5%)
+[Performance] Application.ReadLicenseInfo                                 :        1 samples, Peak.   195 us (1.0x), Avg.   195 us, Total. 195.2 us (0.0%)
+[Performance] Application.InitialScriptRefresh                            :        1 samples, Peak.  15.8 s (1.0x), Avg.  15.8 s, Total. 15.81 s (45.7%)
+[Performance] BuildCatalog                                                :        1 samples, Peak.  29.3 ms (1.0x), Avg.  29.3 ms, Total. 29.28 ms (0.1%)
+[Performance] Application.AssetDatabase.Refresh                           :        1 samples, Peak.   255 ms (1.0x), Avg.   255 ms, Total. 254.9 ms (0.7%)
+[Performance] Application.ImportAssetsWithMismatchingAssetImporterVersion :        1 samples, Peak.   139 ms (1.0x), Avg.   139 ms, Total. 139.0 ms (0.4%)
+[Performance] Application.SyncCurrentColorSpace                           :        1 samples, Peak.  8.11 ms (1.0x), Avg.  8.11 ms, Total. 8.106 ms (0.0%)
+[Performance] Application.OnUsbDevicesChanged                             :        1 samples, Peak.  11.5 ms (1.0x), Avg.  11.5 ms, Total. 11.54 ms (0.0%)
+[Performance] Application.AssetInstanceCacheUpdate                        :        1 samples, Peak.   200 ns (1.0x), Avg.   200 ns, Total. 200.0 ns (0.0%)
+[Performance] Application.UnityExtensions.Initialize                      :        1 samples, Peak.  1.76 ms (1.0x), Avg.  1.76 ms, Total. 1.756 ms (0.0%)
+[Performance] Application.InitializeManagedCompilationPipeline            :        1 samples, Peak.  64.3 ms (1.0x), Avg.  64.3 ms, Total. 64.26 ms (0.2%)
+[Performance] Application.ExecuteStartups                                 :        1 samples, Peak.  14.0 ms (1.0x), Avg.  14.0 ms, Total. 14.05 ms (0.0%)
+[Performance] Application.RebuildOSMenu                                   :        1 samples, Peak.  48.9 ms (1.0x), Avg.  48.9 ms, Total. 48.91 ms (0.1%)
+[Performance] UpdateAllMenus                                              :        1 samples, Peak.  47.2 ms (1.0x), Avg.  47.2 ms, Total. 47.22 ms (0.1%)
+[Performance] Application.editorInitializingProject                       :        1 samples, Peak.  19.3 us (1.0x), Avg.  19.3 us, Total. 19.30 us (0.0%)
+[Performance] GUIView.RepaintAll.PlayerLoopController                     :        1 samples, Peak.   900 ns (1.0x), Avg.   900 ns, Total. 900.0 ns (0.0%)
+[Performance] Application.InvokeFinishedLoadingProject                    :        1 samples, Peak.  31.7 ms (1.0x), Avg.  31.7 ms, Total. 31.70 ms (0.1%)
+[Performance] ProcessService.OnProjectLoaded                              :        1 samples, Peak.  28.8 ms (1.0x), Avg.  28.8 ms, Total. 28.81 ms (0.1%)
+Cleanup mono
+Exiting batchmode successfully now!
+Exiting without the bug reporter. Application will terminate with return code 0

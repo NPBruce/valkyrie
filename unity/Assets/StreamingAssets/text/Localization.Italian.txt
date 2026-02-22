@@ -446,6 +446,8 @@ FULLSCREEN,Schermo intero
 ON,Attivo
 OFF,Disattivo
 EXPORT_LOG,Esporta log
+ADVANCED_OPTIONS,Opzioni Avanzate
+VIEW_LOCK,Blocca movimento automatico telecamera scenario
 
 LOADINGSCENARIOS,Caricamento scenari...
 LOADINGCONTENTPACKS,Caricamento pacchetti di contenuti...

@@ -500,6 +500,8 @@ FULLSCREEN,Vollbild
 ON,An
 OFF,Aus
 EXPORT_LOG,Log exportieren
+ADVANCED_OPTIONS,Erweiterte Optionen
+VIEW_LOCK,Automatische Kamerabewegung in Szenarien blockieren
 
 LOADINGSCENARIOS,Szenarien laden...
 LOADINGCONTENTPACKS,Inhaltspakete laden...

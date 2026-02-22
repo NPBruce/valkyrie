@@ -508,6 +508,8 @@ FULLSCREEN,Tela cheia
 ON,Ligado
 OFF,Desligado
 EXPORT_LOG,Exportar log
+ADVANCED_OPTIONS,Opções Avançadas
+VIEW_LOCK,Bloquear movimento automático da câmera de cenário
 
 LOADINGSCENARIOS,Carregando cenários...
 LOADINGCONTENTPACKS,Carregando pacotes de conteúdo...

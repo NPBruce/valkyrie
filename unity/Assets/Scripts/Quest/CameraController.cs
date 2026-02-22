@@ -308,6 +308,11 @@ public class CameraController : MonoBehaviour {
     // Set camera target position
     public static void SetCamera(Vector2 pos)
     {
+        if (Game.Get().config.data.Get("UserConfig", "viewLock") == "1" && !Game.Get().editMode) 
+        {
+            return;
+        }
+
         CameraController cc = GameObject.FindObjectOfType<CameraController>();
         cc.targetSet = true;
 

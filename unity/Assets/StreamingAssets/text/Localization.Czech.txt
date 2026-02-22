@@ -675,6 +675,8 @@ FULLSCREEN,Celá obrazovka
 ON,Zapnuto
 OFF,Vypnuto
 EXPORT_LOG,Exportovat log
+ADVANCED_OPTIONS,Pokročilé možnosti
+VIEW_LOCK,Blokovat automatický pohyb kamery scénáře
 
 LOADINGSCENARIOS,Načítání scénářů...
 LOADINGCONTENTPACKS,Načítání balíčků obsahu...

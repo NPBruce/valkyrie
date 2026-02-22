@@ -504,6 +504,8 @@ FULLSCREEN,Plein écran
 ON,Activé
 OFF,Désactivé
 EXPORT_LOG,Exporter le journal
+ADVANCED_OPTIONS,Options Avancées
+VIEW_LOCK,Bloquer le mouvement automatique de la caméra de scénario
 
 LOADINGSCENARIOS,Chargement des scénarios...
 LOADINGCONTENTPACKS,Chargement des packs de contenu...

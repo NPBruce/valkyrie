@@ -702,6 +702,8 @@ FULLSCREEN,フルスクリーン
 ON,オン
 OFF,オフ
 EXPORT_LOG,ログ出力
+ADVANCED_OPTIONS,高度なオプション
+VIEW_LOCK,シナリオのカメラ自動移動をブロックする
 
 LOADINGSCENARIOS,シナリオを読み込んでいます...
 LOADINGCONTENTPACKS,コンテンツパックを読み込んでいます...

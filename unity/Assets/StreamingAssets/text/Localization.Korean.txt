@@ -668,6 +668,8 @@ FULLSCREEN,전체 화면
 ON,켜기
 OFF,끄기
 EXPORT_LOG,로그 내보내기
+ADVANCED_OPTIONS,고급 옵션
+VIEW_LOCK,시나리오 카메라 자동 이동 차단
 
 LOADINGSCENARIOS,시나리오 로딩 중...
 LOADINGCONTENTPACKS,콘텐츠 팩 로딩 중...

@@ -503,6 +503,8 @@ FULLSCREEN,Полноэкранный режим
 ON,ВКЛ
 OFF,ВЫКЛ
 EXPORT_LOG,Экспорт журнала
+ADVANCED_OPTIONS,Дополнительные параметры
+VIEW_LOCK,Блокировать автоматическое движение камеры в сценариях
 
 LOADINGSCENARIOS,Загрузка сценариев...
 LOADINGCONTENTPACKS,Загрузка пакетов контента...
