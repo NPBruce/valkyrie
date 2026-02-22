@@ -22,7 +22,7 @@ jobs:
     # or if triggered manually via workflow_dispatch
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (startsWith(github.event.issue.title, '[Scenario]') && contains(github.event.issue.body, 'https://github.com/'))
+      ((startsWith(github.event.issue.title, '[Scenario]') || startsWith(github.event.issue.title, '[ContentPack]')) && contains(github.event.issue.body, 'https://github.com/'))
 
     steps:
       - name: Checkout (needed for workspace)
@@ -47,9 +47,9 @@ jobs:
           fi
           echo "url=$url" >> $GITHUB_OUTPUT
 
-      - name: Validate scenario and comment
+      - name: Validate repository and comment
         if: steps.extract.outputs.url != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pwsh ./workflowScripts/validate-scenario.ps1 -RepoUrl "${{ steps.extract.outputs.url }}" -IssueNumber "${{ github.event.issue.number }}" -RunnerRepo "${{ github.repository }}"
+          pwsh ./workflowScripts/validate-repo.ps1 -RepoUrl "${{ steps.extract.outputs.url }}" -IssueNumber "${{ github.event.issue.number }}" -RunnerRepo "${{ github.repository }}"

@@ -53,14 +53,26 @@ if ($Paths.Count -gt 0) {
     # ------------------------------------------------------------------
     # Generic presence checks
     # ------------------------------------------------------------------
-    $Exts = @("ini", "valkyrie")
+    $IsContentPack = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyriecontentpack") -or [System.IO.Path]::GetFileName($_).ToLower() -eq "content_pack.ini" }).Count -gt 0
+    
+    if ($IsContentPack) {
+        $Exts = @("ini", "valkyriecontentpack")
+        $TargetManifest = "contentPacksManifest.ini"
+        $TargetTag = "Content Pack"
+    }
+    else {
+        $Exts = @("ini", "valkyrie")
+        $TargetManifest = "manifest.ini"
+        $TargetTag = "Scenario"
+    }
+
     foreach ($Ext in $Exts) {
-        $Matches = @($Paths | Where-Object { $_.ToLower().EndsWith(".$Ext") })
-        if ($Matches.Count -eq 0) {
+        $MatchedFiles = @($Paths | Where-Object { $_.ToLower().EndsWith(".$Ext") })
+        if ($MatchedFiles.Count -eq 0) {
             $Results += "- ❌ no *.$Ext file found"
         }
         else {
-            $Results += "- ✅ $($Matches.Count) *.$Ext file(s) found:`n" + ($Matches -join "`n")
+            $Results += "- ✅ $($MatchedFiles.Count) *.$Ext file(s) found:`n" + ($MatchedFiles -join "`n")
         }
     }
 
@@ -90,7 +102,7 @@ if ($Paths.Count -gt 0) {
             $FileResponse = Invoke-RestMethod -Uri $FileUrl -Headers $Headers -Method Get
             $Content = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($FileResponse.content))
 
-            if ($Content -match "(?i)^\s*\[Quest\]") {
+            if ($Content -match "(?im)^\s*\[([^\]]+)\]") {
                 # Check Language
                 if ($Content -match "(?im)^(?:defaultlanguage|Language)\s*=\s*(.*)$") {
                     $Lang = $Matches[1].Trim()
@@ -105,18 +117,34 @@ if ($Paths.Count -gt 0) {
                     $Results += "- ⚠️ ini file '$IniPath' is missing a 'defaultlanguage' property."
                 }
 
-                # Check Packs
-                if ($Content -match "(?im)^packs\s*=\s*(.*)$") {
-                    $Packs = $Matches[1].Trim()
-                    $Results += "- ℹ️ Required Expansions (packs) defined in '$IniPath': **$Packs**"
+                if ($IsContentPack) {
+                    if (-not ($Content -match "(?im)^name\.$Lang\s*=\s*.+$")) {
+                        $Results += "- ❌ Content pack '$IniPath' is missing 'name.$Lang' property required for UI display."
+                    }
+                    else {
+                        $Results += "- ✅ Content pack 'name.$Lang' is defined."
+                    }
+                    if (-not ($Content -match "(?im)^description\.$Lang\s*=\s*.+$")) {
+                        $Results += "- ❌ Content pack '$IniPath' is missing 'description.$Lang' property required for UI display."
+                    }
+                    else {
+                        $Results += "- ✅ Content pack 'description.$Lang' is defined."
+                    }
                 }
                 else {
-                    $Results += "- ℹ️ No 'packs' property defined in '$IniPath' (Base game only)"
+                    # Check Packs
+                    if ($Content -match "(?im)^packs\s*=\s*(.*)$") {
+                        $Packs = $Matches[1].Trim()
+                        $Results += "- ℹ️ Required Expansions (packs) defined in '$IniPath': **$Packs**"
+                    }
+                    else {
+                        $Results += "- ℹ️ No 'packs' property defined in '$IniPath' (Base game only)"
+                    }
                 }
 
                 # Check Image
                 if ($Content -match "(?im)^image\s*=\s*(.*)$") {
-                    $Image = $Matches[1].Trim()
+                    $Image = $Matches[1].Trim().Replace('"', '')
                     $ImageMatch = @($Paths | Where-Object { $_ -eq $Image -or $_.EndsWith("/$Image") -or $_.EndsWith("\$Image") })
                     if ($ImageMatch.Count -gt 0) {
                         $Results += "- ✅ Thumbnail image '$Image' found in repository."
@@ -133,39 +161,58 @@ if ($Paths.Count -gt 0) {
                 $Type = ""
                 if ($Content -match "(?im)^type\s*=\s*(.*)$") {
                     $Type = $Matches[1].Trim()
-                    if ($Type -notin @("MoM", "D2E")) {
-                        $Results += "- ❌ Invalid 'type=$Type' in '$IniPath'. Must be 'MoM' or 'D2E'."
+                    $ValidTypes = if ($IsContentPack) { @("MoMCustom", "D2ECustom") } else { @("MoM", "D2E") }
+                    
+                    if ($Type -notin $ValidTypes) {
+                        $Results += "- ❌ Invalid 'type=$Type' in '$IniPath'. Must be one of: " + ($ValidTypes -join ", ") + "."
                         $Type = ""
                     }
                     else {
-                        $Results += "- ✅ Scenario type identified as '$Type'"
+                        # Map custom types back to base folder names for manifest lookup
+                        $ManifestDirType = if ($Type -eq "MoMCustom") { "MoM" } elseif ($Type -eq "D2ECustom") { "D2E" } else { $Type }
+                        $Results += "- ✅ $TargetTag type identified as '$Type'"
                     }
                 }
                 else {
-                    $Results += "- ❌ Missing 'type' property in '$IniPath'. Must define 'type=MoM' or 'type=D2E'."
+                    $Results += "- ❌ Missing 'type' property in '$IniPath'. Must define 'type'."
                 }
 
                 if ($Type) {
                     $ScenarioId = ""
-                    $ValkPathsTmp = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyrie") })
-                    if ($ValkPathsTmp.Count -gt 0) {
-                        $ValkFile = $ValkPathsTmp[0]
-                        $ValkBase = [System.IO.Path]::GetFileName($ValkFile)
-                        $ScenarioId = $ValkBase.Substring(0, $ValkBase.Length - 9)
+                    if ($IsContentPack) {
+                        $ValkPathsTmp = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyriecontentpack") })
+                        if ($ValkPathsTmp.Count -gt 0) {
+                            $ValkFile = $ValkPathsTmp[0]
+                            $ValkBase = [System.IO.Path]::GetFileName($ValkFile)
+                            $ScenarioId = $ValkBase.Substring(0, $ValkBase.Length - 20)
+                        }
+                        else {
+                            $BaseNameTmp = [System.IO.Path]::GetFileName($IniPath)
+                            $ScenarioId = $BaseNameTmp.Substring(0, $BaseNameTmp.Length - 4)
+                        }
                     }
                     else {
-                        $ScenarioId = $Base.Substring(0, $Base.Length - 4)
+                        $ValkPathsTmp = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyrie") })
+                        if ($ValkPathsTmp.Count -gt 0) {
+                            $ValkFile = $ValkPathsTmp[0]
+                            $ValkBase = [System.IO.Path]::GetFileName($ValkFile)
+                            $ScenarioId = $ValkBase.Substring(0, $ValkBase.Length - 9)
+                        }
+                        else {
+                            $BaseNameTmp = [System.IO.Path]::GetFileName($IniPath)
+                            $ScenarioId = $BaseNameTmp.Substring(0, $BaseNameTmp.Length - 4)
+                        }
                     }
 
                     try {
-                        $ManifestUrl = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/$Type/manifest.ini"
+                        $ManifestUrl = "https://raw.githubusercontent.com/NPBruce/valkyrie-store/master/$ManifestDirType/$TargetManifest"
                         $StoreManifest = Invoke-RestMethod -Uri $ManifestUrl -Method Get
                         $SafeId = [regex]::Escape($ScenarioId)
                         if ($StoreManifest -match "(?im)^\[$SafeId\]") {
-                            $Results += "- ❌ Scenario ID '$ScenarioId' already exists in the valkyrie-store $Type manifest. Please rename your scenario files to ensure a unique ID."
+                            $Results += "- ❌ $TargetTag ID '$ScenarioId' already exists in the valkyrie-store $ManifestDirType $TargetManifest. Please rename your files to ensure a unique ID."
                         }
                         else {
-                            $Results += "- ✅ Scenario ID '$ScenarioId' is unique for $Type."
+                            $Results += "- ✅ $TargetTag ID '$ScenarioId' is unique for $Type."
                             
                             $DefaultBranch = ""
                             try {
@@ -177,13 +224,13 @@ if ($Paths.Count -gt 0) {
                                 $DefaultBranch = "master"
                             }
                             
-                            $Results += "`n---`n💡 **For Valkyrie Admins:** You can copy the following block to add this scenario for Valkyrie Scenario repository:`n"
+                            $Results += "`n---`n💡 **For Valkyrie Admins:** You can copy the following block to add this $TargetTag for Valkyrie $TargetTag repository:`n"
                             $Results += "``````ini`n[$ScenarioId]`nexternal=https://raw.githubusercontent.com/$Owner/$Repo/$DefaultBranch/`n```````n"
-                            $Results += "[👉 Quick Edit $Type manifest.ini](https://github.com/NPBruce/valkyrie-store/edit/master/$Type/manifest.ini)`n---"
+                            $Results += "[👉 Quick Edit $ManifestDirType $TargetManifest](https://github.com/NPBruce/valkyrie-store/edit/master/$ManifestDirType/$TargetManifest)`n---"
                         }
                     }
                     catch {
-                        $Results += "- ⚠️ Could not fetch $Type manifest.ini from valkyrie-store to check for duplicate ID: $_"
+                        $Results += "- ⚠️ Could not fetch $ManifestDirType $TargetManifest from valkyrie-store to check for duplicate ID: $_"
                     }
                 }
             }
@@ -204,11 +251,11 @@ if ($Paths.Count -gt 0) {
     # ------------------------------------------------------------------
     # Filename checks for .valkyrie
     # ------------------------------------------------------------------
-    $ValkPaths = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyrie") })
+    $ValkPaths = @($Paths | Where-Object { $_.ToLower().EndsWith(".valkyrie") -or $_.ToLower().EndsWith(".valkyriecontentpack") })
     foreach ($ValkPath in $ValkPaths) {
         $Base = [System.IO.Path]::GetFileName($ValkPath)
         if ($Base -match "(?i)EditorScenario|EditorScenariusz") {
-            $Results += "- ⚠️ .valkyrie file '$ValkPath' has a generic filename; please rename it"
+            $Results += "- ⚠️ Container file '$ValkPath' has a generic filename; please rename it"
         }
     }
 }
@@ -216,7 +263,7 @@ if ($Paths.Count -gt 0) {
 # ------------------------------------------------------------------
 # Output results
 # ------------------------------------------------------------------
-$CommentBody = "**Scenario repository validation**`n`nRepository: $RepoUrl`n`n" + ($Results -join "`n")
+$CommentBody = "**Repository validation**`n`nRepository: $RepoUrl`n`n" + ($Results -join "`n")
 
 # Always write to the GitHub Actions Console
 Write-Host "========================================="
