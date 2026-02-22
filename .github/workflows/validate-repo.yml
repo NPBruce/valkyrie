@@ -7,6 +7,8 @@ name: Validate scenario repository
 on:
   issues:
     types: [opened]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       repo_url:
@@ -18,11 +20,14 @@ jobs:
   check-scenario:
     name: Check scenario repository files
     runs-on: ubuntu-latest
-    # only run when issue title begins with [Scenario] and body contains a GitHub URL
+    # only run when issue title begins with [Scenario]/[ContentPack] and body contains a GitHub URL
     # or if triggered manually via workflow_dispatch
+    # or if an issue comment contains /check or /revalidate
     if: |
       github.event_name == 'workflow_dispatch' ||
-      ((startsWith(github.event.issue.title, '[Scenario]') || startsWith(github.event.issue.title, '[ContentPack]')) && contains(github.event.issue.body, 'https://github.com/'))
+      ((startsWith(github.event.issue.title, '[Scenario]') || startsWith(github.event.issue.title, '[ContentPack]')) && 
+       ((github.event_name == 'issues' && contains(github.event.issue.body, 'https://github.com/')) ||
+        (github.event_name == 'issue_comment' && (contains(github.event.comment.body, '/check') || contains(github.event.comment.body, '/revalidate')))))
 
     steps:
       - name: Checkout (needed for workspace)
