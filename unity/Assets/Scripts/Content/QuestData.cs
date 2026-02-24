@@ -383,7 +383,7 @@ public class QuestData
         public int rotation = 0;
         public string tokenName;
         public string customImage = "";
-        public string tokenSize = "small";
+        public string tokenSize = "";
         public bool enableClick = true;
 
         // Create new with name (used by editor)
@@ -395,7 +395,7 @@ public class QuestData
             tokenName = "TokenSearch";
             cancelable = true;
             enableClick = true;
-            tokenSize = "small";
+            tokenSize = Game.Get().gameType is D2EGameType ? "small" : "";
         }
 
         // Create from ini data

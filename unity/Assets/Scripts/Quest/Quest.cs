@@ -1846,61 +1846,27 @@ public class Quest
             }
             else
             {
-                float size = 1;
-                if (qToken.tokenSize.Equals("Actual"))
+                if (qToken.tokenSize.Equals("Actual") || qToken.tokenSize.Length == 0)
                 {
-                    // Actual size logic
-                    float pps = game.gameType.TilePixelPerSquare();
-                    if (pps == 0) pps = PPS; // Fallback to current PPS (likely image width) if game type doesn't specify
-                    
-                    if (pps > 0)
+                    // Use native token PPS or image width if token doesn't specify PPS
+                    if (PPS > 0)
                     {
-                        image.rectTransform.sizeDelta = new Vector2(newTex.width / pps, newTex.height / pps);
+                        image.rectTransform.sizeDelta = new Vector2((float) newTex.width / PPS, (float) newTex.height / PPS);
                     }
-                    size = 0; // Mark as handled
                 }
-                else if (!float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out size))
-                {
-                    // Default logic
-                    size = 1;
-                }
-                
-                if (size > 0)
+                else if (float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out float size))
                 {
                     image.rectTransform.sizeDelta = new Vector2(size * 0.95f, size * 0.95f);
+                }
+                else
+                {
+                    // Fallback for valid tokenSize string that failed to parse (should not happen)
+                    image.rectTransform.sizeDelta = new Vector2(0.95f, 0.95f);
                 }
             }
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
 
-            // Move to square
-            // If we have a custom size we need to align top left
-            if (qToken.tokenSize.Length > 0)
-            {
-                float width = 1f;
-                float height = 1f;
-                if (qToken.tokenSize.Equals("medium")) width = 2f;
-                if (qToken.tokenSize.Equals("huge")) { width = 2f; height = 2f; }
-                if (qToken.tokenSize.Equals("massive")) { width = 3f; height = 2f; }
-                
-                if (float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out float size))
-                {
-                    width = size;
-                    height = size;
-                }
-                else if (qToken.tokenSize.Equals("Actual"))
-                {
-                    if (PPS == 0) PPS = game.gameType.TilePixelPerSquare();
-                    if (PPS > 0)
-                    {
-                        width = newTex.width / PPS;
-                        height = newTex.height / PPS;
-                    }
-                }
-
-                unityObject.transform.Translate(Vector3.right * (width - 1) / 2f, Space.World);
-                unityObject.transform.Translate(Vector3.down * (height - 1) / 2f, Space.World);
-            }
 
             // Move to square
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
