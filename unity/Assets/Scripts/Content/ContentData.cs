@@ -352,6 +352,13 @@ public class ContentData
         // Black description isn't fatal
         pack.description = d.Get("ContentPack", "description");
 
+        // Icon can be empty/missing
+        string iconString = d.Get("ContentPack", "icon");
+        if (!string.IsNullOrWhiteSpace(iconString))
+        {
+            pack.icon = path + Path.DirectorySeparatorChar + iconString;
+        }
+
         // Get cloned packs
         string cloneString = d.Get("ContentPack", "clone");
         pack.clone = new List<string>();
@@ -440,6 +447,18 @@ public class ContentData
             }
         }
         return "";
+    }
+
+    public ContentPack GetPackById(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return cp;
+            }
+        }
+        return null;
     }
 
     internal bool AddContent<T>(string name, T d) where T : IContent
