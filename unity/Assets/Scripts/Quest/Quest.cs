@@ -1867,8 +1867,30 @@ public class Quest
             // Rotate around 0,0 rotation amount
             unityObject.transform.RotateAround(Vector3.zero, Vector3.forward, qToken.rotation);
 
-
             // Move to square
+            // Align top left for larger predefined and numeric sizes
+            if (qToken.tokenSize.Length > 0 && !qToken.tokenSize.Equals("Actual") && !qToken.tokenSize.Equals("small"))
+            {
+                float width = 1f;
+                float height = 1f;
+                
+                if (qToken.tokenSize.Equals("medium")) width = 2f;
+                else if (qToken.tokenSize.Equals("huge")) { width = 2f; height = 2f; }
+                else if (qToken.tokenSize.Equals("massive")) { width = 3f; height = 2f; }
+                else if (float.TryParse(qToken.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out float size))
+                {
+                    width = size;
+                    height = size;
+                }
+
+                if (width != 1f || height != 1f)
+                {
+                    unityObject.transform.Translate(Vector3.right * (width - 1) / 2f, Space.World);
+                    unityObject.transform.Translate(Vector3.down * (height - 1) / 2f, Space.World);
+                }
+            }
+
+            // Move to target location
             unityObject.transform.Translate(new Vector3(qToken.location.x, qToken.location.y, 0), Space.World);
 
             game.tokenBoard.Add(this);
