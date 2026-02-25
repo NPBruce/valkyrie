@@ -1435,12 +1435,7 @@ namespace Assets.Scripts.UI.Screens
                 ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 float symbols_missing_prefix_width = ui.GetStringWidth(missingPrefix);
 
-                float missing_x_offset = UIScaler.GetRight(-10f) - 4f + 0.5f;
-
-                if (current_x_offset > missing_x_offset)
-                {
-                    missing_x_offset = current_x_offset;
-                }
+                float missing_x_offset = current_x_offset;
 
                 ui.SetLocation(missing_x_offset, expansion_y_offset, symbols_missing_prefix_width, 1);
                 ui.SetText(missingPrefix, dark_red_text_color);
