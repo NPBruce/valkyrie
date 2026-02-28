@@ -207,6 +207,26 @@ namespace Assets.Scripts.Content
             rawData[newLanguage].AddRange(rawDataToAdd);
         }
 
+        /// <summary>
+        /// Add language data to dictionary from another DictionaryI18n instance.
+        /// Useful for merging localization from different content packs with the same namespace.
+        /// </summary>
+        /// <param name="other">DictionaryI18n to merge from</param>
+        public void AddData(DictionaryI18n other)
+        {
+            if (other == null || other.rawData == null) return;
+            
+            // Loop over every language in the other dictionary's rawData
+            foreach (KeyValuePair<string, List<string>> kv in other.rawData)
+            {
+                if (!rawData.ContainsKey(kv.Key))
+                {
+                    rawData.Add(kv.Key, new List<string>());
+                }
+                rawData[kv.Key].AddRange(kv.Value);
+            }
+        }
+
         private static bool isOldFormat(string rawLine)
         {
             string[] components = rawLine.Split(",".ToCharArray(), 2);

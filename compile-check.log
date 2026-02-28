@@ -1,0 +1,51 @@
+[LicensingClient] ERROR Error 10 while verifying Licensing Client signature (path: 21036, process Id: C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe)
+[Licensing::Module] LicensingClient has failed validation
+[LicensingClient] ERROR Failed to connect to local IPC
+[Licensing::Module] Failed to connect to channel: LicenseClient-Quantum-2019.4.41
+[Licensing::Module] Successfully launched the LicensingClient
+[LicensingClient] ERROR Error 10 while verifying Licensing Client signature (path: 18944, process Id: C:/Program Files/Unity/Hub/Editor/2019.4.41f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe)
+[Licensing::Module] LicensingClient has failed validation
+IPC channel to LicensingClient doesn't exist; falling back to Legacy licensing
+[LicensingClient] ERROR Failed to disconnect local IPC connection
+
+LICENSE SYSTEM [2026225 8:51:49] Next license update check is after 2025-11-30T23:28:13
+
+
+LICENSE SYSTEM [2026225 8:51:49] Machine binding 1 mismatch: (value of current machine) 00331-20020-00000-AA495 != 00331-20020-00000-AA412 (value in license file). Reason might be there is a hardware change on this machine after the license was activated.
+
+
+LICENSE SYSTEM [2026225 8:51:49] Current license is already valid and activated. Skipping license activation process (Provided username/password will be ignored).
+Built from 'HEAD' branch; Version is '2019.4.41f1 (fb553f8fdd6c) revision 16471359'; Using compiler version '191627012'
+OS: 'Windows 11  (10.0.26200) 64bit Professional' Language: 'de' Physical Memory: 16310 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+[Package Manager] Server::Start -- Port 63325 was selected
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2019.4.41f1\Editor\Unity.exe
+-batchmode
+-quit
+-nographics
+-projectPath
+.\unity
+-executeMethod
+UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation
+-logFile
+compile-check.log
+Successfully changed project path to: E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity
+E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity
+It looks like another Unity instance is running with this project open.
+
+Multiple Unity instances cannot open the same project.
+
+Project: E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity 
+(Filename: C:\build\output\unity\unity\Editor/Src/Application/Application.cpp Line: 400)
+
+Fatal Error! It looks like another Unity instance is running with this project open.
+
+Multiple Unity instances cannot open the same project.
+
+Project: E:/Eigene Dokumente/Max/Programmierung/Projekte/Valkyrie App/valkyrie/unity
+ 
+(Filename: C:\build\output\unity\unity\Runtime/Utilities/Argv.cpp Line: 376)
+
+Exiting without the bug reporter. Application will terminate with return code 1

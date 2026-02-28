@@ -459,7 +459,6 @@ namespace Assets.Scripts.UI.Screens
         public void DrawPicture(Texture2D texture, UIElement ui_picture_shadow)
         {
             float width_heigth = ui_picture_shadow.GetRectTransform().rect.width / UIScaler.GetPixelsPerUnit();
-            UnityAction buttonCall = ui_picture_shadow.GetAction();
 
             // draw picture shadow
             ui_picture_shadow.SetImage(picture_shadow);
@@ -469,7 +468,6 @@ namespace Assets.Scripts.UI.Screens
             picture.SetLocation(0.30f, 0.30f, width_heigth - 0.6f, width_heigth - 0.6f);
             picture.SetBGColor(Color.clear);
             picture.SetImage(texture);
-            picture.SetButton(buttonCall);
 
             // draw pin
             const float pin_width = 1.4f;
@@ -478,7 +476,6 @@ namespace Assets.Scripts.UI.Screens
             pin.SetLocation((width_heigth / 2f) - (pin_width / 1.5f), (-pin_height / 2f), pin_width, pin_height);
             pin.SetBGColor(Color.clear);
             pin.SetImage(picture_pin);
-            pin.SetButton(buttonCall);
         }
 
 
@@ -814,7 +811,21 @@ namespace Assets.Scripts.UI.Screens
         foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTLIST))
             Destroy(go);
 
-
+        if (ContentData.textureCache != null && game != null && game.cd != null && game.cd.allPacks != null)
+        {
+            foreach (ContentPack pack in game.cd.allPacks)
+            {
+                if (!string.IsNullOrEmpty(pack.icon) && ContentData.textureCache.ContainsKey(pack.icon))
+                {
+                    Texture2D tex = ContentData.textureCache[pack.icon];
+                    ContentData.textureCache.Remove(pack.icon);
+                    if (tex != null)
+                    {
+                        Destroy(tex);
+                    }
+                }
+            }
+        }
 
         scrollArea = null;
         questActionButtons.Clear();
@@ -1320,8 +1331,19 @@ namespace Assets.Scripts.UI.Screens
             string pack_symbol_available = "";
             string pack_symbol_missing = "";
 
+            List<ContentPack> available_icons = new List<ContentPack>();
+            List<ContentPack> missing_icons = new List<ContentPack>();
+
+            List<string> allPackNames = new List<string>();
+
             foreach (string pack in q.packs)
             {
+                ContentPack packData = game.cd.GetPackById(pack);
+                if (packData != null)
+                {
+                    allPackNames.Add(game.cd.GetContentName(pack));
+                }
+
                 if (game.cd.packSymbolDict.ContainsKey(pack))
                 {
                     string pack_symbol = game.cd.packSymbolDict[pack].Translate(true);
@@ -1338,6 +1360,40 @@ namespace Assets.Scripts.UI.Screens
                     }
                     else
                     {
+                        ContentPack customPack = game.cd.GetPackById(pack);
+                        if (customPack != null && !string.IsNullOrEmpty(customPack.icon))
+                        {
+                            if (missing_packs.Contains(pack))
+                                missing_icons.Add(customPack);
+                            else
+                                available_icons.Add(customPack);
+                        }
+                        else
+                        {
+                            ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
+                            if (game.cd.loadedPacks.Contains(pack))
+                            {
+                                pack_symbol_available += pack;
+                            }
+                            else
+                            {
+                                pack_symbol_missing += $" {pack}";
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ContentPack customPack = game.cd.GetPackById(pack);
+                    if (customPack != null && !string.IsNullOrEmpty(customPack.icon))
+                    {
+                        if (missing_packs.Contains(pack))
+                            missing_icons.Add(customPack);
+                        else
+                            available_icons.Add(customPack);
+                    }
+                    else
+                    {
                         ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
                         if (game.cd.loadedPacks.Contains(pack))
                         {
@@ -1349,44 +1405,135 @@ namespace Assets.Scripts.UI.Screens
                         }
                     }
                 }
-                else
-                {
-                    ValkyrieDebug.Log("ERROR: Could not find pack symbol for pack" + pack);
-                    if (game.cd.loadedPacks.Contains(pack))
-                    {
-                        pack_symbol_available += pack;
-                    }
-                    else
-                    {
-                        pack_symbol_missing += $" {pack}";
-                    }
-                }
             }
-            float symbols_available_width = 0;
+
+            float current_x_offset = expansion_x_offset + 0.5f;
 
             if (!string.IsNullOrWhiteSpace(pack_symbol_available))
             {
                 ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
-                symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size, game.gameType.GetSymbolFont());
-                ui.SetLocation(expansion_x_offset, expansion_y_offset, symbols_available_width + 1, 1);
+                float symbols_available_width = ui.GetStringWidth(pack_symbol_available, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                ui.SetLocation(current_x_offset, expansion_y_offset, symbols_available_width, 1);
                 ui.SetText(pack_symbol_available, Color.black);
                 ui.SetBGColor(Color.clear);
                 ui.SetFont(game.gameType.GetSymbolFont());
                 ui.SetFontSize(expansions_symbol_font_size);
+                current_x_offset += symbols_available_width + 0.1f;
             }
 
-            if (!string.IsNullOrWhiteSpace(pack_symbol_missing))
+            List<string> customPackNames = new List<string>();
+
+            foreach (ContentPack customPack in available_icons)
+            {
+                Texture2D tex = ContentData.FileToTexture(customPack.icon);
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+                float iconSize = 0.85f;
+                ui.SetLocation(current_x_offset, expansion_y_offset + 0.05f, iconSize, iconSize);
+                ui.SetImage(tex);
+                ui.SetBGColor(Color.white);
+                customPackNames.Add(customPack.name);
+                current_x_offset += iconSize + 0.15f;
+            }
+
+            if (!string.IsNullOrWhiteSpace(pack_symbol_missing) || missing_icons.Count > 0)
             {
                 is_expansion_missing = true;
-                pack_symbol_missing = MISSING_EXPANSIONS.Translate() + pack_symbol_missing;
+                string missingPrefix = MISSING_EXPANSIONS.Translate() + " ";
                 ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
-                float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size, game.gameType.GetSymbolFont());
-                ui.SetLocation(expansion_x_offset + symbols_available_width, expansion_y_offset, symbols_missing_width + 1, 1);
-                ui.SetText(pack_symbol_missing, dark_red_text_color);
+                float symbols_missing_prefix_width = ui.GetStringWidth(missingPrefix);
+
+                float missing_x_offset = current_x_offset;
+
+                ui.SetLocation(missing_x_offset, expansion_y_offset, symbols_missing_prefix_width, 1);
+                ui.SetText(missingPrefix, dark_red_text_color);
                 ui.SetBGColor(Color.clear);
-                ui.SetFont(game.gameType.GetSymbolFont());
-                ui.SetFontSize(expansions_symbol_font_size);
+                missing_x_offset += symbols_missing_prefix_width;
+
+                if (!string.IsNullOrWhiteSpace(pack_symbol_missing))
+                {
+                    ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+                    float symbols_missing_width = ui.GetStringWidth(pack_symbol_missing, expansions_symbol_font_size, game.gameType.GetSymbolFont());
+                    ui.SetLocation(missing_x_offset, expansion_y_offset, symbols_missing_width, 1);
+                    ui.SetText(pack_symbol_missing, new Color(0.7f, 0f, 0f));
+                    ui.SetBGColor(Color.clear);
+                    ui.SetFont(game.gameType.GetSymbolFont());
+                    ui.SetFontSize(expansions_symbol_font_size);
+                    missing_x_offset += symbols_missing_width + 0.1f;
+                }
+
+                foreach (ContentPack customPack in missing_icons)
+                {
+                    Texture2D tex = ContentData.FileToTexture(customPack.icon);
+                    ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+                    float iconSize = 0.85f;
+                    ui.SetLocation(missing_x_offset, expansion_y_offset + 0.05f, iconSize, iconSize);
+                    ui.SetImage(tex);
+                    ui.SetBGColor(new Color(1f, 1f, 1f, 0.5f));
+                    missing_x_offset += iconSize + 0.15f;
+                }
+
+                current_x_offset = missing_x_offset;
             }
+
+            if (allPackNames.Count > 0)
+            {
+                Texture2D infoTex = Resources.Load("Sprites/Info") as Texture2D;
+                if (infoTex != null)
+                {
+                    ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+                    float iconSize = 0.85f;
+                    ui.SetLocation(current_x_offset, expansion_y_offset, iconSize, iconSize);
+                    ui.SetImage(infoTex);
+                    ui.SetBGColor(Color.white);
+                    // ui.SetButton(delegate { ShowPackInfo(allPackNames); });
+                    current_x_offset += iconSize;
+                }
+                
+                // Add an invisible button covering the entire pack symbols area
+                float totalWidth = current_x_offset - expansion_x_offset;
+                ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
+                ui.SetLocation(expansion_x_offset, expansion_y_offset, totalWidth, 1.25f);
+                ui.SetBGColor(Color.clear);
+                ui.SetButton(delegate { ShowPackInfo(allPackNames); });
+            }
+        }
+
+        private void ShowPackInfo(List<string> packNames)
+        {
+            Destroyer.Dialog();
+
+            // Full screen transparent background window to dismiss dialog
+            UIElement ui = new UIElement(Game.DIALOG);
+            ui.SetLocation(0, 0, UIScaler.GetWidthUnits(), UIScaler.GetHeightUnits());
+            ui.SetBGColor(Color.clear);
+            ui.SetButton(delegate { Destroyer.Dialog(); });
+
+            float dialogWidth = 24f;
+            float headerHeight = 2.5f;
+            float textHeight = packNames.Count * 1.5f;
+            float dialogHeight = headerHeight + textHeight + 2f;
+            string fullText = string.Join("\n", packNames);
+            string headerText = new StringKey("val", "REQUIRED_EXPANSIONS").Translate();
+
+            // The dialog box centered
+            ui = new UIElement(Game.DIALOG);
+            ui.SetLocation(UIScaler.GetHCenter(-dialogWidth / 2), UIScaler.GetVCenter(-dialogHeight / 2), dialogWidth, dialogHeight);
+            ui.SetBGColor(new Color(0.0f, 0.0f, 0.0f, 0.9f));
+            new UIElementBorder(ui);
+
+            // The text indicating the pack name (Header)
+            ui = new UIElement(Game.DIALOG);
+            ui.SetLocation(UIScaler.GetHCenter(-(dialogWidth - 1) / 2), UIScaler.GetVCenter(-dialogHeight / 2 + 1f), dialogWidth - 1, headerHeight);
+            ui.SetText(headerText);
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // The text indicating the pack name (List)
+            ui = new UIElement(Game.DIALOG);
+            ui.SetLocation(UIScaler.GetHCenter(-(dialogWidth - 1) / 2), UIScaler.GetVCenter(-dialogHeight / 2 + 1f + headerHeight), dialogWidth - 1, textHeight);
+            ui.SetText(fullText);
+            ui.SetTextAlignment(TextAnchor.MiddleCenter);
+            ui.SetFontSize(UIScaler.GetMediumFont());
         }
 
         private UIElement QuestRenderRating(UIElement ui, bool has_stats, int stats_play_count, float stats_rating, float top_text_y)
@@ -1545,7 +1692,9 @@ namespace Assets.Scripts.UI.Screens
             {
                 ui = new UIElement(Game.QUESTLIST, scrollArea.GetScrollTransform());
                 ui.SetBGColor(Color.clear);
-                ui.SetLocation(5.5f, offset + 2.2f, UIScaler.GetRight(-11f) - 5, 2f);
+                ui.SetLocation(5.5f, offset + 2.45f, UIScaler.GetRight(-11f) - 5, 2f);
+                // Disable raycast to prevent blocking custom content pack icon clicks
+                ui.GetRectTransform().GetComponent<UnityEngine.UI.Image>().raycastTarget = false;
                 ui.SetTextPadding(0.5f);
                 if (synopsys_translation.Length >= 105)
                     synopsys_translation = synopsys_translation.Substring(0, 100) + "(...)";
