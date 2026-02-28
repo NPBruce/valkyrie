@@ -419,7 +419,25 @@ public class ContentData
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey(cp.name).Translate();
+                StringKey sk = new StringKey(cp.name);
+                string translatedName = sk.Translate();
+                
+                // If the translation mechanism failed to find the key, it strips
+                // '{dict:' and '}' and returns the bare key (e.g. "MAD09M").
+                if (translatedName == sk.key)
+                {
+                    // Fallback to directly translating the extracted key.
+                    // This catches custom packs or MoM 1st edition packs where the main lookup fails.
+                    string keyTranslate = new StringKey(sk.key).Translate();
+                    if (keyTranslate != sk.key) return keyTranslate;
+
+                    string pckTranslate = new StringKey("pck", sk.key).Translate();
+                    if (pckTranslate != sk.key) return pckTranslate;
+
+                    string valTranslate = new StringKey("val", sk.key).Translate();
+                    if (valTranslate != sk.key) return valTranslate;
+                }
+                return translatedName;
             }
         }
         return "";
