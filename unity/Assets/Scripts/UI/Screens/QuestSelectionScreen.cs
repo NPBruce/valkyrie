@@ -1341,7 +1341,12 @@ namespace Assets.Scripts.UI.Screens
                 ContentPack packData = game.cd.GetPackById(pack);
                 if (packData != null)
                 {
-                    allPackNames.Add(game.cd.GetContentName(pack));
+                    string packName = game.cd.GetContentName(pack);
+                    if (missing_packs.Contains(pack))
+                    {
+                        packName = "<color=red>" + packName + "</color>";
+                    }
+                    allPackNames.Add(packName);
                 }
 
                 if (game.cd.packSymbolDict.ContainsKey(pack))
