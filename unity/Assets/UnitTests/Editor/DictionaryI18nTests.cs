@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Assets.Scripts;
+using Assets.Scripts.Content;
 using ValkyrieTools;
 
 namespace Valkyrie.UnitTests
@@ -1168,6 +1169,47 @@ namespace Valkyrie.UnitTests
             Assert.IsTrue(languageData.ContainsKey("NEW_ITEM2"));
             Assert.AreEqual("Item 1", languageData["NEW_ITEM1"]);
             Assert.AreEqual("Item 2", languageData["NEW_ITEM2"]);
+        }
+
+        #endregion
+
+        #region AddData(DictionaryI18n) Tests
+
+        [Test]
+        public void AddData_MergesRawDataFromOtherDictionary_Successfully()
+        {
+            // Arrange
+            DictionaryI18n dict1 = new DictionaryI18n(new string[] { ".,English", "KEY1,Value1" });
+            DictionaryI18n dict2 = new DictionaryI18n(new string[] { ".,English", "KEY2,Value2" });
+
+            // Act
+            dict1.AddData(dict2);
+
+            // Assert
+            // The data is stored in rawData, which is private. However, we can use ExtractAllMatches to verify.
+            var matches1 = dict1.ExtractAllMatches("KEY1");
+            var matches2 = dict1.ExtractAllMatches("KEY2");
+
+            Assert.IsTrue(matches1.ContainsKey("English"));
+            Assert.AreEqual("Value1", matches1["English"]);
+            
+            Assert.IsTrue(matches2.ContainsKey("English"));
+            Assert.AreEqual("Value2", matches2["English"]);
+        }
+
+        [Test]
+        public void AddData_NullOtherDictionary_DoesNothing()
+        {
+            // Arrange
+            DictionaryI18n dict1 = new DictionaryI18n(new string[] { ".,English", "KEY1,Value1" });
+
+            // Act - should not throw
+            dict1.AddData((DictionaryI18n)null);
+
+            // Assert
+            var matches1 = dict1.ExtractAllMatches("KEY1");
+            Assert.IsTrue(matches1.ContainsKey("English"));
+            Assert.AreEqual("Value1", matches1["English"]);
         }
 
         #endregion

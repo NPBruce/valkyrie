@@ -202,18 +202,23 @@ namespace Valkyrie.UnitTests
         }
 
         [Test]
-        public void AddDictionary_ReplacesExistingDictionary()
+        public void AddDictionary_MergesWithExistingDictionary()
         {
             // Arrange
             string dictName = "test";
-            LocalizationRead.dicts.Add(dictName, null);
+            DictionaryI18n existingDict = new DictionaryI18n(new string[] { ".,English", "KEY1,Value1" });
+            LocalizationRead.dicts.Add(dictName, existingDict);
 
-            // Act - should replace without error
-            LocalizationRead.AddDictionary(dictName, null);
+            DictionaryI18n newDict = new DictionaryI18n(new string[] { ".,English", "KEY2,Value2" });
+
+            // Act - should merge without error
+            LocalizationRead.AddDictionary(dictName, newDict);
 
             // Assert
             Assert.IsTrue(LocalizationRead.dicts.ContainsKey(dictName));
             Assert.AreEqual(1, LocalizationRead.dicts.Count);
+            Assert.IsTrue(LocalizationRead.dicts[dictName].KeyExists("KEY1"));
+            Assert.IsTrue(LocalizationRead.dicts[dictName].KeyExists("KEY2"));
         }
 
         [Test]

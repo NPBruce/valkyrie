@@ -298,7 +298,7 @@ namespace Assets.Scripts.Content
         /// <returns>void</returns>
         public static void AddDictionary(string name, DictionaryI18n dict)
         {
-            if (dicts.ContainsKey(name))
+            if (dicts.ContainsKey(name) && dicts[name] != null)
             {
                 dicts[name].AddData(dict);
             }
