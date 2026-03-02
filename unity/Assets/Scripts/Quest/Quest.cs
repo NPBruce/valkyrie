@@ -1846,7 +1846,7 @@ public class Quest
             }
             else
             {
-                if (qToken.tokenSize.Equals("Actual") || qToken.tokenSize.Length == 0)
+                if (qToken.tokenSize.Equals("Original") || qToken.tokenSize.Length == 0)
                 {
                     // Use native token PPS or image width if token doesn't specify PPS
                     if (PPS > 0)
@@ -1869,7 +1869,7 @@ public class Quest
 
             // Move to square
             // Align top left for larger predefined and numeric sizes
-            if (qToken.tokenSize.Length > 0 && !qToken.tokenSize.Equals("Actual") && !qToken.tokenSize.Equals("small"))
+            if (qToken.tokenSize.Length > 0 && !qToken.tokenSize.Equals("Original") && !qToken.tokenSize.Equals("small"))
             {
                 float width = 1f;
                 float height = 1f;

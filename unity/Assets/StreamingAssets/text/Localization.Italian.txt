@@ -1,7 +1,7 @@
 .,Italian
 // ICONS
 CUSTOM_IMAGE,Immagine personalizzata
-ACTUAL,Reale
+ORIGINAL,Originale
 IMAGE_PLACE,Posizionamento immagine
 IMAGE_PLACE_SIZE,Dimensione posizionamento immagine
 

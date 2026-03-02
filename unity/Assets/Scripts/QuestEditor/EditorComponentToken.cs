@@ -41,7 +41,7 @@ public class EditorComponentToken : EditorComponentEvent
         ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "SIZE")));
         
-        StringKey sizeKey = new StringKey("val", "ACTUAL");
+        StringKey sizeKey = new StringKey("val", "ORIGINAL");
         if (!tokenComponent.tokenSize.Equals(""))
         {
             if (float.TryParse(tokenComponent.tokenSize, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
@@ -222,7 +222,7 @@ public class EditorComponentToken : EditorComponentEvent
         select.AddItem(new StringKey("val", "MEDIUM").Translate(), "medium");
         select.AddItem(new StringKey("val", "HUGE").Translate(), "huge");
         select.AddItem(new StringKey("val", "MASSIVE").Translate(), "massive");
-        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
+        select.AddItem(new StringKey("val", "ORIGINAL").Translate(), "Original");
 
         select.Draw();
     }

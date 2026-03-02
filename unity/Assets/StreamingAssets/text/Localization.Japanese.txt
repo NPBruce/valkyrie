@@ -74,7 +74,7 @@ ZYLA,ジーラ
 
 // ICONS
 CUSTOM_IMAGE,カスタム画像
-ACTUAL,実寸
+ORIGINAL,オリジナル
 IMAGE_PLACE,画像の配置
 IMAGE_PLACE_SIZE,画像の配置サイズ
 

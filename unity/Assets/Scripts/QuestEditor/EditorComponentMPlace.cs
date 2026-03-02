@@ -118,7 +118,7 @@ public class EditorComponentMPlace : EditorComponent
         select.AddItem(new StringKey("val", "MEDIUM").Translate(), "medium");
         select.AddItem(new StringKey("val", "HUGE").Translate(), "huge");
         select.AddItem(new StringKey("val", "MASSIVE").Translate(), "massive");
-        select.AddItem(new StringKey("val", "ACTUAL").Translate(), "Actual");
+        select.AddItem(new StringKey("val", "ORIGINAL").Translate(), "Original");
 
         select.Draw();
     }

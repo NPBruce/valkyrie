@@ -2,7 +2,7 @@
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
 // ICONS
 CUSTOM_IMAGE,Benutzerdefiniertes Bild
-ACTUAL,Tatsächlich
+ORIGINAL,Original
 IMAGE_PLACE,Bildplatzierung
 IMAGE_PLACE_SIZE,Bildplatzierungsgröße
 

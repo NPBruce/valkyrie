@@ -1,7 +1,7 @@
 .,Polish
 // ICONS
 CUSTOM_IMAGE,Własny obraz
-ACTUAL,Rzeczywisty
+ORIGINAL,Oryginalny
 IMAGE_PLACE,Umieszczenie obrazu
 IMAGE_PLACE_SIZE,Rozmiar umieszczenia obrazu
 

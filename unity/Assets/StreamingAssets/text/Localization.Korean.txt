@@ -1,7 +1,7 @@
 .,Korean
 // ICONS
 CUSTOM_IMAGE,사용자 지정 이미지
-ACTUAL,실제
+ORIGINAL,원본
 IMAGE_PLACE,이미지 배치
 IMAGE_PLACE_SIZE,이미지 배치 크기
 

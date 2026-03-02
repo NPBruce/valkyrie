@@ -196,7 +196,7 @@ public class TokenBoard : MonoBehaviour {
                     sizeX = 3;
                     sizeY = 2;
                 }
-                else if (mp.tokenSize.Equals("Actual"))
+                else if (mp.tokenSize.Equals("Original"))
                 {
                     float pps = game.gameType.TilePixelPerSquare();
                     if (pps > 0)

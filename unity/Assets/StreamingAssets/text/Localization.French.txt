@@ -1,7 +1,7 @@
 .,French
 // ICONS
 CUSTOM_IMAGE,Image personnalisée
-ACTUAL,Réelle
+ORIGINAL,Original
 IMAGE_PLACE,Placement de l'image
 IMAGE_PLACE_SIZE,Taille de placement de l'image
 
