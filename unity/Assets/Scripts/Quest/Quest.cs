@@ -1824,7 +1824,15 @@ public class Quest
 
             if (PPS == 0)
             {
-                PPS = (float) newTex.width;
+                if (qToken.customImage.Length > 0 && (qToken.tokenSize.Equals("Original") || qToken.tokenSize.Length == 0))
+                {
+                    PPS = game.gameType.TilePixelPerSquare();
+                }
+
+                if (PPS == 0)
+                {
+                    PPS = (float) newTex.width;
+                }
             }
 
             // Set the size to the image size
@@ -1881,6 +1889,23 @@ public class Quest
                 {
                     width = size;
                     height = size;
+                }
+
+                if (width != 1f || height != 1f)
+                {
+                    unityObject.transform.Translate(Vector3.right * (width - 1) / 2f, Space.World);
+                    unityObject.transform.Translate(Vector3.down * (height - 1) / 2f, Space.World);
+                }
+            }
+            else if (qToken.customImage.Length > 0 && (qToken.tokenSize.Length == 0 || qToken.tokenSize.Equals("Original")))
+            {
+                float width = 1f;
+                float height = 1f;
+                if (PPS == 0) PPS = game.gameType.TilePixelPerSquare();
+                if (PPS > 0)
+                {
+                    width = newTex.width / PPS;
+                    height = newTex.height / PPS;
                 }
 
                 if (width != 1f || height != 1f)

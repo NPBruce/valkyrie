@@ -256,7 +256,7 @@ public class EditorComponentToken : EditorComponentEvent
         {
             tokenComponent.customImage = image;
             tokenComponent.tokenName = "TokenSearch";
-            tokenComponent.tokenSize = "Actual";
+            tokenComponent.tokenSize = "Original";
         }
         Game.Get().CurrentQuest.Remove(tokenComponent.sectionName);
         Game.Get().CurrentQuest.Add(tokenComponent.sectionName);

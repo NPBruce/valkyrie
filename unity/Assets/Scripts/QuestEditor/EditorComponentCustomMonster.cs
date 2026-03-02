@@ -18,7 +18,7 @@ public class EditorComponentCustomMonster : EditorComponent
     private readonly StringKey SELECT_IMAGE = new StringKey("val", "SELECT_IMAGE");
     private readonly StringKey PLACE_IMG = new StringKey("val", "PLACE_IMG");
     private readonly StringKey IMAGE = new StringKey("val", "IMAGE");
-    private readonly StringKey ACTUAL = new StringKey("val", "ACTUAL");
+    private readonly StringKey ORIGINAL = new StringKey("val", "ORIGINAL");
     private readonly StringKey DEFAULT = new StringKey("val", "DEFAULT");
 
     QuestData.CustomMonster monsterComponent;
