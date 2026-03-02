@@ -482,6 +482,7 @@ OFFLINE_DUE_TO_ERROR,OFFLINE (Netzwerkfehler)
 CONTENTPACK_CATEGORY_CUSTOM,Community Contentpacks
 CONTENTPACK_DOWNLOAD,Contentpacks herunterladen
 CONTENTPACK_DOWNLOAD_HEADER,Community Contentpacks herunterladen
+MISSING_EXPANSIONS,Fehlende Erweiterungen:
 
 RICH_TEXT,Rich text
 TEXT_ALIGNMENT,Ausrichten
