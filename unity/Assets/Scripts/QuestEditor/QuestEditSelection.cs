@@ -44,6 +44,7 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
 
@@ -120,6 +121,7 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
 
@@ -193,6 +195,7 @@ public class QuestEditSelection
         foreach (KeyValuePair<string, QuestData.Quest> q in questList)
         {
             string key = q.Key;
+            LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
 
             ui = new UIElement(scrollArea.GetScrollTransform());

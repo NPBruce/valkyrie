@@ -1244,6 +1244,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
+                LocalizationRead.RemoveDictionary("qst");
                 LocalizationRead.AddDictionary("qst", q.localizationDict);
                 name_translation = q.name.Translate();
                 synopsys_translation = q.synopsys.Translate(true);
