@@ -208,7 +208,7 @@ public class ContentData
     {
         //Parse manifest
         ManifestManager manager = new ManifestManager(customContentPackPath);
-        var manifestData = manager.GetLocalQuestManifestIniData();
+        var manifestData = manager.GetLocalContentPackManifestIniData();
 
         // Parse ini
 
@@ -255,6 +255,21 @@ public class ContentData
         ContentPack pack = null;
 
         string combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+
+        if (!File.Exists(combinedContentPackLocalPath) && packIsContainer)
+        {
+            // The content pack might be nested inside a subdirectory of the ZIP
+            string[] subdirs = Directory.GetDirectories(path);
+            foreach (string subdir in subdirs)
+            {
+                if (File.Exists(subdir + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
+                {
+                    path = subdir;
+                    combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+                    break;
+                }
+            }
+        }
 
         if (File.Exists(combinedContentPackLocalPath))
         {
@@ -422,25 +437,17 @@ public class ContentData
                 StringKey sk = new StringKey(cp.name);
                 string translatedName = sk.Translate();
                 
-                // If the translation mechanism failed to find the key, it strips
-                // '{dict:' and '}' and returns the bare key (e.g. "MAD09M").
-                if (translatedName == sk.key)
+                // If it wasn't translated and is a plain ID, try prepending "pck" to find a translation.
+                if (translatedName == cp.name && !cp.name.Contains("{"))
                 {
-                    // Fallback to directly translating the extracted key.
-                    // This catches custom packs or MoM 1st edition packs where the main lookup fails.
-                    string keyTranslate = new StringKey(sk.key).Translate();
-                    if (keyTranslate != sk.key) return keyTranslate;
-
-                    string pckTranslate = new StringKey("pck", sk.key).Translate();
-                    if (pckTranslate != sk.key) return pckTranslate;
-
-                    string valTranslate = new StringKey("val", sk.key).Translate();
-                    if (valTranslate != sk.key) return valTranslate;
+                    StringKey pckKey = new StringKey("pck", cp.name);
+                    if (pckKey.KeyExists()) return pckKey.Translate();
                 }
+                
                 return translatedName;
             }
         }
-        return "";
+        return id;
     }
 
     public string GetContentAcronym(string id)

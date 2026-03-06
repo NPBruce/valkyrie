@@ -62,7 +62,7 @@ namespace Assets.Scripts.Content
                 matchSuccess = false;
             }
 
-            if (matchSuccess)
+            if (matchSuccess && unknownKey.StartsWith("{") && unknownKey.EndsWith("}") && unknownKey.IndexOf('}') == unknownKey.Length - 1)
             {
                 string[] parts = unknownKey.Substring(1,unknownKey.Length -2).Split(":".ToCharArray(), 3, System.StringSplitOptions.RemoveEmptyEntries);
 
@@ -77,7 +77,7 @@ namespace Assets.Scripts.Content
             {
                 dict = null;
                 key = unknownKey;
-                preventLookup = true;
+                preventLookup = !matchSuccess;
             }
         }
 
@@ -153,9 +153,9 @@ namespace Assets.Scripts.Content
         /// <returns>the text in the current language</returns>
         public string Translate(bool emptyIfNotFound = false)
         {
-            if (isKey() && !preventLookup)
+            if (!preventLookup)
             {
-                if (emptyIfNotFound && !KeyExists()) return "";
+                if (emptyIfNotFound && isKey() && !KeyExists()) return "";
                 return LocalizationRead.DictLookup(this);
             } else
             {
@@ -168,6 +168,11 @@ namespace Assets.Scripts.Content
                     return null;
                 }
             }
+        }
+
+        public string Translate()
+        {
+            return Translate(false);
         }
 
         public bool KeyExists()
