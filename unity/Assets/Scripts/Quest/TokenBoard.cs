@@ -103,7 +103,24 @@ public class TokenBoard : MonoBehaviour {
         if (game.gameType is MoMGameType)
         {
             Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
-            AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
+            float width = 1f;
+            float height = 1f;
+
+            if (game.CurrentQuest.qd.components.ContainsKey(me.cMonster.sectionName))
+            {
+                QuestData.CustomMonster cm = game.CurrentQuest.qd.components[me.cMonster.sectionName] as QuestData.CustomMonster;
+                // When using a custom imported image directly or an explicit imageplace, use its native PPS scale
+                if (cm != null && cm.imagePlace.Length > 0)
+                {
+                    float pps = game.gameType.TilePixelPerSquare();
+                    if (pps > 0)
+                    {
+                        width = newTex.width / pps;
+                        height = newTex.height / pps;
+                    }
+                }
+            }
+            AddPlacedMonsterImg("", newTex, width, height, me.qEvent.location.x, me.qEvent.location.y);
         }
         // Check for a placement list at this hero count
         else if (me.qMonster.placement[count].Length == 0)
@@ -111,7 +128,24 @@ public class TokenBoard : MonoBehaviour {
             if (me.cMonster.ContainsTrait("lieutenant"))
             {
                 Texture2D newTex = ContentData.FileToTexture(me.cMonster.imagePlace);
-                AddPlacedMonsterImg("", newTex, 1, 1, me.qEvent.location.x, me.qEvent.location.y);
+                float width = 1f;
+                float height = 1f;
+
+                if (game.CurrentQuest.qd.components.ContainsKey(me.cMonster.sectionName))
+                {
+                    QuestData.CustomMonster cm = game.CurrentQuest.qd.components[me.cMonster.sectionName] as QuestData.CustomMonster;
+                    // For Descent custom unplaced Lieutenants like agents, respect custom token dimensions
+                    if (cm != null && cm.imagePlace.Length > 0)
+                    {
+                        float pps = game.gameType.TilePixelPerSquare();
+                        if (pps > 0)
+                        {
+                            width = newTex.width / pps;
+                            height = newTex.height / pps;
+                        }
+                    }
+                }
+                AddPlacedMonsterImg("", newTex, width, height, me.qEvent.location.x, me.qEvent.location.y);
             }
             else
             {
