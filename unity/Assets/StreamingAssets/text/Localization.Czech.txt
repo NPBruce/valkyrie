@@ -32,7 +32,7 @@ ICON_PRODUCT_MAD28,
 ABILITY,Schopnost
 ABOUT,O aplikaci
 ABOUT_FFG,Valkyrie je pomocná aplikace Pána Zla, inspirována hrou od Fantasy Flight Games, Descent: Road to Legend.  Většina obrázků je importována z FFG aplikace a pod copyrightem FFG a dalších držitelů práv a ochranných známek. Vlaječky jazyků pocházejí od Freepik z www.flaticon.com.
-ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity,  UnityStandaloneFileBrowser z gkngkc a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity, NativeFilePicker od yasirkula a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
 ACTIONS,Akce
 ACTIVATED,Aktivován
 ACTIVATION,Aktivace

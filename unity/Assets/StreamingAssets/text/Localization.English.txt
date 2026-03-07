@@ -26,7 +26,7 @@ ICON_PRODUCT_MAD28,
 ABILITY,Ability
 ABOUT,About
 ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, NativeFilePicker from yasirkula and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activated
 ACTIVATION,Activation

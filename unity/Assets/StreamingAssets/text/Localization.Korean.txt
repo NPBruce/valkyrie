@@ -32,7 +32,7 @@ ABILITY,능력
 ABOUT,만든이
 ABOUT_FFG,Valkyrie는 Fantasy Flight Games' Descent: Road to Legend에서 영감을 얻어 만들어진 던전마스터(핼퍼)툴 입니다. FFG applications에서 가져온 이미지(사진)들은 FFG와 저작권 소유자에 의해 보호받고 있습니다.
 언어, 깃발들은 www.flaticon.com 의 Freepik에 의해서 만들어졌습니다.
-ABOUT_LIBS,Valkyrie는 gkngkc의 DotNetZip-For-Unity, UnityStandaloneFileBrowser 를 사용하고 있으며 Unity Studio and .NET Ogg Vorbis Encoder에서 파생된 코드를 포함하고 있습니다.
+ABOUT_LIBS,Valkyrie는 DotNetZip-For-Unity, yasirkula의 NativeFilePicker를 사용하고 있으며 Unity Studio and .NET Ogg Vorbis Encoder에서 파생된 코드를 포함하고 있습니다.
 ACTIONS,액션
 ACTIVATED,활성됨
 ACTIVATION,활성화

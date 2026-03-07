@@ -10,7 +10,7 @@ IMAGE_PLACE_SIZE,Размер места изображения
 ABILITY,Способность
 ABOUT,О приложении
 ABOUT_FFG,Valkyrie - это GameMaster для игр Fantasy Flight Games, созданный по мотивам игры «Descent: Road to Legend». Большинство используемых изображений импортируются из приложений FFG, являются собственностью FFG и других правообладателей. Языковые флаги сделаны Freepik с www.flaticon.com.
-ABOUT_LIBS,Valkyrie использует DotNetZip-For-Unity, UnityStandaloneFileBrowser от gkngkc и код полученный из Unity Studio и .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie использует DotNetZip-For-Unity, NativeFilePicker от yasirkula и код полученный из Unity Studio и .NET Ogg Vorbis Encoder.
 ACTIONS,Действия
 ACTIVATED,Активен
 ACTIVATION,Активация
