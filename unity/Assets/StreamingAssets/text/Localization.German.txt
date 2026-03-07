@@ -10,7 +10,7 @@ IMAGE_PLACE_SIZE,Bildplatzierungsgröße
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
 ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' "Descent: Wege zum Ruhm" inspiriertes Gamemaster-Tool. Die meisten Bildressourcen werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen. Die Länderflaggen sind von Freepik www.flaticon.com.
-ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, NativeFilePicker von yasirkula und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
 ACTIVATION,Aktivierung

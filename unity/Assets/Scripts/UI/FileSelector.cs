@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using SFB;
 
 namespace Assets.Scripts.UI
 {
@@ -23,11 +22,11 @@ namespace Assets.Scripts.UI
             }
             else
             {
-                // Desktop implementations using StandaloneFileBrowser
-                string[] paths = StandaloneFileBrowser.OpenFilePanel("Select Import File (Zip/Obb)", "", "", false);
-                if (paths.Length > 0 && !string.IsNullOrEmpty(paths[0]))
+                // Desktop implementations using native file dialogs
+                string path = NativeFileDialog.OpenFilePanel("Select Import File (Zip/Obb)", "", "");
+                if (!string.IsNullOrEmpty(path))
                 {
-                    onFileSelected?.Invoke(paths[0]);
+                    onFileSelected?.Invoke(path);
                 }
             }
         }
