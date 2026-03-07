@@ -24,11 +24,18 @@ namespace SetVersion
             if (!CheckFile(projectSettingsFile)) return;
 
             // Check version values
-            string version = File.ReadAllText(versionFile).Trim();
-            if (string.IsNullOrEmpty(version))
+            string[] versionLines = File.ReadAllLines(versionFile);
+            if (versionLines.Length == 0 || string.IsNullOrWhiteSpace(versionLines[0]))
             {
                 Console.WriteLine("version is invalid!");
                 return;
+            }
+
+            string baseVersion = versionLines[0].Trim();
+            string bundleVersion = baseVersion;
+            if (versionLines.Length > 1 && versionLines[1].Trim().ToUpper() == "BETA")
+            {
+                bundleVersion += "-beta";
             }
 
             // Change the settings to contain the new versions
@@ -37,9 +44,9 @@ namespace SetVersion
             {
                 string text = File.ReadAllText(projectSettingsFile, new UTF8Encoding(false));
                 location = "bundleVersion";
-                text = Regex.Replace(text, @"(bundleVersion:).*[^\n]$", "$1 " + version, RegexOptions.Multiline);
+                text = Regex.Replace(text, @"(bundleVersion:).*", "$1 " + bundleVersion, RegexOptions.Multiline);
                 location = "AndroidBundleVersionCode";
-                text = Regex.Replace(text, @"(AndroidBundleVersionCode:).*[^\n]$", "$1 " + VersionCodeGenerate(version), RegexOptions.Multiline);
+                text = Regex.Replace(text, @"(AndroidBundleVersionCode:).*", "$1 " + VersionCodeGenerate(baseVersion), RegexOptions.Multiline);
                 location = "WriteAllText";
                 File.WriteAllText(projectSettingsFile, text, new UTF8Encoding(false));
             }
