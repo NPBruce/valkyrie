@@ -25,7 +25,7 @@ namespace SetVersion
 
             // Check version values
             string[] versionLines = File.ReadAllLines(versionFile);
-            if (versionLines.Length == 0 || string.IsNullOrWhiteSpace(versionLines[0]))
+            if (versionLines.Length == 0 || string.IsNullOrEmpty(versionLines[0].Trim()))
             {
                 Console.WriteLine("version is invalid!");
                 return;

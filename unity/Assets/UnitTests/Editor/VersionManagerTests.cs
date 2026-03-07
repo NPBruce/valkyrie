@@ -49,6 +49,59 @@ namespace Valkyrie.UnitTests
         }
 
         [Test]
+        public void VersionNewer_BasicComparison_ReturnsCorrectResult()
+        {
+            Assert.IsTrue(VersionManager.VersionNewer("3.19", "3.20"));
+            Assert.IsFalse(VersionManager.VersionNewer("3.21", "3.20"));
+            Assert.IsFalse(VersionManager.VersionNewer("3.20", "3.20"));
+        }
+
+        [Test]
+        public void VersionNewer_BetaToStableUpdate_ReturnsTrue()
+        {
+            // Case where local is Beta and online is the final Stable release
+            Assert.IsTrue(VersionManager.VersionNewer("3.20 BETA", "3.20"));
+            Assert.IsTrue(VersionManager.VersionNewer("3.20.1", "3.20")); // 3.20.1 is considered Beta by current logic
+            Assert.IsTrue(VersionManager.VersionNewer("3.20-beta", "3.20"));
+        }
+
+        [Test]
+        public void VersionNewer_StableToNewerBeta_ReturnsTrue()
+        {
+            // Case where stable is installed but a newer version (in Beta) is available
+            Assert.IsTrue(VersionManager.VersionNewer("3.20", "3.21 BETA"));
+        }
+
+        [Test]
+        public void VersionNewer_EqualVersions_ReturnsFalse()
+        {
+            Assert.IsFalse(VersionManager.VersionNewer("3.20", "3.20"));
+            Assert.IsFalse(VersionManager.VersionNewer("3.20 BETA", "3.20 BETA"));
+        }
+
+        [Test]
+        public void VersionNewerOrEqual_BasicComparison_ReturnsCorrectResult()
+        {
+            Assert.IsTrue(VersionManager.VersionNewerOrEqual("3.19", "3.20"));
+            Assert.IsTrue(VersionManager.VersionNewerOrEqual("3.20", "3.20"));
+            Assert.IsFalse(VersionManager.VersionNewerOrEqual("3.21", "3.20"));
+        }
+
+        [Test]
+        public void VersionNewerOrEqual_BetaToStable_ReturnsTrue()
+        {
+            Assert.IsTrue(VersionManager.VersionNewerOrEqual("3.20 BETA", "3.20"));
+        }
+
+        [Test]
+        public void VersionNewer_ComplexSuffixes_HandledCorrectly()
+        {
+            // VersionNewer removes non-digits within components
+            Assert.IsFalse(VersionManager.VersionNewer("3.20a", "3.20")); 
+            Assert.IsFalse(VersionManager.VersionNewer("3.20", "3.20a"));
+        }
+
+        [Test]
         public void IsBeta_NullVersion_ThrowsException()
         {
             Assert.Throws<System.NullReferenceException>(() => VersionManager.IsBeta(null));

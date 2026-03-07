@@ -181,7 +181,9 @@ namespace Valkyrie.UnitTests
         [Test]
         public void VersionNewer_DifferentComponentCount_ReturnsTrue()
         {
-            // Arrange - Different number of components triggers true
+            // Arrange - In our logic, 1.0.0 has 3 components and is considered Beta.
+            // 1.0 has 2 components and is considered Stable.
+            // So 1.0 (Stable) IS newer than 1.0.0 (Beta).
             string oldVersion = "1.0.0";
             string newVersion = "1.0";
 
@@ -189,7 +191,7 @@ namespace Valkyrie.UnitTests
             bool result = VersionManager.VersionNewer(oldVersion, newVersion);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsTrue(result);
         }
 
         #endregion

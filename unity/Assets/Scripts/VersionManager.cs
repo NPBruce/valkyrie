@@ -60,12 +60,13 @@ public class VersionManager
         string[] oldV = oldVersion.Split('.');
         string[] newV = newVersion.Split('.');
 
-        if (newVersion.Equals("")) return false;
-
-        if (oldVersion.Equals("")) return true;
-
         int maxLen = Math.Max(oldV.Length, newV.Length);
-        
+
+        if (newVersion.Equals("")) return false;
+        if (oldVersion.Equals("")) return true;
+        bool numericOlder = false;
+        bool numericNewer = false;
+
         // Check each component
         for (int i = 0; i < maxLen; i++)
         {
@@ -85,14 +86,25 @@ public class VersionManager
 
             if (oldInt < newInt)
             {
-                return true;
+                numericNewer = true;
+                break;
             }
             if (oldInt > newInt)
             {
-                return false;
+                numericOlder = true;
+                break;
             }
         }
-        return false;
+
+        if (numericNewer) return true;
+        if (numericOlder)
+        {
+            // If numerically older (e.g. 3.20.1 vs 3.20), it's still an upgrade if moving FROM Beta TO Stable
+            return IsBeta(oldVersion) && !IsBeta(newVersion);
+        }
+
+        // If numeric parts are identical (e.g. 3.20 vs 3.20 BETA), moving FROM Beta TO Stable is an upgrade
+        return IsBeta(oldVersion) && !IsBeta(newVersion);
     }
 
     /// <summary>
