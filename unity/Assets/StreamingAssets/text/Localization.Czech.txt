@@ -168,7 +168,7 @@ OP,Op
 OPTIONS,Volby
 PLACEMENT,Umístění
 
-PLACE_IMG,Umístit obrázek:
+PLACE_IMG,Umístit obrázek
 POOL_TRAITS,Výběr vlastností:
 POSITION,Pozice
 POSITION_TYPE_HIGHLIGHT,Zvýraznění

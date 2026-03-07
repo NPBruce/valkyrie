@@ -131,7 +131,7 @@ NUMBER_HEROS,{0} Герои:
 OPTIONS,Настройки
 PLACEMENT,Помещение
 
-PLACE_IMG,Фото помещения:
+PLACE_IMG,Фото помещения
 POOL_TRAITS,Набор
 POSITION,Позиция
 POSITION_TYPE_HIGHLIGHT,Отметка

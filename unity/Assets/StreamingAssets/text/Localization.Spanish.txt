@@ -141,7 +141,7 @@ OP,Op
 OPTIONS,Opciones
 PLACEMENT,Colocación
 
-PLACE_IMG,Poner Img:
+PLACE_IMG,Poner Img
 POOL_TRAITS,Atributos Posibles:
 POSITION,Posición
 POSITION_TYPE_HIGHLIGHT,Destacado

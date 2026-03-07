@@ -107,7 +107,7 @@ OP,Opera
 OPTIONS,Opzioni
 PLACEMENT,Posizione
 
-PLACE_IMG,Posiziona Img:
+PLACE_IMG,Posiziona Img
 POOL_TRAITS,Tratti Pubblici
 POSITION,Posizione
 POSITION_TYPE_HIGHLIGHT,Evidenzia

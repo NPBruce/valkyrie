@@ -135,7 +135,7 @@ NUMBER_HEROS,{0} Helden:
 OPTIONS,Optionen
 PLACEMENT,Platzierung
 
-PLACE_IMG,Platz. Bild:
+PLACE_IMG,Platz. Bild
 POOL_TRAITS,Poolmerkmale:
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Markieren

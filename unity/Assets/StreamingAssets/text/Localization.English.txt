@@ -162,7 +162,7 @@ OP,Op
 OPTIONS,Options
 PLACEMENT,Placement
 
-PLACE_IMG,Place Img:
+PLACE_IMG,Place Img
 POOL_TRAITS,Pool Traits:
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Highlight

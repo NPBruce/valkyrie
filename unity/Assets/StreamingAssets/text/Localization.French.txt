@@ -138,7 +138,7 @@ OP,Opérateur
 OPTIONS,Options
 PLACEMENT,Positionnement
 
-PLACE_IMG,Placer Img :
+PLACE_IMG,Placer Img 
 POOL_TRAITS,Traits possibles :
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Mise en valeur

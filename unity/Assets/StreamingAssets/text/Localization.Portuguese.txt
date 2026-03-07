@@ -144,7 +144,7 @@ OP,Op
 OPTIONS,Opções
 PLACEMENT,Atribuição
 
-PLACE_IMG,Atribuir Img:
+PLACE_IMG,Atribuir Img
 POOL_TRAITS,Traços:
 POSITION,Posição
 POSITION_TYPE_HIGHLIGHT,Realçar
