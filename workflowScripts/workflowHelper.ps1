@@ -15,6 +15,9 @@ function Get-ReleaseVersion {
         if ($type -eq "beta") {
             $version = "$version-beta"
         }
+        elseif ($type -eq "major") {
+            $version = "$version-major"
+        }
     }
 
     $customName = $env:CUSTOM_RELEASE_NAME

@@ -61,8 +61,32 @@ namespace Valkyrie.UnitTests
         {
             // Case where local is Beta and online is the final Stable release
             Assert.IsTrue(VersionManager.VersionNewer("3.20 BETA", "3.20"));
-            Assert.IsTrue(VersionManager.VersionNewer("3.20.1", "3.20")); // 3.20.1 is considered Beta by current logic
+            Assert.IsTrue(VersionManager.VersionNewer("3.20.1", "3.20")); // 3.20.1 is Beta, 3.20 is Stable
             Assert.IsTrue(VersionManager.VersionNewer("3.20-beta", "3.20"));
+        }
+
+        [Test]
+        public void VersionNewer_StableToMajorUpdate_ReturnsTrue()
+        {
+            // Case where stable is released and then a MAJOR version is released
+            Assert.IsTrue(VersionManager.VersionNewer("3.20", "3.20 MAJOR"));
+            Assert.IsTrue(VersionManager.VersionNewer("3.20.0", "3.20 MAJOR"));
+        }
+
+        [Test]
+        public void VersionNewer_NumericPrecedenceOverSuffix_ReturnsCorrectResult()
+        {
+            // 3.20 BETA is numerically newer than 3.15 MAJOR, so it should be true (3.15 MAJOR -> 3.20 BETA)
+            Assert.IsTrue(VersionManager.VersionNewer("3.15 MAJOR", "3.20 BETA"));
+            
+            // Conversely, 3.20 BETA is NOT newer than 3.21 (stable)
+            Assert.IsTrue(VersionManager.VersionNewer("3.20 BETA", "3.21"));
+            
+            // 3.20 MAJOR is NOT newer than 3.21 (even if 3.21 is stable)
+            Assert.IsTrue(VersionManager.VersionNewer("3.20 MAJOR", "3.21"));
+            
+            // 3.21 is NOT newer than 3.20 MAJOR
+            Assert.IsFalse(VersionManager.VersionNewer("3.21", "3.20 MAJOR"));
         }
 
         [Test]
@@ -70,6 +94,7 @@ namespace Valkyrie.UnitTests
         {
             // Case where stable is installed but a newer version (in Beta) is available
             Assert.IsTrue(VersionManager.VersionNewer("3.20", "3.21 BETA"));
+            Assert.IsTrue(VersionManager.VersionNewer("3.20", "3.20.1")); // 3.20.1 is a newer beta
         }
 
         [Test]

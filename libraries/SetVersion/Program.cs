@@ -33,9 +33,17 @@ namespace SetVersion
 
             string baseVersion = versionLines[0].Trim();
             string bundleVersion = baseVersion;
-            if (versionLines.Length > 1 && versionLines[1].Trim().ToUpper() == "BETA")
+            if (versionLines.Length > 1)
             {
-                bundleVersion += "-beta";
+                string type = versionLines[1].Trim().ToUpper();
+                if (type == "BETA")
+                {
+                    bundleVersion += "-beta";
+                }
+                else if (type == "MAJOR")
+                {
+                    bundleVersion += "-major";
+                }
             }
 
             // Change the settings to contain the new versions

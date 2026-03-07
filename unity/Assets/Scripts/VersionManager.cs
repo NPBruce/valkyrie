@@ -60,56 +60,61 @@ public class VersionManager
         string[] oldV = oldVersion.Split('.');
         string[] newV = newVersion.Split('.');
 
-        int maxLen = Math.Max(oldV.Length, newV.Length);
-
         if (newVersion.Equals("")) return false;
         if (oldVersion.Equals("")) return true;
-        bool numericOlder = false;
-        bool numericNewer = false;
 
-        // Check each component
-        for (int i = 0; i < maxLen; i++)
+        int commonLen = Math.Min(oldV.Length, newV.Length);
+
+        // Check each common component
+        for (int i = 0; i < commonLen; i++)
         {
             int oldInt = 0;
             int newInt = 0;
 
-            if (i < oldV.Length)
-            {
-                string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
-                int.TryParse(oldS, out oldInt);
-            }
-            if (i < newV.Length)
-            {
-                string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
-                int.TryParse(newS, out newInt);
-            }
+            string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
+            int.TryParse(oldS, out oldInt);
+            string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
+            int.TryParse(newS, out newInt);
 
-            if (oldInt < newInt)
-            {
-                numericNewer = true;
-                break;
-            }
-            if (oldInt > newInt)
-            {
-                numericOlder = true;
-                break;
-            }
+            if (oldInt < newInt) return true;
+            if (oldInt > newInt) return false;
         }
 
-        if (numericNewer) return true;
-        if (numericOlder)
+        // Common components are equal. 
+        // If one version has more components (e.g. 3.20.1 vs 3.20)
+        if (newV.Length > oldV.Length)
         {
-            // If numerically older (e.g. 3.20.1 vs 3.20), it's still an upgrade if moving FROM Beta TO Stable
-            return IsBeta(oldVersion) && !IsBeta(newVersion);
+            // e.g. 3.20 -> 3.20.1. New is newer numerically.
+            return true;
+        }
+        if (oldV.Length > newV.Length)
+        {
+            // e.g. 3.20.1 -> 3.20. Old has more.
+            // In our logic, 3.20.1 is Beta, 3.20 is Stable.
+            // Moving from Beta to Stable is an upgrade if numeric parts match.
+            return GetVersionPriority(newVersion) > GetVersionPriority(oldVersion);
         }
 
-        // If numeric parts are identical (e.g. 3.20 vs 3.20 BETA), moving FROM Beta TO Stable is an upgrade
-        return IsBeta(oldVersion) && !IsBeta(newVersion);
+        // Same components, just check release type suffixes (Beta < Stable < Major)
+        return GetVersionPriority(newVersion) > GetVersionPriority(oldVersion);
+    }
+
+    /// <summary>
+    /// Gets a priority score for the version's release type.
+    /// Beta = 1, Stable/Normal = 2, Major = 3
+    /// </summary>
+    private static int GetVersionPriority(string version)
+    {
+        string vLower = version.ToLower();
+        if (vLower.Contains("major")) return 3;
+        if (IsBeta(version)) return 1;
+        return 2; // Default for normal releases
     }
 
     /// <summary>
     /// Checks if the provided version string indicates a beta version.
-    /// A beta version is defined as having more than 2 components (e.g., 3.12.1).
+    /// A beta version is defined as having more than 2 components (e.g., 3.12.1)
+    /// or containing the string "beta".
     /// </summary>
     /// <param name="version">The version string to check.</param>
     /// <returns>True if the version is beta, otherwise false.</returns>
