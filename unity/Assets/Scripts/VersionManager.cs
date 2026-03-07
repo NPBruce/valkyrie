@@ -37,7 +37,7 @@ public class VersionManager
             return;
         }
 
-        online_version = data;
+        online_version = data.Trim().Replace("\r\n", " ").Replace("\n", " ");
 
         if(version_downloaded_action != null)
             version_downloaded_action();
@@ -103,7 +103,7 @@ public class VersionManager
     /// <returns>True if the version is beta, otherwise false.</returns>
     public static bool IsBeta(string version)
     {
-        return version.Split('.').Length > 2;
+        return version.Split('.').Length > 2 || version.ToLower().Contains("beta");
     }
 
 }

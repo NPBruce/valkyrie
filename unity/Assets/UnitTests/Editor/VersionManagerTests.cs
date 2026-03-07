@@ -27,6 +27,22 @@ namespace Valkyrie.UnitTests
         }
 
         [Test]
+        public void IsBeta_StringWithBeta_ReturnsTrue()
+        {
+            Assert.IsTrue(VersionManager.IsBeta("3.12 BETA"));
+            Assert.IsTrue(VersionManager.IsBeta("3.12\nBETA"));
+            Assert.IsTrue(VersionManager.IsBeta("3.14  beta"));
+        }
+
+        [Test]
+        public void IsBeta_StringWithMajor_ReturnsFalse()
+        {
+            Assert.IsFalse(VersionManager.IsBeta("3.12 MAJOR"));
+            Assert.IsFalse(VersionManager.IsBeta("3.12\nMAJOR"));
+            Assert.IsFalse(VersionManager.IsBeta("3.14  major"));
+        }
+
+        [Test]
         public void IsBeta_EmptyVersion_ReturnsFalse()
         {
             Assert.IsFalse(VersionManager.IsBeta(""));

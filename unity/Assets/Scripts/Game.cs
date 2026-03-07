@@ -281,7 +281,7 @@ public class Game : MonoBehaviour
 
         // Read the version and add it to the log
         TextAsset versionFile = Resources.Load("version") as TextAsset;
-        version = versionFile.text.Trim();
+        version = versionFile.text.Trim().Replace("\r\n", " ").Replace("\n", " ");
         // The newline at the end stops the stack trace appearing in the log
         ValkyrieDebug.Log("Valkyrie Version: " + version + Environment.NewLine);
 
