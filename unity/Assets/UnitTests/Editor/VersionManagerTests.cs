@@ -61,7 +61,7 @@ namespace Valkyrie.UnitTests
         {
             // Case where local is Beta and online is the final Stable release
             Assert.IsTrue(VersionManager.VersionNewer("3.20 BETA", "3.20"));
-            Assert.IsTrue(VersionManager.VersionNewer("3.20.1", "3.20")); // 3.20.1 is Beta, 3.20 is Stable
+            Assert.IsTrue(VersionManager.VersionNewer("3.20.0", "3.20")); // 3.20.0 is Beta, 3.20 is Stable
             Assert.IsTrue(VersionManager.VersionNewer("3.20-beta", "3.20"));
         }
 

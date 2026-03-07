@@ -63,39 +63,43 @@ public class VersionManager
         if (newVersion.Equals("")) return false;
         if (oldVersion.Equals("")) return true;
 
-        int commonLen = Math.Min(oldV.Length, newV.Length);
+        int maxLen = Math.Max(oldV.Length, newV.Length);
+        bool numericOlder = false;
+        bool numericNewer = false;
 
-        // Check each common component
-        for (int i = 0; i < commonLen; i++)
+        // Check each component
+        for (int i = 0; i < maxLen; i++)
         {
             int oldInt = 0;
             int newInt = 0;
 
-            string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
-            int.TryParse(oldS, out oldInt);
-            string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
-            int.TryParse(newS, out newInt);
+            if (i < oldV.Length)
+            {
+                string oldS = System.Text.RegularExpressions.Regex.Replace(oldV[i], "[^0-9]", "");
+                int.TryParse(oldS, out oldInt);
+            }
+            if (i < newV.Length)
+            {
+                string newS = System.Text.RegularExpressions.Regex.Replace(newV[i], "[^0-9]", "");
+                int.TryParse(newS, out newInt);
+            }
 
-            if (oldInt < newInt) return true;
-            if (oldInt > newInt) return false;
+            if (oldInt < newInt)
+            {
+                numericNewer = true;
+                break;
+            }
+            if (oldInt > newInt)
+            {
+                numericOlder = true;
+                break;
+            }
         }
 
-        // Common components are equal. 
-        // If one version has more components (e.g. 3.20.1 vs 3.20)
-        if (newV.Length > oldV.Length)
-        {
-            // e.g. 3.20 -> 3.20.1. New is newer numerically.
-            return true;
-        }
-        if (oldV.Length > newV.Length)
-        {
-            // e.g. 3.20.1 -> 3.20. Old has more.
-            // In our logic, 3.20.1 is Beta, 3.20 is Stable.
-            // Moving from Beta to Stable is an upgrade if numeric parts match.
-            return GetVersionPriority(newVersion) > GetVersionPriority(oldVersion);
-        }
+        if (numericNewer) return true;
+        if (numericOlder) return false;
 
-        // Same components, just check release type suffixes (Beta < Stable < Major)
+        // If numeric parts are identical (e.g. 3.20.0 vs 3.20, or 3.20 vs 3.20 BETA), check priority
         return GetVersionPriority(newVersion) > GetVersionPriority(oldVersion);
     }
 
