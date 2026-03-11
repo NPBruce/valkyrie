@@ -268,6 +268,7 @@ public class QuestsManager
 
             foreach (KeyValuePair<string, QuestData.Quest> quest_data in local_quests_data)
             {
+                LocalizationRead.RemoveDictionary("qst");
                 LocalizationRead.AddDictionary("qst", quest_data.Value.localizationDict);
                 quests_sorted_by_author.Add(quest_data.Value.GetShortAuthor(), quest_data.Key);
                 quests_sorted_by_name.Add(quest_data.Value.name.Translate(), quest_data.Key);

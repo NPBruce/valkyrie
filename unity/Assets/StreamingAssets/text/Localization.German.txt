@@ -1,10 +1,16 @@
 .,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
+// ICONS
+CUSTOM_IMAGE,Benutzerdefiniertes Bild
+ORIGINAL,Original
+IMAGE_PLACE,Bildplatzierung
+IMAGE_PLACE_SIZE,Bildplatzierungsgröße
+
 // TEXTS
 ABILITY,Fähigkeit
 ABOUT,Über Valkyrie
 ABOUT_FFG,Valkyrie ist ein durch Fantasy Flight Games' "Descent: Wege zum Ruhm" inspiriertes Gamemaster-Tool. Die meisten Bildressourcen werden aus FFG-Anwendungen importiert und unterliegen daher dem Copyright von FGG und anderen. Die Länderflaggen sind von Freepik www.flaticon.com.
-ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, UnityStandaloneFileBrowser von gkngkc und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
+ABOUT_LIBS,Valkyrie benutzt DotNetZip-For-Unity, NativeFilePicker von yasirkula und enthält Code der auf Unity Studio und dem .NET Vorbis Encoder aufbaut.
 ACTIONS,Aktionen
 ACTIVATED,Aktiviert
 ACTIVATION,Aktivierung
@@ -129,7 +135,7 @@ NUMBER_HEROS,{0} Helden:
 OPTIONS,Optionen
 PLACEMENT,Platzierung
 
-PLACE_IMG,Platz. Bild:
+PLACE_IMG,Platz. Bild
 POOL_TRAITS,Poolmerkmale:
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Markieren
@@ -476,6 +482,7 @@ OFFLINE_DUE_TO_ERROR,OFFLINE (Netzwerkfehler)
 CONTENTPACK_CATEGORY_CUSTOM,Community Contentpacks
 CONTENTPACK_DOWNLOAD,Contentpacks herunterladen
 CONTENTPACK_DOWNLOAD_HEADER,Community Contentpacks herunterladen
+MISSING_EXPANSIONS,Fehlende Erweiterungen:
 
 RICH_TEXT,Rich text
 TEXT_ALIGNMENT,Ausrichten
@@ -494,6 +501,8 @@ FULLSCREEN,Vollbild
 ON,An
 OFF,Aus
 EXPORT_LOG,Log exportieren
+ADVANCED_OPTIONS,Erweiterte Optionen
+VIEW_LOCK,Automatische Kamerabewegung in Szenarien blockieren
 
 LOADINGSCENARIOS,Szenarien laden...
 LOADINGCONTENTPACKS,Inhaltspakete laden...
@@ -515,3 +524,11 @@ SELECT_GAME_TYPE,Spieltyp auswählen
 SEARCH_BY_NAME,Suche nach Name...
 
 SEARCH_BY_ID,Suche nach ID...
+
+DEFAULT,Standard
+SMALL,Klein
+MEDIUM,Mittel
+HUGE,Groß
+MASSIVE,Massiv
+
+CUSTOM_IMAGE,Benutzerdefiniertes Bild

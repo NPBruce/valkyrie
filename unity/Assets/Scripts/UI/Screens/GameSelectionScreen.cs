@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using Assets.Scripts.Content;
 using FFGAppImport;
-using SFB;
 using UnityEngine;
 using UnityEngine.UI;
 using ValkyrieTools;
@@ -363,6 +362,12 @@ namespace Assets.Scripts.UI.Screens
                 game.gameType = new D2EGameType();
 
 
+                // Clean up any old localization
+                LocalizationRead.RemoveDictionary("ffg");
+                LocalizationRead.RemoveDictionary("csh");
+                // Clean up texture cache
+                if (ContentData.textureCache != null) ContentData.textureCache.Clear();
+
                 // Load localization before content
                 loadLocalization();
 
@@ -372,6 +377,7 @@ namespace Assets.Scripts.UI.Screens
                 // Download quests list
                 game.questsList = new QuestsManager();
                 game.remoteContentPackManager = new RemoteContentPackManager();
+                game.roundControl = new RoundController();
                 Texture2D cursor = Resources.Load("sprites/CursorD2E") as Texture2D;
                 Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
 
@@ -529,6 +535,12 @@ namespace Assets.Scripts.UI.Screens
 
                 Game game = Game.Get();
                 game.gameType = new MoMGameType();
+
+                // Clean up any old localization
+                LocalizationRead.RemoveDictionary("ffg");
+                LocalizationRead.RemoveDictionary("csh");
+                // Clean up texture cache
+                if (ContentData.textureCache != null) ContentData.textureCache.Clear();
 
                 // Load localization before content
                 loadLocalization();

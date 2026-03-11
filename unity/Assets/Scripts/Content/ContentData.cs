@@ -208,7 +208,7 @@ public class ContentData
     {
         //Parse manifest
         ManifestManager manager = new ManifestManager(customContentPackPath);
-        var manifestData = manager.GetLocalQuestManifestIniData();
+        var manifestData = manager.GetLocalContentPackManifestIniData();
 
         // Parse ini
 
@@ -255,6 +255,21 @@ public class ContentData
         ContentPack pack = null;
 
         string combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+
+        if (!File.Exists(combinedContentPackLocalPath) && packIsContainer)
+        {
+            // The content pack might be nested inside a subdirectory of the ZIP
+            string[] subdirs = Directory.GetDirectories(path);
+            foreach (string subdir in subdirs)
+            {
+                if (File.Exists(subdir + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile))
+                {
+                    path = subdir;
+                    combinedContentPackLocalPath = path + Path.DirectorySeparatorChar + ValkyrieConstants.ContentPackIniFile;
+                    break;
+                }
+            }
+        }
 
         if (File.Exists(combinedContentPackLocalPath))
         {
@@ -352,6 +367,13 @@ public class ContentData
         // Black description isn't fatal
         pack.description = d.Get("ContentPack", "description");
 
+        // Icon can be empty/missing
+        string iconString = d.Get("ContentPack", "icon");
+        if (!string.IsNullOrWhiteSpace(iconString))
+        {
+            pack.icon = path + Path.DirectorySeparatorChar + iconString;
+        }
+
         // Get cloned packs
         string cloneString = d.Get("ContentPack", "clone");
         pack.clone = new List<string>();
@@ -412,10 +434,20 @@ public class ContentData
         {
             if (cp.id.Equals(id))
             {
-                return new StringKey(cp.name).Translate();
+                StringKey sk = new StringKey(cp.name);
+                string translatedName = sk.Translate();
+                
+                // If it wasn't translated and is a plain ID, try prepending "pck" to find a translation.
+                if (translatedName == cp.name && !cp.name.Contains("{"))
+                {
+                    StringKey pckKey = new StringKey("pck", cp.name);
+                    if (pckKey.KeyExists()) return pckKey.Translate();
+                }
+                
+                return translatedName;
             }
         }
-        return "";
+        return id;
     }
 
     public string GetContentAcronym(string id)
@@ -440,6 +472,18 @@ public class ContentData
             }
         }
         return "";
+    }
+
+    public ContentPack GetPackById(string id)
+    {
+        foreach (ContentPack cp in allPacks)
+        {
+            if (cp.id.Equals(id))
+            {
+                return cp;
+            }
+        }
+        return null;
     }
 
     internal bool AddContent<T>(string name, T d) where T : IContent

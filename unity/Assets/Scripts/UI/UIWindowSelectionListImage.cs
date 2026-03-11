@@ -60,7 +60,12 @@ namespace Assets.Scripts.UI
             {
                 Vector2 texPos = new Vector2(tokenData.x, tokenData.y);
                 Vector2 texSize = new Vector2(tokenData.width, tokenData.height);
+
                 return ContentData.FileToTexture(tokenData.image, texPos, texSize);
+            }
+            else if (game.cd.TryGet(key, out MonsterData monsterData))
+            {
+                return ContentData.FileToTexture(monsterData.image);
             }
             else if (game.cd.TryGet(key, out PuzzleData puzzleData))
             {

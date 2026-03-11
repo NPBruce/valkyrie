@@ -37,7 +37,7 @@ public class VersionManager
             return;
         }
 
-        online_version = data;
+        online_version = data.Trim().Replace("\r\n", " ").Replace("\n", " ");
 
         if(version_downloaded_action != null)
             version_downloaded_action();
@@ -61,11 +61,12 @@ public class VersionManager
         string[] newV = newVersion.Split('.');
 
         if (newVersion.Equals("")) return false;
-
         if (oldVersion.Equals("")) return true;
 
         int maxLen = Math.Max(oldV.Length, newV.Length);
-        
+        bool numericOlder = false;
+        bool numericNewer = false;
+
         // Check each component
         for (int i = 0; i < maxLen; i++)
         {
@@ -85,25 +86,45 @@ public class VersionManager
 
             if (oldInt < newInt)
             {
-                return true;
+                numericNewer = true;
+                break;
             }
             if (oldInt > newInt)
             {
-                return false;
+                numericOlder = true;
+                break;
             }
         }
-        return false;
+
+        if (numericNewer) return true;
+        if (numericOlder) return false;
+
+        // If numeric parts are identical (e.g. 3.20.0 vs 3.20, or 3.20 vs 3.20 BETA), check priority
+        return GetVersionPriority(newVersion) > GetVersionPriority(oldVersion);
+    }
+
+    /// <summary>
+    /// Gets a priority score for the version's release type.
+    /// Beta = 1, Stable/Normal = 2, Major = 3
+    /// </summary>
+    private static int GetVersionPriority(string version)
+    {
+        string vLower = version.ToLower();
+        if (vLower.Contains("major")) return 3;
+        if (IsBeta(version)) return 1;
+        return 2; // Default for normal releases
     }
 
     /// <summary>
     /// Checks if the provided version string indicates a beta version.
-    /// A beta version is defined as having more than 2 components (e.g., 3.12.1).
+    /// A beta version is defined as having more than 2 components (e.g., 3.12.1)
+    /// or containing the string "beta".
     /// </summary>
     /// <param name="version">The version string to check.</param>
     /// <returns>True if the version is beta, otherwise false.</returns>
     public static bool IsBeta(string version)
     {
-        return version.Split('.').Length > 2;
+        return version.Split('.').Length > 2 || version.ToLower().Contains("beta");
     }
 
 }

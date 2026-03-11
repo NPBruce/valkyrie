@@ -1,4 +1,10 @@
 .,Chinese
+// ICONS
+CUSTOM_IMAGE,自定义图像
+ORIGINAL,原始
+IMAGE_PLACE,图像放置
+IMAGE_PLACE_SIZE,图像放置大小
+
 // TEXTS
 ABILITY,Ability
 ABOUT,關於
@@ -128,7 +134,7 @@ OP,Op
 OPTIONS,設置
 PLACEMENT,Placement
 
-PLACE_IMG,Place Img:
+PLACE_IMG,Place Img
 POOL_TRAITS,Pool Traits:
 POSITION,位置
 POSITION_TYPE_HIGHLIGHT,高光
@@ -475,6 +481,8 @@ FULLSCREEN,全屏
 ON,开
 OFF,关
 EXPORT_LOG,导出日志
+ADVANCED_OPTIONS,高级选项
+VIEW_LOCK,禁用剧本视角自动移动
 
 LOADINGSCENARIOS,正在加载剧本...
 LOADINGCONTENTPACKS,正在加载内容包...
@@ -496,3 +504,11 @@ SELECT_GAME_TYPE,选择游戏类型
 SEARCH_BY_NAME,按名称搜索...
 
 SEARCH_BY_ID,按ID搜索...
+
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
+
+CUSTOM_IMAGE,自定义图片

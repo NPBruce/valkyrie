@@ -1,9 +1,15 @@
 .,French
+// ICONS
+CUSTOM_IMAGE,Image personnalisée
+ORIGINAL,Original
+IMAGE_PLACE,Placement de l'image
+IMAGE_PLACE_SIZE,Taille de placement de l'image
+
 // TEXTS
 ABILITY,Capacité
 ABOUT,À propos
 ABOUT_FFG,Valkyrie est une application d'aide de jeu inspiré par Descent : Road to Legend de Fantasy Flight Games. La plupart des images utilisées sont issues des applications FFG et sont la propriété de FFG. Tous droits réservés. Les drapeaux sont fait par Freepik de www.flaticon.com.
-ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, UnityStandaloneFileBrowser de gkngkc et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie utilise DotNetZip-For-Unity, NativeFilePicker de yasirkula et contient du code dérivé de Unity Studio et .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activé
 ACTIVATION,Activation
@@ -132,7 +138,7 @@ OP,Opérateur
 OPTIONS,Options
 PLACEMENT,Positionnement
 
-PLACE_IMG,Placer Img :
+PLACE_IMG,Placer Img 
 POOL_TRAITS,Traits possibles :
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Mise en valeur
@@ -498,6 +504,8 @@ FULLSCREEN,Plein écran
 ON,Activé
 OFF,Désactivé
 EXPORT_LOG,Exporter le journal
+ADVANCED_OPTIONS,Options Avancées
+VIEW_LOCK,Bloquer le mouvement automatique de la caméra de scénario
 
 LOADINGSCENARIOS,Chargement des scénarios...
 LOADINGCONTENTPACKS,Chargement des packs de contenu...
@@ -519,3 +527,11 @@ SELECT_GAME_TYPE,Sélectionner le type de jeu
 SEARCH_BY_NAME,Recherche par nom...
 
 SEARCH_BY_ID,Rechercher par ID...
+
+DEFAULT,Défaut
+SMALL,Petit
+MEDIUM,Moyen
+HUGE,Grand
+MASSIVE,Massif
+
+CUSTOM_IMAGE,Image personnalisée

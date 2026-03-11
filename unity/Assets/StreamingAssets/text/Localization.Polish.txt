@@ -1,9 +1,15 @@
 .,Polish
+// ICONS
+CUSTOM_IMAGE,Własny obraz
+ORIGINAL,Oryginalny
+IMAGE_PLACE,Umieszczenie obrazu
+IMAGE_PLACE_SIZE,Rozmiar umieszczenia obrazu
+
 // TEXTS
 ABILITY,Umiejętność
 ABOUT, O Valkyrie
 ABOUT_FFG,Valkyrie to narzędzie pomocnicze mistrza gry inspirowane grą Descent: Droga do legendy wydaną przez Fantasy Flight Games. Większość używanych grafik została zaimportowana z aplikacji FFG i są objęte ochroną praw autorskich należących do FFG i innych podmiotów posiadających prawa. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,W Valkyrie używana jest biblioteka DotNetZip-For-Unity, NativeFilePicker od yasirkula a także kod pochodzący z Unity Studio oraz .NET Ogg Vorbis Encoder.
 ACTIONS,Akcje
 ACTIVATED,Aktywowano
 ACTIVATION,Aktywacja
@@ -475,6 +481,8 @@ FULLSCREEN,Pełny ekran
 ON,Wł.
 OFF,Wył.
 EXPORT_LOG,Eksportuj log
+ADVANCED_OPTIONS,Opcje Zaawansowane
+VIEW_LOCK,Zablokuj automatyczny ruch kamery w scenariuszu
 
 LOADINGSCENARIOS,Wczytywanie scenariuszy...
 LOADINGCONTENTPACKS,Wczytywanie pakietów zawartości...
@@ -495,3 +503,11 @@ SELECT_GAME_TYPE,Wybierz typ gry
 SEARCH_BY_NAME,Szukaj według nazwy...
 
 SEARCH_BY_ID,Szukaj po ID...
+
+DEFAULT,Default
+SMALL,Mały
+MEDIUM,Średni
+HUGE,Duży
+MASSIVE,Masywny
+
+CUSTOM_IMAGE,Niestandardowy obraz

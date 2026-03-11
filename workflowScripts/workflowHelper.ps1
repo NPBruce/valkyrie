@@ -7,16 +7,28 @@ function Get-UnityVersion {
 
 function Get-ReleaseVersion {
     $versionFile = "$env:GITHUB_WORKSPACE/unity/Assets/Resources/version.txt"
-    $version = Get-Content $versionFile
+    $versionLines = Get-Content $versionFile
+    $version = $versionLines[0].Trim()
+    
+    if ($versionLines.Length -gt 1) {
+        $type = $versionLines[1].Trim().ToLower()
+        if ($type -eq "beta") {
+            $version = "$version-beta"
+        }
+        elseif ($type -eq "major") {
+            $version = "$version-major"
+        }
+    }
+
     $customName = $env:CUSTOM_RELEASE_NAME
 
     if (-not [string]::IsNullOrWhiteSpace($customName)) {
-        if ($customName -match '^[a-zA-Z0-9]+$') {
+        if ($customName -match '^[a-zA-Z0-9\-]+$') {
             Write-Host "Using Custom Release Name: $customName"
             echo "RELEASE_NAME=$customName" | Out-File -FilePath $env:GITHUB_ENV -Append
         }
         else {
-            Write-Error "Custom Release Name '$customName' is invalid. Must be alphanumeric only."
+            Write-Error "Custom Release Name '$customName' is invalid. Must be alphanumeric or hyphen only."
             exit 1
         }
     }

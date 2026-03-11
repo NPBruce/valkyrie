@@ -72,11 +72,11 @@ public class EditorComponentEvent : EditorComponent
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(1.5f, offset, 10, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", MUSIC));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(11.5f, offset++, 1, 1);
+        ui.SetLocation(4, offset++, 1, 1);
         ui.SetText(CommonStringKeys.PLUS, Color.green);
         ui.SetButton(delegate { AddMusic(0); });
         new UIElementBorder(ui, Color.green);
@@ -92,12 +92,12 @@ public class EditorComponentEvent : EditorComponent
             new UIElementBorder(ui, Color.red);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(1.5f, offset, 10, 1);
+            ui.SetLocation(4, offset, 10, 1);
             ui.SetText(eventComponent.music[index]);
             new UIElementBorder(ui);
 
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(11.5f, offset++, 1, 1);
+            ui.SetLocation(14, offset++, 1, 1);
             ui.SetText(CommonStringKeys.PLUS, Color.green);
             ui.SetButton(delegate { AddMusic(i + 1); });
             new UIElementBorder(ui, Color.green);
@@ -288,11 +288,11 @@ public class EditorComponentEvent : EditorComponent
     virtual public float AddHeroSelection(float offset)
     {
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", SELECTION));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 12.5f, 1);
+        ui.SetLocation(4, offset, 14.5f, 1);
         ui.SetText(eventComponent.heroListName);
         ui.SetButton(delegate { SetHighlight(); });
         new UIElementBorder(ui);
@@ -309,21 +309,21 @@ public class EditorComponentEvent : EditorComponent
         offset++;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 3, 1);
+        ui.SetLocation(4, offset, 3, 1);
         ui.SetText(new StringKey("val", "X_COLON", MIN));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(9, offset, 2, 1);
+        ui.SetLocation(7, offset, 2, 1);
         ui.SetText(eventComponent.minHeroes.ToString());
         ui.SetButton(delegate { SetHeroCount(false); });
         new UIElementBorder(ui);
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(11, offset, 3, 1);
+        ui.SetLocation(9, offset, 3, 1);
         ui.SetText(new StringKey("val", "X_COLON", MAX));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(14, offset, 2, 1);
+        ui.SetLocation(12, offset, 2, 1);
         ui.SetText(eventComponent.maxHeroes.ToString());
         ui.SetButton(delegate { SetHeroCount(true); });
         new UIElementBorder(ui);
@@ -369,13 +369,13 @@ public class EditorComponentEvent : EditorComponent
         offset += 2;
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 8, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "NEXT_EVENTS")));
 
         string randomButton = "Ordered";
         if (eventComponent.randomEvents) randomButton = "Random";
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(8, offset, 4, 1);
+        ui.SetLocation(4, offset, 4, 1);
         ui.SetText(new StringKey("val", randomButton));
         ui.SetButton(delegate { ToggleRandom(); });
         new UIElementBorder(ui);

@@ -26,7 +26,7 @@ ICON_PRODUCT_MAD28,
 ABILITY,Ability
 ABOUT,About
 ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, NativeFilePicker from yasirkula and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,Actions
 ACTIVATED,Activated
 ACTIVATION,Activation
@@ -77,6 +77,8 @@ CONTINUE,Continue
 COPY,Copy
 CUSTOMMONSTER,CustomMonster
 DEFAULTMUSICON,Turn on default music
+ORIGINAL,Original
+DEFAULT,Default
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
 D2E_HERO_NAME,Hero
@@ -160,7 +162,7 @@ OP,Op
 OPTIONS,Options
 PLACEMENT,Placement
 
-PLACE_IMG,Place Img:
+PLACE_IMG,Place Img
 POOL_TRAITS,Pool Traits:
 POSITION,Position
 POSITION_TYPE_HIGHLIGHT,Highlight
@@ -244,6 +246,11 @@ HORIZONTAL,Horizontal
 VERTICAL,Vertical
 ALIGN,Align
 SIZE,Size
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
 TEXT_SIZE,Text Size
 BACKGROUND_COLOUR,Background colour
 ASPECT,Aspect
@@ -667,6 +674,8 @@ FULLSCREEN,Fullscreen
 ON,ON
 OFF,OFF
 EXPORT_LOG,Export Log
+ADVANCED_OPTIONS,Advanced Options
+VIEW_LOCK,Block automatic scenario camera movement
 
 LOADINGSCENARIOS,Loading scenarios...
 LOADINGCONTENTPACKS,Loading content packs...
@@ -688,3 +697,8 @@ SELECT_GAME_TYPE,Select Game Type
 SEARCH_BY_NAME,Search by Name...
 
 SEARCH_BY_ID,Search by id...
+
+CUSTOM_IMAGE,Custom Image
+ORIGINAL,Original
+IMAGE_PLACE,Image Place
+IMAGE_PLACE_SIZE,Image Place Size

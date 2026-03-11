@@ -124,8 +124,10 @@ function Get-BuildVersion {
     param ([string]$ScriptRoot)
     $VersionFile = Join-Path $ScriptRoot "unity\Assets\Resources\version.txt"
     if (Test-Path $VersionFile) {
-        $Version = Get-Content $VersionFile -Raw
-        return $Version.Trim()
+        $versionLines = Get-Content $VersionFile
+        # Use only the first line (version number), ignore second line (BETA/MAJOR)
+        $Version = $versionLines[0].Trim()
+        return $Version
     }
     else {
         Write-Log "ERROR: Version file not found at $VersionFile" -Level "ERROR" -Color "Red"

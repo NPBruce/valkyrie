@@ -85,6 +85,7 @@ public class QuestMonster : MonsterData
             imagePlace = Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + Path.DirectorySeparatorChar + imagePlace;
         }
 
+
         // Read activations  from quest data or base type
         activations = qm.activations;
         if (activations.Length == 0 && baseObject != null)

@@ -1,10 +1,16 @@
 .,Portuguese
 
+// ICONS
+CUSTOM_IMAGE,Imagem personalizada
+ORIGINAL,Original
+IMAGE_PLACE,Colocação de imagem
+IMAGE_PLACE_SIZE,Tamanho da colocação de imagem
+
 // TEXTS
 ABILITY,Habilidade
 ABOUT,Sobre Valkyrie
 ABOUT_FFG,Valkyrie é um App de ajuda de criação de aventuras inspirado por Fantasy Flight Games' Descent: Road to Legend. A maioria das imagens utilizadas no App são da FFG e são de propriedade da FFG com todos os direitos reservados. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
+ABOUT_LIBS,Valkyrie utilizza DotNetZip-For-Unity, NativeFilePicker di yasirkula e codici derivanti da Unity Studio e .NET Ogg Vorbis Encoder
 ACTIONS,Ações
 ACTIVATED,Ativado
 ACTIVATION,Ativação
@@ -138,7 +144,7 @@ OP,Op
 OPTIONS,Opções
 PLACEMENT,Atribuição
 
-PLACE_IMG,Atribuir Img:
+PLACE_IMG,Atribuir Img
 POOL_TRAITS,Traços:
 POSITION,Posição
 POSITION_TYPE_HIGHLIGHT,Realçar
@@ -502,6 +508,8 @@ FULLSCREEN,Tela cheia
 ON,Ligado
 OFF,Desligado
 EXPORT_LOG,Exportar log
+ADVANCED_OPTIONS,Opções Avançadas
+VIEW_LOCK,Bloquear movimento automático da câmera de cenário
 
 LOADINGSCENARIOS,Carregando cenários...
 LOADINGCONTENTPACKS,Carregando pacotes de conteúdo...
@@ -522,3 +530,11 @@ SELECT_GAME_TYPE,Selecionar tipo de jogo
 SEARCH_BY_NAME,Pesquisar por nome...
 
 SEARCH_BY_ID,Pesquisar por ID...
+
+DEFAULT,Default
+SMALL,Pequeno
+MEDIUM,Médio
+HUGE,Gigante
+MASSIVE,Massivo
+
+CUSTOM_IMAGE,Imagem personalizada

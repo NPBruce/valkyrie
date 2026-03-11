@@ -119,6 +119,20 @@ namespace Valkyrie.UnitTests
             Assert.AreEqual("{invalid}", result.key);
         }
 
+        [Test]
+        public void Constructor_MixedTextAndKeyFormat_TreatsAsMixedKey()
+        {
+            // Arrange
+            string input = "{tst:MY_KEY} (MIXED)";
+
+            // Act
+            StringKey result = new StringKey(input);
+
+            // Assert
+            Assert.IsNull(result.dict);
+            Assert.AreEqual("{tst:MY_KEY} (MIXED)", result.key);
+        }
+
         #endregion
 
         #region Constructor Tests - Dict and Key Parameters
@@ -276,6 +290,27 @@ namespace Valkyrie.UnitTests
 
             // Assert
             Assert.AreEqual("{val:MSG:{0}:replacement}", fullKey);
+        }
+
+        #endregion
+
+        #region Translate Tests
+
+        [Test]
+        public void Translate_MixedTextAndKeyFormat_TranslatesEmbeddedKey()
+        {
+            // Arrange
+            LocalizationRead.dicts["tst"] = new DictionaryI18n();
+            LocalizationRead.dicts["tst"].AddEntry("SANDS_KEY", "Sands of the Past");
+            
+            string input = "{tst:SANDS_KEY} (SOTP)";
+            StringKey sut = new StringKey(input);
+
+            // Act
+            string result = sut.Translate();
+
+            // Assert
+            Assert.AreEqual("Sands of the Past (SOTP)", result);
         }
 
         #endregion

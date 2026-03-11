@@ -58,11 +58,11 @@ public class EditorComponentSpawn : EditorComponentEvent
         UIElement ui = null;
         
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", ACTIVATED));
         
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 3, 1);
+        ui.SetLocation(4, offset, 3, 1);
         var activatedText = spawnComponent.activated ? CommonStringKeys.TRUE : CommonStringKeys.FALSE;
         ui.SetText(activatedText);
         ui.SetButton(delegate { ActivatedToggle(); });
@@ -72,13 +72,13 @@ public class EditorComponentSpawn : EditorComponentEvent
         if (game.gameType is D2EGameType)
         {
             ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-            ui.SetLocation(0, offset, 6, 1);
+            ui.SetLocation(0, offset, 4, 1);
             ui.SetText(new StringKey("val", "X_COLON", MONSTER_UNIQUE));
 
             if (!spawnComponent.unique)
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(6, offset, 3, 1);
+                ui.SetLocation(4, offset, 3, 1);
                 ui.SetText(CommonStringKeys.FALSE);
                 ui.SetButton(delegate { UniqueToggle(); });
                 new UIElementBorder(ui);
@@ -87,18 +87,18 @@ public class EditorComponentSpawn : EditorComponentEvent
             else
             {
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(6, offset, 3, 1);
+                ui.SetLocation(4, offset, 3, 1);
                 ui.SetText(CommonStringKeys.TRUE);
                 ui.SetButton(delegate { UniqueToggle(); });
                 new UIElementBorder(ui);
                 offset += 2;
 
                 ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-                ui.SetLocation(0, offset, 5, 1);
+                ui.SetLocation(0, offset, 4, 1);
                 ui.SetText(new StringKey("val", "X_COLON", UNIQUE_TITLE));
 
                 uniqueTitleUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-                uniqueTitleUIE.SetLocation(5, offset, 14.5f, 1);
+                uniqueTitleUIE.SetLocation(4, offset, 14.5f, 1);
                 uniqueTitleUIE.SetText(spawnComponent.uniqueTitle.Translate());
                 uniqueTitleUIE.SetSingleLine();
                 uniqueTitleUIE.SetButton(delegate { UpdateUniqueTitle(); });
@@ -120,11 +120,11 @@ public class EditorComponentSpawn : EditorComponentEvent
         }
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 5, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", HEALTH));
 
         healthUIE = new UIElementEditable(Game.EDITOR, scrollArea.GetScrollTransform());
-        healthUIE.SetLocation(5, offset, 3, 1);
+        healthUIE.SetLocation(4, offset, 3, 1);
         healthUIE.SetText(spawnComponent.uniqueHealthBase.ToString());
         healthUIE.SetSingleLine();
         healthUIE.SetButton(delegate { UpdateHealth(); });

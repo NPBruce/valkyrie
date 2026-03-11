@@ -73,6 +73,11 @@ WIDOW_TARHA,やもめのタイラー
 ZYLA,ジーラ
 
 // ICONS
+CUSTOM_IMAGE,カスタム画像
+ORIGINAL,オリジナル
+IMAGE_PLACE,画像の配置
+IMAGE_PLACE_SIZE,画像の配置サイズ
+
 ICON_SKILL_STRENGTH,
 ICON_SKILL_AGILITY,
 ICON_SKILL_OBSERVATION,
@@ -99,7 +104,7 @@ ICON_PRODUCT_MAD28,
 ABILITY,Ability
 ABOUT,このアプリに関して
 ABOUT_FFG,Valkyrie is a game master helper tool inspired by Fantasy Flight Games' Descent: Road to Legend.  Most images used are imported from FFG applications are are copyright FFG and other rights holders. Languages flags are made by Freepik from www.flaticon.com.
-ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, UnityStandaloneFileBrowser from gkngkc and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie uses DotNetZip-For-Unity, NativeFilePicker from yasirkula and has code derived from Unity Studio and .NET Ogg Vorbis Encoder.
 ACTIONS,行動
 ACTIVATED,活動済
 ACTIVATION,活動
@@ -226,7 +231,7 @@ OP,Op
 OPTIONS,オプション
 PLACEMENT,配置
 
-PLACE_IMG,Place Img:
+PLACE_IMG,Place Img
 POOL_TRAITS,Pool Traits:
 POSITION,位置
 POSITION_TYPE_HIGHLIGHT,ハイライト位置
@@ -697,6 +702,8 @@ FULLSCREEN,フルスクリーン
 ON,オン
 OFF,オフ
 EXPORT_LOG,ログ出力
+ADVANCED_OPTIONS,高度なオプション
+VIEW_LOCK,シナリオのカメラ自動移動をブロックする
 
 LOADINGSCENARIOS,シナリオを読み込んでいます...
 LOADINGCONTENTPACKS,コンテンツパックを読み込んでいます...
@@ -718,3 +725,11 @@ SELECT_GAME_TYPE,ゲームタイプを選択
 SEARCH_BY_NAME,名前で検索...
 
 SEARCH_BY_ID,IDで検索...
+
+DEFAULT,Default
+SMALL,小型
+MEDIUM,中型
+HUGE,大型
+MASSIVE,巨大
+
+CUSTOM_IMAGE,カスタムイメージ

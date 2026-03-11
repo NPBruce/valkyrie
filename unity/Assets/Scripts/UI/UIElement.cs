@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Assets.Scripts.Content;
 using UnityEditor;
 using UnityEngine.UI;
@@ -640,6 +640,31 @@ namespace Assets.Scripts.UI
             GetRectTransform().anchoredPosition = new Vector2(GetRectTransform().anchoredPosition.x, GetRectTransform().anchoredPosition.y - ((newHeightPixels - oldHeight) / 2f));
             GetRectTransform().sizeDelta = new Vector2(GetRectTransform().sizeDelta.x, newHeightPixels);
             return newHeight;
+        }
+        /// <summary>
+        /// Set element text, truncating if it exceeds width.</summary>
+        /// <param name="content">Text to display.</param>
+        public virtual void SetTextFileName(string content)
+        {
+            if (content.Length > 20)
+            {
+                string filename = System.IO.Path.GetFileName(content);
+                string directory = System.IO.Path.GetDirectoryName(content);
+                
+                if (content.Length > 40)
+                {
+                    if (filename.Length > 20)
+                    {
+                        content = "..." + System.IO.Path.DirectorySeparatorChar + filename;
+                    }
+                    else
+                    {
+                        // keep the last 30 chars
+                        content = "..." + content.Substring(content.Length - 30);
+                    }
+                }
+            }
+            SetText(content, Color.white);
         }
     }
 }

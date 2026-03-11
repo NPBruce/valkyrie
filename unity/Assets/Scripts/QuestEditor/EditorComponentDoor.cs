@@ -35,11 +35,11 @@ public class EditorComponentDoor : EditorComponentEvent
         doorComponent = component as QuestData.Door;
 
         UIElement ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(0, offset, 6, 1);
+        ui.SetLocation(0, offset, 4, 1);
         ui.SetText(new StringKey("val", "X_COLON", new StringKey("val", "ROTATION")));
 
         ui = new UIElement(Game.EDITOR, scrollArea.GetScrollTransform());
-        ui.SetLocation(6, offset, 3, 1);
+        ui.SetLocation(4, offset, 3, 1);
         ui.SetText(doorComponent.rotation.ToString() + "˚");
         ui.SetButton(delegate { Rotate(); });
         new UIElementBorder(ui);

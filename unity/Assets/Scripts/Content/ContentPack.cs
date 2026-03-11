@@ -11,6 +11,7 @@ namespace Assets.Scripts.Content
     {
         public string name;
         public string image;
+        public string icon;
         public string description;
         public string id;
         public string type;

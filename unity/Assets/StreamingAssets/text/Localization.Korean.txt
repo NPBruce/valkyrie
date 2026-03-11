@@ -1,5 +1,10 @@
 .,Korean
 // ICONS
+CUSTOM_IMAGE,사용자 지정 이미지
+ORIGINAL,원본
+IMAGE_PLACE,이미지 배치
+IMAGE_PLACE_SIZE,이미지 배치 크기
+
 ICON_SKILL_STRENGTH,
 ICON_SKILL_AGILITY,
 ICON_SKILL_OBSERVATION,
@@ -27,7 +32,7 @@ ABILITY,능력
 ABOUT,만든이
 ABOUT_FFG,Valkyrie는 Fantasy Flight Games' Descent: Road to Legend에서 영감을 얻어 만들어진 던전마스터(핼퍼)툴 입니다. FFG applications에서 가져온 이미지(사진)들은 FFG와 저작권 소유자에 의해 보호받고 있습니다.
 언어, 깃발들은 www.flaticon.com 의 Freepik에 의해서 만들어졌습니다.
-ABOUT_LIBS,Valkyrie는 gkngkc의 DotNetZip-For-Unity, UnityStandaloneFileBrowser 를 사용하고 있으며 Unity Studio and .NET Ogg Vorbis Encoder에서 파생된 코드를 포함하고 있습니다.
+ABOUT_LIBS,Valkyrie는 DotNetZip-For-Unity, yasirkula의 NativeFilePicker를 사용하고 있으며 Unity Studio and .NET Ogg Vorbis Encoder에서 파생된 코드를 포함하고 있습니다.
 ACTIONS,액션
 ACTIVATED,활성됨
 ACTIVATION,활성화
@@ -161,7 +166,7 @@ OP,Op
 OPTIONS,옵션
 PLACEMENT,놓기
 
-PLACE_IMG,이미지 조각:
+PLACE_IMG,이미지 조각
 POOL_TRAITS,풀 속성:
 POSITION,위치
 POSITION_TYPE_HIGHLIGHT,하이라이트
@@ -663,6 +668,8 @@ FULLSCREEN,전체 화면
 ON,켜기
 OFF,끄기
 EXPORT_LOG,로그 내보내기
+ADVANCED_OPTIONS,고급 옵션
+VIEW_LOCK,시나리오 카메라 자동 이동 차단
 
 LOADINGSCENARIOS,시나리오 로딩 중...
 LOADINGCONTENTPACKS,콘텐츠 팩 로딩 중...
@@ -684,3 +691,11 @@ SELECT_GAME_TYPE,게임 유형 선택
 SEARCH_BY_NAME,이름으로 검색...
 
 SEARCH_BY_ID,ID로 검색...
+
+DEFAULT,Default
+SMALL,소형
+MEDIUM,중형
+HUGE,대형
+MASSIVE,무거운
+
+CUSTOM_IMAGE,사용자 지정 이미지

@@ -38,26 +38,28 @@ namespace Assets.Scripts.Content
         /// <returns>true if the quest is valid</returns>
         public bool Populate(Dictionary<string, string> iniData)
         {
+            const string keyName = "name.";
             languages_name = new Dictionary<string, string>();
-            if (iniData.ContainsKey("name." + defaultLanguage))
+            if (iniData.ContainsKey(keyName + defaultLanguage))
             {
                 foreach (KeyValuePair<string, string> kv in iniData)
                 {
-                    if (kv.Key.Contains("name."))
+                    if (kv.Key.StartsWith(keyName))
                     {
-                        languages_name.Add(kv.Key.Substring(5), kv.Value);
+                        languages_name.Add(kv.Key.Substring(keyName.Length), kv.Value);
                     }
                 }
             }
 
+            const string keyDescription = "description.";
             languages_description = new Dictionary<string, string>();
-            if (iniData.ContainsKey("description." + defaultLanguage))
+            if (iniData.ContainsKey(keyDescription + defaultLanguage))
             {
                 foreach (KeyValuePair<string, string> kv in iniData)
                 {
-                    if (kv.Key.Contains("description."))
+                    if (kv.Key.StartsWith(keyDescription))
                     {
-                        languages_description.Add(kv.Key.Substring(5), kv.Value);
+                        languages_description.Add(kv.Key.Substring(keyDescription.Length), kv.Value);
                     }
                 }
             }
@@ -123,6 +125,40 @@ namespace Assets.Scripts.Content
             }
 
             return r.ToString();
+        }
+
+        public string GetTitle(string userLanguage)
+        {
+            if (languages_name.ContainsKey(userLanguage))
+            {
+                return languages_name[userLanguage];
+            }
+            if (languages_name.ContainsKey(defaultLanguage))
+            {
+                return languages_name[defaultLanguage];
+            }
+            if (languages_name.Count > 0)
+            {
+                return languages_name.First().Value;
+            }
+            return "";
+        }
+
+        public string GetDescription(string userLanguage)
+        {
+            if (languages_description.ContainsKey(userLanguage))
+            {
+                return languages_description[userLanguage];
+            }
+            if (languages_description.ContainsKey(defaultLanguage))
+            {
+                return languages_description[defaultLanguage];
+            }
+            if (languages_description.Count > 0)
+            {
+                return languages_description.First().Value;
+            }
+            return "";
         }
     }
 }

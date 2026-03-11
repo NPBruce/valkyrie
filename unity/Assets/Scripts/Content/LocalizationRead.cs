@@ -298,7 +298,26 @@ namespace Assets.Scripts.Content
         /// <returns>void</returns>
         public static void AddDictionary(string name, DictionaryI18n dict)
         {
-            dicts[name] = dict;
+            if (dicts.ContainsKey(name) && dicts[name] != null)
+            {
+                dicts[name].AddData(dict);
+            }
+            else
+            {
+                dicts[name] = dict;
+            }
+        }
+
+        /// <summary>
+        /// Remove a dictionary
+        /// </summary>
+        /// <param name="name">dictionary name</param>
+        public static void RemoveDictionary(string name)
+        {
+            if (dicts.ContainsKey(name))
+            {
+                dicts.Remove(name);
+            }
         }
 
         /// <summary>

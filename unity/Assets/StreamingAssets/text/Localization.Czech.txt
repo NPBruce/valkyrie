@@ -1,6 +1,11 @@
 .,Czech
 // Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
 // ICONS
+CUSTOM_IMAGE,Vlastní obrázek
+ORIGINAL,Původní
+IMAGE_PLACE,Umístění obrázku
+IMAGE_PLACE_SIZE,Velikost umístění obrázku
+
 ICON_SKILL_STRENGTH,
 ICON_SKILL_AGILITY,
 ICON_SKILL_OBSERVATION,
@@ -27,7 +32,7 @@ ICON_PRODUCT_MAD28,
 ABILITY,Schopnost
 ABOUT,O aplikaci
 ABOUT_FFG,Valkyrie je pomocná aplikace Pána Zla, inspirována hrou od Fantasy Flight Games, Descent: Road to Legend.  Většina obrázků je importována z FFG aplikace a pod copyrightem FFG a dalších držitelů práv a ochranných známek. Vlaječky jazyků pocházejí od Freepik z www.flaticon.com.
-ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity,  UnityStandaloneFileBrowser z gkngkc a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
+ABOUT_LIBS,Valkyrie využívá DotNetZip-For-Unity, NativeFilePicker od yasirkula a má kód vycházející z Unity Studio a .NET Ogg Vorbis Encoder.
 ACTIONS,Akce
 ACTIVATED,Aktivován
 ACTIVATION,Aktivace
@@ -163,7 +168,7 @@ OP,Op
 OPTIONS,Volby
 PLACEMENT,Umístění
 
-PLACE_IMG,Umístit obrázek:
+PLACE_IMG,Umístit obrázek
 POOL_TRAITS,Výběr vlastností:
 POSITION,Pozice
 POSITION_TYPE_HIGHLIGHT,Zvýraznění
@@ -670,6 +675,8 @@ FULLSCREEN,Celá obrazovka
 ON,Zapnuto
 OFF,Vypnuto
 EXPORT_LOG,Exportovat log
+ADVANCED_OPTIONS,Pokročilé možnosti
+VIEW_LOCK,Blokovat automatický pohyb kamery scénáře
 
 LOADINGSCENARIOS,Načítání scénářů...
 LOADINGCONTENTPACKS,Načítání balíčků obsahu...
@@ -691,3 +698,11 @@ SELECT_GAME_TYPE,Vybrat typ hry
 SEARCH_BY_NAME,Hledat podle názvu...
 
 SEARCH_BY_ID,Hledat podle ID...
+
+DEFAULT,Default
+SMALL,Small
+MEDIUM,Medium
+HUGE,Huge
+MASSIVE,Massive
+
+CUSTOM_IMAGE,Vlastní obrázek
