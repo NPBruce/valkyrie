@@ -286,5 +286,14 @@ const TRANSLATIONS = {
         'Italian': 'Clicca su uno scenario per visualizzare una descrizione dettagliata dello scenario.',
         'Polish': 'Kliknij scenariusz, aby zobaczyć szczegółowy opis scenariusza.',
         'Portuguese': 'Clique em um cenário para ver uma descrição detalhada do cenário.'
+    },
+    'LabelSupportedPlayerCount': {
+        'English': 'Supported Player count',
+        'German': 'Unterstützte Spieleranzahl',
+        'Spanish': 'Cant. de Jugadores Soportada',
+        'French': 'Nombre de Joueurs Supporté',
+        'Italian': 'Numero di Giocatori Supportato',
+        'Polish': 'Obsługiwana Liczba Graczy',
+        'Portuguese': 'Nº de Jogadores Suportado'
     }
 };

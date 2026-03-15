@@ -490,7 +490,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 avgDuration: params.get('avg_duration') || '',
                 minPlayCount: params.get('min_play_count') || '',
                 minPlayers: params.get('min_players') || '',
-                maxPlayers: params.get('max_players') || ''
+                maxPlayers: params.get('max_players') || '',
+                supportedPlayers: params.get('supported_players') || ''
             };
         };
 
@@ -513,7 +514,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     avgDuration: initialParams.avgDuration,
                     minPlayCount: initialParams.minPlayCount,
                     minPlayers: initialParams.minPlayers,
-                    maxPlayers: initialParams.maxPlayers
+                    maxPlayers: initialParams.maxPlayers,
+                    supportedPlayers: initialParams.supportedPlayers
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -535,7 +537,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     avgDuration: initialParams.avgDuration,
                     minPlayCount: initialParams.minPlayCount,
                     minPlayers: initialParams.minPlayers,
-                    maxPlayers: initialParams.maxPlayers
+                    maxPlayers: initialParams.maxPlayers,
+                    supportedPlayers: initialParams.supportedPlayers
                 },
                 sort: {
                     field: initialParams.sortField,
@@ -559,6 +562,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (s.filters.minWinRatio) params.set('min_win_ratio', s.filters.minWinRatio);
             if (s.filters.avgDuration) params.set('avg_duration', s.filters.avgDuration);
             if (s.filters.minPlayCount) params.set('min_play_count', s.filters.minPlayCount);
+            if (s.filters.minPlayers) params.set('min_players', s.filters.minPlayers);
+            if (s.filters.maxPlayers) params.set('max_players', s.filters.maxPlayers);
+            if (s.filters.supportedPlayers) params.set('supported_players', s.filters.supportedPlayers);
 
             if (s.sort.field !== 'last_updated') params.set('sort', s.sort.field);
             if (s.sort.dir !== 'desc') params.set('sort_direction', s.sort.dir);
@@ -708,6 +714,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
+            // Supported Players
+            if (s.filters.supportedPlayers) {
+                const suppP = parseInt(s.filters.supportedPlayers);
+                filtered = filtered.filter(item => {
+                    const minHero = item.minhero ? parseInt(item.minhero) : (type === 'MOM' ? 1 : 2);
+                    const maxHero = item.maxhero ? parseInt(item.maxhero) : (type === 'MOM' ? 5 : 4);
+                    return minHero <= suppP && suppP <= maxHero;
+                });
+            }
+
             // Sorting
             filtered.sort((a, b) => {
                 let valA, valB;
@@ -764,6 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (s.filters.minPlayCount) params.set('min_play_count', s.filters.minPlayCount);
             if (s.filters.minPlayers) params.set('min_players', s.filters.minPlayers);
             if (s.filters.maxPlayers) params.set('max_players', s.filters.maxPlayers);
+            if (s.filters.supportedPlayers) params.set('supported_players', s.filters.supportedPlayers);
 
             if (s.sort.field !== 'last_updated') params.set('sort', s.sort.field);
             if (s.sort.dir !== 'desc') params.set('sort_direction', s.sort.dir);
@@ -859,6 +876,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const lblPlayCountTooltip = getTransitionLabel('PlayCountTooltip', userLang);
             const lblMinPlayerCount = getTransitionLabel('LabelMinPlayerCount', userLang);
             const lblMaxPlayerCount = getTransitionLabel('LabelMaxPlayerCount', userLang);
+            const lblSupportedPlayerCount = getTransitionLabel('LabelSupportedPlayerCount', userLang);
 
             // Calculate Avg Duration Options (30+, 60+ ... 600+)
             let avgDurOptions = `<option value="">${lblAny}</option>`;
@@ -970,6 +988,19 @@ document.addEventListener('DOMContentLoaded', function () {
             row2.className = 'd-flex flex-wrap align-items-center mt-3 pt-3 border-top filter-row-gap filter-separator';
 
             row2.innerHTML = `
+                <!--Supported Player Count-->
+                <div class="d-flex flex-column">
+                    <label class="mb-1 text-muted small">${lblSupportedPlayerCount}</label>
+                    <select class="form-control form-control-sm bg-secondary text-light border-0 filter-supported-players">
+                        <option value="">${lblAny}</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
                 <!--Min Player Count-->
                 <div class="d-flex flex-column">
                     <label class="mb-1 text-muted small">${lblMinPlayerCount}</label>
@@ -1084,12 +1115,13 @@ document.addEventListener('DOMContentLoaded', function () {
             safeSetValue('.filter-language', state[type].filters.language);
             safeSetValue('.filter-author', state[type].filters.author);
 
-            filterBar.querySelector('.filter-min-rating').value = state[type].filters.minRating;
-            filterBar.querySelector('.filter-min-win-ratio').value = state[type].filters.minWinRatio;
-            filterBar.querySelector('.filter-avg-duration').value = state[type].filters.avgDuration;
-            filterBar.querySelector('.filter-min-play-count').value = state[type].filters.minPlayCount;
-            filterBar.querySelector('.filter-min-players').value = state[type].filters.minPlayers;
-            filterBar.querySelector('.filter-max-players').value = state[type].filters.maxPlayers;
+            safeSetValue('.filter-min-rating', state[type].filters.minRating);
+            safeSetValue('.filter-min-win-ratio', state[type].filters.minWinRatio);
+            safeSetValue('.filter-avg-duration', state[type].filters.avgDuration);
+            safeSetValue('.filter-min-play-count', state[type].filters.minPlayCount);
+            safeSetValue('.filter-min-players', state[type].filters.minPlayers);
+            safeSetValue('.filter-max-players', state[type].filters.maxPlayers);
+            safeSetValue('.filter-supported-players', state[type].filters.supportedPlayers);
 
             // Helper to safely add listener
             const safeAddListener = (selector, event, callback) => {
@@ -1142,6 +1174,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             safeAddListener('.filter-max-players', 'change', (e) => {
                 state[type].filters.maxPlayers = e.target.value;
+                applyFilters(type, userLang);
+            });
+
+            safeAddListener('.filter-supported-players', 'change', (e) => {
+                state[type].filters.supportedPlayers = e.target.value;
                 applyFilters(type, userLang);
             });
 
@@ -1305,7 +1342,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 avgDuration: '',
                 minPlayCount: '',
                 minPlayers: '',
-                maxPlayers: ''
+                maxPlayers: '',
+                supportedPlayers: ''
             };
             // Reset Sort
             state[type].sort = {
@@ -1319,21 +1357,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if (listContainer && listContainer.parentElement) {
                 const filterBar = listContainer.parentElement.querySelector('.filter-bar');
                 if (filterBar) {
-                    filterBar.querySelector('.filter-search').value = '';
-                    filterBar.querySelector('.filter-duration').value = '';
-                    filterBar.querySelector('.filter-difficulty').value = '';
-                    filterBar.querySelector('.filter-language').value = '';
-                    filterBar.querySelector('.filter-author').value = '';
-                    filterBar.querySelector('.filter-min-rating').value = '';
-                    filterBar.querySelector('.filter-min-win-ratio').value = '';
-                    filterBar.querySelector('.filter-avg-duration').value = '';
-                    filterBar.querySelector('.filter-avg-duration').value = '';
-                    filterBar.querySelector('.filter-avg-duration').value = '';
-                    filterBar.querySelector('.filter-min-play-count').value = '';
-                    filterBar.querySelector('.filter-min-players').value = '';
-                    filterBar.querySelector('.filter-max-players').value = '';
-                    filterBar.querySelector('.filter-min-players').value = '';
-                    filterBar.querySelector('.filter-max-players').value = '';
+                    const safeReset = (sel) => {
+                        const el = filterBar.querySelector(sel);
+                        if (el) el.value = '';
+                    };
+
+                    safeReset('.filter-search');
+                    safeReset('.filter-duration');
+                    safeReset('.filter-difficulty');
+                    safeReset('.filter-language');
+                    safeReset('.filter-author');
+                    safeReset('.filter-min-rating');
+                    safeReset('.filter-min-win-ratio');
+                    safeReset('.filter-avg-duration');
+                    safeReset('.filter-min-play-count');
+                    safeReset('.filter-min-players');
+                    safeReset('.filter-max-players');
+                    safeReset('.filter-supported-players');
 
                     // Reset checkboxes
                     filterBar.querySelectorAll('.exp-checkbox').forEach(cb => cb.checked = false);
