@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Rendering ---
 
-    function renderScenarios(data, totalCount, containerId, lang = 'English') {
+    function renderScenarios(data, totalCount, containerId, lang = 'English', gameType = 'MOM') {
         const container = document.getElementById(containerId);
         if (!container) return;
 
@@ -279,6 +279,22 @@ document.addEventListener('DOMContentLoaded', function () {
                         const min = item.lengthmin || '?';
                         const max = item.lengthmax || '?';
 
+                        // Default heroes logic
+                        let minHero = item.minhero ? parseInt(item.minhero) : null;
+                        let maxHero = item.maxhero ? parseInt(item.maxhero) : null;
+                        
+                        if (minHero === null && maxHero === null) {
+                            if (gameType === 'MOM') {
+                                minHero = 1; maxHero = 5;
+                            } else {
+                                minHero = 2; maxHero = 4;
+                            }
+                        } else if (minHero === null) {
+                            minHero = gameType === 'MOM' ? 1 : 2;
+                        } else if (maxHero === null) {
+                            maxHero = gameType === 'MOM' ? 5 : 4;
+                        }
+
                         // Difficulty Stars
                         const diffStars = getHardwareStars(item.difficulty);
                         const diffLabel = getTransitionLabel('Difficulty', lang);
@@ -318,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <div class="d-flex flex-wrap align-items-center w-100">
                                         <div class="meta-item"><span title="${durationLabel}">${durationLabel}: ${min}-${max} min</span></div>
                                         <div class="meta-item"><span title="Difficulty">${diffLabel}: <span class="text-warning">${diffStars.filled}<span class="star-empty">${diffStars.empty}</span></span></span></div>
-                                        ${(item.minhero && item.maxhero) ? `<div class="meta-item"><span title="${labelPlayerCount}">${labelPlayerCount}: ${item.minhero}-${item.maxhero}</span></div>` : ''}
+                                        <div class="meta-item"><span title="${labelPlayerCount}">${labelPlayerCount}: ${minHero}-${maxHero}</span></div>
                                         <div class="meta-item"><span title="${authorsTitle}">${authorLabel}: ${authorsDisplay}</span></div>
                                         ${item.latest_update ? `<div class="meta-item"><span title="${updatedLabel}">${updatedLabel}: ${item.latest_update.split('T')[0]}</span></div>` : ''}
                                     </div>
@@ -675,10 +691,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (s.filters.minPlayers) {
                 const minP = parseInt(s.filters.minPlayers);
                 filtered = filtered.filter(item => {
-                    // Strict Subset: Scenario Min must be >= Filter Min
-                    // Default to 0 if missing, so 0 >= X fails (unless X is 0)
-                    const mp = item.minhero ? parseInt(item.minhero) : 0;
-                    return mp >= minP;
+                    // Scenario's minimum player requirement should match exactly to what user expects as lower bound,
+                    // or effectively, if user wants a minimum of 1 player games, it should exclusively be 1.
+                    // For filtering, it's most common people want the scenario's min to be exactly the filter's min.
+                    const mp = item.minhero ? parseInt(item.minhero) : (type === 'MOM' ? 1 : 2);
+                    return mp == minP;
                 });
             }
 
@@ -686,10 +703,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (s.filters.maxPlayers) {
                 const maxP = parseInt(s.filters.maxPlayers);
                 filtered = filtered.filter(item => {
-                    // Strict Subset: Scenario Max must be <= Filter Max
-                    // Default to 99 if missing, so 99 <= X fails
-                    const mp = item.maxhero ? parseInt(item.maxhero) : 99;
-                    return mp <= maxP;
+                    const mp = item.maxhero ? parseInt(item.maxhero) : (type === 'MOM' ? 5 : 4);
+                    return mp == maxP;
                 });
             }
 
@@ -757,7 +772,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             window.location.hash = params.toString();
 
-            renderScenarios(filtered, (s.data ? s.data.length : 0), `scenarios-${type.toLowerCase()}-list`, userLang);
+            renderScenarios(filtered, (s.data ? s.data.length : 0), `scenarios-${type.toLowerCase()}-list`, userLang, type);
 
             // Filter Content Packs List
             if (s.packs) {
