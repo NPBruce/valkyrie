@@ -42,16 +42,12 @@ assignees: ''
 
 <!--If the error occured on a Desktop computer (please complete the following information, otherwise delete this section):-->
 ### Desktop
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+ - OS: [e.g. windows, iOS]
 
 <!--If the error occured on a Smartphone / Tablet (please complete the following information, otherwise delete this section):-->
 ### Smartphone
  - Device: [e.g. iPhone6]
  - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
 
 <!--Add any other context about the problem here.-->
 ### Additional context

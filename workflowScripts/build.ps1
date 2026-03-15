@@ -309,17 +309,8 @@ function Create-Installer {
     param ([string]$Version)
 
     Write-Log "Creating Installer..."
-    $LastDigit = $Version.Substring($Version.Length - 1)
-    $Num = $LastDigit -as [int]
-
-    if ($Num -eq $LastDigit) {
-        Invoke-CommandChecked { makensis /DVERSION=$Version valkyrie.nsi } "Makensis Release failed"
-        Write-Log "Installer created (Release)."
-    }
-    else {
-        Invoke-CommandChecked { makensis /DVERSION=$Version /DPRERELEASE valkyrie.nsi } "Makensis Pre-release failed"
-        Write-Log "Installer created (Pre-release)."
-    }
+    Invoke-CommandChecked { makensis /DVERSION=$Version valkyrie.nsi } "Makensis Release failed"
+    Write-Log "Installer created (Release)."
 }
 
 # -----------------------------------------------------------------------------

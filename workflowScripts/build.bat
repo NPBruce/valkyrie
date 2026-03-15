@@ -251,15 +251,7 @@ if "%BUILD_LINUX%"=="true" (
 rem move apk
 IF EXIST android\test.apk move android\test.apk valkyrie-android-%OutputVersion%.apk
 
-set /a num=%version:~-1% 2>nul
-
 echo [%TIME%] Creating Installer...
-if "%num%"=="%version:~-1%" (
-    makensis /DVERSION=%OutputVersion% valkyrie.nsi
-    echo [%TIME%] Installer created (Release).
-    goto :EOF
-)
-
-makensis /DVERSION=%OutputVersion% /DPRERELEASE valkyrie.nsi
-echo [%TIME%] Installer created (Pre-release).
+makensis /DVERSION=%OutputVersion% valkyrie.nsi
+echo [%TIME%] Installer created (Release).
 echo [%TIME%] --- Build Process Complete ---
