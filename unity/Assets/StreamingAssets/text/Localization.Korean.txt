@@ -699,3 +699,7 @@ HUGE,대형
 MASSIVE,무거운
 
 CUSTOM_IMAGE,사용자 지정 이미지
+
+FALLBACK_LANG,대체 언어
+
+LANGUAGE,언어

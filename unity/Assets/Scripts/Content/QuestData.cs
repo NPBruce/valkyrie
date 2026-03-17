@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
@@ -118,6 +118,10 @@ public class QuestData
 
         // Reset scenario dict
         DictionaryI18n qstDict = new DictionaryI18n(game.currentLang);
+        if (!string.IsNullOrEmpty(game.fallbackLang))
+        {
+            qstDict.AddRequiredLanguage(game.fallbackLang);
+        }
         foreach (string file in localizationFiles)
         {
             qstDict.AddDataFromFile(file);

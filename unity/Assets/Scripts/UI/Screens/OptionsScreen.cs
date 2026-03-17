@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ValkyrieTools;
 using Assets.Scripts.Content;
+using Assets.Scripts.UI;
 
 namespace Assets.Scripts.UI.Screens
 {
@@ -16,7 +17,10 @@ namespace Assets.Scripts.UI.Screens
 
 
         private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
+        private readonly StringKey LANGUAGE = new StringKey("val", "LANGUAGE");
         private readonly StringKey CHOOSE_LANG = new StringKey("val", "CHOOSE_LANG");
+        private readonly StringKey FALLBACK_LANG = new StringKey("val", "FALLBACK_LANG");
+        private readonly StringKey NONE = new StringKey("val", "NONE");
         private readonly StringKey EFFECTS = new StringKey("val", "EFFECTS");
         private readonly StringKey MUSIC = new StringKey("val", "MUSIC");
         private readonly StringKey RESTART_TO_APPLY = new StringKey("val", "RESTART_TO_APPLY");
@@ -25,6 +29,20 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey OptionON = new StringKey("val", "ON");
         private readonly StringKey OptionOff = new StringKey("val", "OFF");
         private readonly StringKey ADVANCED_OPTIONS = new StringKey("val", "ADVANCED_OPTIONS");
+
+        // Grid constants
+        private const float LEFT_X = 2f;
+        private const float LEFT_W = 14f;
+        private const float RIGHT_X_OFFSET = 2f; // added to UIScaler.GetHCenter()
+        private const float RIGHT_W = 14f;
+        private const float ROW_LABEL_H = 2f;
+        private const float ROW_BTN_H = 2f;
+        private const float ROW_GAP = 1.5f;
+        private const float ROW_STRIDE = ROW_LABEL_H + ROW_BTN_H + ROW_GAP;  // 5.5f per row
+        private const float ROW0_Y = 2f;  // Language
+        private const float ROW1_Y = ROW0_Y + ROW_STRIDE;  // Fallback = 7.5f
+        private const float ROW2_Y = ROW1_Y + ROW_STRIDE;  // Resolution = 13f
+        private const float ROW3_Y = ROW2_Y + ROW_STRIDE;  // Fullscreen = 18.5f
 
         Game game = Game.Get();
 
@@ -53,6 +71,8 @@ namespace Assets.Scripts.UI.Screens
         {
 
             CreateLanguageElements();
+
+            CreateFallbackLanguageElements();
 
             CreateAudioElements();
 
@@ -83,92 +103,55 @@ namespace Assets.Scripts.UI.Screens
 
             Game game = Game.Get();
 
-            // Header
+            // === Resolution row (ROW2) ===
             UIElement ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 5, 12, 18, 2);
+            ui.SetLocation(LEFT_X, ROW2_Y, LEFT_W, ROW_LABEL_H);
             ui.SetText(RESOLUTION);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            // Prepare resolutions and find current index
             var resolutions = ResolutionManager.GetAvailableResolutions();
             int currentIndex = -1;
 
-            // Check config for pending resolution
             string configRes = game.config.data.Get("UserConfig", "resolution");
             if (!string.IsNullOrEmpty(configRes))
             {
                 string[] parts = configRes.Split('x');
                 if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h))
-                {
                     currentIndex = resolutions.FindIndex(r => r.width == w && r.height == h);
-                }
             }
-
-            // Fallback to current screen resolution if config is missing or invalid
             if (currentIndex < 0)
-            {
                 currentIndex = resolutions.FindIndex(r => r.width == Screen.width && r.height == Screen.height);
-            }
             if (currentIndex < 0) currentIndex = 0;
 
-            // Prev button
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 4, 14, 3, 2);
-            ui.SetText("<");
-            ui.SetButton(delegate
-            {
-                DecreaseResolution(game, resolutions, currentIndex);
-            });
-            new UIElementBorder(ui);
-
-            // Current resolution display (center)
+            // Current resolution button — click to open selection modal
             var cur = resolutions[currentIndex];
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 1, 14, 10, 2);
+            ui.SetLocation(LEFT_X, ROW2_Y + ROW_LABEL_H, LEFT_W, ROW_BTN_H);
             ui.SetText($"{cur.width} x {cur.height}");
             ui.SetFontSize(UIScaler.GetMediumFont());
-            new UIElementBorder(ui);
-
-            // Next button
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() + 9, 14, 3, 2);
-            ui.SetText(">");
-            ui.SetButton(delegate
-            {
-                IncreaseResolution(game, resolutions, currentIndex);
-            });
+            ui.SetButton(delegate { OpenResolutionSelection(game, resolutions, currentIndex); });
             new UIElementBorder(ui);
 
             // Restart warning
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 5, 16.5f, 18, 2);
+            ui.SetLocation(LEFT_X, ROW2_Y + ROW_LABEL_H + ROW_BTN_H, LEFT_W, 1.2f);
             ui.SetText(RESTART_TO_APPLY, Color.red);
             ui.SetFont(game.gameType.GetFont());
             ui.SetFontSize(UIScaler.GetSmallFont());
 
-            // Fullscreen toggle label
+            // === Fullscreen row (ROW3) ===
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 4, 19, 16, 2);
+            ui.SetLocation(LEFT_X, ROW3_Y, LEFT_W, ROW_LABEL_H);
             ui.SetText(FULLSCREEN);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            // Fullscreen toggle button (On / Off)
-            // Check config for pending fullscreen state
             string configFs = game.config.data.Get("UserConfig", "fullscreen");
-            bool isFs;
-            if (!string.IsNullOrEmpty(configFs))
-            {
-                isFs = configFs == "1";
-            }
-            else
-            {
-                isFs = ResolutionManager.IsFullscreen();
-            }
+            bool isFs = !string.IsNullOrEmpty(configFs) ? configFs == "1" : ResolutionManager.IsFullscreen();
 
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() + 1, 21, 6, 2);
+            ui.SetLocation(LEFT_X, ROW3_Y + ROW_LABEL_H, LEFT_W, ROW_BTN_H);
             ui.SetText(isFs ? OptionON : OptionOff);
             ui.SetButton(delegate
             {
@@ -178,32 +161,43 @@ namespace Assets.Scripts.UI.Screens
                 game.config.Save();
                 new OptionsScreen();
             });
-            if (isFs)
-                new UIElementBorder(ui, Color.white);
-            else
-                new UIElementBorder(ui, Color.grey);
+            new UIElementBorder(ui, isFs ? Color.white : Color.grey);
         }
 
-        private static void IncreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
+        private static void OpenResolutionSelection(Game game, List<Resolution> resolutions, int currentIndex)
         {
-            int idx = (currentIndex + 1) % resolutions.Count;
-            var r = resolutions[idx];
-            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
-            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
-            game.config.Save();
-            ScheduleOptionsScreenReload();
+            UIWindowSelectionList selection = new UIWindowSelectionList(
+                delegate(string result)
+                {
+                    if (result != null)
+                    {
+                        game.config.data.Add("UserConfig", "resolution", result);
+                        game.config.Save();
+                        Game.Get().StartCoroutine(ReloadOptionsScreenNextFrame());
+                    }
+                    else
+                    {
+                        new OptionsScreen();
+                    }
+                },
+                "",
+                callAfterCancel: true,
+                showSortButtons: false
+            );
+
+            string configRes = game.config.data.Get("UserConfig", "resolution");
+            foreach (var r in resolutions)
+            {
+                string key = $"{r.width}x{r.height}";
+                string display = $"{r.width} x {r.height}";
+                bool isSelected = key == configRes
+                    || (string.IsNullOrEmpty(configRes) && r.width == Screen.width && r.height == Screen.height);
+                selection.AddItem(display, key, isSelected ? Color.green : Color.white);
+            }
+
+            selection.Draw();
         }
 
-        private static void DecreaseResolution(Game game, List<Resolution> resolutions, int currentIndex)
-        {
-            int idx = (currentIndex - 1 + resolutions.Count) % resolutions.Count;
-            var r = resolutions[idx];
-            // ResolutionManager.SetResolution(r.width, r.height, ResolutionManager.IsFullscreen()); // Defer to restart
-            // persist choice to config (optional)
-            game.config.data.Add("UserConfig", "resolution", $"{r.width}x{r.height}");
-            game.config.Save();
-            ScheduleOptionsScreenReload();
-        }
 
         private void CreateAdvancedOptionsElements()
         {
@@ -220,8 +214,11 @@ namespace Assets.Scripts.UI.Screens
 
         private void CreateAudioElements()
         {
+            float rightX = UIScaler.GetHCenter() + RIGHT_X_OFFSET;
+
+            // === Music row (ROW0 on right) ===
             UIElement ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 1, 4, 10, 2);
+            ui.SetLocation(rightX, ROW0_Y, RIGHT_W, ROW_LABEL_H);
             ui.SetText(MUSIC);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -231,8 +228,9 @@ namespace Assets.Scripts.UI.Screens
             float.TryParse(vSet, out mVolume);
             if (vSet.Length == 0) mVolume = 1;
 
+            float musicBtnY = ROW0_Y + ROW_LABEL_H;
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 3, 6f, 14, 2);
+            ui.SetLocation(rightX, musicBtnY, RIGHT_W, ROW_BTN_H);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -241,8 +239,8 @@ namespace Assets.Scripts.UI.Screens
             musicSlideObj.transform.SetParent(game.uICanvas.transform);
             musicSlide = musicSlideObj.AddComponent<Slider>();
             RectTransform musicSlideRect = musicSlideObj.GetComponent<RectTransform>();
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetHCenter() - 3) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, musicBtnY * UIScaler.GetPixelsPerUnit(), ROW_BTN_H * UIScaler.GetPixelsPerUnit());
+            musicSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, rightX * UIScaler.GetPixelsPerUnit(), RIGHT_W * UIScaler.GetPixelsPerUnit());
             musicSlide.onValueChanged.AddListener(delegate { UpdateMusic(); });
 
             GameObject musicFill = new GameObject("musicfill");
@@ -254,14 +252,13 @@ namespace Assets.Scripts.UI.Screens
             musicSlide.fillRect.offsetMin = Vector2.zero;
             musicSlide.fillRect.offsetMax = Vector2.zero;
 
-            // Double slide is a hack because I can't get a click in the space to work otherwise
             GameObject musicSlideObjRev = new GameObject("musicSlideRev");
             musicSlideObjRev.tag = Game.DIALOG;
             musicSlideObjRev.transform.SetParent(game.uICanvas.transform);
             musicSlideRev = musicSlideObjRev.AddComponent<Slider>();
             RectTransform musicSlideRectRev = musicSlideObjRev.GetComponent<RectTransform>();
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 6f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetHCenter() - 3) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, musicBtnY * UIScaler.GetPixelsPerUnit(), ROW_BTN_H * UIScaler.GetPixelsPerUnit());
+            musicSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, rightX * UIScaler.GetPixelsPerUnit(), RIGHT_W * UIScaler.GetPixelsPerUnit());
             musicSlideRev.onValueChanged.AddListener(delegate { UpdateMusicRev(); });
             musicSlideRev.direction = Slider.Direction.RightToLeft;
 
@@ -274,12 +271,12 @@ namespace Assets.Scripts.UI.Screens
             musicSlideRev.fillRect.offsetMin = Vector2.zero;
             musicSlideRev.fillRect.offsetMax = Vector2.zero;
 
-
             musicSlide.value = mVolume;
             musicSlideRev.value = 1 - mVolume;
 
+            // === Effects row (ROW1 on right) ===
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 1, 8f, 10, 2);
+            ui.SetLocation(rightX, ROW1_Y, RIGHT_W, ROW_LABEL_H);
             ui.SetText(EFFECTS);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -289,8 +286,9 @@ namespace Assets.Scripts.UI.Screens
             float.TryParse(vSet, out eVolume);
             if (vSet.Length == 0) eVolume = 1;
 
+            float effectBtnY = ROW1_Y + ROW_LABEL_H;
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 3, 10f, 14, 2);
+            ui.SetLocation(rightX, effectBtnY, RIGHT_W, ROW_BTN_H);
             ui.SetBGColor(Color.clear);
             new UIElementBorder(ui);
 
@@ -299,8 +297,8 @@ namespace Assets.Scripts.UI.Screens
             effectSlideObj.transform.SetParent(game.uICanvas.transform);
             effectSlide = effectSlideObj.AddComponent<Slider>();
             RectTransform effectSlideRect = effectSlideObj.GetComponent<RectTransform>();
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 10f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetHCenter() - 3) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, effectBtnY * UIScaler.GetPixelsPerUnit(), ROW_BTN_H * UIScaler.GetPixelsPerUnit());
+            effectSlideRect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, rightX * UIScaler.GetPixelsPerUnit(), RIGHT_W * UIScaler.GetPixelsPerUnit());
             effectSlide.onValueChanged.AddListener(delegate { UpdateEffects(); });
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerUp;
@@ -316,14 +314,13 @@ namespace Assets.Scripts.UI.Screens
             effectSlide.fillRect.offsetMin = Vector2.zero;
             effectSlide.fillRect.offsetMax = Vector2.zero;
 
-            // Double slide is a hack because I can't get a click in the space to work otherwise
             GameObject effectSlideObjRev = new GameObject("effectSlideRev");
             effectSlideObjRev.tag = Game.DIALOG;
             effectSlideObjRev.transform.SetParent(game.uICanvas.transform);
             effectSlideRev = effectSlideObjRev.AddComponent<Slider>();
             RectTransform effectSlideRectRev = effectSlideObjRev.GetComponent<RectTransform>();
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 10f * UIScaler.GetPixelsPerUnit(), 2 * UIScaler.GetPixelsPerUnit());
-            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (UIScaler.GetHCenter() - 3) * UIScaler.GetPixelsPerUnit(), 14 * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, effectBtnY * UIScaler.GetPixelsPerUnit(), ROW_BTN_H * UIScaler.GetPixelsPerUnit());
+            effectSlideRectRev.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, rightX * UIScaler.GetPixelsPerUnit(), RIGHT_W * UIScaler.GetPixelsPerUnit());
             effectSlideRev.onValueChanged.AddListener(delegate { UpdateEffectsRev(); });
             effectSlideRev.direction = Slider.Direction.RightToLeft;
             effectSlideObjRev.AddComponent<EventTrigger>().triggers.Add(entry);
@@ -341,62 +338,115 @@ namespace Assets.Scripts.UI.Screens
             effectSlideRev.value = 1 - eVolume;
         }
 
-
         /// <summary>
         /// Method to create language UI elements in the screen
         /// </summary>
-        /// <param name="game">current game</param>
         private void CreateLanguageElements()
         {
-            // Select langauge text
+            // === Language row (ROW0 on left) ===
             UIElement ui = new UIElement();
-            ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 11, 2, 18, 2);
-            ui.SetText(CHOOSE_LANG);
+            ui.SetLocation(LEFT_X, ROW0_Y, LEFT_W, ROW_LABEL_H);
+            ui.SetText(LANGUAGE);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
 
-            // The list of languages is determined by FFG languages for MoM
-            // In D2E there is an additional language
-            // It can change in future
-
-            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese,Ukrainian".Split(','); // Japanese removed to fit into screen
-            // For now, the languages below are available.
-            HashSet<string> enabled_langs = ENABLED_LANGS;
-
-            //The first button in the list of buttons should start in this vertical coordinate
-            float verticalStart = UIScaler.GetVCenter(-2.5f) - langs.Length + 4f;
-            int languageFontSize = (int)Math.Round(UIScaler.GetMediumFont() * 0.9f);
-
-            for (int i = 0; i < langs.Length; i++)
-            {
-                int position = i + 1;
-                // Need current index in order to delegate not point to loop for variable
-                string currentLanguage = langs[i];
-
-                ui = new UIElement();
-                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (1.6f * position), 8, 1.4f);
-                if (!enabled_langs.Contains(currentLanguage))
-                {
-                    ui.SetText(currentLanguage, Color.red);
-                    new UIElementBorder(ui, Color.red);
-                }
-                else
-                {
-                    ui.SetButton(delegate { SelectLang(currentLanguage); });
-                    if (currentLanguage == game.currentLang)
-                    {
-                        ui.SetText(currentLanguage);
-                        new UIElementBorder(ui);
-                    }
-                    else
-                    {
-                        ui.SetText(currentLanguage, Color.grey);
-                        new UIElementBorder(ui, Color.grey);
-                    }
-                }
-                ui.SetFontSize(languageFontSize);
-            }
+            ui = new UIElement();
+            ui.SetLocation(LEFT_X, ROW0_Y + ROW_LABEL_H, LEFT_W, ROW_BTN_H);
+            ui.SetText(game.currentLang);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(OpenLanguageSelection);
+            new UIElementBorder(ui);
         }
+
+        private void OpenLanguageSelection()
+        {
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese,Ukrainian".Split(',');
+            Array.Sort(langs);
+
+            UIWindowSelectionList selection = new UIWindowSelectionList(
+                delegate(string result)
+                {
+                    if (result != null)
+                        SelectLang(result);
+                    else
+                        new OptionsScreen();
+                },
+                CHOOSE_LANG,
+                callAfterCancel: true,
+                showSortButtons: false
+            );
+
+            foreach (string lang in langs)
+            {
+                selection.AddItem(lang, lang, lang == game.currentLang ? Color.green : Color.white);
+            }
+
+            selection.Draw();
+        }
+
+        /// <summary>
+        /// Method to create fallback language UI elements in the screen
+        /// </summary>
+        private void CreateFallbackLanguageElements()
+        {
+            // === Fallback Language row (ROW1 on left) ===
+            UIElement ui = new UIElement();
+            ui.SetLocation(LEFT_X, ROW1_Y, LEFT_W, ROW_LABEL_H);
+            ui.SetText(FALLBACK_LANG);
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            string currentFallback = game.fallbackLang ?? string.Empty;
+            string displayLabel = string.IsNullOrEmpty(currentFallback) ? NONE.Translate() : currentFallback;
+            Color displayColor = string.IsNullOrEmpty(currentFallback) ? Color.grey : Color.white;
+
+            ui = new UIElement();
+            ui.SetLocation(LEFT_X, ROW1_Y + ROW_LABEL_H, LEFT_W, ROW_BTN_H);
+            ui.SetText(displayLabel, displayColor);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(OpenFallbackLangSelection);
+            new UIElementBorder(ui, displayColor);
+        }
+
+        private void OpenFallbackLangSelection()
+        {
+            string[] allLangs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese,Ukrainian".Split(',');
+            Array.Sort(allLangs);
+
+            UIWindowSelectionList selection = new UIWindowSelectionList(
+                delegate(string result)
+                {
+                    if (result != null)
+                        SelectFallbackLang(result == "\x00none" ? string.Empty : result);
+                    else
+                        new OptionsScreen();
+                },
+                FALLBACK_LANG,
+                callAfterCancel: true,
+                showSortButtons: false
+            );
+
+            // "None" option always at top
+            selection.AddItem(NONE.Translate(), "\x00none", alwaysOnTop: true);
+
+            // All languages — no filtering
+            foreach (string lang in allLangs)
+            {
+                Color c = (lang == (game.fallbackLang ?? string.Empty)) ? Color.green : Color.white;
+                selection.AddItem(lang, lang, c);
+            }
+
+            selection.Draw();
+        }
+
+        private void SelectFallbackLang(string lang)
+        {
+            game.fallbackLang = lang;
+            game.config.data.Add("UserConfig", "fallbackLang", lang);
+            game.config.Save();
+            new OptionsScreen();
+        }
+
 
         private void UpdateMusic()
         {
@@ -443,10 +493,15 @@ namespace Assets.Scripts.UI.Screens
         /// <param name="langName"></param>
         private void SelectLang(string lang)
         {
-            // Set newn lang in UI...
             string newLang = lang;
 
-            // ... and in configuration
+            // If fallback is the same as the new main language, reset it to None (it would be redundant)
+            if (game.fallbackLang == newLang)
+            {
+                game.fallbackLang = string.Empty;
+                game.config.data.Add("UserConfig", "fallbackLang", string.Empty);
+            }
+
             game.config.data.Add("UserConfig", "currentLang", newLang);
             game.config.Save();
             game.currentLang = newLang;
@@ -458,6 +513,7 @@ namespace Assets.Scripts.UI.Screens
             // clear list of local quests to make sure we take the latest changes
             Game.Get().questsList.UnloadLocalQuests();
         }
+
 
 
         private static void ScheduleOptionsScreenReload()

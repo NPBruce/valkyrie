@@ -535,3 +535,7 @@ HUGE,Grand
 MASSIVE,Massif
 
 CUSTOM_IMAGE,Image personnalisée
+
+FALLBACK_LANG,Langue de repli
+
+LANGUAGE,Langue

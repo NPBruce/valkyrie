@@ -537,3 +537,6 @@ CUSTOM_IMAGE,Власне зображення
 ORIGINAL,Оригінал
 IMAGE_PLACE,Місце зображення
 IMAGE_PLACE_SIZE,Розмір місця зображення
+FALLBACK_LANG,Мова запасного варіанту
+
+LANGUAGE,Мова

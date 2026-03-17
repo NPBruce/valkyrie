@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,6 +39,17 @@ namespace Assets.Scripts.Content
             }
         }
 
+        public string fallbackLanguage
+        {
+            get => _fallbackLanguage;
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    AddRequiredLanguage(value);
+                _fallbackLanguage = value;
+            }
+        }
+
         private Dictionary<string, string> keyToGroup = new Dictionary<string, string>();
         private Dictionary<string, string> groupToLanguage = new Dictionary<string, string>();
         private HashSet<string> requiredLanguages = new HashSet<string> { ValkyrieConstants.DefaultLanguage };
@@ -53,6 +64,7 @@ namespace Assets.Scripts.Content
         protected bool loadedForEdit = false;
         private string _defaultLanguage = ValkyrieConstants.DefaultLanguage;
         private string _currentLanguage = ValkyrieConstants.DefaultLanguage;
+        private string _fallbackLanguage = string.Empty;
         private static readonly string DOUBLE_QUOTE = "\"";
         private static readonly string TRIPLE_ENCLOSING = "|||";
 
@@ -105,9 +117,15 @@ namespace Assets.Scripts.Content
         private void InitCurrentLanguage()
         {
             if (Game.Get() != null)
+            {
                 currentLanguage = Game.Get().currentLang;
+                fallbackLanguage = Game.Get().fallbackLang ?? string.Empty;
+            }
             else
+            {
                 currentLanguage = "English";
+                fallbackLanguage = string.Empty;
+            }
         }
 
         /// <summary>
@@ -488,6 +506,16 @@ namespace Assets.Scripts.Content
             if (data.ContainsKey(currentLanguage) && data[currentLanguage].TryGetValue(key, out string currentLanguageValue) && !string.IsNullOrWhiteSpace(currentLanguageValue))
             {
                 return Combine(currentLanguageValue, secondLanguageValue);
+            }
+
+            // Then check user-configured fallback language
+            if (!string.IsNullOrEmpty(fallbackLanguage)
+                && fallbackLanguage != currentLanguage
+                && data.ContainsKey(fallbackLanguage)
+                && data[fallbackLanguage].TryGetValue(key, out string fallbackLanguageValue)
+                && !string.IsNullOrWhiteSpace(fallbackLanguageValue))
+            {
+                return Combine(fallbackLanguageValue, secondLanguageValue);
             }
 
             // Then check default language

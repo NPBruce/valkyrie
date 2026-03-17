@@ -511,3 +511,7 @@ HUGE,Duży
 MASSIVE,Masywny
 
 CUSTOM_IMAGE,Niestandardowy obraz
+
+FALLBACK_LANG,Język alternatywny
+
+LANGUAGE,Język

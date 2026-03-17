@@ -733,3 +733,7 @@ HUGE,大型
 MASSIVE,巨大
 
 CUSTOM_IMAGE,カスタムイメージ
+
+FALLBACK_LANG,代替言語
+
+LANGUAGE,言語
