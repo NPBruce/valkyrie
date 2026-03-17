@@ -12,7 +12,7 @@ namespace Assets.Scripts.UI.Screens
     // Class for options menu
     public class OptionsScreen
     {
-        public static readonly HashSet<string> ENABLED_LANGS = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese".Split(','));
+        public static readonly HashSet<string> ENABLED_LANGS = new HashSet<string>("English,Spanish,French,Italian,German,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese,Ukrainian".Split(','));
 
 
         private readonly StringKey OPTIONS = new StringKey("val", "OPTIONS");
@@ -51,12 +51,6 @@ namespace Assets.Scripts.UI.Screens
         /// <param name="game">current game</param>
         private void CreateElements()
         {
-            // Options screen text
-            UIElement ui = new UIElement();
-            ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
-            ui.SetText(OPTIONS);
-            ui.SetFont(game.gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetLargeFont());
 
             CreateLanguageElements();
 
@@ -67,7 +61,7 @@ namespace Assets.Scripts.UI.Screens
             CreateAdvancedOptionsElements();
 
             // Button for back to main menu
-            ui = new UIElement();
+            UIElement ui = new UIElement();
             ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
             ui.SetText(CommonStringKeys.BACK, Color.red);
             ui.SetFont(game.gameType.GetHeaderFont());
@@ -155,7 +149,7 @@ namespace Assets.Scripts.UI.Screens
 
             // Fullscreen toggle label
             ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter() - 1, 19, 10, 2);
+            ui.SetLocation(UIScaler.GetHCenter() - 4, 19, 16, 2);
             ui.SetText(FULLSCREEN);
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
@@ -365,12 +359,13 @@ namespace Assets.Scripts.UI.Screens
             // In D2E there is an additional language
             // It can change in future
 
-            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese".Split(','); // Japanese removed to fit into screen
+            string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Korean,Czech,Japanese,Ukrainian".Split(','); // Japanese removed to fit into screen
             // For now, the languages below are available.
             HashSet<string> enabled_langs = ENABLED_LANGS;
 
             //The first button in the list of buttons should start in this vertical coordinate
-            float verticalStart = UIScaler.GetVCenter(-2f) - langs.Length + 1;
+            float verticalStart = UIScaler.GetVCenter(-2.5f) - langs.Length + 4f;
+            int languageFontSize = (int)Math.Round(UIScaler.GetMediumFont() * 0.9f);
 
             for (int i = 0; i < langs.Length; i++)
             {
@@ -379,7 +374,7 @@ namespace Assets.Scripts.UI.Screens
                 string currentLanguage = langs[i];
 
                 ui = new UIElement();
-                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (1.8f * position), 8, 1.6f);
+                ui.SetLocation((0.25f * UIScaler.GetWidthUnits()) - 6, verticalStart + (1.6f * position), 8, 1.4f);
                 if (!enabled_langs.Contains(currentLanguage))
                 {
                     ui.SetText(currentLanguage, Color.red);
@@ -399,7 +394,7 @@ namespace Assets.Scripts.UI.Screens
                         new UIElementBorder(ui, Color.grey);
                     }
                 }
-                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetFontSize(languageFontSize);
             }
         }
 

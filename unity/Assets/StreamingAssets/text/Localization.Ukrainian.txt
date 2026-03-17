@@ -1,0 +1,539 @@
+.,Ukrainian
+
+// TEXTS
+ABILITY,Здібність
+ABOUT,Про програму
+ABOUT_FFG,Valkyrie — це GameMaster для ігор Fantasy Flight Games, створений за мотивами Descent: Road to Legend. Більшість зображень імпортовано з додатків FFG і належать FFG та іншим правовласникам. Прапори мов створені Freepik з www.flaticon.com.
+ABOUT_LIBS,Valkyrie використовує DotNetZip-For-Unity, NativeFilePicker від yasirkula та код на основі Unity Studio та .NET Ogg Vorbis Encoder.
+ACTIONS,Дії
+ACTIVATED,Активовано
+ACTIVATION,Активація
+ACTIVATIONS,Активації
+ADD_COMPONENTS,Додати компоненти:
+COMPONENTS,Компоненти
+RENAME,Перейменувати
+SAVE_TEST,Зберегти та перевірити
+SOURCE,Джерело
+COMMENT,Коментар
+TRUE,Так
+FALSE,Ні
+SNAP,Сітка
+FREE,Вільно
+CONFIRM,Підтвердити
+INSPECT,Оглянути
+DURATION,Тривалість:
+DESCRIPTION,Опис
+AUTHORS,Автори
+DIFFICULTY,Складність:
+VALIDATE_SCENARIO,Перевірити
+FILE,Файл
+OPTIMIZE_LOCALIZATION,Оптимізувати локалізацію
+CREATE_PACKAGE,Створити пакет
+REORDER_COMPONENTS,Змінити порядок компонентів
+ASSIGN,Призначити
+ATTACK,Атака
+ATTACK_MESSAGE,Повідомлення атаки:
+AUDIO,Аудіо
+BACK,Назад
+BASE,База
+BUTTON,Кнопка
+BUTTONS,Кнопки
+CAMERA,Камера
+CANCEL,Скасувати
+CHOOSE_LANG,Обрати мову
+CLEAR_FIRE,Загасити вогонь
+COLOR,Колір
+COMPONENT_NAME,Назва компонента:
+COMPONENT_TO_DELETE,Компонент для видалення:
+CONTENT_IMPORTING,Імпорт...\nМоже зайняти кілька хвилин
+CONTENT_LOCATE,Вказати розташування гри
+CONTENT_INSTALL_VIA_STEAM,Встановити через Steam
+CONTENT_INSTALL_VIA_GOOGLEPLAY,Встановити через Google Play
+CONTINUE,Продовжити
+COPY,Копіювати
+CUSTOMMONSTER,Нестандартний монстр
+DEFAULTMUSICON,Увімкнути музику за замовчуванням
+ORIGINAL,Оригінал
+DEFAULT,За замовчуванням
+D2E_APP_NOT_FOUND,Не вдалося знайти Road to Legend
+D2E_HEROES_NAME,Герої
+D2E_HERO_NAME,Герой
+D2E_NAME,Descent: Подорожі в темряву (друга редакція)
+D2E_QUEST_NAME,Квест
+DEFEATED,Переможено
+DELETE,Видалити
+UPDATE,Оновити
+DIALOG,Діалог
+DOOR,Двері
+DOWNLOAD,Завантажити
+DOWNLOAD_LIST,Завантаження списку пакетів
+DOWNLOAD_PACKAGE,Завантаження пакета
+EFFECTS,Ефекти
+END_TURN,Кінець ходу
+ROUND,Раунд {0}
+EVADE,Ухилитися
+EVENT,Подія
+EXIT,Вихід
+FINISHED,Завершено
+FIRST,Перший
+FORCE_ACTIVATE,Примусова активація
+
+HEALTH,Здоров'я
+HEALTH_HERO,На героя
+HIGHLIGHT,Підсвітка
+HORROR_CHECK,Перевірка жаху
+AWARENESS,Пильність
+INFO,Інфо
+INFORMATION,Інформація
+INITIAL_MESSAGE,Початкове повідомлення:
+ITEM,Предмет
+QITEM,Квестовий предмет
+KO,Нокаут
+LOAD_QUEST,Продовжити
+LOG,Журнал
+SKILLS,Уміння
+ITEMS,Предмети
+ITEMS_SMALL,Предмети
+GOLD,Золото
+MAIN_MENU,Головне меню
+MAX,Макс
+MAX_X,Макс {0}
+MAX_CAM,Макс камери
+MENU,Меню
+MIN,Мін
+MIN_X,Мін {0}
+MIN_CAM,Мін камери
+MOM_APP_NOT_FOUND,Не вдалося знайти Mansions of Madness
+MOM_HEROES_NAME,Дослідники
+MOM_HERO_NAME,Дослідник
+MOM_NAME,Маєтки божевілля (друга редакція)
+MOM_QUEST_NAME,Сценарій
+MONSTER,Монстр
+MONSTER_ATTACKS,Монстр атакує.
+MONSTER_MASTER,Майстер
+MONSTER_MASTER_X,Майстер {0}
+MONSTER_MINION,Прислужник
+MONSTER_NORMAL,Звичайний
+
+MONSTER_UNIQUE,Унікальний
+MOVES,Ходи
+MUSIC,Музика
+NAME,Назва
+NEW,Новий
+NEW_X,{Новий {0}}
+NONE,{Немає}
+
+NEXT_EVENTS,Наступні події
+NOT_FIRST,Не перший
+NO_ATTACK_MESSAGE,Без повідомлення атаки:
+
+NUMBER,Номер
+NUMBER_HEROS,{0} героїв:
+OK,Ок
+OP,Оп
+OPTIONS,Налаштування
+PLACEMENT,Розміщення
+
+PLACE_IMG,Зображення місця
+POOL_TRAITS,Набір рис:
+POSITION,Позиція
+POSITION_TYPE_HIGHLIGHT,Підсвітка
+POSITION_TYPE_UNUSED,Не використано
+PUZZLE,Головоломка
+PUZZLE_ALT_LEVEL,Альт. рівень
+PUZZLE_SOLUTION,Рішення
+PUZZLE_CLASS,Клас
+PUZZLE_CLASS_SELECT,Обрати клас
+IMAGE,Зображення
+
+PUZZLE_LEVEL,Рівень
+PUZZLE_SELECT_SKILL,Обрати вміння
+PUZZLE_IMAGE_CLASS,зображення
+PUZZLE_CODE_CLASS,код
+PUZZLE_SLIDE_CLASS,ковзанка
+QUEST,Квест
+QUEST_NAME_DOWNLOAD,Завантажити {0}
+QUEST_NAME_EDITOR,Редактор {0}
+EDITOR,Редактор
+QUEST_NAME_UPDATE,  [Оновити] {0}
+QUOTA,Квота
+RECOVER,Відновити
+INVESTIGATOR_ATTACKS,Дослідник атакує
+
+RELOAD,Перезавантажити
+REMOVE_COMPONENTS,Видалити компоненти:
+REQUIRED_EXPANSIONS,Необхідні доповнення:
+REQUIRES_EXPANSION, Потрібно:  {0}
+
+REQ_TRAITS,Потр. риси:
+RESET,Скинути
+ROTATE_TO,Поворот: {0}
+ROTATION,Поворот
+SAVE,Зберегти
+AUTOSAVE,Автозбереження
+SELECT_SAVE,Обрати збереження
+SELECT,Обрати {0}
+SELECT_CLASS,Обрати клас
+SELECTION,Вибір
+SELECT_CONTENT,Обрати контент
+SELECT_EXPANSION,Обрати контент доповнень
+SELECT_IMAGE,Обрати зображення
+SELECT_ITEM,Обрати предмет
+SELECT_PACK,Обрати пакет
+SELECT_TO_COPY,Обрати {0} для копіювання
+SELECT_TO_DELETE,Обрати {0} для видалення
+DISABLE,Вимкнути
+HIDE,Сховати
+HIDDEN,Приховано
+ACTIVE,Активний
+SET,Встановити
+SET_EDITOR_ALPHA,Прозорість редактора
+SKILL,Уміння
+SELECT_SKILLS,Обрати вміння
+SPAWN,Поява
+STARTING_ITEM,Початковий предмет
+STARTING_ITEMS,Початкові предмети
+START_QUEST,Нова гра
+START,Почати
+
+TESTS,Перевірки
+TILE,Плитка
+
+AND,І
+OR,АБО
+
+TOKEN,Жетон
+TOOLS,Інструменти
+TOTAL_MOVES,Всього ходів
+TRAITS,Риси
+TRIGGER,Тригер
+TYPE,Тип
+TYPES,Типи
+UNABLE_BUTTON,Недоступна кнопка:
+
+UI,Інтерфейс
+UNITS,Одиниці
+HORIZONTAL,Горизонтально
+VERTICAL,Вертикально
+ALIGN,Вирівнювання
+SIZE,Розмір
+DEFAULT,За замовчуванням
+SMALL,Малий
+MEDIUM,Середній
+HUGE,Великий
+MASSIVE,Масивний
+TEXT_SIZE,Розмір тексту
+BACKGROUND_COLOUR,Колір фону
+ASPECT,Аспект
+BORDER,Рамка
+NO_BORDER,Без рамки
+UNDO,Скасувати
+UNIQUE_DEFEATED,Унікальний\nПереможено
+UNIQUE_INFO,Унікальна інформація
+UNIQUE_MONSTER,Унікальний монстр
+UNIQUE_TITLE,Унікальна назва
+UNUSED,Не використано
+VALUE,Значення
+VAR,Змінна
+VARS,Змінні
+VAR_NAME,Назва змінної:
+X_ACTIVATED,{0} активовано
+
+BUY,Купити
+SELL,Продати
+CLASS,Клас
+ACT_1,Акт I
+ACT_2,Акт II
+
+//Items
+weapon,Зброя
+firearm,Вогнепальна зброя
+heavyweapon,Важка зброя
+heavy,Важка зброя
+tome,Фоліант
+equipment,Спорядження
+lightsource,Джерело світла
+bladedweapon,Холодна зброя
+bladed,Холодна зброя
+spell,Заклинання
+key,Ключ
+evidence,Доказ
+ally,Союзник
+spelldefence,Захисне заклинання
+spellattack,Атакуюче заклинання
+
+//Audio
+PLAY_AUDIO_IN_BACKGROUND,Відтворювати аудіо у фоні
+menu,Меню
+music,Музика
+quest,Квест
+defeated,Переможено
+newround,Новий раунд
+attack,Атака
+unarmed,Без зброї
+horror,Жах
+search,Обшук
+explore,Досліджувати
+
+//Heroes
+latari,Латарі
+dwarf,Дворф
+gnome,Гном
+male,Чоловік
+female,Жінка
+
+//monsters
+monster,Монстр
+undead,Нежить
+humanoid,Гуманоїд
+spirit,Дух
+beast,Звір
+agent,Агент
+lieutenant,Лейтенант
+small,Малий
+medium,Середній
+huge,Великий
+massive,Масивний
+building,Будівля
+melee,Ближній бій
+ranged,Дальній бій
+goblin,Гоблін
+cursed,Проклятий
+cave,Печера
+wilderness,Дикі землі
+civilized,Цивілізований
+dark,Темний
+mountain,Гірський
+cold,Холодний
+hot,Гарячий
+water,Вода
+fleshless,Безтілесний
+snakeperson,Людина-змія
+relic,Реліквія
+elixir,Еліксир
+
+//Tiles
+basement,Підвал
+river,Річка
+street,Вулиця
+hallway,Коридор
+bathroom,Ванна
+bedroom,Спальня
+kitchen,Кухня
+dock,Причал
+storage,Сховище
+outside,Зовні
+inside,Всередині
+big,Великий
+transition,Перехід
+throne,Трон
+pit,Яма
+farm,Ферма
+tomb,Гробниця
+library,Бібліотека
+graves,Могили
+bridge,Міст
+stairs,Сходи
+torture,Катівня
+tents,Намети
+stables,Стайні
+hall,Зал
+map,Карта
+city,Місто
+fountain,Фонтан
+blackrealm,Чорне царство
+altar,Вівтар
+beds,Ліжка
+study,Кабінет
+prison,В'язниця
+plinth,Постамент
+tavern,Таверна
+statues,Статуї
+drawbridge,Підйомний міст
+rubble,Уламки
+treasure,Скарб
+stone,Камінь
+dirt,Бруд
+timber,Деревина
+snow,Сніг
+lava,Лава
+swamp,Болото
+sludge,Муло
+ship,Корабель
+temple,Храм
+train,Поїзд
+
+// Colors
+black,Чорний
+white,Білий
+red,Червоний
+lime,Лайм
+blue,Синій
+yellow,Жовтий
+aqua,Бірюзовий
+cyan,Блакитний
+magenta,Пурпурний
+fuchsia,Фіолетово-червоний
+silver,Срібний
+gray,Сірий
+maroon,Бордовий
+olive,Оливковий
+green,Зелений
+purple,Фіолетовий
+teal,Бірюзовий
+navy,Темно-синій
+
+//Puzzles
+image,Зображення
+code,Код
+slide,Ковзанка
+tower,Вежа
+SYMBOL,Символ
+ELEMENT,Елемент
+
+// Events
+Ordered,По порядку
+Random,Випадково
+
+//Inherited from FFG localization files,
+SET_FIRE,Підпалити
+INVESTIGATOR_ELIMINATED,Дослідник вибув
+CLOSE,Закрити
+PUZZLE_GUESS,Вгадати
+
+UP,Вгору
+DOWN,Вниз
+LEFT,Вліво
+RIGHT,Вправо
+
+PHASE_INVESTIGATOR,Фаза дослідників
+PHASE_MYTHOS,Фаза міту
+MONSTER_STEP,Дії монстрів
+HORROR_STEP,Перевірка жаху
+END_PHASE,Кінець фази
+
+ATTACK_PROMPT,Яким типом зброї атакувати?
+ATTACK_WITH_HEAVY_WEAPON, Атакувати [i]важкою зброєю[/i]
+ATTACK_WITH_BLADED_WEAPON, Атакувати [i]холодною зброєю[/i]
+ATTACK_WITH_FIREARM, Атакувати [i]вогнепальною зброєю[/i]
+ATTACK_WITH_SPELL, Атакувати заклинанням
+ATTACK_WITH_UNARMED, Атакувати без зброї
+
+ACTION_X, {0}
+
+STATS_WELCOME,Дякуємо за гру. Будь ласка, оцініть і поділіться враженнями для майбутніх гравців. Ваші дії в грі будуть передані авторам сценарію, щоб допомогти їм покращити його.
+
+STATS_ASK_VICTORY,Ви виграли цю гру?
+STATS_ASK_VICTORY_YES,ТАК!
+STATS_ASK_VICTORY_NO,Ні...
+STATS_ASK_RATING,Як ви оціните цей сценарій?\n(1: жахливо  10: чудово)
+STATS_ASK_COMMENTS,Бажаєте залишити коментар для автора сценарію?
+STATS_MISSING_INFO,Будь ласка, оцініть сценарій і повідомте, чи виграли ви, перед надсиланням.
+STATS_SEND_BUTTON,Надіслати
+STATS_MENU_BUTTON,Меню
+
+STATS_AVERAGE_WIN_RATIO,Середній відсоток перемог: {0}%
+STATS_NB_USER_REVIEWS,({0} відгуків)
+STATS_AVERAGE_DURATION,Середня тривалість: {0} хв
+STATS_NO_AVERAGE_DURATION,Середня тривалість недоступна
+STATS_NO_AVERAGE_WIN_RATIO,Середній відсоток перемог недоступний
+
+STATS_DOWNLOAD_ONGOING,Завантаження статистики гри та рейтингу...\nБудь ласка, оновіть сторінку за кілька секунд
+STATS_ERROR_HTTP,Помилка отримання статистики гри; якщо проблема не зникає, повідомте на github Valkyrie\n{0}
+STATS_ERROR_NETWORK,Помилка отримання статистики гри; перевірте підключення до інтернету
+
+ERROR_HTTP,Помилка завантаження файлу; якщо проблема не зникає, повідомте на github Valkyrie\n{0}
+ERROR_NETWORK,Помилка завантаження файлу; перевірте підключення до інтернету
+
+NEW_VERSION_AVAILABLE,Доступна нова версія!
+
+SORT_TITLE,Сортування
+SORT_SELECT_CRITERIA,Обрати критерій сортування:
+SORT_SELECT_ORDER,Порядок:
+SORT_ASCENDING,За зростанням
+SORT_DESCENDING,За спаданням
+
+SORT_BY_AUTHOR,Автор
+SORT_BY_NAME,Назва
+SORT_BY_DIFFICULTY,Складність
+SORT_BY_DURATION,Тривалість
+
+SORT_BY_RATING,Рейтинг
+SORT_BY_AVERAGE_DURATION,Сер. тривалість
+SORT_BY_WIN_RATIO,Відсоток перемог
+SORT_BY_DATE,Дата оновлення
+
+FILTER_TITLE,Обрати фільтри
+FILTER_SELECT_LANG,Обрати мову (мови), якою ви володієте:
+FILTER_MISSING_EXPANSIONS_ON,Приховати сценарії з відсутніми доповненнями  ☑
+FILTER_MISSING_EXPANSIONS_OFF,Приховати сценарії з відсутніми доповненнями  ☐
+
+AUTHORS_SHORT,Один рядок для авторів (для опції «сортувати за автором»)
+AUTHORS_UNKNOWN,Невідомі автори (потрібне оновлення сценарію автором)
+
+SYNOPSYS,Синопсис (макс. 100 символів)
+
+UPDATED_THIS_WEEK,Оновлено цього тижня
+UPDATED_THIS_MONTH,Оновлено цього місяця
+UPDATED_THIS_TRIMESTER,Оновлено цього кварталу
+UPDATED_THIS_SEMESTER,Оновлено за півроку
+UPDATED_THIS_YEAR,Оновлено цього року
+UPDATED_TWO_YEARS_AGO,Оновлено два роки тому
+UPDATE_OLDER_THAN_TWO_YEAR,Останнє оновлення понад два роки тому
+
+GO_OFFLINE,ПЕРЕЙТИ В ОФЛАЙН
+GO_ONLINE,ПЕРЕЙТИ В ОНЛАЙН
+ONLINE,Онлайн
+OFFLINE,Офлайн
+DOWNLOAD_ONGOING,Завантаження...
+OFFLINE_DUE_TO_ERROR,ОФЛАЙН (помилка мережі)
+CONTENTPACK_CATEGORY_CUSTOM,Пакети контенту спільноти
+CONTENTPACK_DOWNLOAD,Завантажити контент
+CONTENTPACK_DOWNLOAD_HEADER,Завантаження пакета контенту спільноти
+MISSING_EXPANSIONS,Відсутні доповнення:
+
+RICH_TEXT,Форматування тексту
+TEXT_ALIGNMENT,Вирівнювання
+TOP,Вгорі
+CENTER,По центру
+BOTTOM,Внизу
+RESTART_TO_APPLY,Набуде чинності після перезапуску
+
+CONTENT_IMPORT_OFFICIAL,Імпорт з офіційного додатку
+CONTENT_IMPORT_ZIP,Імпорт з ZIP
+CONTENT_REIMPORT_OFFICIAL,Повторний імпорт з офіційного додатку
+CONTENT_REIMPORT_ZIP,Повторний імпорт з ZIP
+RESOLUTION,Роздільна здатність
+FULLSCREEN,Повноекранний режим
+
+ON,УВІМК
+OFF,ВИМК
+EXPORT_LOG,Експорт журналу
+ADVANCED_OPTIONS,Додаткові параметри
+VIEW_LOCK,Блокувати автоматичний рух камери в сценарії
+
+LOADINGSCENARIOS,Завантаження сценаріїв...
+LOADINGCONTENTPACKS,Завантаження пакетів контенту...
+FILTER_TEXT_TOTAL_AND_FILTERED,{0} сценаріїв (+{1} приховано фільтром)
+
+FADE,Швидкість згасання
+QUEST_EDITOR_HERO_COUNT_LABEL,Кількість героїв
+QUEST_EDITOR_INVESTIGATOR_COUNT_LABEL,Кількість дослідників
+FADE_INSTANT,Миттєво
+FADE_FAST,Швидко
+FADE_SLOW,Повільно
+CLICK_BEHAVIOR,Поведінка при кліку
+CLICK_BLINK,Блимання / Подія
+CLICK_STATIC,Статично / Без події
+REQUIRED,Обов'язково
+FILTER_TEXT_TOTAL_ONLY,{0} сценаріїв
+SELECT_GAME_TYPE,Обрати тип гри
+
+SEARCH_BY_NAME,Пошук за назвою...
+
+SEARCH_BY_ID,Пошук за ID...
+
+CUSTOM_IMAGE,Власне зображення
+ORIGINAL,Оригінал
+IMAGE_PLACE,Місце зображення
+IMAGE_PLACE_SIZE,Розмір місця зображення
