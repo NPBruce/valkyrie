@@ -706,3 +706,7 @@ HUGE,Huge
 MASSIVE,Massive
 
 CUSTOM_IMAGE,Vlastní obrázek
+
+FALLBACK_LANG,Záložní jazyk
+
+LANGUAGE,Jazyk

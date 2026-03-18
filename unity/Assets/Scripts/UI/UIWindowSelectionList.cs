@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Assets.Scripts.Content;
 using System.Collections.Generic;
 
@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
     {
         protected string _title = "";
         protected UnityEngine.Events.UnityAction<string> _call;
+        protected bool _showSortButtons = true;
 
         protected SortedList<string, SelectionItem> alwaysOnTopItems = new SortedList<string, SelectionItem>();
         protected SortedList<int, SelectionItem> items = new SortedList<int, SelectionItem>();
@@ -17,17 +18,17 @@ namespace Assets.Scripts.UI
         static protected bool reverseSort = false;
         protected bool callAfterCancel = true;
 
-        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false)
+        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, string title = "", bool callAfterCancel = false, bool showSortButtons = true)
         {
             _title = title;
             _call = call;
             this.callAfterCancel = callAfterCancel;
+            _showSortButtons = showSortButtons;
         }
 
-        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title, bool callAfterCancel = false) 
-            : this(call, title.Translate(), callAfterCancel)
+        public UIWindowSelectionList(UnityEngine.Events.UnityAction<string> call, StringKey title, bool callAfterCancel = false, bool showSortButtons = true)
+            : this(call, title.Translate(), callAfterCancel, showSortButtons)
         {
-            
         }
         public void AddItem(StringKey stringKey)
         {
@@ -94,49 +95,52 @@ namespace Assets.Scripts.UI
             ui.SetText(_title);
 
             // Sort Buttons
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(8.5f), 1, 1, 1);
-            if (alphaSort)
+            if (_showSortButtons)
             {
-                ui.SetText("1", Color.white);
-                ui.SetBGColor(Color.black);
-            }
-            else
-            {
-                if (reverseSort)
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(8.5f), 1, 1, 1);
+                if (alphaSort)
                 {
-                    ui.SetText("9", Color.black);
+                    ui.SetText("1", Color.white);
+                    ui.SetBGColor(Color.black);
                 }
                 else
                 {
-                    ui.SetText("1", Color.black);
+                    if (reverseSort)
+                    {
+                        ui.SetText("9", Color.black);
+                    }
+                    else
+                    {
+                        ui.SetText("1", Color.black);
+                    }
+                    ui.SetBGColor(Color.white);
                 }
-                ui.SetBGColor(Color.white);
-            }
-            ui.SetButton(SortNumerical);
-            new UIElementBorder(ui);
+                ui.SetButton(SortNumerical);
+                new UIElementBorder(ui);
 
-            ui = new UIElement();
-            ui.SetLocation(UIScaler.GetHCenter(9.5f), 1, 1, 1);
-            if (alphaSort)
-            {
-                if (reverseSort)
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(9.5f), 1, 1, 1);
+                if (alphaSort)
                 {
-                    ui.SetText("Z", Color.black);
+                    if (reverseSort)
+                    {
+                        ui.SetText("Z", Color.black);
+                    }
+                    else
+                    {
+                        ui.SetText("A", Color.black);
+                    }
+                    ui.SetBGColor(Color.white);
                 }
                 else
                 {
-                    ui.SetText("A", Color.black);
+                    ui.SetText("A", Color.white);
+                    ui.SetBGColor(Color.black);
                 }
-                ui.SetBGColor(Color.white);
+                ui.SetButton(SortAlpha);
+                new UIElementBorder(ui);
             }
-            else
-            {
-                ui.SetText("A", Color.white);
-                ui.SetBGColor(Color.black);
-            }
-            ui.SetButton(SortAlpha);
-            new UIElementBorder(ui);
 
             UIElementScrollVertical scrollArea = new UIElementScrollVertical();
             scrollArea.SetLocation(UIScaler.GetHCenter(-10.5f), 2, 21, 25);

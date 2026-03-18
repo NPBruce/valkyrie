@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Globalization;
@@ -125,6 +125,9 @@ public class Game : MonoBehaviour
     // Current language
     public string currentLang;
 
+    // Fallback language for scenario content (empty = no fallback)
+    public string fallbackLang;
+
     // Set when in quest editor
     public bool editMode = false;
 
@@ -204,6 +207,7 @@ public class Game : MonoBehaviour
             config.Save();
         }
         currentLang = config.data.Get("UserConfig", "currentLang");
+        fallbackLang = config.data.Get("UserConfig", "fallbackLang");
         userRoot = config.data.Get("UserConfig", "UserRoot");
 
         string vSet = config.data.Get("UserConfig", "editorTransparency");

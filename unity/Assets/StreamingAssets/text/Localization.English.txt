@@ -702,3 +702,7 @@ CUSTOM_IMAGE,Custom Image
 ORIGINAL,Original
 IMAGE_PLACE,Image Place
 IMAGE_PLACE_SIZE,Image Place Size
+
+FALLBACK_LANG,Fallback language
+
+LANGUAGE,Language

@@ -477,3 +477,8 @@ HUGE,Gigante
 MASSIVE,Massivo
 
 CUSTOM_IMAGE,Immagine personalizzata
+
+FALLBACK_LANG,Lingua alternativa
+NONE,Nessuno
+
+LANGUAGE,Lingua

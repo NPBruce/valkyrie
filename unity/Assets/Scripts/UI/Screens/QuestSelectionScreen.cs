@@ -75,7 +75,7 @@ namespace Assets.Scripts.UI.Screens
         private readonly Color dark_red_text_color = new Color(0.686f, 0.031f, 0.023f);
 
         // filters
-        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech,Korean,Japanese".Split(',');
+        string[] langs = "English,Spanish,French,German,Italian,Portuguese,Polish,Russian,Chinese,Czech,Korean,Japanese,Ukrainian".Split(',');
         Dictionary<string, bool> langs_selected = null;
         bool filter_missing_expansions = false;
 
@@ -427,19 +427,21 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawFlags()
         {
-            float x_offset = 11f;
-            float y_offset = 11f;
+            int flagCount = langs_selected.Count;
             const float flag_size = 1.7f;
+            const float flag_spacing = 0.3f;
+            float totalFlagsWidth = flagCount * flag_size + (flagCount - 1) * flag_spacing;
+            float popupWidth = 42f;
+            float x_offset = (popupWidth - totalFlagsWidth) / 2f;
+            float y_offset = 11f;
 
             foreach (KeyValuePair<string, bool> k in langs_selected)
             {
                 string lang = k.Key;
                 bool activated = k.Value;
 
-                UIElement ui = null;
-                ui = new UIElement(filtersPopup.GetTransform());
-                Texture2D flagTex = null;
-                flagTex = Resources.Load("sprites/flags/" + lang) as Texture2D;
+                UIElement ui = new UIElement(filtersPopup.GetTransform());
+                Texture2D flagTex = Resources.Load("sprites/flags/" + lang) as Texture2D;
                 ui.SetLocation(x_offset, y_offset, flag_size, flag_size);
                 ui.SetImage(flagTex);
                 ui.SetButton(delegate { SetFilterLang(lang); });
@@ -452,7 +454,7 @@ namespace Assets.Scripts.UI.Screens
                     ui.SetButton(delegate { SetFilterLang(lang); });
                 }
 
-                x_offset += flag_size + 0.3f;
+                x_offset += flag_size + flag_spacing;
             }
         }
 

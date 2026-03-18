@@ -534,3 +534,7 @@ HUGE,Огромный
 MASSIVE,Массивный
 
 CUSTOM_IMAGE,Пользовательское изображение
+
+FALLBACK_LANG,Резервный язык
+
+LANGUAGE,Язык

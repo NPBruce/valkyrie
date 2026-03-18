@@ -124,7 +124,7 @@ MUSIC,Musik
 NAME,Name
 NEW,Neu
 NEW_X,{Neu {0}}
-NONE,{Keines}
+NONE,{Keine}
 
 NEXT_EVENTS,Nächstes Ereignis
 NOT_FIRST,Nicht zuerst
@@ -532,3 +532,6 @@ HUGE,Groß
 MASSIVE,Massiv
 
 CUSTOM_IMAGE,Benutzerdefiniertes Bild
+
+FALLBACK_LANG,Ausweichsprache
+LANGUAGE,Sprache

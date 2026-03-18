@@ -1213,5 +1213,102 @@ namespace Valkyrie.UnitTests
         }
 
         #endregion
+
+        #region Fallback Language Tests
+
+        // Helper: build a multi-language dictionary without needing Game.Get()
+        private static DictionaryI18n BuildMultiLangDict(string currentLang, string fallbackLang = "", string defaultLang = "English")
+        {
+            // Build with English data first (acts as scenario default)
+            var dict = new DictionaryI18n(new string[] { ".,English", "KEY,English value" }, defaultLang);
+            dict.AddData(new string[] { ".,Polish", "KEY,Polish value" });
+            dict.AddData(new string[] { ".,French", "KEY,French value" });
+
+            // Manually set language properties (avoids needing Game.Get())
+            dict.defaultLanguage = defaultLang;
+            dict.currentLanguage = currentLang;
+            dict.fallbackLanguage = fallbackLang;
+            return dict;
+        }
+
+        [Test]
+        public void GetValue_CurrentLanguagePresent_ReturnsCurrentLanguage()
+        {
+            // Arrange
+            var dict = BuildMultiLangDict(currentLang: "Polish", fallbackLang: "French");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert
+            Assert.AreEqual("Polish value", result);
+        }
+
+        [Test]
+        public void GetValue_CurrentLanguageMissing_FallbackPresent_ReturnsFallback()
+        {
+            // Arrange - Ukrainian is not in the dict, French is the fallback
+            var dict = BuildMultiLangDict(currentLang: "Ukrainian", fallbackLang: "French");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert
+            Assert.AreEqual("French value", result);
+        }
+
+        [Test]
+        public void GetValue_CurrentAndFallbackMissing_ReturnsDefaultLanguage()
+        {
+            // Arrange - Ukrainian current, German fallback (neither in dict), English is default
+            var dict = BuildMultiLangDict(currentLang: "Ukrainian", fallbackLang: "German");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert
+            Assert.AreEqual("English value", result);
+        }
+
+        [Test]
+        public void GetValue_EmptyFallback_SkipsFallbackAndUsesDefault()
+        {
+            // Arrange - Ukrainian current, no fallback set, English is default
+            var dict = BuildMultiLangDict(currentLang: "Ukrainian", fallbackLang: "");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert - should fall straight to English (defaultLanguage)
+            Assert.AreEqual("English value", result);
+        }
+
+        [Test]
+        public void GetValue_FallbackSameAsCurrentLanguage_NotCheckedTwice_ReturnsDefault()
+        {
+            // Arrange - fallback = current (both Ukrainian, not in dict)
+            var dict = BuildMultiLangDict(currentLang: "Ukrainian", fallbackLang: "Ukrainian");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert - fallback skipped (same as current), falls to English default
+            Assert.AreEqual("English value", result);
+        }
+
+        [Test]
+        public void GetValue_FallbackSameAsDefault_FallbackUsedCorrectly()
+        {
+            // Arrange - current = Ukrainian (missing), fallback = English (same as defaultLang)
+            var dict = BuildMultiLangDict(currentLang: "Ukrainian", fallbackLang: "English");
+
+            // Act
+            string result = dict.GetValue("KEY");
+
+            // Assert - fallback finds English value directly
+            Assert.AreEqual("English value", result);
+        }
+
+        #endregion
     }
 }

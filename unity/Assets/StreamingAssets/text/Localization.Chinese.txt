@@ -512,3 +512,7 @@ HUGE,Huge
 MASSIVE,Massive
 
 CUSTOM_IMAGE,自定义图片
+
+FALLBACK_LANG,备用语言
+
+LANGUAGE,语言
