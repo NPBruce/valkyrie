@@ -179,5 +179,49 @@ namespace Valkyrie.UnitTests
             // Assert
             Assert.AreEqual(Path.Combine(_tempDir, "German", "images", "BgTile.png"), result);
         }
+
+        [Test]
+        public void Supports_LanguageFolderInsideSubfolder()
+        {
+            // Arrange — image is in a subfolder and localized version is inside that subfolder (e.g. image/German/map.png)
+            CreateFile(Path.Combine("image", "map.png"));
+            CreateFile(Path.Combine("image", "German", "map.png"));
+
+            // Act — name uses platform separator as produced by the ini parsing on this OS
+            string name = Path.Combine("image", "map.png");
+            string result = Call(name, "German", "English");
+
+            // Assert — localized inside subfolder should be preferred over root
+            Assert.AreEqual(Path.Combine(_tempDir, "image", "German", "map.png"), result);
+        }
+
+        [Test]
+        public void Fallback_LanguageFolderInsideSubfolder_IsUsed_WhenCurrentMissing()
+        {
+            // Arrange — only fallback localized version exists inside the subfolder
+            CreateFile(Path.Combine("image", "English", "map.png"));
+
+            // Act
+            string name = Path.Combine("image", "map.png");
+            string result = Call(name, "German", "English");
+
+            // Assert — fallback inside subfolder should be returned
+            Assert.AreEqual(Path.Combine(_tempDir, "image", "English", "map.png"), result);
+        }
+
+        [Test]
+        public void EditMode_Ignores_LanguageFolderInsideSubfolder()
+        {
+            // Arrange — localized version exists inside the subfolder but edit mode should bypass it
+            CreateFile(Path.Combine("image", "German", "map.png"));
+            CreateFile(Path.Combine("image", "map.png"));
+
+            // Act
+            string name = Path.Combine("image", "map.png");
+            string result = Call(name, "German", "English", editMode: true);
+
+            // Assert — edit mode returns root path
+            Assert.AreEqual(Path.Combine(_tempDir, "image", "map.png"), result);
+        }
     }
 }
