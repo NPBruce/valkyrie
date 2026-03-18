@@ -141,9 +141,49 @@ public class Quest
     /// </remarks>
     public static string FindLocalisedMultimediaFile(string name, string source)
     {
-        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang), name)))
+        return FindLocalisedMultimediaFile(name, source, Game.game.currentLang, Game.game.fallbackLang, Game.game.editMode);
+    }
+
+    /// <summary>
+    /// Testable overload of FindLocalisedMultimediaFile with explicit parameters instead of reading Game state.
+    /// </summary>
+    public static string FindLocalisedMultimediaFile(string name, string source, string currentLang, string fallbackLang, bool editMode)
+    {
+        // First try language folder directly under the scenario root: source/<lang>/<path>
+        string langPathRoot = Path.Combine(Path.Combine(source, currentLang), name);
+        if (!editMode && File.Exists(langPathRoot))
         {
-            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
+            return langPathRoot;
+        }
+
+        // If the file name contains subfolders (e.g. "image/map.png"), also support placing
+        // the language folder inside that subfolder: source/<dir>/<lang>/<file>
+        string dir = Path.GetDirectoryName(name);
+        string file = Path.GetFileName(name);
+        if (!editMode && !string.IsNullOrEmpty(dir))
+        {
+            string langPathInDir = Path.Combine(source, dir, currentLang, file);
+            if (File.Exists(langPathInDir))
+                return langPathInDir;
+        }
+
+        // Try fallback language using the same two patterns
+        if (!editMode
+            && !string.IsNullOrEmpty(fallbackLang)
+            && fallbackLang != currentLang)
+        {
+            string fallbackPathRoot = Path.Combine(Path.Combine(source, fallbackLang), name);
+            if (File.Exists(fallbackPathRoot))
+            {
+                return fallbackPathRoot;
+            }
+
+            if (!string.IsNullOrEmpty(dir))
+            {
+                string fallbackPathInDir = Path.Combine(source, dir, fallbackLang, file);
+                if (File.Exists(fallbackPathInDir))
+                    return fallbackPathInDir;
+            }
         }
 
         return Path.Combine(source, name);
@@ -1614,7 +1654,8 @@ public class Quest
                 }
                 else
                 {
-                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qTile.customImage;
+                    string questDir = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath);
+                    string path = FindLocalisedMultimediaFile(qTile.customImage, questDir);
                     newTex = ContentData.FileToTexture(path);
                 }
                 
@@ -1768,7 +1809,8 @@ public class Quest
                 }
                 else
                 {
-                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
+                    string questDir = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath);
+                    string path = FindLocalisedMultimediaFile(qToken.customImage, questDir);
                     newTex = ContentData.FileToTexture(path);
                 }
             }

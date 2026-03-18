@@ -562,9 +562,18 @@ public class GenericData : IContent
         if (content.ContainsKey("name"))
         {
             name = new StringKey(content["name"]);
-        } else
+        }
+        else
         {
-            name = new StringKey(null,name_ini.Substring(type.Length));
+            // Some callers pass a section name that may not include the type prefix
+            // (for example when creating a dummy TileSide from a file path). Guard
+            // against calling Substring with an out-of-range start index.
+            string displayName = name_ini ?? "";
+            if (!string.IsNullOrEmpty(type) && displayName.Length > type.Length && displayName.StartsWith(type))
+            {
+                displayName = displayName.Substring(type.Length);
+            }
+            name = new StringKey(null, displayName);
         }
 
         priority = 0;
