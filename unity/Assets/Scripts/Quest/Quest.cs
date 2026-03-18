@@ -141,9 +141,25 @@ public class Quest
     /// </remarks>
     public static string FindLocalisedMultimediaFile(string name, string source)
     {
-        if (!Game.game.editMode && File.Exists(Path.Combine(Path.Combine(source, Game.game.currentLang), name)))
+        return FindLocalisedMultimediaFile(name, source, Game.game.currentLang, Game.game.fallbackLang, Game.game.editMode);
+    }
+
+    /// <summary>
+    /// Testable overload of FindLocalisedMultimediaFile with explicit parameters instead of reading Game state.
+    /// </summary>
+    public static string FindLocalisedMultimediaFile(string name, string source, string currentLang, string fallbackLang, bool editMode)
+    {
+        if (!editMode && File.Exists(Path.Combine(Path.Combine(source, currentLang), name)))
         {
-            return Path.Combine(Path.Combine(source, Game.game.currentLang), name);
+            return Path.Combine(Path.Combine(source, currentLang), name);
+        }
+
+        if (!editMode
+            && !string.IsNullOrEmpty(fallbackLang)
+            && fallbackLang != currentLang
+            && File.Exists(Path.Combine(Path.Combine(source, fallbackLang), name)))
+        {
+            return Path.Combine(Path.Combine(source, fallbackLang), name);
         }
 
         return Path.Combine(source, name);
@@ -1614,7 +1630,8 @@ public class Quest
                 }
                 else
                 {
-                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qTile.customImage;
+                    string questDir = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath);
+                    string path = FindLocalisedMultimediaFile(qTile.customImage, questDir);
                     newTex = ContentData.FileToTexture(path);
                 }
                 
@@ -1768,7 +1785,8 @@ public class Quest
                 }
                 else
                 {
-                    string path = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath) + System.IO.Path.DirectorySeparatorChar + qToken.customImage;
+                    string questDir = System.IO.Path.GetDirectoryName(game.CurrentQuest.qd.questPath);
+                    string path = FindLocalisedMultimediaFile(qToken.customImage, questDir);
                     newTex = ContentData.FileToTexture(path);
                 }
             }
