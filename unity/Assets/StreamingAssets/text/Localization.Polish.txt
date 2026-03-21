@@ -515,4 +515,4 @@ CUSTOM_IMAGE,Niestandardowy obraz
 FALLBACK_LANG,Język alternatywny
 
 LANGUAGE,Język
-REPORT_ISSUE,Zgłoś problem
+PROVIDE_FEEDBACK,Przekaż opinię

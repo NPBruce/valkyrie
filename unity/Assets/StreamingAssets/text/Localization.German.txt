@@ -535,4 +535,4 @@ CUSTOM_IMAGE,Benutzerdefiniertes Bild
 
 FALLBACK_LANG,Ausweichsprache
 LANGUAGE,Sprache
-REPORT_ISSUE,Problem melden
+PROVIDE_FEEDBACK,Feedback geben

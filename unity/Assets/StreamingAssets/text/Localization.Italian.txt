@@ -482,4 +482,4 @@ FALLBACK_LANG,Lingua alternativa
 NONE,Nessuno
 
 LANGUAGE,Lingua
-REPORT_ISSUE,Segnala problema
+PROVIDE_FEEDBACK,Fornisci un feedback

@@ -122,10 +122,18 @@ namespace Assets.Scripts.UI.Screens
             if (!string.IsNullOrEmpty(q.package_url) && q.package_url.Contains("github"))
             {
                 UIElement uiIssue = new UIElement();
-                uiIssue.SetLocation(UIScaler.GetHCenter(-4f), UIScaler.GetBottom(-2.5f), 8, 2);
-                uiIssue.SetText(new StringKey("val", "REPORT_ISSUE"), Color.white);
+                uiIssue.SetLocation(UIScaler.GetRight(-8.5f), 3f, 8, 2);
+                StringKey feedbackKey = new StringKey("val", "PROVIDE_FEEDBACK");
+                uiIssue.SetText(feedbackKey, Color.white);
                 uiIssue.SetFont(game.gameType.GetHeaderFont());
-                uiIssue.SetFontSize(UIScaler.GetMediumFont());
+                if (uiIssue.GetStringWidth(feedbackKey, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont()) > 7.5f)
+                {
+                    uiIssue.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    uiIssue.SetFontSize(UIScaler.GetMediumFont());
+                }
                 uiIssue.SetButton(delegate { ReportIssue(q); });
                 new UIElementBorder(uiIssue, Color.white);
             }
