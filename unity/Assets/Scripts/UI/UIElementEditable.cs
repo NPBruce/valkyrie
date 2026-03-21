@@ -155,6 +155,9 @@ namespace Assets.Scripts.UI
 
             placeholderObject.GetComponent<UnityEngine.UI.Text>().text = placeholder;
             placeholderHiddenOnFocus = true;
+
+            if (!string.IsNullOrEmpty(uiInput.text))
+                placeholderObject.SetActive(false);
         }
 
         private void OnValueChanged()

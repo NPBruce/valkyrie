@@ -12,6 +12,14 @@ public class QuestEditSelection
 {
     public Dictionary<string, QuestData.Quest> questList;
 
+    private static string editSearchFilter = "";
+    private UIElementEditable editSearchInput = null;
+    private string deleteSearchFilter = "";
+    private UIElementEditable deleteSearchInput = null;
+    private string copySearchFilter = "";
+    private UIElementEditable copySearchInput = null;
+    private static readonly StringKey SEARCH_BY_NAME = new StringKey("val", "SEARCH_BY_NAME");
+
     // Create a pack with list of quests to edit
     public QuestEditSelection()
     {
@@ -35,8 +43,16 @@ public class QuestEditSelection
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
 
+        editSearchInput = new UIElementSearchBox();
+        editSearchInput.SetLocation(UIScaler.GetHCenter(-9f), 4.2f, 18f, 1.5f);
+        editSearchInput.SetText(editSearchFilter);
+        editSearchInput.SetSingleLine();
+        editSearchInput.SetPlaceholder(SEARCH_BY_NAME);
+        editSearchInput.SetButton(delegate { PerformEditSearch(); });
+        new UIElementBorder(editSearchInput, Color.grey);
+
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
-        scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
+        scrollArea.SetLocation(1, 6.5f, UIScaler.GetWidthUnits() - 2f, 19.5f);
         new UIElementBorder(scrollArea);
 
         // List of quests
@@ -47,6 +63,9 @@ public class QuestEditSelection
             LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
+
+            if (!editSearchFilter.Equals("") && !translation.ToLower().Contains(editSearchFilter.ToLower()))
+                continue;
 
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
@@ -93,6 +112,7 @@ public class QuestEditSelection
 
     public void Cancel()
     {
+        editSearchFilter = "";
         GameStateManager.MainMenu();
     }
 
@@ -112,8 +132,16 @@ public class QuestEditSelection
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
 
+        deleteSearchInput = new UIElementSearchBox();
+        deleteSearchInput.SetLocation(UIScaler.GetHCenter(-9f), 4.2f, 18f, 1.5f);
+        deleteSearchInput.SetText(deleteSearchFilter);
+        deleteSearchInput.SetSingleLine();
+        deleteSearchInput.SetPlaceholder(SEARCH_BY_NAME);
+        deleteSearchInput.SetButton(delegate { PerformDeleteSearch(); });
+        new UIElementBorder(deleteSearchInput, Color.grey);
+
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
-        scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
+        scrollArea.SetLocation(1, 6.5f, UIScaler.GetWidthUnits() - 2f, 19.5f);
         new UIElementBorder(scrollArea);
 
         // List of quests
@@ -124,6 +152,9 @@ public class QuestEditSelection
             LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
             string translation = q.Value.name.Translate();
+
+            if (!deleteSearchFilter.Equals("") && !translation.ToLower().Contains(deleteSearchFilter.ToLower()))
+                continue;
 
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
@@ -159,13 +190,33 @@ public class QuestEditSelection
         new QuestEditSelection();
     }
 
+    private void PerformEditSearch()
+    {
+        if (editSearchInput == null) return;
+        string newFilter = editSearchInput.GetText().Trim();
+        if (newFilter.Equals(editSearchFilter)) return;
+        editSearchFilter = newFilter;
+        new QuestEditSelection();
+    }
+
+    private void PerformDeleteSearch()
+    {
+        if (deleteSearchInput == null) return;
+        string newFilter = deleteSearchInput.GetText().Trim();
+        if (newFilter.Equals(deleteSearchFilter)) return;
+        deleteSearchFilter = newFilter;
+        Delete();
+    }
+
     public void CancelCopy()
     {
+        copySearchFilter = "";
         new QuestEditSelection();
     }
 
     public void CancelDelete()
     {
+        deleteSearchFilter = "";
         new QuestEditSelection();
     }
 
@@ -186,8 +237,17 @@ public class QuestEditSelection
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetLargeFont());
 
+        // Search bar
+        copySearchInput = new UIElementSearchBox();
+        copySearchInput.SetLocation(UIScaler.GetHCenter(-9f), 4.2f, 18f, 1.5f);
+        copySearchInput.SetText(copySearchFilter);
+        copySearchInput.SetSingleLine();
+        copySearchInput.SetPlaceholder(SEARCH_BY_NAME);
+        copySearchInput.SetButton(delegate { PerformCopySearch(); });
+        new UIElementBorder(copySearchInput, Color.grey);
+
         UIElementScrollVertical scrollArea = new UIElementScrollVertical();
-        scrollArea.SetLocation(1, 5, UIScaler.GetWidthUnits() - 2f, 21);
+        scrollArea.SetLocation(1, 6.5f, UIScaler.GetWidthUnits() - 2f, 19.5f);
         new UIElementBorder(scrollArea);
 
         // List of quests
@@ -197,10 +257,15 @@ public class QuestEditSelection
             string key = q.Key;
             LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.Value.localizationDict);
+            string translation = q.Value.name.Translate();
+
+            // Apply search filter
+            if (!copySearchFilter.Equals("") && !translation.ToLower().Contains(copySearchFilter.ToLower()))
+                continue;
 
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
-            ui.SetText(new StringKey("val", "INDENT", q.Value.name), Color.black);
+            ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
             ui.SetTextAlignment(TextAnchor.MiddleLeft);
             ui.SetButton(delegate { Copy(key); });
             ui.SetBGColor(Color.white);
@@ -216,6 +281,15 @@ public class QuestEditSelection
         ui.SetFontSize(UIScaler.GetMediumFont());
         ui.SetButton(CancelCopy);
         new UIElementBorder(ui, Color.red);
+    }
+
+    private void PerformCopySearch()
+    {
+        if (copySearchInput == null) return;
+        string newFilter = copySearchInput.GetText().Trim();
+        if (newFilter.Equals(copySearchFilter)) return;
+        copySearchFilter = newFilter;
+        Copy();
     }
 
     // Copy a quest
@@ -326,6 +400,7 @@ public class QuestEditSelection
     // Create a new quest
     public void NewQuest()
     {
+        editSearchFilter = "";
         Game game = Game.Get();
         string dataLocation = Game.AppData() + Path.DirectorySeparatorChar + Game.Get().gameType.TypeName() + "/Editor";
         if (!Directory.Exists(dataLocation))
