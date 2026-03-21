@@ -540,3 +540,4 @@ IMAGE_PLACE_SIZE,Розмір місця зображення
 FALLBACK_LANG,Мова запасного варіанту
 
 LANGUAGE,Мова
+REPORT_ISSUE,Повідомити про проблему

@@ -542,3 +542,4 @@ CUSTOM_IMAGE,Imagem personalizada
 FALLBACK_LANG,Idioma alternativo
 
 LANGUAGE,Idioma
+REPORT_ISSUE,Reportar Problema

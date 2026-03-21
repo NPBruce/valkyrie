@@ -538,3 +538,4 @@ CUSTOM_IMAGE,Пользовательское изображение
 FALLBACK_LANG,Резервный язык
 
 LANGUAGE,Язык
+REPORT_ISSUE,Сообщить о проблеме
