@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Content;
+using Assets.Scripts.Content;
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
@@ -28,9 +28,20 @@ public class SkillWindow
         // Add a title to the page
         ui = new UIElement();
         ui.SetLocation(UIScaler.GetHCenter(-14), 1, 28, 3);
-        ui.SetText(new StringKey("val", "SELECT_SKILLS"));
+        StringKey title = new StringKey("val", "SELECT_SKILLS");
+        ui.SetText(title);
         ui.SetFont(game.gameType.GetHeaderFont());
-        ui.SetFontSize(UIScaler.GetLargeFont());
+
+        float titleWidth = ui.GetStringWidth(title, UIScaler.GetLargeFont(), game.gameType.GetHeaderFont());
+        if (titleWidth > 27f)
+        {
+            float scale = 27f / titleWidth;
+            ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetLargeFont() * scale));
+        }
+        else
+        {
+            ui.SetFontSize(UIScaler.GetLargeFont());
+        }
 
         // Get all heros
         int heroCount = 0;

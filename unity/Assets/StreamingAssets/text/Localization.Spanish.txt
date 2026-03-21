@@ -541,3 +541,4 @@ CUSTOM_IMAGE,Imagen personalizada
 FALLBACK_LANG,Idioma alternativo
 
 LANGUAGE,Idioma
+PROVIDE_FEEDBACK,Dar opinión

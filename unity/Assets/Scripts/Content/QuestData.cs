@@ -2434,6 +2434,11 @@ public class QuestData
                 r.Append("version=").AppendLine(version);
             }
 
+            if(package_url != "")
+            {
+                r.Append("url=").AppendLine(package_url);
+            }
+
             foreach (KeyValuePair<string, string> kv in languages_name)
             {
                 r.Append("name."+ kv.Key + "=").AppendLine(kv.Value);

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI;
@@ -19,7 +19,14 @@ public class SkillButton
         ui.SetLocation(11.5f, UIScaler.GetBottom(-2.5f), 6, 2);
         ui.SetText(SKILLS);
         ui.SetFont(game.gameType.GetHeaderFont());
-        ui.SetFontSize(UIScaler.GetMediumFont());
+        if (ui.GetStringWidth(SKILLS, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont()) > 5.5f)
+        {
+            ui.SetFontSize(UIScaler.GetSmallFont());
+        }
+        else
+        {
+            ui.SetFontSize(UIScaler.GetMediumFont());
+        }
         ui.SetButton(Skills);
         new UIElementBorder(ui);
     }

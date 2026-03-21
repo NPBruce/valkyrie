@@ -737,3 +737,4 @@ CUSTOM_IMAGE,カスタムイメージ
 FALLBACK_LANG,代替言語
 
 LANGUAGE,言語
+PROVIDE_FEEDBACK,フィードバックを提供する

@@ -119,7 +119,24 @@ namespace Assets.Scripts.UI.Screens
             ui.SetButton(delegate { Start(q); });
             new UIElementBorder(ui, Color.green);
 
-
+            if (!string.IsNullOrEmpty(q.package_url) && q.package_url.Contains("github"))
+            {
+                UIElement uiIssue = new UIElement();
+                uiIssue.SetLocation(UIScaler.GetRight(-8.5f), 3f, 8, 2);
+                StringKey feedbackKey = new StringKey("val", "PROVIDE_FEEDBACK");
+                uiIssue.SetText(feedbackKey, Color.white);
+                uiIssue.SetFont(game.gameType.GetHeaderFont());
+                if (uiIssue.GetStringWidth(feedbackKey, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont()) > 7.5f)
+                {
+                    uiIssue.SetFontSize(UIScaler.GetSmallFont());
+                }
+                else
+                {
+                    uiIssue.SetFontSize(UIScaler.GetMediumFont());
+                }
+                uiIssue.SetButton(delegate { ReportIssue(q); });
+                new UIElementBorder(uiIssue, Color.white);
+            }
         }
 
         /// <summary>
@@ -168,6 +185,20 @@ namespace Assets.Scripts.UI.Screens
         {
             ValkyrieDebug.Log("INFO: Start quest from details screen");
             GameStateManager.Quest.Start(q);
+        }
+
+        public void ReportIssue(QuestData.Quest q)
+        {
+            if (string.IsNullOrEmpty(q.package_url)) return;
+
+            string url = q.package_url.Replace("https://raw.githubusercontent.com", "https://github.com");
+            string[] parts = url.Split('/');
+            
+            if (parts.Length >= 5 && parts[2].Contains("github.com"))
+            {
+                url = $"{parts[0]}//{parts[2]}/{parts[3]}/{parts[4]}/issues";
+                Application.OpenURL(url);
+            }
         }
     }
 }

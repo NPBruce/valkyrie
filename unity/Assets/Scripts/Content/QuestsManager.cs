@@ -1,4 +1,4 @@
-﻿using Assets.Scripts;
+using Assets.Scripts;
 using Assets.Scripts.Content;
 using Assets.Scripts.UI.Screens;
 using System;
@@ -388,6 +388,7 @@ public class QuestsManager
             UnloadLocalQuests();
             // extract and load local quest
             local_quests_data = QuestLoader.GetQuests();
+            ApplyLocalManifestData(local_quests_data);
         }
     }
 
@@ -430,6 +431,7 @@ public class QuestsManager
         else
         {
             local_quests_data = task.Result;
+            ApplyLocalManifestData(local_quests_data);
         }
         callback?.Invoke();
     }
@@ -451,6 +453,33 @@ public class QuestsManager
             // Clean up temporary files
             ExtractManager.CleanTemp();
             local_quests_data = null;
+        }
+    }
+
+    private void ApplyLocalManifestData(Dictionary<string, QuestData.Quest> quests)
+    {
+        string saveLocation = ContentData.DownloadPath();
+        ManifestManager manager = new ManifestManager(saveLocation);
+        IniData localManifest = manager.GetLocalQuestManifestIniData();
+        if (localManifest == null) return;
+
+        foreach (var kvp in quests)
+        {
+            string shortKey = Path.GetFileName(kvp.Key);
+            if (shortKey.EndsWith(ValkyrieConstants.ScenarioDownloadContainerExtension))
+            {
+                shortKey = shortKey.Substring(0, shortKey.Length - ValkyrieConstants.ScenarioDownloadContainerExtension.Length);
+            }
+            if (string.IsNullOrEmpty(shortKey)) continue;
+
+            if (localManifest.data.ContainsKey(shortKey))
+            {
+                var manifestEntry = localManifest.data[shortKey];
+                if (manifestEntry.ContainsKey("url"))
+                {
+                    kvp.Value.package_url = manifestEntry["url"];
+                }
+            }
         }
     }
 }

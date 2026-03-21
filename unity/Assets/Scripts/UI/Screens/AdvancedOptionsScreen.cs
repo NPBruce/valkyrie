@@ -70,7 +70,9 @@ namespace Assets.Scripts.UI.Screens
             ui.SetText(SET_EDITOR_ALPHA);
             ui.SetTextAlignment(TextAnchor.MiddleCenter);
             ui.SetFont(game.gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            float titleWidth = ui.GetStringWidth(SET_EDITOR_ALPHA, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont());
+            ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetMediumFont() * Mathf.Min(1f, 38f / titleWidth)));
 
             Texture2D SampleTex = ContentData.FileToTexture(game.cd.Get<ImageData>(IMG_LOW_EDITOR_TRANSPARENCY).image);
             Sprite SampleSprite = Sprite.Create(SampleTex, new Rect(0, 0, SampleTex.width, SampleTex.height), Vector2.zero, 1);
@@ -119,7 +121,9 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetLocation(UIScaler.GetHCenter() - 10, 14, 20, 2);
                 ui.SetText(PLAY_AUDIO_IN_BACKGROUND);
                 ui.SetFont(game.gameType.GetHeaderFont());
-                ui.SetFontSize(UIScaler.GetMediumFont());
+
+                float titleWidth = ui.GetStringWidth(PLAY_AUDIO_IN_BACKGROUND, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont());
+                ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetMediumFont() * Mathf.Min(1f, 38f / titleWidth)));
 
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetHCenter() - 3, 16.5f, 6, 2);
@@ -148,7 +152,9 @@ namespace Assets.Scripts.UI.Screens
             ui.SetLocation(UIScaler.GetHCenter() - 10, 19.5f, 20, 2);
             ui.SetText(VIEW_LOCK);
             ui.SetFont(game.gameType.GetHeaderFont());
-            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            float titleWidth = ui.GetStringWidth(VIEW_LOCK, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont());
+            ui.SetFontSize(Mathf.RoundToInt(UIScaler.GetMediumFont() * Mathf.Min(1f, 38f / titleWidth)));
 
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter() - 3, 22f, 6, 2);

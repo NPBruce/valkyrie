@@ -1113,6 +1113,7 @@ namespace Assets.Scripts.UI.Screens
             if (stopwatch.ElapsedMilliseconds > 4)
             {
                 yield return null;
+                if (scrollArea == null) yield break;
                 stopwatch.Restart();
             }
         }
@@ -1770,7 +1771,12 @@ namespace Assets.Scripts.UI.Screens
                 foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.QUESTUI))
                     Destroy(go);
                 ValkyrieDebug.Log("INFO: ... and launch online quest");
-                new QuestDetailsScreen(QuestLoader.GetSingleQuest(key));
+                QuestData.Quest localQ = QuestLoader.GetSingleQuest(key);
+                if (localQ != null)
+                {
+                    localQ.package_url = q.package_url;
+                }
+                new QuestDetailsScreen(localQ);
             }
             else
             {
