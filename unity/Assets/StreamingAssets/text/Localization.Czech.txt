@@ -710,4 +710,4 @@ CUSTOM_IMAGE,Vlastní obrázek
 FALLBACK_LANG,Záložní jazyk
 
 LANGUAGE,Jazyk
-PROVIDE_FEEDBACK,Poskytnout zpětnou vazbu
+REPORT_ISSUE,Nahlásit problém

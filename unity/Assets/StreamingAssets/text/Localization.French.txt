@@ -539,4 +539,4 @@ CUSTOM_IMAGE,Image personnalisée
 FALLBACK_LANG,Langue de repli
 
 LANGUAGE,Langue
-PROVIDE_FEEDBACK,Fournir des commentaires
+REPORT_ISSUE,Signaler un problème

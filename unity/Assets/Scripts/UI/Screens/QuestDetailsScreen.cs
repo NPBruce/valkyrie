@@ -123,7 +123,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 UIElement uiIssue = new UIElement();
                 uiIssue.SetLocation(UIScaler.GetRight(-8.5f), 3f, 8, 2);
-                StringKey feedbackKey = new StringKey("val", "PROVIDE_FEEDBACK");
+                StringKey feedbackKey = new StringKey("val", "REPORT_ISSUE");
                 uiIssue.SetText(feedbackKey, Color.white);
                 uiIssue.SetFont(game.gameType.GetHeaderFont());
                 if (uiIssue.GetStringWidth(feedbackKey, UIScaler.GetMediumFont(), game.gameType.GetHeaderFont()) > 7.5f)
