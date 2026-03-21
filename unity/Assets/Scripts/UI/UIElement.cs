@@ -340,7 +340,15 @@ namespace Assets.Scripts.UI
             {
                 uiText.material = uiText.font.material;
             }
-            uiText.text = content;
+
+            if (uiText.font != null && Game.Get() != null && Game.Get().gameType is D2EGameType && uiText.font.name == Game.Get().gameType.GetHeaderFont().name)
+            {
+                uiText.text = content.ToUpper();
+            }
+            else
+            {
+                uiText.text = content;
+            }
         }
 
         /// <summary>
@@ -390,6 +398,11 @@ namespace Assets.Scripts.UI
         {
             if (text == null) { ValkyrieTools.ValkyrieDebug.Log("SetFont called without text"); return; }
             text.GetComponent<UnityEngine.UI.Text>().font = font;
+
+            if (font != null && Game.Get() != null && Game.Get().gameType is D2EGameType && font.name == Game.Get().gameType.GetHeaderFont().name)
+            {
+                text.GetComponent<UnityEngine.UI.Text>().text = text.GetComponent<UnityEngine.UI.Text>().text.ToUpper();
+            }
         }
 
         /// <summary>
