@@ -55,6 +55,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Über Google Play installieren
 CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
+CREATE,Erstellen
 CUSTOMMONSTER,Spezial-Monster
 DEFAULTMUSICON,Standardmusik einschalten
 D2E_APP_NOT_FOUND,"Road to Legend" nicht gefunden
@@ -64,6 +65,7 @@ D2E_NAME,Descent 2. Edition: Die Reise ins Dunkel
 D2E_QUEST_NAME,Szenario
 DEFEATED,Besiegt
 DELETE,Löschen
+SCENARIO_DISPLAY_NAME,Szenario-Anzeigename
 UPDATE,Update
 DIALOG,Dialog
 DOOR,Tür
@@ -77,6 +79,7 @@ EVADE,Ausweichen
 EVENT,Ereignis
 EXIT,Verlassen
 FINISHED,Fertig
+SCENARIO_FOLDER_NAME,Szenario-Ordnername
 FIRST,Erster
 FORCE_ACTIVATE,Erzwinge Aktivierung
 
@@ -124,6 +127,8 @@ MUSIC,Musik
 NAME,Name
 NEW,Neu
 NEW_X,{Neu {0}}
+NEW_QUEST_FOLDER_EXISTS,Ordnername bereits vorhanden
+NEW_QUEST_INVALID_NAME,Ungültiger Ordnername
 NONE,{Keine}
 
 NEXT_EVENTS,Nächstes Ereignis
@@ -133,6 +138,7 @@ NO_ATTACK_MESSAGE,Kein-Angriff-Meldung:
 NUMBER,Nummer
 NUMBER_HEROS,{0} Helden:
 OPTIONS,Optionen
+OPEN_IN_FILE_MANAGER,Im Dateimanager öffnen
 PLACEMENT,Platzierung
 
 PLACE_IMG,Platz. Bild
@@ -155,6 +161,7 @@ PUZZLE_SLIDE_CLASS,Schieberätsel
 QUEST,Szenario
 QUEST_NAME_DOWNLOAD,Download {0}
 QUEST_NAME_EDITOR,{0}-Editor
+EDITOR_ANDROID_NOT_SUPPORTED,Der Quest-/Szenario-Editor ist auf Android nicht verfügbar.\nBitte verwende die Windows-, Mac- oder Linux-Version von Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Zitat
@@ -535,4 +542,4 @@ CUSTOM_IMAGE,Benutzerdefiniertes Bild
 
 FALLBACK_LANG,Ausweichsprache
 LANGUAGE,Sprache
-PROVIDE_FEEDBACK,Feedback geben
+REPORT_ISSUE,Problem melden

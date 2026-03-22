@@ -75,6 +75,32 @@ To add a new editable field to an `EditorComponent`:
 3.  Bind a button action (usually on the element itself or a separate button) to a method that updates the underlying data model.
 4.  Implement the update method (e.g., `UpdateQuestName()`) which reads the value from the UI element, updates the data, and calls `Update()` to refresh.
 
+## Dialog Tags & Cleanup
+
+All `UIElement`s default to the `Game.DIALOG` tag. **`Destroyer.Dialog()` destroys every `Game.DIALOG`-tagged object**, including the elements of the current screen. Calling it to close a small popup will blank the entire screen.
+
+### Choosing the right tag and destroyer
+
+| Use case | Tag | Destroyer |
+|---|---|---|
+| Full screen / screen transition | `Game.DIALOG` (default) | `Destroyer.Dialog()` |
+| Overlay / modal on top of an existing screen | `Game.DIALOG_PART` | `Destroyer.DialogParts()` |
+
+Pass the tag explicitly when creating overlay elements:
+```csharp
+UIElement ui = new UIElement(Game.DIALOG_PART);
+// ...
+ui.SetButton(delegate { Destroyer.DialogParts(); });
+```
+
+### Disabled button pattern
+
+To show a button as unavailable (e.g. a feature not supported on the current platform), match the pattern used for the inactive "Load Quest" button:
+- Set `SetBGColor(BUTTON_BG_COLOR)` as normal
+- Pass `Color.grey` to `SetText(...)`
+- Use `BUTTON_BORDER_COLOR_INACTIVE` for the border
+- Do **not** call `SetButton(...)` — no callback means no interaction
+
 ## Styling & resources
 - **Fonts**: Accessed via `Game.Get().gameType.GetFont()`.
 - **Colors**: Standard Unity `Color` structs. `Color.clear` is often used for invisible click targets.

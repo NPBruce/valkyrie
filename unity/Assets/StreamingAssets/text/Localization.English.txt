@@ -75,6 +75,7 @@ CONTENT_INSTALL_VIA_STEAM,Install via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Install via Google Play
 CONTINUE,Continue
 COPY,Copy
+CREATE,Create
 CUSTOMMONSTER,CustomMonster
 DEFAULTMUSICON,Turn on default music
 ORIGINAL,Original
@@ -86,6 +87,7 @@ D2E_NAME,Descent: Journeys in the Dark Second Edition
 D2E_QUEST_NAME,Quest
 DEFEATED,Defeated
 DELETE,Delete
+SCENARIO_DISPLAY_NAME,Scenario Display Name
 UPDATE,Update
 DIALOG,Dialog
 DOOR,Door
@@ -102,6 +104,7 @@ EVENT,Event
 EXIT,Exit
 FINISHED,Finished
 FIRST,First
+SCENARIO_FOLDER_NAME,Scenario Folder Name
 FORCE_ACTIVATE,Force Activate
 
 HEALTH,Health
@@ -149,6 +152,8 @@ MUSIC,Music
 NAME,Name
 NEW,New
 NEW_X,{New {0}}
+NEW_QUEST_FOLDER_EXISTS,Folder name already exists
+NEW_QUEST_INVALID_NAME,Invalid folder name
 NONE,{None}
 
 NEXT_EVENTS,Next Events
@@ -160,6 +165,7 @@ NUMBER_HEROS,{0} Heros:
 OK,Ok
 OP,Op
 OPTIONS,Options
+OPEN_IN_FILE_MANAGER,Open in File Manager
 PLACEMENT,Placement
 
 PLACE_IMG,Place Img
@@ -182,6 +188,7 @@ PUZZLE_SLIDE_CLASS,slide
 QUEST,Quest
 QUEST_NAME_DOWNLOAD,Download {0}
 QUEST_NAME_EDITOR,{0} Editor
+EDITOR_ANDROID_NOT_SUPPORTED,The Quest/Scenario Editor is not available on Android.\nPlease use the Windows, Mac or Linux version of Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Quota
@@ -706,4 +713,4 @@ IMAGE_PLACE_SIZE,Image Place Size
 FALLBACK_LANG,Fallback language
 
 LANGUAGE,Language
-PROVIDE_FEEDBACK,Provide feedback
+REPORT_ISSUE,Report an issue

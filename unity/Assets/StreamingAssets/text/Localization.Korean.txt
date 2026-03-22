@@ -81,6 +81,7 @@ CONTENT_INSTALL_VIA_STEAM,Steam으로 설치
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Google Play로 설치
 CONTINUE,계속
 COPY,복사
+CREATE,만들기
 CUSTOMMONSTER,커스텀괴물
 DEFAULTMUSICON,배경음악 키기
 D2E_APP_NOT_FOUND,Road to Legend를 찾을 수 없습니다
@@ -90,6 +91,7 @@ D2E_NAME,디센트: 어둠속의 여정 2판
 D2E_QUEST_NAME,퀘스트
 DEFEATED,탈락
 DELETE,삭제
+SCENARIO_DISPLAY_NAME,시나리오 표시 이름
 UPDATE,업데이트
 DIALOG,대화창
 DOOR,문
@@ -105,6 +107,7 @@ EVADE,회피
 EVENT,이벤트
 EXIT,종료
 FINISHED,준비 계속하기
+SCENARIO_FOLDER_NAME,시나리오 폴더 이름
 FIRST,처음
 FORCE_ACTIVATE,강제 활성화
 
@@ -153,6 +156,8 @@ MUSIC,음악
 NAME,이름
 NEW,새로운
 NEW_X,{새로운 {0}}
+NEW_QUEST_FOLDER_EXISTS,폴더 이름이 이미 존재합니다
+NEW_QUEST_INVALID_NAME,잘못된 폴더 이름
 NONE,{없음}
 
 NEXT_EVENTS,다음 이벤트
@@ -164,6 +169,7 @@ NUMBER_HEROS,{0} 영웅:
 OK,확인
 OP,Op
 OPTIONS,옵션
+OPEN_IN_FILE_MANAGER,파일 관리자에서 열기
 PLACEMENT,놓기
 
 PLACE_IMG,이미지 조각
@@ -186,6 +192,7 @@ PUZZLE_SLIDE_등급,슬라이드
 QUEST,퀘스트
 QUEST_NAME_DOWNLOAD,다운로드 {0}
 QUEST_NAME_EDITOR,{0} 에디터
+EDITOR_ANDROID_NOT_SUPPORTED,퀘스트/시나리오 에디터는 Android에서 사용할 수 없습니다.\nValkyrie의 Windows, Mac 또는 Linux 버전을 사용하세요.
 EDITOR,에디터
 QUEST_NAME_UPDATE,  [업데이트] {0}
 QUOTA,몫

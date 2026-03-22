@@ -50,7 +50,16 @@ When your changes create orphans:
 
 The test: Every changed line should trace directly to the user's request.
 
-#### 4. Goal-Driven Execution
+#### 4. Update Agent Rules After Implementation
+
+**After implementing something non-trivial, check if a rule file should be updated.**
+
+- Review the `.agent/rules/` files for sections relevant to what you just implemented.
+- If you discovered something that isn't documented — a pattern, a gotcha, a missing entry — add it.
+- Only add information that is genuinely non-obvious or would prevent a future mistake. Don't pad existing docs.
+- If no existing rule file fits, consider whether the insight belongs in `agents.md` itself or ask the user if it makes sense to create a new .md file.
+
+#### 5. Goal-Driven Execution
 
 **Define success criteria. Loop until verified.**
 

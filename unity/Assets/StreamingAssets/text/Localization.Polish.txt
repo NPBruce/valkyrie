@@ -56,6 +56,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
 CONTENT_LOCATE,Zlokalizuj katalog z grą
 CONTINUE,Kontynuuj
 COPY,Kopiuj
+CREATE,Utwórz
 CUSTOMMONSTER,Modyfikacja Potwora
 D2E_APP_NOT_FOUND,Nie znaleziono gry.
 D2E_HEROES_NAME,Bohaterowie
@@ -64,6 +65,7 @@ D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
 D2E_QUEST_NAME,Przygoda
 DEFEATED,Pokonany
 DELETE,Usuń
+SCENARIO_DISPLAY_NAME,Wyświetlana nazwa scenariusza
 UPDATE,Aktualizuj
 DIALOG,Wyświetlany tekst
 DOOR,Drzwi
@@ -78,6 +80,7 @@ EVADE,Unik
 EVENT,Wydarzenie
 EXIT,Wyjście
 FINISHED,Zakończono
+SCENARIO_FOLDER_NAME,Nazwa folderu scenariusza
 FIRST,Pierwszy
 FORCE_ACTIVATE,Wymuś Aktywację
 
@@ -124,6 +127,8 @@ MUSIC,Muzyka
 NAME,Imię
 NEW,Nowy
 NEW_X,{Nowy {0}}
+NEW_QUEST_FOLDER_EXISTS,Nazwa folderu już istnieje
+NEW_QUEST_INVALID_NAME,Nieprawidłowa nazwa folderu
 NONE,{Żaden}
 
 NEXT_EVENTS,Porządek wydarzeń
@@ -135,6 +140,7 @@ NUMBER_HEROS,{0} Bohater:
 OK,Ok
 OP,Operator
 OPTIONS,Opcje
+OPEN_IN_FILE_MANAGER,Otwórz w menedżerze plików
 PLACEMENT,Rozmieszczenie
 
 PLACE_IMG,Umieść Obraz
@@ -156,6 +162,7 @@ PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
 QUEST_NAME_DOWNLOAD,Pobieranie
 QUEST_NAME_EDITOR,Edytor Scenariuszy
+EDITOR_ANDROID_NOT_SUPPORTED,Edytor questów/scenariuszy nie jest dostępny na Androidzie.\nProszę użyć wersji Windows, Mac lub Linux Valkyrie.
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}
 QUOTA,Wartość testu
@@ -515,4 +522,4 @@ CUSTOM_IMAGE,Niestandardowy obraz
 FALLBACK_LANG,Język alternatywny
 
 LANGUAGE,Język
-PROVIDE_FEEDBACK,Przekaż opinię
+REPORT_ISSUE,Zgłoś problem

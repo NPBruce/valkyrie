@@ -187,6 +187,26 @@ namespace Assets.Scripts.UI.Screens
         {
             ValkyrieDebug.Log("INFO: Accessing editor selection screen");
 
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                float width = 28;
+                float x = (UIScaler.GetWidthUnits() - width) / 2f;
+
+                UIElement ui = new UIElement(Game.DIALOG_PART);
+                ui.SetLocation(x, 8, width, 6);
+                ui.SetText(new StringKey("val", "EDITOR_ANDROID_NOT_SUPPORTED"));
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui);
+
+                ui = new UIElement(Game.DIALOG_PART);
+                ui.SetLocation(x + (width / 2f) - 5, 15, 10, 2);
+                ui.SetText(CommonStringKeys.CLOSE);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Destroyer.DialogParts(); });
+                new UIElementBorder(ui);
+                return;
+            }
+
             Game game = Game.Get();
             game.SelectEditQuest();
         }
