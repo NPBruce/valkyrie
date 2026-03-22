@@ -105,15 +105,23 @@ namespace Assets.Scripts.UI.Screens
             ui.SetBGColor(BUTTON_BG_COLOR);
             new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
-            // Quest/Scenario editor
+            // Quest/Scenario editor (disabled on Android)
             ui = new UIElement();
             ui.SetLocation(menuButtonsX, 14, ButtonWidth, 2);
-            ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
-            ui.SetButton(Editor);
             ui.SetBGColor(BUTTON_BG_COLOR);
-            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
+            if (Application.platform != RuntimePlatform.Android)
+            {
+                ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
+                ui.SetButton(Editor);
+                new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
+            }
+            else
+            {
+                ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()), Color.grey);
+                new UIElementBorder(ui, BUTTON_BORDER_COLOR_INACTIVE);
+            }
 
             // About page (managed in this class)
             ui = new UIElement();
