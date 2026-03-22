@@ -162,6 +162,7 @@ PUZZLE_SLIDE_CLASS,przesuń
 QUEST,Scenariusz
 QUEST_NAME_DOWNLOAD,Pobieranie
 QUEST_NAME_EDITOR,Edytor Scenariuszy
+EDITOR_ANDROID_NOT_SUPPORTED,Edytor questów/scenariuszy nie jest dostępny na Androidzie.\nProszę użyć wersji Windows, Mac lub Linux Valkyrie.
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}
 QUOTA,Wartość testu

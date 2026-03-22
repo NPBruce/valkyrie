@@ -194,6 +194,7 @@ PUZZLE_SLIDE_CLASS,slide
 QUEST,Úkol
 QUEST_NAME_DOWNLOAD,Stáhnout {0}
 QUEST_NAME_EDITOR,Editor úkolů
+EDITOR_ANDROID_NOT_SUPPORTED,Editor úkolů/scénářů není na Androidu dostupný.\nProsím použijte verzi Valkyrie pro Windows, Mac nebo Linux.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Aktualizace] {0}
 QUOTA,Kvóta

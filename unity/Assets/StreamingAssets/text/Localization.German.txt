@@ -161,6 +161,7 @@ PUZZLE_SLIDE_CLASS,Schieberätsel
 QUEST,Szenario
 QUEST_NAME_DOWNLOAD,Download {0}
 QUEST_NAME_EDITOR,{0}-Editor
+EDITOR_ANDROID_NOT_SUPPORTED,Der Quest-/Szenario-Editor ist auf Android nicht verfügbar.\nBitte verwende die Windows-, Mac- oder Linux-Version von Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Zitat

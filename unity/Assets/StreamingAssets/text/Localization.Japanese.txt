@@ -256,6 +256,7 @@ PUZZLE_SLIDE_CLASS,華容道
 QUEST,クエスト
 QUEST_NAME_DOWNLOAD,{0} をダウンロード
 QUEST_NAME_EDITOR,{0}を編集
+EDITOR_ANDROID_NOT_SUPPORTED,クエスト/シナリオエディターはAndroidでは利用できません。\nWindowsまたはMac、Linux版のValkyrieをご利用ください。
 EDITOR,編集
 QUEST_NAME_UPDATE,  [更新] {0}
 QUOTA,クォータ

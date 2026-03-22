@@ -105,23 +105,15 @@ namespace Assets.Scripts.UI.Screens
             ui.SetBGColor(BUTTON_BG_COLOR);
             new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
-            // Quest/Scenario editor (disabled on Android)
+            // Quest/Scenario editor
             ui = new UIElement();
             ui.SetLocation(menuButtonsX, 14, ButtonWidth, 2);
+            ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetMediumFont());
+            ui.SetButton(Editor);
             ui.SetBGColor(BUTTON_BG_COLOR);
-            if (Application.platform != RuntimePlatform.Android)
-            {
-                ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()));
-                ui.SetButton(Editor);
-                new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
-            }
-            else
-            {
-                ui.SetText(new StringKey("val","QUEST_NAME_EDITOR",game.gameType.QuestName()), Color.grey);
-                new UIElementBorder(ui, BUTTON_BORDER_COLOR_INACTIVE);
-            }
+            new UIElementBorder(ui, BUTTON_BORDER_COLOR_ACTIVE);
 
             // About page (managed in this class)
             ui = new UIElement();
@@ -194,6 +186,26 @@ namespace Assets.Scripts.UI.Screens
         public void Editor()
         {
             ValkyrieDebug.Log("INFO: Accessing editor selection screen");
+
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                float width = 28;
+                float x = (UIScaler.GetWidthUnits() - width) / 2f;
+
+                UIElement ui = new UIElement(Game.DIALOG_PART);
+                ui.SetLocation(x, 8, width, 6);
+                ui.SetText(new StringKey("val", "EDITOR_ANDROID_NOT_SUPPORTED"));
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                new UIElementBorder(ui);
+
+                ui = new UIElement(Game.DIALOG_PART);
+                ui.SetLocation(x + (width / 2f) - 5, 15, 10, 2);
+                ui.SetText(CommonStringKeys.CLOSE);
+                ui.SetFontSize(UIScaler.GetMediumFont());
+                ui.SetButton(delegate { Destroyer.DialogParts(); });
+                new UIElementBorder(ui);
+                return;
+            }
 
             Game game = Game.Get();
             game.SelectEditQuest();

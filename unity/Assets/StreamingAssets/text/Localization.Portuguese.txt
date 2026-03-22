@@ -170,6 +170,7 @@ PUZZLE_SLIDE_CLASS,deslizar
 QUEST,Quest
 QUEST_NAME_DOWNLOAD,Download {0}
 QUEST_NAME_EDITOR,{0} Editor
+EDITOR_ANDROID_NOT_SUPPORTED,O editor de quests/cenários não está disponível no Android.\nPor favor use a versão Windows, Mac ou Linux do Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,Cota

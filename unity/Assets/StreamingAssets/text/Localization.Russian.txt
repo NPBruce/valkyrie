@@ -157,6 +157,7 @@ PUZZLE_SLIDE_CLASS,слайд
 QUEST,Задание
 QUEST_NAME_DOWNLOAD,Загрузить {0}
 QUEST_NAME_EDITOR,Редактор сценариев
+EDITOR_ANDROID_NOT_SUPPORTED,Редактор квестов/сценариев недоступен на Android.\nПожалуйста, используйте версию Valkyrie для Windows, Mac или Linux.
 EDITOR,Редактор
 QUEST_NAME_UPDATE,  [Обновить] {0}
 QUOTA,Лимит

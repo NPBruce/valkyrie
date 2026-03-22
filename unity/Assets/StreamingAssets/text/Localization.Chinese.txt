@@ -159,6 +159,7 @@ PUZZLE_SLIDE_CLASS,華容道
 QUEST,劇本
 QUEST_NAME_DOWNLOAD,下載{0}
 QUEST_NAME_EDITOR,{0}編輯器
+EDITOR_ANDROID_NOT_SUPPORTED,任務/場景編輯器在Android上不可用。\n請使用Windows、Mac或Linux版本的Valkyrie。
 EDITOR,編輯器
 QUEST_NAME_UPDATE,  [Update] {0}
 QUOTA,配額

@@ -192,6 +192,7 @@ PUZZLE_SLIDE_등급,슬라이드
 QUEST,퀘스트
 QUEST_NAME_DOWNLOAD,다운로드 {0}
 QUEST_NAME_EDITOR,{0} 에디터
+EDITOR_ANDROID_NOT_SUPPORTED,퀘스트/시나리오 에디터는 Android에서 사용할 수 없습니다.\nValkyrie의 Windows, Mac 또는 Linux 버전을 사용하세요.
 EDITOR,에디터
 QUEST_NAME_UPDATE,  [업데이트] {0}
 QUOTA,몫

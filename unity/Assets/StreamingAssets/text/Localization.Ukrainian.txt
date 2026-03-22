@@ -160,6 +160,7 @@ PUZZLE_SLIDE_CLASS,ковзанка
 QUEST,Квест
 QUEST_NAME_DOWNLOAD,Завантажити {0}
 QUEST_NAME_EDITOR,Редактор {0}
+EDITOR_ANDROID_NOT_SUPPORTED,Редактор квестів/сценаріїв недоступний на Android.\nБудь ласка, використовуйте версію Valkyrie для Windows, Mac або Linux.
 EDITOR,Редактор
 QUEST_NAME_UPDATE,  [Оновити] {0}
 QUOTA,Квота

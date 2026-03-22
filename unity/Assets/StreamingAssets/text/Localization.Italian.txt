@@ -132,6 +132,7 @@ PUZZLE_SLIDE_CLASS,meccanismo
 QUEST,Scenario
 QUEST_NAME_DOWNLOAD,Scarica {0}
 QUEST_NAME_EDITOR,{0} Editor
+EDITOR_ANDROID_NOT_SUPPORTED,L'editor di quest/scenari non è disponibile su Android.\nUtilizza la versione Windows, Mac o Linux di Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Aggiorna] {0}
 QUOTA,Quota
