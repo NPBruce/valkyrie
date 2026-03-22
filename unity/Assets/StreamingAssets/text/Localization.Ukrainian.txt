@@ -137,6 +137,7 @@ NUMBER_HEROS,{0} героїв:
 OK,Ок
 OP,Оп
 OPTIONS,Налаштування
+OPEN_IN_FILE_MANAGER,Відкрити у файловому менеджері
 PLACEMENT,Розміщення
 
 PLACE_IMG,Зображення місця

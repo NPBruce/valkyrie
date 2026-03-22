@@ -134,6 +134,7 @@ NO_ATTACK_MESSAGE,Обычное сообщение:
 NUMBER,Номер
 NUMBER_HEROS,{0} Герои:
 OPTIONS,Настройки
+OPEN_IN_FILE_MANAGER,Открыть в файловом менеджере
 PLACEMENT,Помещение
 
 PLACE_IMG,Фото помещения

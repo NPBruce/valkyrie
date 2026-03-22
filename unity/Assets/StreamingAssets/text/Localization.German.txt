@@ -138,6 +138,7 @@ NO_ATTACK_MESSAGE,Kein-Angriff-Meldung:
 NUMBER,Nummer
 NUMBER_HEROS,{0} Helden:
 OPTIONS,Optionen
+OPEN_IN_FILE_MANAGER,Im Dateimanager öffnen
 PLACEMENT,Platzierung
 
 PLACE_IMG,Platz. Bild

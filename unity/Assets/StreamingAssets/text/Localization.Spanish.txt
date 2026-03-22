@@ -144,6 +144,7 @@ NUMBER_HEROS,{0} Héroes:
 OK,Ok
 OP,Op
 OPTIONS,Opciones
+OPEN_IN_FILE_MANAGER,Abrir en el administrador de archivos
 PLACEMENT,Colocación
 
 PLACE_IMG,Poner Img

@@ -137,6 +137,7 @@ NUMBER_HEROS,{0} 調查員:
 OK,確定
 OP,Op
 OPTIONS,設置
+OPEN_IN_FILE_MANAGER,在文件管理器中打开
 PLACEMENT,Placement
 
 PLACE_IMG,Place Img

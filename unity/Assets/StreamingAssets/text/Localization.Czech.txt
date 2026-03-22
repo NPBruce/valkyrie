@@ -171,6 +171,7 @@ NUMBER_HEROS,{0} Hrdiny:
 OK,Ok
 OP,Op
 OPTIONS,Volby
+OPEN_IN_FILE_MANAGER,Otevřít ve správci souborů
 PLACEMENT,Umístění
 
 PLACE_IMG,Umístit obrázek

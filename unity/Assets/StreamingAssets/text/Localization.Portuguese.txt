@@ -147,6 +147,7 @@ NUMBER_HEROS,{0} Heróis:
 OK,Ok
 OP,Op
 OPTIONS,Opções
+OPEN_IN_FILE_MANAGER,Abrir no gerenciador de arquivos
 PLACEMENT,Atribuição
 
 PLACE_IMG,Atribuir Img

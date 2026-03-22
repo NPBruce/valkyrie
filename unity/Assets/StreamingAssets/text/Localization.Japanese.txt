@@ -234,6 +234,7 @@ NUMBER_HEROS,{0}人の探索者:
 OK,確定
 OP,Op
 OPTIONS,オプション
+OPEN_IN_FILE_MANAGER,ファイルマネージャーで開く
 PLACEMENT,配置
 
 PLACE_IMG,Place Img

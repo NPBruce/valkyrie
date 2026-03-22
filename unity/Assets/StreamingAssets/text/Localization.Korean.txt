@@ -169,6 +169,7 @@ NUMBER_HEROS,{0} 영웅:
 OK,확인
 OP,Op
 OPTIONS,옵션
+OPEN_IN_FILE_MANAGER,파일 관리자에서 열기
 PLACEMENT,놓기
 
 PLACE_IMG,이미지 조각

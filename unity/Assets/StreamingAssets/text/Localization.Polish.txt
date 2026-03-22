@@ -140,6 +140,7 @@ NUMBER_HEROS,{0} Bohater:
 OK,Ok
 OP,Operator
 OPTIONS,Opcje
+OPEN_IN_FILE_MANAGER,Otwórz w menedżerze plików
 PLACEMENT,Rozmieszczenie
 
 PLACE_IMG,Umieść Obraz

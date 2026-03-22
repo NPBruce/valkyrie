@@ -165,6 +165,7 @@ NUMBER_HEROS,{0} Heros:
 OK,Ok
 OP,Op
 OPTIONS,Options
+OPEN_IN_FILE_MANAGER,Open in File Manager
 PLACEMENT,Placement
 
 PLACE_IMG,Place Img

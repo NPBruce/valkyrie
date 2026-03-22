@@ -110,6 +110,7 @@ NUMBER_HEROS,{0} Eroi:
 OK,Ok
 OP,Opera
 OPTIONS,Opzioni
+OPEN_IN_FILE_MANAGER,Apri nel gestore file
 PLACEMENT,Posizione
 
 PLACE_IMG,Posiziona Img
