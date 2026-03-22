@@ -56,6 +56,7 @@ CONTENT_INSTALL_VIA_GOOGLEPLAY,Zainstaluj przy użyciu Google Play
 CONTENT_LOCATE,Zlokalizuj katalog z grą
 CONTINUE,Kontynuuj
 COPY,Kopiuj
+CREATE,Utwórz
 CUSTOMMONSTER,Modyfikacja Potwora
 D2E_APP_NOT_FOUND,Nie znaleziono gry.
 D2E_HEROES_NAME,Bohaterowie
@@ -64,6 +65,7 @@ D2E_NAME,Descent 2. edycja: Wędrówki w Mroku
 D2E_QUEST_NAME,Przygoda
 DEFEATED,Pokonany
 DELETE,Usuń
+SCENARIO_DISPLAY_NAME,Wyświetlana nazwa scenariusza
 UPDATE,Aktualizuj
 DIALOG,Wyświetlany tekst
 DOOR,Drzwi
@@ -78,6 +80,7 @@ EVADE,Unik
 EVENT,Wydarzenie
 EXIT,Wyjście
 FINISHED,Zakończono
+SCENARIO_FOLDER_NAME,Nazwa folderu scenariusza
 FIRST,Pierwszy
 FORCE_ACTIVATE,Wymuś Aktywację
 
@@ -124,6 +127,8 @@ MUSIC,Muzyka
 NAME,Imię
 NEW,Nowy
 NEW_X,{Nowy {0}}
+NEW_QUEST_FOLDER_EXISTS,Nazwa folderu już istnieje
+NEW_QUEST_INVALID_NAME,Nieprawidłowa nazwa folderu
 NONE,{Żaden}
 
 NEXT_EVENTS,Porządek wydarzeń

@@ -19,6 +19,14 @@ public class QuestEditSelection
     private string copySearchFilter = "";
     private UIElementEditable copySearchInput = null;
     private static readonly StringKey SEARCH_BY_NAME = new StringKey("val", "SEARCH_BY_NAME");
+    private static readonly StringKey CREATE = new StringKey("val", "CREATE");
+    private static readonly StringKey FOLDER_NAME = new StringKey("val", "SCENARIO_FOLDER_NAME");
+    private static readonly StringKey DISPLAY_NAME = new StringKey("val", "SCENARIO_DISPLAY_NAME");
+    private static readonly StringKey NEW_QUEST_FOLDER_EXISTS = new StringKey("val", "NEW_QUEST_FOLDER_EXISTS");
+    private static readonly StringKey NEW_QUEST_INVALID_NAME = new StringKey("val", "NEW_QUEST_INVALID_NAME");
+
+    private UIElementEditable newQuestFolderInput = null;
+    private UIElementEditable newQuestNameInput = null;
 
     // Create a pack with list of quests to edit
     public QuestEditSelection()
@@ -106,7 +114,7 @@ public class QuestEditSelection
         ui.SetText(CommonStringKeys.NEW);
         ui.SetFont(Game.Get().gameType.GetHeaderFont());
         ui.SetFontSize(UIScaler.GetMediumFont());
-        ui.SetButton(NewQuest);
+        ui.SetButton(delegate { NewQuestDialog(); });
         new UIElementBorder(ui);
     }
 
@@ -159,7 +167,6 @@ public class QuestEditSelection
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
             ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
-            ui.SetTextAlignment(TextAnchor.MiddleLeft);
             ui.SetButton(delegate { Delete(key); });
             ui.SetBGColor(Color.red);
             offset += 2;
@@ -266,7 +273,6 @@ public class QuestEditSelection
             ui = new UIElement(scrollArea.GetScrollTransform());
             ui.SetLocation(1, offset, UIScaler.GetWidthUnits() - 5, 1.2f);
             ui.SetText(new StringKey("val", "INDENT", translation), Color.black);
-            ui.SetTextAlignment(TextAnchor.MiddleLeft);
             ui.SetButton(delegate { Copy(key); });
             ui.SetBGColor(Color.white);
             offset += 2;
@@ -397,8 +403,93 @@ public class QuestEditSelection
         }
     }
 
-    // Create a new quest
-    public void NewQuest()
+    public void NewQuestDialog(string errorMessage = "", string folderValue = "", string nameValue = "")
+    {
+        Game game = Game.Get();
+
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag(Game.DIALOG))
+            Object.Destroy(go);
+
+        UIElement ui = new UIElement();
+        ui.SetLocation(2, 1, UIScaler.GetWidthUnits() - 4, 3);
+        ui.SetText(CommonStringKeys.NEW.Translate() + " " + game.gameType.QuestName().Translate());
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetLargeFont());
+
+        float center = UIScaler.GetHCenter(-9f);
+
+        ui = new UIElement();
+        ui.SetLocation(center, 5.5f, 18f, 1.2f);
+        ui.SetText(FOLDER_NAME, Color.white);
+
+        newQuestFolderInput = new UIElementEditable();
+        newQuestFolderInput.SetLocation(center, 7f, 18f, 1.5f);
+        newQuestFolderInput.SetText(folderValue);
+        newQuestFolderInput.SetSingleLine();
+        newQuestFolderInput.SetAlphanumericOnly();
+        new UIElementBorder(newQuestFolderInput, Color.grey);
+
+        ui = new UIElement();
+        ui.SetLocation(center, 9.5f, 18f, 1.2f);
+        ui.SetText(DISPLAY_NAME, Color.white);
+
+        newQuestNameInput = new UIElementEditable();
+        newQuestNameInput.SetLocation(center, 11f, 18f, 1.5f);
+        newQuestNameInput.SetText(nameValue);
+        newQuestNameInput.SetSingleLine();
+        new UIElementBorder(newQuestNameInput, Color.grey);
+
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            ui = new UIElement();
+            ui.SetLocation(center, 13.5f, 18f, 1.5f);
+            ui.SetText(errorMessage, Color.red);
+        }
+
+        ui = new UIElement();
+        ui.SetLocation(1, UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CommonStringKeys.BACK, Color.red);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(delegate { new QuestEditSelection(); });
+        new UIElementBorder(ui, Color.red);
+
+        ui = new UIElement();
+        ui.SetLocation(UIScaler.GetRight(-9), UIScaler.GetBottom(-3), 8, 2);
+        ui.SetText(CREATE);
+        ui.SetFont(game.gameType.GetHeaderFont());
+        ui.SetFontSize(UIScaler.GetMediumFont());
+        ui.SetButton(delegate { TryCreateQuest(); });
+        new UIElementBorder(ui);
+    }
+
+    private void TryCreateQuest()
+    {
+        if (newQuestFolderInput == null || newQuestNameInput == null) return;
+
+        string folderName = newQuestFolderInput.GetText().Trim();
+        string displayName = newQuestNameInput.GetText().Trim();
+
+        if (string.IsNullOrEmpty(folderName) || folderName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+        {
+            NewQuestDialog(NEW_QUEST_INVALID_NAME.Translate(), folderName, displayName);
+            return;
+        }
+
+        string dataLocation = Game.AppData() + Path.DirectorySeparatorChar + Game.Get().gameType.TypeName() + "/Editor";
+        if (Directory.Exists(dataLocation + "/" + folderName))
+        {
+            NewQuestDialog(NEW_QUEST_FOLDER_EXISTS.Translate(), folderName, displayName);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(displayName))
+            displayName = folderName;
+
+        NewQuest(folderName, displayName);
+    }
+
+    private void NewQuest(string folderName, string displayName)
     {
         editSearchFilter = "";
         Game game = Game.Get();
@@ -408,46 +499,30 @@ public class QuestEditSelection
             Directory.CreateDirectory(dataLocation);
         }
 
-        // Find an available unique directory name
-        int i = 1;
-        while (Directory.Exists(dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i))
-        {
-            i++;
-        }
-        string targetLocation = dataLocation + "/Editor" + game.gameType.QuestName().Translate() + i;
+        string targetLocation = dataLocation + "/" + folderName;
 
         try
         {
             Directory.CreateDirectory(targetLocation);
 
             List<string> questData = new List<string>();
-
-            // Create basic quest info
             questData.Add("[Quest]");
             questData.Add("type=" + game.gameType.TypeName());
             questData.Add("format=" + QuestData.Quest.currentFormat);
-            questData.Add("defaultlanguage=" + game.currentLang); 
+            questData.Add("defaultlanguage=" + game.currentLang);
             questData.Add("");
             questData.Add("[QuestText]");
-            questData.Add("Localization."+ game.currentLang +".txt");
+            questData.Add("Localization." + game.currentLang + ".txt");
 
-            // Write quest file
             File.WriteAllLines(targetLocation + ValkyrieConstants.QuestIniFilePath, questData.ToArray());
 
-            // Create new dictionary
             DictionaryI18n newScenarioDict = new DictionaryI18n(new string[1] { ".," + game.currentLang }, game.currentLang);
+            newScenarioDict.AddEntry("quest.name", displayName);
+            newScenarioDict.AddEntry("quest.description", displayName + "...");
 
-            // Add quest name to dictionary
-            newScenarioDict.AddEntry("quest.name", game.gameType.QuestName().Translate() + " " + i);
-            // Add quest description to dictionary
-            newScenarioDict.AddEntry("quest.description", game.gameType.QuestName().Translate() + " " + i + "...");
-
-            // Generate localization file
-            Dictionary<string,List<string>> localization_files = newScenarioDict.SerializeMultiple();
-
+            Dictionary<string, List<string>> localization_files = newScenarioDict.SerializeMultiple();
             foreach (string oneLang in localization_files.Keys)
             {
-                // Write localization file
                 File.WriteAllText(
                     targetLocation + "/Localization." + oneLang + ".txt",
                     string.Join(Environment.NewLine, localization_files[oneLang].ToArray()));
@@ -458,7 +533,6 @@ public class QuestEditSelection
             ValkyrieDebug.Log("Error: Failed to create new quest: " + e.Message);
             Application.Quit();
         }
-        // Back to edit selection
         new QuestEditSelection();
     }
 

@@ -59,6 +59,7 @@ CONTENT_INSTALL_VIA_STEAM,Instalar via Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar via Google Play
 CONTINUE,Continuar
 COPY,Copiar
+CREATE,Criar
 CUSTOMMONSTER,Monstro Personalizado
 D2E_APP_NOT_FOUND,Impossivel encontrar "Road of Legend"
 D2E_HEROES_NAME,Heróis
@@ -67,6 +68,7 @@ D2E_NAME,Descent: Journeys in the Dark Second Edition
 D2E_QUEST_NAME,Aventura
 DEFEATED,Derrotado
 DELETE,Deletar
+SCENARIO_DISPLAY_NAME,Nome de exibição do cenário
 UPDATE,Atualizar
 DIALOG,Diálogo
 DOOR,Porta
@@ -82,6 +84,7 @@ EVADE,Evasão
 EVENT,Evento
 EXIT,Sair
 FINISHED,Terminado
+SCENARIO_FOLDER_NAME,Nome da pasta do cenário
 FIRST,Primeiro
 FORCE_ACTIVATE,Ativação Forçada
 START_QUEST,Novo jogo
@@ -131,6 +134,8 @@ MUSIC,Música
 NAME,Nome
 NEW,Novo
 NEW_X,Novo {0}
+NEW_QUEST_FOLDER_EXISTS,O nome da pasta já existe
+NEW_QUEST_INVALID_NAME,Nome de pasta inválido
 NONE,Nenhum
 
 NEXT_EVENTS,Próximos Eventos

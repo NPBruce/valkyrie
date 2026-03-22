@@ -148,6 +148,7 @@ COMPONENT_TO_DELETE,削除するコンポーネント：
 CONTENT_IMPORTING,インポート中...
 CONTINUE,コンティニュー
 COPY,複製
+CREATE,作成
 CUSTOMMONSTER,カスタムモンスター
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,英雄
@@ -156,6 +157,7 @@ D2E_NAME,ディセント：闇への旅立ち　第２版
 D2E_QUEST_NAME,シナリオ
 DEFEATED,敗北
 DELETE,削除
+SCENARIO_DISPLAY_NAME,シナリオの表示名
 DIALOG,会話
 DOOR,ドア
 DOWNLOAD,ダウンロード
@@ -170,6 +172,7 @@ EVADE,回避
 EVENT,イベント
 EXIT,終了
 FINISHED,終了
+SCENARIO_FOLDER_NAME,シナリオのフォルダ名
 FIRST,第1の
 FORCE_ACTIVATE,強制活動させる
 
@@ -218,6 +221,8 @@ MUSIC,音楽
 NAME,名前
 NEW,新規
 NEW_X,{新規 {0}}
+NEW_QUEST_FOLDER_EXISTS,フォルダ名はすでに存在します
+NEW_QUEST_INVALID_NAME,無効なフォルダ名
 NONE,{None}
 
 NEXT_EVENTS,次のイベント

@@ -83,6 +83,7 @@ CONTENT_INSTALL_VIA_STEAM,Instalovat ze Steamu
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalovat z Google Play
 CONTINUE,Pokračovat
 COPY,Kopírovat
+CREATE,Vytvořit
 CUSTOMMONSTER,Vlastní monstrum
 DEFAULTMUSICON,Zapnout základni hudbu
 D2E_APP_NOT_FOUND,Nelze najít Road to Legend
@@ -92,6 +93,7 @@ D2E_NAME,Descent: Výprava do temnot (Druhá edice)
 D2E_QUEST_NAME,Úkol
 DEFEATED,Poražen
 DELETE,Smazat
+SCENARIO_DISPLAY_NAME,Zobrazovaný název scénáře
 UPDATE,Aktualizovat
 DIALOG,Dialog
 DOOR,Dveře
@@ -107,6 +109,7 @@ EVADE,Úhyb
 EVENT,Událost
 EXIT,Konec
 FINISHED,Dokončeno
+SCENARIO_FOLDER_NAME,Název složky scénáře
 FIRST,První
 FORCE_ACTIVATE,Vynutit aktivaci
 
@@ -155,6 +158,8 @@ MUSIC,Hudba
 NAME,Jméno
 NEW,Nový
 NEW_X,{Nový {0}}
+NEW_QUEST_FOLDER_EXISTS,Název složky již existuje
+NEW_QUEST_INVALID_NAME,Neplatný název složky
 NONE,{Žádný}
 
 NEXT_EVENTS,Další události

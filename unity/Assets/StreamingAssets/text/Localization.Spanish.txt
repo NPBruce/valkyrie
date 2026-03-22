@@ -57,6 +57,7 @@ CONTENT_INSTALL_VIA_STEAM,Instalar desde Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalar desde Google Play
 CONTINUE,Continuar
 COPY,Copiar
+CREATE,Crear
 CUSTOMMONSTER,Monstruo Personalizado
 D2E_APP_NOT_FOUND,Imposible localizar "Road to Legend"
 D2E_HEROES_NAME,Héroes
@@ -65,6 +66,7 @@ D2E_NAME,Descent: Viaje a las Profundidades Segunda Edición
 D2E_QUEST_NAME,Aventura
 DEFEATED,Derrotado
 DELETE,Eliminar
+SCENARIO_DISPLAY_NAME,Nombre para mostrar del escenario
 UPDATE,Actualizar
 DIALOG,Diálogo
 DOOR,Puerta
@@ -80,6 +82,7 @@ EVADE,Esquivar
 EVENT,Evento
 EXIT,Salir
 FINISHED,Terminado
+SCENARIO_FOLDER_NAME,Nombre de carpeta del escenario
 FIRST,Primero
 FORCE_ACTIVATE,Forzar Activación
 
@@ -128,6 +131,8 @@ MUSIC,Música
 NAME,Nombre
 NEW,Nuevo
 NEW_X,{Nuevo {0}}
+NEW_QUEST_FOLDER_EXISTS,El nombre de carpeta ya existe
+NEW_QUEST_INVALID_NAME,Nombre de carpeta no válido
 NONE,{Ninguno}
 
 NEXT_EVENTS,Siguientes Eventos

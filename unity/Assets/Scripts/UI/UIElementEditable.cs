@@ -92,6 +92,30 @@ namespace Assets.Scripts.UI
             input.GetComponent<PanCancelInputField>().lineType = UnityEngine.UI.InputField.LineType.SingleLine;
         }
 
+        public void SetNoWhitespace()
+        {
+            if (input == null) return;
+            PanCancelInputField uiInput = input.GetComponent<PanCancelInputField>();
+            uiInput.onValueChanged.AddListener(value =>
+            {
+                string filtered = value.Replace(" ", "").Replace("\t", "");
+                if (filtered != value)
+                    uiInput.text = filtered;
+            });
+        }
+
+        public void SetAlphanumericOnly()
+        {
+            if (input == null) return;
+            PanCancelInputField uiInput = input.GetComponent<PanCancelInputField>();
+            uiInput.onValueChanged.AddListener(value =>
+            {
+                string filtered = new string(System.Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
+                if (filtered != value)
+                    uiInput.text = filtered;
+            });
+        }
+
         public void SetMaxCharacters(int maxCharacter)
         {
             input.GetComponent<PanCancelInputField>().characterLimit = maxCharacter;

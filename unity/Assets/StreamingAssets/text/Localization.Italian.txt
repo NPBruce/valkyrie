@@ -35,6 +35,7 @@ CONTENT_INSTALL_VIA_STEAM,Installalo con Steam
 CONTENT_INSTALL_VIA_GOOGLEPLAY,Installalo con Google Play
 CONTINUE,Continua
 COPY,Copia
+CREATE,Crea
 CUSTOMMONSTER,Mostro personalizzato
 D2E_APP_NOT_FOUND,Impossibile trovare "Road of Legend"
 D2E_HEROES_NAME,Eroi
@@ -43,6 +44,7 @@ D2E_NAME,Descent: Viaggi nelle Tenebre - Seconda Edizione
 D2E_QUEST_NAME,Scenario
 DEFEATED,Sconfitto
 DELETE,Cancella
+SCENARIO_DISPLAY_NAME,Nome visualizzato dello scenario
 UPDATE,Aggiorna
 DIALOG,Dialogo
 DOOR,Porta
@@ -55,6 +57,7 @@ EVADE,Evadi
 EVENT,Evento
 EXIT,Esci
 FINISHED,Continua
+SCENARIO_FOLDER_NAME,Nome cartella dello scenario
 FIRST,Primo
 FORCE_ACTIVATE,Attivazione forzata
 
@@ -95,6 +98,8 @@ MUSIC,Musica
 NAME,Nome
 NEW,Nuovo
 NEW_X,{Nuovo {0}}
+NEW_QUEST_FOLDER_EXISTS,Il nome della cartella esiste già
+NEW_QUEST_INVALID_NAME,Nome cartella non valido
 
 NEXT_EVENTS,Evento Successivo
 NOT_FIRST,Non Primo

@@ -51,6 +51,7 @@ COMPONENT_TO_DELETE,刪除組件:
 CONTENT_IMPORTING,導入中...
 CONTINUE,繼續
 COPY,複製
+CREATE,创建
 CUSTOMMONSTER,自定義怪物
 D2E_APP_NOT_FOUND,Unable to locate Road to Legend
 D2E_HEROES_NAME,Heroes
@@ -59,6 +60,7 @@ D2E_NAME,Descent: Journeys in the Dark Second Edition
 D2E_QUEST_NAME,劇本
 DEFEATED,擊敗
 DELETE,刪除
+SCENARIO_DISPLAY_NAME,场景显示名称
 DIALOG,對話
 DOOR,Door
 DOWNLOAD,下載
@@ -73,6 +75,7 @@ EVADE,躲避
 EVENT,事件
 EXIT,退出
 FINISHED,完成
+SCENARIO_FOLDER_NAME,场景文件夹名称
 FIRST,First
 FORCE_ACTIVATE,Force Activate
 
@@ -121,6 +124,8 @@ MUSIC,音樂
 NAME,名稱
 NEW,新建
 NEW_X,{新建 {0}}
+NEW_QUEST_FOLDER_EXISTS,文件夹名称已存在
+NEW_QUEST_INVALID_NAME,无效的文件夹名称
 NONE,{None}
 
 NEXT_EVENTS,下一個事件
