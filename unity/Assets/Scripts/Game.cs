@@ -101,6 +101,7 @@ public class Game : MonoBehaviour
 
     // Import thread
     public GameSelectionScreen gameSelect;
+    public ContentImportScreen contentImport;
 
     // List of quests window
     public GameObject go_questSelectionScreen = null;
@@ -513,7 +514,11 @@ public class Game : MonoBehaviour
             }
         }
 
-        if (gameSelect != null)
+        if (contentImport != null)
+        {
+            contentImport.Update();
+        }
+        else if (gameSelect != null)
         {
             gameSelect.Update();
         }
