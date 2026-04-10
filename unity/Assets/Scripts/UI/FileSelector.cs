@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
             else
             {
                 // Desktop implementations using native file dialogs
-                string path = NativeFileDialog.OpenFilePanel("Select Import File (Zip/Obb)", "", "");
+                string path = NativeFileDialog.OpenFilePanel("Select Import File (ZIP)", "", "zip");
                 if (!string.IsNullOrEmpty(path))
                 {
                     onFileSelected?.Invoke(path);
