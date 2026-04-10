@@ -78,9 +78,6 @@ COMPONENT_TO_DELETE,Díl ke smazání:
 CONTENT_IMPORT,Importovat obsah
 CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
 CONTENT_REIMPORT,Znovu imporovat obsah
-CONTENT_LOCATE,Najít hru
-CONTENT_INSTALL_VIA_STEAM,Instalovat ze Steamu
-CONTENT_INSTALL_VIA_GOOGLEPLAY,Instalovat z Google Play
 CONTINUE,Pokračovat
 COPY,Kopírovat
 CREATE,Vytvořit
@@ -672,10 +669,6 @@ TOP,Nahoru
 CENTER,Na střed
 BOTTOM,Dole
 RESTART_TO_APPLY,Vyžadován restart
-CONTENT_IMPORT_OFFICIAL,Importovat z oficiální aplikace
-CONTENT_IMPORT_ZIP,Importovat ze ZIP
-CONTENT_REIMPORT_OFFICIAL,Reimportovat z oficiální aplikace
-CONTENT_REIMPORT_ZIP,Reimportovat ze ZIP
 RESOLUTION,Rozlišení
 FULLSCREEN,Celá obrazovka
 

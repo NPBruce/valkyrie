@@ -50,9 +50,6 @@ COLOR,Farbe
 COMPONENT_NAME,Name der Erweiterung:
 COMPONENT_TO_DELETE,Zu löschende Erweiterung:
 CONTENT_IMPORTING,Importiere...
-CONTENT_INSTALL_VIA_STEAM,Über Steam installieren
-CONTENT_INSTALL_VIA_GOOGLEPLAY,Über Google Play installieren
-CONTENT_LOCATE,Spielinstallation finden
 CONTINUE,Weiter
 COPY,Kopieren
 CREATE,Erstellen
@@ -498,10 +495,6 @@ CENTER,Mitte
 BOTTOM,Unten
 RESTART_TO_APPLY,Neustart erforderlich
 
-CONTENT_IMPORT_OFFICIAL,Import aus offizieller App
-CONTENT_IMPORT_ZIP,Import aus ZIP
-CONTENT_REIMPORT_OFFICIAL,Reimport aus offizieller App
-CONTENT_REIMPORT_ZIP,Reimport aus ZIP
 RESOLUTION,Auflösung
 FULLSCREEN,Vollbild
 
