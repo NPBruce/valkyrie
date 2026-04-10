@@ -45,6 +45,7 @@ namespace Assets.Scripts.UI.Screens
 
         public static bool NeedImport(string type)
         {
+            if (fcD2E == null || fcMoM == null) return false;
             if (type.Equals(ValkyrieConstants.typeDescent)) return fcD2E.NeedImport();
             if (type.Equals(ValkyrieConstants.typeMom)) return fcMoM.NeedImport();
             return false;
@@ -52,6 +53,7 @@ namespace Assets.Scripts.UI.Screens
 
         public static bool ImportAvailable(string type)
         {
+            if (fcD2E == null || fcMoM == null) return false;
             if (type.Equals(ValkyrieConstants.typeDescent)) return fcD2E.ImportAvailable();
             if (type.Equals(ValkyrieConstants.typeMom)) return fcMoM.ImportAvailable();
             return false;
@@ -64,11 +66,11 @@ namespace Assets.Scripts.UI.Screens
             new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
 
+            importThread = null;
             if (type.Equals(ValkyrieConstants.typeDescent))
                 importThread = new Thread(() => fcD2E.Import(path));
-            if (type.Equals(ValkyrieConstants.typeMom))
+            else if (type.Equals(ValkyrieConstants.typeMom))
                 importThread = new Thread(() => fcMoM.Import(path));
-
             importThread?.Start();
         }
 
@@ -123,7 +125,7 @@ namespace Assets.Scripts.UI.Screens
                     }
                 }
             });
-            importThread.Start();
+            importThread?.Start();
         }
 
         public static void Update()
