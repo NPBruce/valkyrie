@@ -90,8 +90,8 @@ IMPORT_LOCATE_DESC,Přejděte k vaší instalaci hry. Použijte pro instalace mi
 IMPORT_FROM_ZIP,Importovat ze ZIP
 REIMPORT_FROM_ZIP,Znovu importovat ze ZIP
 IMPORT_FROM_ZIP_DESC,Vyberte předpřipravený soubor ZIP. Funguje na všech platformách.
-IMPORT_GAME_DATA,Importovat herní data
-REIMPORT_GAME_DATA,Znovu importovat herní data
+IMPORT_GAME_DATA,Importovat data
+REIMPORT_GAME_DATA,Znovu importovat data
 REIMPORT_SCREEN_TITLE,Znovu importovat herní obsah
 IMPORT_ANDROID_ONLY_ZIP,Import přes Steam a aplikaci není na Androidu dostupný. Použijte importování přes ZIP níže.
 CONTENT_REIMPORT,Znovu imporovat obsah

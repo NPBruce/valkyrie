@@ -62,8 +62,8 @@ IMPORT_LOCATE_DESC,浏览到您的游戏安装目录。适用于非 Steam 安装
 IMPORT_FROM_ZIP,从 ZIP 导入
 REIMPORT_FROM_ZIP,从 ZIP 重新导入
 IMPORT_FROM_ZIP_DESC,选择一个预打包的 ZIP 文件。适用于所有平台。
-IMPORT_GAME_DATA,导入游戏数据
-REIMPORT_GAME_DATA,重新导入游戏数据
+IMPORT_GAME_DATA,导入数据
+REIMPORT_GAME_DATA,重新导入数据
 REIMPORT_SCREEN_TITLE,重新导入游戏内容
 IMPORT_ANDROID_ONLY_ZIP,Steam 和应用导入在 Android 上不可用。请使用下方的 ZIP 导入。
 CONTINUE,繼續

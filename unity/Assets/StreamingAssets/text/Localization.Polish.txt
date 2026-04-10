@@ -64,8 +64,8 @@ IMPORT_LOCATE_DESC,Przejdź do lokalizacji instalacji gry. Użyj dla instalacji 
 IMPORT_FROM_ZIP,Importuj z ZIP
 REIMPORT_FROM_ZIP,Reimportuj z ZIP
 IMPORT_FROM_ZIP_DESC,Wybierz gotowy plik ZIP. Działa na wszystkich platformach.
-IMPORT_GAME_DATA,Importuj dane gry
-REIMPORT_GAME_DATA,Reimportuj dane gry
+IMPORT_GAME_DATA,Importuj dane
+REIMPORT_GAME_DATA,Reimportuj dane
 REIMPORT_SCREEN_TITLE,Reimportuj zawartość gry
 IMPORT_ANDROID_ONLY_ZIP,Import przez Steam i aplikację jest niedostępny na Androidzie. Użyj importu ZIP poniżej.
 CONTINUE,Kontynuuj

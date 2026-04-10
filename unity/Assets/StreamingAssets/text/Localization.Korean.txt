@@ -89,8 +89,8 @@ IMPORT_LOCATE_DESC,게임 설치 위치를 탐색합니다. Steam 외 설치나 
 IMPORT_FROM_ZIP,ZIP에서 가져오기
 REIMPORT_FROM_ZIP,ZIP에서 다시 가져오기
 IMPORT_FROM_ZIP_DESC,미리 패키지된 ZIP 파일을 선택합니다. 모든 플랫폼에서 작동합니다.
-IMPORT_GAME_DATA,게임 데이터 가져오기
-REIMPORT_GAME_DATA,게임 데이터 다시 가져오기
+IMPORT_GAME_DATA,데이터 가져오기
+REIMPORT_GAME_DATA,데이터 다시 가져오기
 REIMPORT_SCREEN_TITLE,게임 콘텐츠 다시 가져오기
 IMPORT_ANDROID_ONLY_ZIP,Android에서는 Steam 및 앱 기반 가져오기를 사용할 수 없습니다. 아래의 ZIP 가져오기를 사용하세요.
 CONTINUE,계속

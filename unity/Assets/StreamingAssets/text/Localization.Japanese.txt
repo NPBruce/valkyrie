@@ -159,8 +159,8 @@ IMPORT_LOCATE_DESC,ゲームのインストール場所を参照します。Stea
 IMPORT_FROM_ZIP,ZIPからインポート
 REIMPORT_FROM_ZIP,ZIPから再インポート
 IMPORT_FROM_ZIP_DESC,パッケージ済みZIPファイルを選択します。全プラットフォームで使用可能。
-IMPORT_GAME_DATA,ゲームデータをインポート
-REIMPORT_GAME_DATA,ゲームデータを再インポート
+IMPORT_GAME_DATA,データをインポート
+REIMPORT_GAME_DATA,データを再インポート
 REIMPORT_SCREEN_TITLE,ゲームコンテンツの再インポート
 IMPORT_ANDROID_ONLY_ZIP,AndroidではSteamおよびアプリからのインポートは利用できません。以下のZIPインポートをご使用ください。
 CONTINUE,コンティニュー

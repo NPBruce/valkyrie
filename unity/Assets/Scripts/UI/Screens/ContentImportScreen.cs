@@ -19,15 +19,12 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey REIMPORT_SCREEN_TITLE  = new StringKey("val", "REIMPORT_SCREEN_TITLE");
         private static readonly StringKey IMPORT_SCREEN_SUBTITLE = new StringKey("val", "IMPORT_SCREEN_SUBTITLE");
         private static readonly StringKey IMPORT_FROM_STEAM      = new StringKey("val", "IMPORT_FROM_STEAM");
-        private static readonly StringKey REIMPORT_FROM_STEAM    = new StringKey("val", "REIMPORT_FROM_STEAM");
         private static readonly StringKey IMPORT_FROM_STEAM_DESC = new StringKey("val", "IMPORT_FROM_STEAM_DESC");
         private static readonly StringKey IMPORT_STEAM_NOT_FOUND = new StringKey("val", "IMPORT_STEAM_NOT_FOUND");
         private static readonly StringKey IMPORT_INSTALL_STEAM_LINK = new StringKey("val", "IMPORT_INSTALL_STEAM_LINK");
         private static readonly StringKey IMPORT_LOCATE          = new StringKey("val", "IMPORT_LOCATE");
-        private static readonly StringKey REIMPORT_LOCATE        = new StringKey("val", "REIMPORT_LOCATE");
         private static readonly StringKey IMPORT_LOCATE_DESC     = new StringKey("val", "IMPORT_LOCATE_DESC");
         private static readonly StringKey IMPORT_FROM_ZIP        = new StringKey("val", "IMPORT_FROM_ZIP");
-        private static readonly StringKey REIMPORT_FROM_ZIP      = new StringKey("val", "REIMPORT_FROM_ZIP");
         private static readonly StringKey IMPORT_FROM_ZIP_DESC   = new StringKey("val", "IMPORT_FROM_ZIP_DESC");
         private static readonly StringKey IMPORT_ANDROID_ONLY_ZIP = new StringKey("val", "IMPORT_ANDROID_ONLY_ZIP");
         private static readonly StringKey D2E_NAME               = new StringKey("val", "D2E_NAME");
@@ -88,7 +85,7 @@ namespace Assets.Scripts.UI.Screens
                 ? IMPORT_ANDROID_ONLY_ZIP.Translate()
                 : IMPORT_FROM_STEAM_DESC.Translate();
 
-            string cardText = (needImport ? IMPORT_FROM_STEAM : REIMPORT_FROM_STEAM).Translate()
+            string cardText = IMPORT_FROM_STEAM.Translate()
                 + System.Environment.NewLine + description;
 
             UIElement card = new UIElement();
@@ -121,7 +118,7 @@ namespace Assets.Scripts.UI.Screens
         private void DrawLocateCard(float x, float y, bool isAndroid)
         {
             Color cardColor = isAndroid ? Color.grey : Color.white;
-            string cardText = (needImport ? IMPORT_LOCATE : REIMPORT_LOCATE).Translate()
+            string cardText = IMPORT_LOCATE.Translate()
                 + System.Environment.NewLine + IMPORT_LOCATE_DESC.Translate();
 
             UIElement card = new UIElement();
@@ -136,7 +133,7 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawZipCard(float x, float y)
         {
-            string cardText = (needImport ? IMPORT_FROM_ZIP : REIMPORT_FROM_ZIP).Translate()
+            string cardText = IMPORT_FROM_ZIP.Translate()
                 + System.Environment.NewLine + IMPORT_FROM_ZIP_DESC.Translate();
 
             UIElement card = new UIElement();

@@ -83,8 +83,8 @@ IMPORT_LOCATE_DESC,Browse to your game installation. Use this for non-Steam inst
 IMPORT_FROM_ZIP,Import from ZIP
 REIMPORT_FROM_ZIP,Reimport from ZIP
 IMPORT_FROM_ZIP_DESC,Select a pre-packaged ZIP file. Works on all platforms.
-IMPORT_GAME_DATA,Import game data
-REIMPORT_GAME_DATA,Reimport game data
+IMPORT_GAME_DATA,Import data
+REIMPORT_GAME_DATA,Reimport data
 REIMPORT_SCREEN_TITLE,Reimport Game Content
 IMPORT_ANDROID_ONLY_ZIP,Steam and app-based import are not available on Android. Use ZIP import below.
 CONTINUE,Continue
