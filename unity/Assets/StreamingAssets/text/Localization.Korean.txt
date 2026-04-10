@@ -76,6 +76,23 @@ COLOR,색상
 COMPONENT_NAME,구성 요소 이름:
 COMPONENT_TO_DELETE,삭제할 구성 요소:
 CONTENT_IMPORTING,불러오는 중...\n이 작업은 몇 분 정도 걸릴 수 있습니다.
+IMPORT_SCREEN_TITLE,게임 콘텐츠 가져오기
+IMPORT_SCREEN_SUBTITLE,Valkyrie가 구매한 {0}의 복사본에서 에셋을 복사해야 합니다. 이 단계는 한 번만 수행됩니다. 아래에서 방법을 선택하세요.
+IMPORT_FROM_STEAM,Steam에서 가져오기
+REIMPORT_FROM_STEAM,Steam에서 다시 가져오기
+IMPORT_FROM_STEAM_DESC,Steam 설치에서 자동으로 가져옵니다.
+IMPORT_STEAM_NOT_FOUND,Steam을 찾을 수 없습니다.
+IMPORT_INSTALL_STEAM_LINK,Steam으로 설치 →
+IMPORT_LOCATE,수동으로 찾기
+REIMPORT_LOCATE,게임 위치 다시 찾기
+IMPORT_LOCATE_DESC,게임 설치 위치를 탐색합니다. Steam 외 설치나 Steam 감지 실패 시 사용하세요.
+IMPORT_FROM_ZIP,ZIP에서 가져오기
+REIMPORT_FROM_ZIP,ZIP에서 다시 가져오기
+IMPORT_FROM_ZIP_DESC,미리 패키지된 ZIP 파일을 선택합니다. 모든 플랫폼에서 작동합니다.
+IMPORT_GAME_DATA,게임 데이터 가져오기
+REIMPORT_GAME_DATA,게임 데이터 다시 가져오기
+REIMPORT_SCREEN_TITLE,게임 콘텐츠 다시 가져오기
+IMPORT_ANDROID_ONLY_ZIP,Android에서는 Steam 및 앱 기반 가져오기를 사용할 수 없습니다. 아래의 ZIP 가져오기를 사용하세요.
 CONTINUE,계속
 COPY,복사
 CREATE,만들기

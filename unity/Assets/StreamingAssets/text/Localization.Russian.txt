@@ -52,6 +52,23 @@ COLOR,Цвет
 COMPONENT_NAME,Имя компонента:
 COMPONENT_TO_DELETE,Удалить компонент:
 CONTENT_IMPORTING,Добавление...
+IMPORT_SCREEN_TITLE,Импорт игрового контента
+IMPORT_SCREEN_SUBTITLE,Valkyrie необходимо скопировать ресурсы из вашей купленной копии {0}. Это однократный шаг. Выберите метод ниже.
+IMPORT_FROM_STEAM,Импорт из Steam
+REIMPORT_FROM_STEAM,Повторный импорт из Steam
+IMPORT_FROM_STEAM_DESC,Автоматически импортирует из вашей установки Steam.
+IMPORT_STEAM_NOT_FOUND,Steam не обнаружен.
+IMPORT_INSTALL_STEAM_LINK,Установить через Steam →
+IMPORT_LOCATE,Указать вручную
+REIMPORT_LOCATE,Указать игру повторно
+IMPORT_LOCATE_DESC,Найдите папку с установленной игрой. Используйте для установок не через Steam или если автоматическое обнаружение не удалось.
+IMPORT_FROM_ZIP,Импорт из ZIP
+REIMPORT_FROM_ZIP,Повторный импорт из ZIP
+IMPORT_FROM_ZIP_DESC,Выберите готовый ZIP-файл. Работает на всех платформах.
+IMPORT_GAME_DATA,Импортировать данные игры
+REIMPORT_GAME_DATA,Повторно импортировать данные игры
+REIMPORT_SCREEN_TITLE,Повторный импорт игрового контента
+IMPORT_ANDROID_ONLY_ZIP,Импорт через Steam и приложение недоступен на Android. Используйте импорт из ZIP ниже.
 CONTINUE,Далее
 COPY,Копировать
 CREATE,Создать

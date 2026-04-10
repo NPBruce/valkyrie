@@ -31,6 +31,23 @@ COLOR,Colore
 COMPONENT_NAME,Importa
 COMPONENT_TO_DELETE,Contenuto da Eliminare
 CONTENT_IMPORTING,In aggiornamento...
+IMPORT_SCREEN_TITLE,Importa contenuto di gioco
+IMPORT_SCREEN_SUBTITLE,Valkyrie deve copiare le risorse dalla tua copia acquistata di {0}. Questo è un passaggio unico. Scegli un metodo qui sotto.
+IMPORT_FROM_STEAM,Importa da Steam
+REIMPORT_FROM_STEAM,Reimporta da Steam
+IMPORT_FROM_STEAM_DESC,Importa automaticamente dalla tua installazione Steam.
+IMPORT_STEAM_NOT_FOUND,Steam non rilevato.
+IMPORT_INSTALL_STEAM_LINK,Installa tramite Steam →
+IMPORT_LOCATE,Individua manualmente
+REIMPORT_LOCATE,Rilocalizza il gioco
+IMPORT_LOCATE_DESC,Naviga alla tua installazione del gioco. Usalo per installazioni non Steam o se il rilevamento Steam non è riuscito.
+IMPORT_FROM_ZIP,Importa da ZIP
+REIMPORT_FROM_ZIP,Reimporta da ZIP
+IMPORT_FROM_ZIP_DESC,Seleziona un file ZIP preconfezionato. Funziona su tutte le piattaforme.
+IMPORT_GAME_DATA,Importa dati di gioco
+REIMPORT_GAME_DATA,Reimporta dati di gioco
+REIMPORT_SCREEN_TITLE,Reimporta contenuto di gioco
+IMPORT_ANDROID_ONLY_ZIP,L'importazione tramite Steam e app non è disponibile su Android. Usa l'importazione ZIP qui sotto.
 CONTINUE,Continua
 COPY,Copia
 CREATE,Crea
