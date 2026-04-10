@@ -30,6 +30,8 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey REIMPORT_FROM_ZIP      = new StringKey("val", "REIMPORT_FROM_ZIP");
         private static readonly StringKey IMPORT_FROM_ZIP_DESC   = new StringKey("val", "IMPORT_FROM_ZIP_DESC");
         private static readonly StringKey IMPORT_ANDROID_ONLY_ZIP = new StringKey("val", "IMPORT_ANDROID_ONLY_ZIP");
+        private static readonly StringKey D2E_NAME               = new StringKey("val", "D2E_NAME");
+        private static readonly StringKey MOM_NAME               = new StringKey("val", "MOM_NAME");
 
         public ContentImportScreen(string gameType, bool needImport)
         {
@@ -110,6 +112,7 @@ namespace Assets.Scripts.UI.Screens
                 installLink.SetLocation(x + 15, y + 3.2f, 15, 1.3f);
                 installLink.SetText(IMPORT_INSTALL_STEAM_LINK, Color.red);
                 installLink.SetFontSize(UIScaler.GetSmallFont());
+                installLink.SetBGColor(new Color(0, 0.03f, 0f));
                 installLink.SetButton(delegate { Application.OpenURL(steamUrl); });
                 new UIElementBorder(installLink, Color.red);
             }
@@ -197,9 +200,9 @@ namespace Assets.Scripts.UI.Screens
         private string GetGameName()
         {
             if (gameType.Equals(ValkyrieConstants.typeDescent))
-                return new StringKey("val", "D2E_NAME").Translate();
+                return D2E_NAME.Translate();
             if (gameType.Equals(ValkyrieConstants.typeMom))
-                return new StringKey("val", "MOM_NAME").Translate();
+                return MOM_NAME.Translate();
             return gameType;
         }
 
