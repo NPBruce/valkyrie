@@ -518,10 +518,6 @@ public class Game : MonoBehaviour
         {
             contentImport.Update();
         }
-        else if (gameSelect != null)
-        {
-            gameSelect.Update();
-        }
     }
 
     public string userRoot;
