@@ -30,8 +30,6 @@ namespace Assets.Scripts.UI.Screens
         private static readonly StringKey REIMPORT_FROM_ZIP      = new StringKey("val", "REIMPORT_FROM_ZIP");
         private static readonly StringKey IMPORT_FROM_ZIP_DESC   = new StringKey("val", "IMPORT_FROM_ZIP_DESC");
         private static readonly StringKey IMPORT_ANDROID_ONLY_ZIP = new StringKey("val", "IMPORT_ANDROID_ONLY_ZIP");
-        private static readonly StringKey IMPORT_GAME_DATA       = new StringKey("val", "IMPORT_GAME_DATA");
-        private static readonly StringKey REIMPORT_GAME_DATA     = new StringKey("val", "REIMPORT_GAME_DATA");
 
         public ContentImportScreen(string gameType, bool needImport)
         {
