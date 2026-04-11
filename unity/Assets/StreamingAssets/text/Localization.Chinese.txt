@@ -51,21 +51,13 @@ COMPONENT_TO_DELETE,刪除組件:
 CONTENT_IMPORTING,導入中...
 IMPORT_SCREEN_TITLE,导入游戏内容
 IMPORT_SCREEN_SUBTITLE,Valkyrie 需要从 {0} 的官方应用中复制资源。这是一次性步骤。请在下方选择方法。
-IMPORT_FROM_STEAM,从 Steam 导入
-REIMPORT_FROM_STEAM,从 Steam 重新导入
-IMPORT_FROM_STEAM_DESC,自动从您的 Steam 安装导入。
-IMPORT_STEAM_NOT_FOUND,未检测到 Steam。
-IMPORT_INSTALL_STEAM_LINK,通过 Steam 安装 →
-IMPORT_LOCATE,手动定位
-REIMPORT_LOCATE,重新定位游戏
-IMPORT_LOCATE_DESC,浏览到您的游戏安装目录。适用于非 Steam 安装或 Steam 检测失败时。
+IMPORT_FROM_APP,从官方应用导入
+IMPORT_FROM_APP_DESC,自动查找您的官方应用安装。如果未找到，将打开文件选择器。
+IMPORT_LINUX_UNAVAILABLE,Linux上不支持自动导入。请使用ZIP导入，或使用-import标志启动Valkyrie。
 IMPORT_FROM_ZIP,从 ZIP 导入
-REIMPORT_FROM_ZIP,从 ZIP 重新导入
 IMPORT_FROM_ZIP_DESC,选择一个预打包的 ZIP 文件。适用于所有平台。
 IMPORT_GAME_DATA,导入数据
 REIMPORT_GAME_DATA,重新导入数据
-REIMPORT_SCREEN_TITLE,重新导入游戏内容
-IMPORT_ANDROID_ONLY_ZIP,Steam 和应用导入在 Android 上不可用。请使用下方的 ZIP 导入。
 CONTINUE,繼續
 COPY,複製
 CREATE,创建

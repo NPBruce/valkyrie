@@ -148,21 +148,13 @@ COMPONENT_TO_DELETE,削除するコンポーネント：
 CONTENT_IMPORTING,インポート中...
 IMPORT_SCREEN_TITLE,ゲームコンテンツのインポート
 IMPORT_SCREEN_SUBTITLE,Valkyrieは{0}の公式アプリからアセットをコピーする必要があります。これは一度だけの手順です。以下から方法を選択してください。
-IMPORT_FROM_STEAM,Steamからインポート
-REIMPORT_FROM_STEAM,Steamから再インポート
-IMPORT_FROM_STEAM_DESC,Steam版から自動インポートします。
-IMPORT_STEAM_NOT_FOUND,Steamが見つかりません。
-IMPORT_INSTALL_STEAM_LINK,Steam経由でインストール →
-IMPORT_LOCATE,手動で場所を指定
-REIMPORT_LOCATE,ゲームの場所を再指定
-IMPORT_LOCATE_DESC,ゲームのインストール場所を参照します。Steam以外のインストールまたはSteam検出に失敗した場合に使用してください。
+IMPORT_FROM_APP,公式アプリからインポート
+IMPORT_FROM_APP_DESC,公式アプリのインストールを自動的に検索します。見つからない場合はファイル選択ダイアログが開きます。
+IMPORT_LINUX_UNAVAILABLE,Linuxでは自動インポートはご利用いただけません。ZIPインポートを使用するか、-importフラグを付けてValkyrieを起動してください。
 IMPORT_FROM_ZIP,ZIPからインポート
-REIMPORT_FROM_ZIP,ZIPから再インポート
 IMPORT_FROM_ZIP_DESC,パッケージ済みZIPファイルを選択します。全プラットフォームで使用可能。
 IMPORT_GAME_DATA,データをインポート
 REIMPORT_GAME_DATA,データを再インポート
-REIMPORT_SCREEN_TITLE,ゲームコンテンツの再インポート
-IMPORT_ANDROID_ONLY_ZIP,AndroidではSteamおよびアプリからのインポートは利用できません。以下のZIPインポートをご使用ください。
 CONTINUE,コンティニュー
 COPY,複製
 CREATE,作成

@@ -79,21 +79,13 @@ CONTENT_IMPORT,Importovat obsah
 CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
 IMPORT_SCREEN_TITLE,Importovat herní obsah
 IMPORT_SCREEN_SUBTITLE,Valkyrie potřebuje zkopírovat soubory z oficiální aplikace pro {0}. Jedná se o jednorázový krok. Vyberte níže metodu.
-IMPORT_FROM_STEAM,Importovat ze Steamu
-REIMPORT_FROM_STEAM,Znovu importovat ze Steamu
-IMPORT_FROM_STEAM_DESC,Automaticky importuje z vaší instalace Steamu.
-IMPORT_STEAM_NOT_FOUND,Steam nebyl nalezen.
-IMPORT_INSTALL_STEAM_LINK,Nainstalovat přes Steam →
-IMPORT_LOCATE,Vyhledat ručně
-REIMPORT_LOCATE,Znovu vyhledat hru
-IMPORT_LOCATE_DESC,Přejděte k vaší instalaci hry. Použijte pro instalace mimo Steam nebo pokud selhalo automatické vyhledání.
+IMPORT_FROM_APP,Importovat z oficiální aplikace
+IMPORT_FROM_APP_DESC,Automaticky nalezne vaši instalaci oficiální aplikace. Pokud není nalezena, otevře se dialog pro výběr souboru.
+IMPORT_LINUX_UNAVAILABLE,Automatický import není v systému Linux k dispozici. Použijte import ZIP nebo spusťte Valkyrie s příznakem -import.
 IMPORT_FROM_ZIP,Importovat ze ZIP
-REIMPORT_FROM_ZIP,Znovu importovat ze ZIP
 IMPORT_FROM_ZIP_DESC,Vyberte předpřipravený soubor ZIP. Funguje na všech platformách.
 IMPORT_GAME_DATA,Importovat data
 REIMPORT_GAME_DATA,Znovu importovat data
-REIMPORT_SCREEN_TITLE,Znovu importovat herní obsah
-IMPORT_ANDROID_ONLY_ZIP,Import přes Steam a aplikaci není na Androidu dostupný. Použijte importování přes ZIP níže.
 CONTENT_REIMPORT,Znovu imporovat obsah
 CONTINUE,Pokračovat
 COPY,Kopírovat

@@ -53,21 +53,13 @@ COMPONENT_TO_DELETE,Komponent do usunięcia:
 CONTENT_IMPORTING,Importowanie danych...
 IMPORT_SCREEN_TITLE,Importuj zawartość gry
 IMPORT_SCREEN_SUBTITLE,Valkyrie musi skopiować zasoby z oficjalnej aplikacji dla {0}. To jednorazowy krok. Wybierz metodę poniżej.
-IMPORT_FROM_STEAM,Importuj ze Steam
-REIMPORT_FROM_STEAM,Reimportuj ze Steam
-IMPORT_FROM_STEAM_DESC,Automatycznie importuje z instalacji Steam.
-IMPORT_STEAM_NOT_FOUND,Nie wykryto Steam.
-IMPORT_INSTALL_STEAM_LINK,Zainstaluj przez Steam →
-IMPORT_LOCATE,Wskaż ręcznie
-REIMPORT_LOCATE,Wskaż grę ponownie
-IMPORT_LOCATE_DESC,Przejdź do lokalizacji instalacji gry. Użyj dla instalacji spoza Steam lub gdy wykrywanie Steam się nie powiodło.
+IMPORT_FROM_APP,Importuj z oficjalnej aplikacji
+IMPORT_FROM_APP_DESC,Automatycznie znajduje instalację oficjalnej aplikacji. Jeśli nie znaleziono, otwiera okno wyboru pliku.
+IMPORT_LINUX_UNAVAILABLE,Automatyczny import nie jest dostępny w systemie Linux. Użyj importu ZIP lub uruchom Valkyrie z flagą -import.
 IMPORT_FROM_ZIP,Importuj z ZIP
-REIMPORT_FROM_ZIP,Reimportuj z ZIP
 IMPORT_FROM_ZIP_DESC,Wybierz gotowy plik ZIP. Działa na wszystkich platformach.
 IMPORT_GAME_DATA,Importuj dane
 REIMPORT_GAME_DATA,Reimportuj dane
-REIMPORT_SCREEN_TITLE,Reimportuj zawartość gry
-IMPORT_ANDROID_ONLY_ZIP,Import przez Steam i aplikację jest niedostępny na Androidzie. Użyj importu ZIP poniżej.
 CONTINUE,Kontynuuj
 COPY,Kopiuj
 CREATE,Utwórz

@@ -60,6 +60,41 @@ namespace Assets.Scripts.UI.Screens
             return false;
         }
 
+        /// <summary>
+        /// Returns a hint path to pre-populate the file picker when the user must
+        /// locate the game manually. Returns "" if no hint is available.
+        /// </summary>
+        public static string GetInstallHintPath()
+        {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+            try
+            {
+                string steamPath = (string)Microsoft.Win32.Registry.GetValue(
+                    @"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "");
+                if (!string.IsNullOrEmpty(steamPath))
+                {
+                    string commonPath = Path.Combine(steamPath, "steamapps", "common");
+                    if (Directory.Exists(commonPath)) return commonPath;
+                    return steamPath;
+                }
+            }
+            catch { }
+            return "";
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+            try
+            {
+                string steamCommon = Path.Combine(
+                    System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                    "Library/Application Support/Steam/steamapps/common");
+                if (Directory.Exists(steamCommon)) return steamCommon;
+            }
+            catch { }
+            return "/Applications";
+#else
+            return "";
+#endif
+        }
+
         public static void Import(string type, string path, Action callback)
         {
             onComplete = callback;

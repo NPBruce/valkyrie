@@ -72,21 +72,13 @@ COMPONENT_TO_DELETE,Component to Delete:
 CONTENT_IMPORTING,Importing...\nThis may take a few minutes
 IMPORT_SCREEN_TITLE,Import Game Content
 IMPORT_SCREEN_SUBTITLE,Valkyrie needs to copy assets from the official app for {0}. This is a one-time step. Choose a method below.
-IMPORT_FROM_STEAM,Import from Steam
-REIMPORT_FROM_STEAM,Reimport from Steam
-IMPORT_FROM_STEAM_DESC,Automatically imports from your Steam installation.
-IMPORT_STEAM_NOT_FOUND,Steam not detected.
-IMPORT_INSTALL_STEAM_LINK,Install via Steam →
-IMPORT_LOCATE,Locate manually
-REIMPORT_LOCATE,Relocate game
-IMPORT_LOCATE_DESC,Browse to your game installation. Use this for non-Steam installs or if Steam detection failed.
+IMPORT_FROM_APP,Import from official app
+IMPORT_FROM_APP_DESC,Automatically finds your official app installation. If not found, opens a file picker to locate it manually.
+IMPORT_LINUX_UNAVAILABLE,Automatic import is not available on Linux. Use ZIP import, or launch Valkyrie with the -import flag.
 IMPORT_FROM_ZIP,Import from ZIP
-REIMPORT_FROM_ZIP,Reimport from ZIP
 IMPORT_FROM_ZIP_DESC,Select a pre-packaged ZIP file. Works on all platforms.
 IMPORT_GAME_DATA,Import data
 REIMPORT_GAME_DATA,Reimport data
-REIMPORT_SCREEN_TITLE,Reimport Game Content
-IMPORT_ANDROID_ONLY_ZIP,Steam and app-based import are not available on Android. Use ZIP import below.
 CONTINUE,Continue
 COPY,Copy
 CREATE,Create

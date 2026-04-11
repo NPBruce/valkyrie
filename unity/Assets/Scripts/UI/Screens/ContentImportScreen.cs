@@ -12,21 +12,13 @@ namespace Assets.Scripts.UI.Screens
         private readonly string gameType;
         private readonly bool needImport;
 
-        private static readonly string MOM_APP_URL_STEAM = "https://store.steampowered.com/app/478980/Mansions_of_Madness/";
-        private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
-
         private static readonly StringKey IMPORT_SCREEN_TITLE    = new StringKey("val", "IMPORT_SCREEN_TITLE");
-        private static readonly StringKey REIMPORT_SCREEN_TITLE  = new StringKey("val", "REIMPORT_SCREEN_TITLE");
         private static readonly StringKey IMPORT_SCREEN_SUBTITLE = new StringKey("val", "IMPORT_SCREEN_SUBTITLE");
-        private static readonly StringKey IMPORT_FROM_STEAM      = new StringKey("val", "IMPORT_FROM_STEAM");
-        private static readonly StringKey IMPORT_FROM_STEAM_DESC = new StringKey("val", "IMPORT_FROM_STEAM_DESC");
-        private static readonly StringKey IMPORT_STEAM_NOT_FOUND = new StringKey("val", "IMPORT_STEAM_NOT_FOUND");
-        private static readonly StringKey IMPORT_INSTALL_STEAM_LINK = new StringKey("val", "IMPORT_INSTALL_STEAM_LINK");
-        private static readonly StringKey IMPORT_LOCATE          = new StringKey("val", "IMPORT_LOCATE");
-        private static readonly StringKey IMPORT_LOCATE_DESC     = new StringKey("val", "IMPORT_LOCATE_DESC");
+        private static readonly StringKey IMPORT_FROM_APP        = new StringKey("val", "IMPORT_FROM_APP");
+        private static readonly StringKey IMPORT_FROM_APP_DESC   = new StringKey("val", "IMPORT_FROM_APP_DESC");
+        private static readonly StringKey IMPORT_LINUX_UNAVAILABLE = new StringKey("val", "IMPORT_LINUX_UNAVAILABLE");
         private static readonly StringKey IMPORT_FROM_ZIP        = new StringKey("val", "IMPORT_FROM_ZIP");
         private static readonly StringKey IMPORT_FROM_ZIP_DESC   = new StringKey("val", "IMPORT_FROM_ZIP_DESC");
-        private static readonly StringKey IMPORT_ANDROID_ONLY_ZIP = new StringKey("val", "IMPORT_ANDROID_ONLY_ZIP");
         private static readonly StringKey D2E_NAME               = new StringKey("val", "D2E_NAME");
         private static readonly StringKey MOM_NAME               = new StringKey("val", "MOM_NAME");
 
@@ -43,10 +35,10 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
 
             float centerX = (UIScaler.GetWidthUnits() - 30) / 2;
-            bool steamAvailable = ImportManager.ImportAvailable(gameType);
+            bool appFound = ImportManager.ImportAvailable(gameType);
             bool isAndroid = Application.platform == RuntimePlatform.Android;
+            bool isLinux   = Application.platform == RuntimePlatform.LinuxPlayer;
             string gameName = GetGameName();
-            string steamUrl = gameType.Equals(ValkyrieConstants.typeDescent) ? D2E_APP_URL_STEAM : MOM_APP_URL_STEAM;
 
             // Back button
             UIElement back = new UIElement();
@@ -60,7 +52,7 @@ namespace Assets.Scripts.UI.Screens
             // Title
             UIElement title = new UIElement();
             title.SetLocation(centerX, 1, 30, 2);
-            title.SetText(needImport ? IMPORT_SCREEN_TITLE : REIMPORT_SCREEN_TITLE);
+            title.SetText(IMPORT_SCREEN_TITLE);
             title.SetFontSize(UIScaler.GetMediumFont());
             title.SetBGColor(Color.clear);
 
@@ -71,22 +63,22 @@ namespace Assets.Scripts.UI.Screens
             subtitle.SetFontSize(UIScaler.GetSmallFont());
             subtitle.SetBGColor(Color.clear);
 
-            DrawSteamCard(centerX, 7f, steamAvailable, isAndroid, steamUrl);
-            DrawLocateCard(centerX, 13f, isAndroid);
-            DrawZipCard(centerX, 17f);
+            if (!isAndroid)
+                DrawAppCard(centerX, 7f, appFound, isLinux);
+            DrawZipCard(centerX, 13f);
         }
 
-        private void DrawSteamCard(float x, float y, bool steamAvailable, bool isAndroid, string steamUrl)
+        private void DrawAppCard(float x, float y, bool appFound, bool isLinux)
         {
-            bool active = steamAvailable && !isAndroid;
+            bool active = !isLinux;
             Color cardColor = active ? Color.white : Color.grey;
 
-            string description = isAndroid
-                ? IMPORT_ANDROID_ONLY_ZIP.Translate()
-                : IMPORT_FROM_STEAM_DESC.Translate();
+            string desc = isLinux
+                ? IMPORT_LINUX_UNAVAILABLE.Translate()
+                : IMPORT_FROM_APP_DESC.Translate();
 
-            string cardText = IMPORT_FROM_STEAM.Translate()
-                + System.Environment.NewLine + description;
+            string cardText = IMPORT_FROM_APP.Translate()
+                + System.Environment.NewLine + desc;
 
             UIElement card = new UIElement();
             card.SetLocation(x, y, 30, 3f);
@@ -94,40 +86,7 @@ namespace Assets.Scripts.UI.Screens
             card.SetFontSize(UIScaler.GetSmallFont());
             card.SetBGColor(new Color(0, 0.03f, 0f));
             if (active)
-                card.SetButton(OnImportFromSteam);
-            new UIElementBorder(card, cardColor);
-
-            if (!steamAvailable && !isAndroid)
-            {
-                UIElement notFound = new UIElement();
-                notFound.SetLocation(x, y + 3.2f, 14, 1.3f);
-                notFound.SetText(IMPORT_STEAM_NOT_FOUND, Color.grey);
-                notFound.SetFontSize(UIScaler.GetSmallFont());
-                notFound.SetBGColor(new Color(0, 0.03f, 0f));
-
-                UIElement installLink = new UIElement();
-                installLink.SetLocation(x + 15, y + 3.2f, 15, 1.3f);
-                installLink.SetText(IMPORT_INSTALL_STEAM_LINK, Color.red);
-                installLink.SetFontSize(UIScaler.GetSmallFont());
-                installLink.SetBGColor(new Color(0, 0.03f, 0f));
-                installLink.SetButton(delegate { Application.OpenURL(steamUrl); });
-                new UIElementBorder(installLink, Color.red);
-            }
-        }
-
-        private void DrawLocateCard(float x, float y, bool isAndroid)
-        {
-            Color cardColor = isAndroid ? Color.grey : Color.white;
-            string cardText = IMPORT_LOCATE.Translate()
-                + System.Environment.NewLine + IMPORT_LOCATE_DESC.Translate();
-
-            UIElement card = new UIElement();
-            card.SetLocation(x, y, 30, 3f);
-            card.SetText(cardText, cardColor);
-            card.SetFontSize(UIScaler.GetSmallFont());
-            card.SetBGColor(new Color(0, 0.03f, 0f));
-            if (!isAndroid)
-                card.SetButton(OnLocateManually);
+                card.SetButton(OnImportFromApp);
             new UIElementBorder(card, cardColor);
         }
 
@@ -151,36 +110,42 @@ namespace Assets.Scripts.UI.Screens
             Game.Get().gameSelect.Draw();
         }
 
-        private void OnImportFromSteam()
+        private void OnImportFromApp()
         {
-            ImportManager.Import(gameType, null, OnImportComplete);
-        }
+            bool appFound = ImportManager.ImportAvailable(gameType);
 
-        private void OnLocateManually()
-        {
+            if (appFound)
+            {
+                // Auto-import: AppFinder already located the install directory
+                ImportManager.Import(gameType, null, OnImportComplete);
+                return;
+            }
+
+            // App not found — open file picker pre-populated at Steam/Applications hint
             string appFilename = gameType.Equals(ValkyrieConstants.typeDescent)
                 ? "Road to Legend"
                 : "Mansions of Madness";
 
-#if UNITY_STANDALONE_OSX
+#if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
             string extension = "app";
 #else
             string extension = "exe";
 #endif
 
-            string pickedPath = NativeFileDialog.OpenFilePanel("Locate " + appFilename, "", extension);
+            string hintPath = ImportManager.GetInstallHintPath();
+            string pickedPath = NativeFileDialog.OpenFilePanel("Locate " + appFilename, hintPath, extension);
             if (string.IsNullOrEmpty(pickedPath)) return;
 
-            string path;
+            string dataPath;
             if (Application.platform == RuntimePlatform.OSXPlayer)
-                path = Path.Combine(pickedPath, "Contents/Resources/Data");
+                dataPath = Path.Combine(pickedPath, "Contents/Resources/Data");
             else
-                path = Path.Combine(Path.GetDirectoryName(pickedPath), appFilename + "_Data");
+                dataPath = Path.Combine(Path.GetDirectoryName(pickedPath), appFilename + "_Data");
 
-            ValkyrieDebug.Log("Using path: " + path);
-            if (!Directory.Exists(path)) return;
+            ValkyrieDebug.Log("Using path: " + dataPath);
+            if (!Directory.Exists(dataPath)) return;
 
-            ImportManager.Import(gameType, path, OnImportComplete);
+            ImportManager.Import(gameType, dataPath, OnImportComplete);
         }
 
         private void OnImportFromZip()
