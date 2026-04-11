@@ -32,7 +32,7 @@ COMPONENT_NAME,Importa
 COMPONENT_TO_DELETE,Contenuto da Eliminare
 CONTENT_IMPORTING,In aggiornamento...
 IMPORT_SCREEN_TITLE,Importa contenuto di gioco
-IMPORT_SCREEN_SUBTITLE,Valkyrie deve copiare le risorse dalla tua copia acquistata di {0}. Questo è un passaggio unico. Scegli un metodo qui sotto.
+IMPORT_SCREEN_SUBTITLE,Valkyrie deve copiare le risorse dall'app ufficiale di {0}. Questo è un passaggio unico. Scegli un metodo qui sotto.
 IMPORT_FROM_STEAM,Importa da Steam
 REIMPORT_FROM_STEAM,Reimporta da Steam
 IMPORT_FROM_STEAM_DESC,Importa automaticamente dalla tua installazione Steam.

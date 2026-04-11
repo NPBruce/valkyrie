@@ -50,7 +50,7 @@ COMPONENT_NAME,組件名:
 COMPONENT_TO_DELETE,刪除組件:
 CONTENT_IMPORTING,導入中...
 IMPORT_SCREEN_TITLE,导入游戏内容
-IMPORT_SCREEN_SUBTITLE,Valkyrie 需要从您已购买的 {0} 副本中复制资源。这是一次性步骤。请在下方选择方法。
+IMPORT_SCREEN_SUBTITLE,Valkyrie 需要从 {0} 的官方应用中复制资源。这是一次性步骤。请在下方选择方法。
 IMPORT_FROM_STEAM,从 Steam 导入
 REIMPORT_FROM_STEAM,从 Steam 重新导入
 IMPORT_FROM_STEAM_DESC,自动从您的 Steam 安装导入。

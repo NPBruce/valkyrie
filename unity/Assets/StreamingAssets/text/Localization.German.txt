@@ -51,7 +51,7 @@ COMPONENT_NAME,Name der Erweiterung:
 COMPONENT_TO_DELETE,Zu löschende Erweiterung:
 CONTENT_IMPORTING,Importiere...
 IMPORT_SCREEN_TITLE,Spielinhalte importieren
-IMPORT_SCREEN_SUBTITLE,Valkyrie muss Ressourcen aus deiner gekauften Kopie von {0} kopieren. Dies ist ein einmaliger Schritt. Wähle unten eine Methode.
+IMPORT_SCREEN_SUBTITLE,Valkyrie muss Ressourcen aus der offiziellen App für {0} kopieren. Dies ist ein einmaliger Schritt. Wähle unten eine Methode.
 IMPORT_FROM_STEAM,Von Steam importieren
 REIMPORT_FROM_STEAM,Von Steam neu importieren
 IMPORT_FROM_STEAM_DESC,Importiert automatisch aus deiner Steam-Installation.

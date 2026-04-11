@@ -53,7 +53,7 @@ COMPONENT_NAME,Имя компонента:
 COMPONENT_TO_DELETE,Удалить компонент:
 CONTENT_IMPORTING,Добавление...
 IMPORT_SCREEN_TITLE,Импорт игрового контента
-IMPORT_SCREEN_SUBTITLE,Valkyrie необходимо скопировать ресурсы из вашей купленной копии {0}. Это однократный шаг. Выберите метод ниже.
+IMPORT_SCREEN_SUBTITLE,Valkyrie необходимо скопировать ресурсы из официального приложения для {0}. Это однократный шаг. Выберите метод ниже.
 IMPORT_FROM_STEAM,Импорт из Steam
 REIMPORT_FROM_STEAM,Повторный импорт из Steam
 IMPORT_FROM_STEAM_DESC,Автоматически импортирует из вашей установки Steam.

@@ -78,7 +78,7 @@ COMPONENT_TO_DELETE,Díl ke smazání:
 CONTENT_IMPORT,Importovat obsah
 CONTENT_IMPORTING,Importuji...\nTohle mÅ¯Å¾e chvÃ­li trvat…
 IMPORT_SCREEN_TITLE,Importovat herní obsah
-IMPORT_SCREEN_SUBTITLE,Valkyrie potřebuje zkopírovat soubory z vaší zakoupené kopie hry {0}. Jedná se o jednorázový krok. Vyberte níže metodu.
+IMPORT_SCREEN_SUBTITLE,Valkyrie potřebuje zkopírovat soubory z oficiální aplikace pro {0}. Jedná se o jednorázový krok. Vyberte níže metodu.
 IMPORT_FROM_STEAM,Importovat ze Steamu
 REIMPORT_FROM_STEAM,Znovu importovat ze Steamu
 IMPORT_FROM_STEAM_DESC,Automaticky importuje z vaší instalace Steamu.

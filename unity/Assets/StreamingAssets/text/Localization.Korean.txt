@@ -77,7 +77,7 @@ COMPONENT_NAME,구성 요소 이름:
 COMPONENT_TO_DELETE,삭제할 구성 요소:
 CONTENT_IMPORTING,불러오는 중...\n이 작업은 몇 분 정도 걸릴 수 있습니다.
 IMPORT_SCREEN_TITLE,게임 콘텐츠 가져오기
-IMPORT_SCREEN_SUBTITLE,Valkyrie가 구매한 {0}의 복사본에서 에셋을 복사해야 합니다. 이 단계는 한 번만 수행됩니다. 아래에서 방법을 선택하세요.
+IMPORT_SCREEN_SUBTITLE,Valkyrie가 {0}의 공식 앱에서 에셋을 복사해야 합니다. 이 단계는 한 번만 수행됩니다. 아래에서 방법을 선택하세요.
 IMPORT_FROM_STEAM,Steam에서 가져오기
 REIMPORT_FROM_STEAM,Steam에서 다시 가져오기
 IMPORT_FROM_STEAM_DESC,Steam 설치에서 자동으로 가져옵니다.

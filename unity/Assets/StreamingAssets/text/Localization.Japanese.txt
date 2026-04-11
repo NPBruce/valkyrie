@@ -147,7 +147,7 @@ COMPONENT_NAME,コンポーネント名:
 COMPONENT_TO_DELETE,削除するコンポーネント：
 CONTENT_IMPORTING,インポート中...
 IMPORT_SCREEN_TITLE,ゲームコンテンツのインポート
-IMPORT_SCREEN_SUBTITLE,Valkyrieは{0}の購入済みコピーからアセットをコピーする必要があります。これは一度だけの手順です。以下から方法を選択してください。
+IMPORT_SCREEN_SUBTITLE,Valkyrieは{0}の公式アプリからアセットをコピーする必要があります。これは一度だけの手順です。以下から方法を選択してください。
 IMPORT_FROM_STEAM,Steamからインポート
 REIMPORT_FROM_STEAM,Steamから再インポート
 IMPORT_FROM_STEAM_DESC,Steam版から自動インポートします。
