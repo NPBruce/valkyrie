@@ -66,7 +66,7 @@ namespace Assets.Scripts.UI.Screens
         /// </summary>
         public static string GetInstallHintPath()
         {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#if UNITY_STANDALONE_WIN
             try
             {
                 string steamPath = (string)Microsoft.Win32.Registry.GetValue(
@@ -80,7 +80,7 @@ namespace Assets.Scripts.UI.Screens
             }
             catch { }
             return "";
-#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+#elif UNITY_STANDALONE_OSX
             try
             {
                 string steamCommon = Path.Combine(
