@@ -146,6 +146,15 @@ COLOR,色
 COMPONENT_NAME,コンポーネント名:
 COMPONENT_TO_DELETE,削除するコンポーネント：
 CONTENT_IMPORTING,インポート中...
+IMPORT_SCREEN_TITLE,ゲームコンテンツのインポート
+IMPORT_SCREEN_SUBTITLE,Valkyrieは{0}の公式アプリからアセットをコピーする必要があります。これは一度だけの手順です。以下から方法を選択してください。
+IMPORT_FROM_APP,公式アプリからインポート
+IMPORT_FROM_APP_DESC,公式アプリのインストールを自動的に検索します。見つからない場合はファイル選択ダイアログが開きます。
+IMPORT_LINUX_UNAVAILABLE,Linuxでは自動インポートはご利用いただけません。ZIPインポートを使用するか、-importフラグを付けてValkyrieを起動してください。
+IMPORT_FROM_ZIP,ZIPからインポート
+IMPORT_FROM_ZIP_DESC,パッケージ済みZIPファイルを選択します。全プラットフォームで使用可能。
+IMPORT_GAME_DATA,データをインポート
+REIMPORT_GAME_DATA,データを再インポート
 CONTINUE,コンティニュー
 COPY,複製
 CREATE,作成
@@ -699,10 +708,6 @@ TOP,上
 CENTER,中央
 BOTTOM,ボトム
 RESTART_TO_APPLY,再起動時に有効になります
-CONTENT_IMPORT_OFFICIAL,公式アプリからインポート
-CONTENT_IMPORT_ZIP,ZIPからインポート
-CONTENT_REIMPORT_OFFICIAL,公式アプリから再インポート
-CONTENT_REIMPORT_ZIP,ZIPから再インポート
 RESOLUTION,解像度
 FULLSCREEN,フルスクリーン
 

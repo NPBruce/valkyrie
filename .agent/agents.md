@@ -107,6 +107,7 @@ Refer to Unity documentation and C# programming guides for best practices in scr
 ## Development environment
 Coding is intended to happen in a Windows environment.
 
+- Prefer PowerShell instead of Python scripts when executing shell commands.
 - This is mainly due to the build.bat and build.ps1 files which help with building the application for different operating systems.
 - Some Unix-style commands (for example, `grep`) may not be available or function as expected.
 - When providing scripts or command-line instructions, prefer cross-platform or Windows-compatible solutions where possible.

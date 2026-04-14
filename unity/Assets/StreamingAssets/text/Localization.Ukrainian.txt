@@ -46,9 +46,15 @@ COLOR,Колір
 COMPONENT_NAME,Назва компонента:
 COMPONENT_TO_DELETE,Компонент для видалення:
 CONTENT_IMPORTING,Імпорт...\nМоже зайняти кілька хвилин
-CONTENT_LOCATE,Вказати розташування гри
-CONTENT_INSTALL_VIA_STEAM,Встановити через Steam
-CONTENT_INSTALL_VIA_GOOGLEPLAY,Встановити через Google Play
+IMPORT_SCREEN_TITLE,Імпорт ігрового контенту
+IMPORT_SCREEN_SUBTITLE,Valkyrie потрібно скопіювати ресурси з офіційного додатку для {0}. Це одноразовий крок. Виберіть метод нижче.
+IMPORT_FROM_APP,Імпортувати з офіційного додатка
+IMPORT_FROM_APP_DESC,Автоматично знаходить встановлення офіційного додатка. Якщо не знайдено, відкривається діалог вибору файлу.
+IMPORT_LINUX_UNAVAILABLE,Автоматичний імпорт недоступний у Linux. Використовуйте імпорт ZIP або запустіть Valkyrie з прапором -import.
+IMPORT_FROM_ZIP,Імпорт з ZIP
+IMPORT_FROM_ZIP_DESC,Виберіть готовий ZIP-файл. Працює на всіх платформах.
+IMPORT_GAME_DATA,Імпортувати дані
+REIMPORT_GAME_DATA,Повторно імпортувати дані
 CONTINUE,Продовжити
 COPY,Копіювати
 CREATE,Створити
@@ -506,10 +512,6 @@ CENTER,По центру
 BOTTOM,Внизу
 RESTART_TO_APPLY,Набуде чинності після перезапуску
 
-CONTENT_IMPORT_OFFICIAL,Імпорт з офіційного додатку
-CONTENT_IMPORT_ZIP,Імпорт з ZIP
-CONTENT_REIMPORT_OFFICIAL,Повторний імпорт з офіційного додатку
-CONTENT_REIMPORT_ZIP,Повторний імпорт з ZIP
 RESOLUTION,Роздільна здатність
 FULLSCREEN,Повноекранний режим
 

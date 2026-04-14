@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Assets.Scripts.Content;
-using FFGAppImport;
 using UnityEngine;
 using UnityEngine.UI;
 using ValkyrieTools;
@@ -17,33 +14,14 @@ namespace Assets.Scripts.UI.Screens
     // and import controls
     public class GameSelectionScreen
     {
-        static FFGImport fcD2E;
-        static FFGImport fcMoM;
-
-        protected string importType = "";
-        Thread importThread;
-
         private static readonly StringKey D2E_NAME = new StringKey("val","D2E_NAME");
         private static readonly StringKey D2E_APP_NOT_FOUND = new StringKey("val", "D2E_APP_NOT_FOUND");
 
         private static readonly StringKey MOM_NAME = new StringKey("val", "MOM_NAME");
         private static readonly StringKey MOM_APP_NOT_FOUND = new StringKey("val", "MOM_APP_NOT_FOUND");
 
-
-        private static readonly StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
-        private static readonly StringKey CONTENT_LOCATE = new StringKey("val", "CONTENT_LOCATE");
-        private static readonly StringKey CONTENT_INSTALL_VIA_STEAM = new StringKey("val", "CONTENT_INSTALL_VIA_STEAM");
-        private static readonly StringKey CONTENT_INSTALL_VIA_GOOGLEPLAY = new StringKey("val", "CONTENT_INSTALL_VIA_GOOGLEPLAY");
-        private static readonly StringKey CONTENT_IMPORT_OFFICIAL = new StringKey("val", "CONTENT_IMPORT_OFFICIAL");
-        private static readonly StringKey CONTENT_IMPORT_ZIP = new StringKey("val", "CONTENT_IMPORT_ZIP");
-        private static readonly StringKey CONTENT_REIMPORT_OFFICIAL = new StringKey("val", "CONTENT_REIMPORT_OFFICIAL");
-        private static readonly StringKey CONTENT_REIMPORT_ZIP = new StringKey("val", "CONTENT_REIMPORT_ZIP");
-
-        private static readonly string MOM_APP_URL_STEAM = "https://store.steampowered.com/app/478980/Mansions_of_Madness/";
-
-        private static readonly string D2E_APP_URL_STEAM = "https://store.steampowered.com/app/477200/Descent_Road_to_Legend/";
-
-
+        private static readonly StringKey IMPORT_GAME_DATA   = new StringKey("val", "IMPORT_GAME_DATA");
+        private static readonly StringKey REIMPORT_GAME_DATA = new StringKey("val", "REIMPORT_GAME_DATA");
 
         // Create a menu which will take up the whole screen and have options.  All items are dialog for destruction.
         public GameSelectionScreen()
@@ -60,7 +38,7 @@ namespace Assets.Scripts.UI.Screens
 
             game.gameType = new NoGameType();
 
-            InitializeImporters();
+            ImportManager.Inspect();
 
             DrawBanner();
 
@@ -72,43 +50,13 @@ namespace Assets.Scripts.UI.Screens
             offset += 7f;
 
             DrawMoMSection(offset);
-            
+
 
 
             DrawExitButton();
 
             // will display a button if a new version is available
             VersionManager.GetLatestVersionAsync(CheckForNewValkyrieVersion);
-        }
-
-        private void InitializeImporters()
-        {
-            // Check if we have already initialized
-            if (fcD2E != null && fcMoM != null) return;
-            
-            // Get the current content for games
-            if (Application.platform == RuntimePlatform.OSXPlayer)
-            {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.MacOS, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-
-            }
-            else if (Application.platform == RuntimePlatform.Android)
-            {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Android, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-
-            }
-            else
-            {
-                fcD2E = new FFGImport(FFGAppImport.GameType.D2E, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-                fcMoM = new FFGImport(FFGAppImport.GameType.MoM, Platform.Windows, Game.AppData() + Path.DirectorySeparatorChar, Application.isEditor);
-
-            }
-
-            fcD2E.Inspect();
-            fcMoM.Inspect();
-
         }
 
         private void DrawBanner()
@@ -136,208 +84,73 @@ namespace Assets.Scripts.UI.Screens
 
         private void DrawD2ESection(float offset)
         {
-            // Draw D2E button
-            bool D2E_need_import = fcD2E.NeedImport();
-            bool D2E_import_available = fcD2E.ImportAvailable();
-            Color startColor = D2E_need_import ? Color.grey : Color.white;
+            bool needImport = ImportManager.NeedImport(ValkyrieConstants.typeDescent);
+            Color startColor = needImport ? Color.grey : Color.white;
             int fontSize = UIScaler.GetMediumFont();
 
             UIElement ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, offset, 30, 3);
-            // If we need to import we can't play this type
-            if (!D2E_need_import)
+            if (!needImport)
             {
                 ui.SetText(D2E_NAME, startColor);
                 ui.SetButton(delegate { D2E(); });
             }
             else
             {
-                string message = "";
-                if (D2E_import_available)
-                {
-                    message = D2E_NAME.Translate();
-                } else
-                {
-                    message = D2E_NAME.Translate() + Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
-                    fontSize = (int) (UIScaler.GetMediumFont() / 1.05f);
-                }
+                string message = ImportManager.ImportAvailable(ValkyrieConstants.typeDescent)
+                    ? D2E_NAME.Translate()
+                    : D2E_NAME.Translate() + System.Environment.NewLine + D2E_APP_NOT_FOUND.Translate();
+                if (!ImportManager.ImportAvailable(ValkyrieConstants.typeDescent))
+                    fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
                 ui.SetText(message, startColor);
             }
             ui.SetFontSize(fontSize);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
-            // Draw D2E import button
-            ui = new UIElement();
-            if (D2E_import_available || !D2E_need_import)
-            {
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
-                    ui.SetText(D2E_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-                else
-                {
-                    // Desktop: Side-by-side buttons
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 13, offset + 3.2f, 12, 2);
-                    ui.SetText(D2E_need_import ? CONTENT_IMPORT_OFFICIAL : CONTENT_REIMPORT_OFFICIAL);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { Import(ValkyrieConstants.typeDescent, !D2E_import_available); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) + 1, offset + 3.2f, 12, 2);
-                    ui.SetText(D2E_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-            }
-            else // Import unavailable
-            {
-                // only install button for Android
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
-                    ui.SetText(CONTENT_IMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-                else
-                {
-                    // install and locate button for other systems
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits()/ 2) - 13, offset + 3.2f, 12, 1.3f);
-                    ui.SetText(CONTENT_INSTALL_VIA_STEAM, Color.red);
-                    ui.SetButton(delegate { GotoWebBrowser(D2E_APP_URL_STEAM); });
-                    new UIElementBorder(ui, Color.red);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() /2) + 1, offset + 3.2f, 12, 1.3f);
-                    ui.SetText(CONTENT_LOCATE, Color.red);
-                    ui.SetButton(delegate { Import(ValkyrieConstants.typeDescent, true); });
-                    new UIElementBorder(ui, Color.red);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 6, offset + 4.8f, 12, 1.3f);
-                    ui.SetText(CONTENT_IMPORT_ZIP);
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeDescent); });
-                    new UIElementBorder(ui, Color.red);
-                }
-            }
+            UIElement importBtn = new UIElement();
+            importBtn.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
+            importBtn.SetText(needImport ? IMPORT_GAME_DATA : REIMPORT_GAME_DATA);
+            importBtn.SetFontSize(UIScaler.GetSmallFont());
+            importBtn.SetButton(delegate { new ContentImportScreen(ValkyrieConstants.typeDescent, needImport); });
+            importBtn.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(importBtn);
         }
 
         private void DrawMoMSection(float offset)
         {
-            // Draw MoM button
-            bool MoM_need_import = fcMoM.NeedImport();
-            bool MoM_import_available = fcMoM.ImportAvailable();
-            Color startColor = MoM_need_import ? Color.grey : Color.white;
+            bool needImport = ImportManager.NeedImport(ValkyrieConstants.typeMom);
+            Color startColor = needImport ? Color.grey : Color.white;
             int fontSize = UIScaler.GetMediumFont();
 
             UIElement ui = new UIElement();
             ui.SetLocation((UIScaler.GetWidthUnits() - 30) / 2, offset, 30, 3);
-            // If we need to import we can't play this type
-            if (!MoM_need_import)
+            if (!needImport)
             {
                 ui.SetText(MOM_NAME, startColor);
                 ui.SetButton(delegate { MoM(); });
             }
             else
             {
-                string message = "";
-                if (MoM_import_available)
-                {
-                    message = MOM_NAME.Translate();
-                }
-                else
-                {
-                    message = MOM_NAME.Translate() + Environment.NewLine + MOM_APP_NOT_FOUND.Translate();
+                string message = ImportManager.ImportAvailable(ValkyrieConstants.typeMom)
+                    ? MOM_NAME.Translate()
+                    : MOM_NAME.Translate() + System.Environment.NewLine + MOM_APP_NOT_FOUND.Translate();
+                if (!ImportManager.ImportAvailable(ValkyrieConstants.typeMom))
                     fontSize = (int)(UIScaler.GetMediumFont() / 1.05f);
-                }
                 ui.SetText(message, startColor);
             }
             ui.SetFontSize(fontSize);
             ui.SetBGColor(new Color(0, 0.03f, 0f));
             new UIElementBorder(ui, startColor);
 
-            // Draw MoM import button
-            ui = new UIElement();
-            if (MoM_import_available || !MoM_need_import)
-            {
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
-                    ui.SetText(MoM_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-                else
-                {
-                    // Desktop: Side-by-side buttons
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 13, offset + 3.2f, 12, 2);
-                    ui.SetText(MoM_need_import ? CONTENT_IMPORT_OFFICIAL : CONTENT_REIMPORT_OFFICIAL);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { Import(ValkyrieConstants.typeMom, !MoM_import_available); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) + 1, offset + 3.2f, 12, 2);
-                    ui.SetText(MoM_need_import ? CONTENT_IMPORT_ZIP : CONTENT_REIMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-            }
-            else // Import unavailable
-            {
-                // only install button for Android
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    ui.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
-                    ui.SetText(CONTENT_IMPORT_ZIP);
-                    ui.SetFontSize(UIScaler.GetSmallFont());
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
-                    ui.SetBGColor(new Color(0, 0.03f, 0f));
-                    new UIElementBorder(ui);
-                }
-                else
-                {
-                    // install and locate button for other systems
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 13, offset + 3.2f, 12, 1.3f);
-                    ui.SetText(CONTENT_INSTALL_VIA_STEAM, Color.red);
-                    ui.SetButton(delegate { GotoWebBrowser(MOM_APP_URL_STEAM); });
-                    new UIElementBorder(ui, Color.red);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) + 1, offset + 3.2f, 12, 1.3f);
-                    ui.SetText(CONTENT_LOCATE, Color.red);
-                    ui.SetButton(delegate { Import(ValkyrieConstants.typeMom, true); });
-                    new UIElementBorder(ui, Color.red);
-
-                    ui = new UIElement();
-                    ui.SetLocation((UIScaler.GetWidthUnits() / 2) - 6, offset + 4.8f, 12, 1.3f);
-                    ui.SetText(CONTENT_IMPORT_ZIP);
-                    ui.SetButton(delegate { ImportZip(ValkyrieConstants.typeMom); });
-                    new UIElementBorder(ui, Color.red);
-                }
-            }
+            UIElement importBtn = new UIElement();
+            importBtn.SetLocation((UIScaler.GetWidthUnits() - 14) / 2, offset + 3.2f, 14, 2);
+            importBtn.SetText(needImport ? IMPORT_GAME_DATA : REIMPORT_GAME_DATA);
+            importBtn.SetFontSize(UIScaler.GetSmallFont());
+            importBtn.SetButton(delegate { new ContentImportScreen(ValkyrieConstants.typeMom, needImport); });
+            importBtn.SetBGColor(new Color(0, 0.03f, 0f));
+            new UIElementBorder(importBtn);
         }
-
-
 
         private void DrawExitButton()
         {
@@ -354,8 +167,7 @@ namespace Assets.Scripts.UI.Screens
         {
             ValkyrieDebug.Log("INFO: Start game as D2E");
 
-            // Check if import neeeded
-            if (!fcD2E.NeedImport())
+            if (!ImportManager.NeedImport(ValkyrieConstants.typeDescent))
             {
                 Game game = Game.Get();
 
@@ -385,152 +197,12 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        // Import content
-        // Import content
-        public void Import(string type, bool manual_path_selection=false)
-        {
-            ValkyrieDebug.Log("INFO: Import "+type);
-
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                ImportZip(type);
-                return;
-            }
-
-            if (manual_path_selection)
-            {
-                string app_filename="";
-                if (type.Equals(ValkyrieConstants.typeDescent)) app_filename = "Road to Legend";
-                if (type.Equals(ValkyrieConstants.typeMom)) app_filename = "Mansions of Madness";
-
-#if UNITY_STANDALONE_OSX
-                string extension = "app";
-#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-                string extension = "exe";
-#else
-                string extension = null;    
-#endif
-
-                NativeFilePicker.PickFile(delegate(string pickedPath)
-                {
-                    if (string.IsNullOrEmpty(pickedPath)) return;
-
-                    string path = null;
-                    if (Application.platform == RuntimePlatform.OSXPlayer)
-                    {
-                        path = Path.Combine(pickedPath, "Contents/Resources/Data");
-                    }
-                    else 
-                    {
-                        path = Path.Combine(Path.GetDirectoryName(pickedPath), app_filename + "_Data");
-                    }
-                    ValkyrieDebug.Log("Using path: " + path);
-
-                    if (!Directory.Exists(path)) return;
-
-                    StartImport(type, path);
-                }, extension);
-            }
-            else
-            {
-                 // Logic for automatic import (if any) or if manual selection is false but not Android
-                 // The original code didn't seem to have an 'else' block for manual_path_selection=false that did anything significant 
-                 // other than fall through to the import execution which would fail with path=null.
-                 // However, looking at the original code, if manual_path_selection is false, it skips the file browser
-                 // and proceeds to import with path=null? 
-                 // Wait, looking at the original code:
-                 // if (manual_path_selection) { ... path = ... }
-                 // Destroyer.Destroy(); ... importThread = ... fcD2E.Import(path);
-                 // So if manual_path_selection is false, it calls Import(null).
-                 // Let's preserve this behavior.
-                 StartImport(type, null);
-            }
-        }
-
-        private void StartImport(string type, string path)
-        {
-            Destroyer.Destroy();
-
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
-            importType = type;
-
-            if (type.Equals(ValkyrieConstants.typeDescent))
-            {
-                importThread = new Thread(new ThreadStart(delegate { fcD2E.Import(path); }));
-            }
-            if (type.Equals(ValkyrieConstants.typeMom))
-            {
-                importThread = new Thread(new ThreadStart(delegate { fcMoM.Import(path); }));
-            }
-
-            importThread.Start();
-        }
-
-        public void ImportZip(string type)
-        {
-            FileSelector.PickZipFile((zipPath) =>
-            {
-                ImportZipFromPath(zipPath, type);
-            });
-        }
-
-        public void ImportZipFromPath(string zipPath, string type)
-        {
-            Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
-            importType = type;
-
-            string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
-            if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
-            Directory.CreateDirectory(tempPath);
-
-            importThread = new Thread(new ThreadStart(delegate {
-                ZipManager.ExtractZipAsync(tempPath, zipPath, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
-                ZipManager.Wait4PreviousSave();
-
-                // Check for raw assets
-                string resourcesAssets = Path.Combine(tempPath, "resources.assets");
-                bool rawAssetsFound = File.Exists(resourcesAssets);
-                // Also check for OBB in subfolders if not found at root (simple check)
-                if (!rawAssetsFound)
-                {
-                    rawAssetsFound = Directory.GetFiles(tempPath, "*.obb", SearchOption.AllDirectories).Length > 0;
-                }
-
-                if (type.Equals(ValkyrieConstants.typeDescent))
-                {
-                    if (rawAssetsFound) fcD2E.Import(tempPath);
-                    else
-                    {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcD2E.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
-                    }
-                }
-                if (type.Equals(ValkyrieConstants.typeMom))
-                {
-                    if (rawAssetsFound) fcMoM.Import(tempPath);
-                    else
-                    {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcMoM.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
-                    }
-                }
-
-            }));
-            importThread.Start();
-        }
-
         // Start game as MoM
         public void MoM()
         {
             ValkyrieDebug.Log("INFO: Start game as MoM");
 
-            // Check if import neeeded
-            if (!fcMoM.NeedImport())
+            if (!ImportManager.NeedImport(ValkyrieConstants.typeMom))
             {
 
                 Game game = Game.Get();
@@ -565,8 +237,6 @@ namespace Assets.Scripts.UI.Screens
                 GameStateManager.MainMenu();
             }
         }
-
-
 
         /// <summary>
         /// After selecting game, we load the localization file.
@@ -605,65 +275,10 @@ namespace Assets.Scripts.UI.Screens
             }
         }
 
-        public void Update()
-        {
-            if (importThread == null) return;
-            if (importThread.IsAlive) return;
-            importThread = null;
-            ExtractBundles();
-            // TODO: Delete Obb dir for Android build here
-            Draw();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ExtractBundles()
-        {
-            try
-            {
-                string importDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
-                string bundlesFile = Path.Combine(importDir, "bundles.txt");
-                ValkyrieDebug.Log("Loading all bundles from '" + bundlesFile + "'");
-                string[] bundles = File.ReadAllLines(bundlesFile);
-                foreach (string file in bundles)
-                {
-                    AssetBundle bundle = AssetBundle.LoadFromFile(file);
-                    if (bundle == null) continue;
-                    ValkyrieDebug.Log("Loading assets from '" + file + "'");
-                    foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
-                    {
-                        string textDir = Path.Combine(importDir, "text");
-                        Directory.CreateDirectory(textDir);
-                        string f = Path.Combine(importDir, Path.Combine(textDir, asset.name + ".txt"));
-                        ValkyrieDebug.Log("Writing text asset to '" + f + "'");
-                        File.WriteAllText(f, asset.ToString());
-                    }
-                    bundle.Unload(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
-            }
-            importType = "";
-        }
-
         // Exit Valkyrie
         public void Exit()
         {
             ValkyrieDebug.Log("INFO: Leaving Valkyrie");
-
-            Application.Quit();
-        }
-
-        // Open link and quit Valkyrie
-        public void GotoWebBrowser(string url)
-        {
-            ValkyrieDebug.Log("INFO: Accessing new version");
-
-            Application.OpenURL(url);
 
             Application.Quit();
         }
@@ -685,6 +300,16 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(new Color(0, 0.03f, 0f));
                 new UIElementBorder(ui, Color.green);
             }
+        }
+
+        // Open link and quit Valkyrie
+        private void GotoWebBrowser(string url)
+        {
+            ValkyrieDebug.Log("INFO: Accessing new version");
+
+            Application.OpenURL(url);
+
+            Application.Quit();
         }
 
     }
