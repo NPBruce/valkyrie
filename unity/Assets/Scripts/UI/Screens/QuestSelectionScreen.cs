@@ -67,6 +67,13 @@ namespace Assets.Scripts.UI.Screens
         private readonly StringKey DOWNLOAD_ONGOING = new StringKey("val", "DOWNLOAD_ONGOING");
         private readonly StringKey OFFLINE_DUE_TO_ERROR = new StringKey("val", "OFFLINE_DUE_TO_ERROR");
 
+        private readonly StringKey QUEST_LOAD_ERROR_TITLE = new StringKey("val", "QUEST_LOAD_ERROR_TITLE");
+        private readonly StringKey QUEST_LOAD_ERROR_CANNOT_OPEN = new StringKey("val", "QUEST_LOAD_ERROR_CANNOT_OPEN");
+        private readonly StringKey QUEST_LOAD_ERROR_DETAIL = new StringKey("val", "QUEST_LOAD_ERROR_DETAIL");
+        private readonly StringKey QUEST_LOAD_ERROR_REDOWNLOAD = new StringKey("val", "QUEST_LOAD_ERROR_REDOWNLOAD");
+        private readonly StringKey QUEST_LOAD_ERROR_REPORT = new StringKey("val", "QUEST_LOAD_ERROR_REPORT");
+        private readonly StringKey QUEST_LOAD_ERROR_RETURN = new StringKey("val", "QUEST_LOAD_ERROR_RETURN");
+
 
         // text colors
         private readonly Color grey_transparent_text_color = new Color(0.1f, 0.1f, 0.1f, 0.50f);
@@ -1752,14 +1759,14 @@ namespace Assets.Scripts.UI.Screens
             // Error heading
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-7), 28, 2);
-            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_TITLE"), Color.red);
+            ui.SetText(QUEST_LOAD_ERROR_TITLE, Color.red);
             ui.SetBGColor(Color.clear);
             ui.SetFontSize(UIScaler.GetMediumFont());
 
             // Error detail
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-4.5f), 28, 5);
-            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_CANNOT_OPEN", questName).Translate() + "\n" + new StringKey("val", "QUEST_LOAD_ERROR_DETAIL").Translate(), Color.white);
+            ui.SetText(new StringKey(QUEST_LOAD_ERROR_CANNOT_OPEN, "{0}", questName).Translate() + "\n" + QUEST_LOAD_ERROR_DETAIL.Translate(), Color.white);
             ui.SetBGColor(Color.clear);
             ui.SetFontSize(UIScaler.GetSmallFont());
 
@@ -1767,7 +1774,7 @@ namespace Assets.Scripts.UI.Screens
             string capturedKey = key;
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(2f), 24, 2.5f);
-            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_REDOWNLOAD"));
+            ui.SetText(QUEST_LOAD_ERROR_REDOWNLOAD);
             ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetSmallFont());
@@ -1787,7 +1794,7 @@ namespace Assets.Scripts.UI.Screens
             {
                 ui = new UIElement();
                 ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(5.5f), 24, 2);
-                ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_REPORT"));
+                ui.SetText(QUEST_LOAD_ERROR_REPORT);
                 ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
                 ui.SetFont(game.gameType.GetHeaderFont());
                 ui.SetFontSize(UIScaler.GetSmallFont());
@@ -1799,7 +1806,7 @@ namespace Assets.Scripts.UI.Screens
             // Return to quest selection button
             ui = new UIElement();
             ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(8f), 24, 2);
-            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_RETURN"));
+            ui.SetText(QUEST_LOAD_ERROR_RETURN);
             ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
             ui.SetFont(game.gameType.GetHeaderFont());
             ui.SetFontSize(UIScaler.GetSmallFont());
