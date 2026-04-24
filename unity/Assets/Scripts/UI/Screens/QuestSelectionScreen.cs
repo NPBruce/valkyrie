@@ -1741,6 +1741,82 @@ namespace Assets.Scripts.UI.Screens
             GameStateManager.MainMenu();
         }
 
+        private void ShowQuestLoadError(string questName, string packageUrl, string key)
+        {
+            // Dark background panel
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-15), UIScaler.GetVCenter(-8), 30, 20);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            new UIElementBorder(ui);
+
+            // Error heading
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-7), 28, 2);
+            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_TITLE"), Color.red);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Error detail
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-4.5f), 28, 5);
+            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_CANNOT_OPEN", questName).Translate() + "\n" + new StringKey("val", "QUEST_LOAD_ERROR_DETAIL").Translate(), Color.white);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetSmallFont());
+
+            // Re-download button (primary action)
+            string capturedKey = key;
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(2f), 24, 2.5f);
+            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_REDOWNLOAD"));
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+            ui.SetButton(delegate
+            {
+                string filePath = System.IO.Path.Combine(ContentData.DownloadPath(), capturedKey + ValkyrieConstants.ScenarioDownloadContainerExtension);
+                if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
+                game.questsList.SetQuestAvailability(capturedKey, false);
+                GameStateManager.Quest.List();
+                Game.Get().questSelectionScreen.Selection(capturedKey);
+            });
+            new UIElementBorder(ui);
+
+            // Report error button (only shown when a GitHub issues URL can be built)
+            string reportUrl = BuildGitHubIssueUrl(packageUrl);
+            if (!string.IsNullOrEmpty(reportUrl))
+            {
+                ui = new UIElement();
+                ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(5.5f), 24, 2);
+                ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_REPORT"));
+                ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+                ui.SetFont(game.gameType.GetHeaderFont());
+                ui.SetFontSize(UIScaler.GetSmallFont());
+                string capturedUrl = reportUrl;
+                ui.SetButton(delegate { Application.OpenURL(capturedUrl); });
+                new UIElementBorder(ui);
+            }
+
+            // Return to quest selection button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-12), UIScaler.GetVCenter(8f), 24, 2);
+            ui.SetText(new StringKey("val", "QUEST_LOAD_ERROR_RETURN"));
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(game.gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+            ui.SetButton(delegate { GameStateManager.Quest.List(); });
+            new UIElementBorder(ui);
+        }
+
+        private string BuildGitHubIssueUrl(string packageUrl)
+        {
+            if (string.IsNullOrEmpty(packageUrl)) return null;
+            string url = packageUrl.Replace("https://raw.githubusercontent.com", "https://github.com");
+            string[] parts = url.Split('/');
+            if (parts.Length >= 5 && parts[2].Contains("github.com"))
+                return string.Format("{0}//{1}/{2}/{3}/issues", parts[0], parts[2], parts[3], parts[4]);
+            return null;
+        }
+
         // Select a quest
         public void Selection(string key)
         {
@@ -1772,10 +1848,16 @@ namespace Assets.Scripts.UI.Screens
                     Destroy(go);
                 ValkyrieDebug.Log("INFO: ... and launch online quest");
                 QuestData.Quest localQ = QuestLoader.GetSingleQuest(key);
-                if (localQ != null)
+                if (localQ == null)
                 {
-                    localQ.package_url = q.package_url;
+                    ValkyrieDebug.Log("ERROR: Failed to read quest file for: " + key + " (file may be corrupt or invalid)");
+                    string displayName, unusedSynopsys;
+                    QuestGetTranslations(q, out displayName, out unusedSynopsys);
+                    if (string.IsNullOrEmpty(displayName)) displayName = key;
+                    ShowQuestLoadError(displayName, q.package_url, key);
+                    return;
                 }
+                localQ.package_url = q.package_url;
                 new QuestDetailsScreen(localQ);
             }
             else

@@ -1,4 +1,4 @@
-.,Ukrainian
+﻿.,Ukrainian
 
 // TEXTS
 ABILITY,Здібність
@@ -169,6 +169,12 @@ QUEST_NAME_EDITOR,Редактор {0}
 EDITOR_ANDROID_NOT_SUPPORTED,Редактор квестів/сценаріїв недоступний на Android.\nБудь ласка, використовуйте версію Valkyrie для Windows, Mac або Linux.
 EDITOR,Редактор
 QUEST_NAME_UPDATE,  [Оновити] {0}
+QUEST_LOAD_ERROR_TITLE,Помилка завантаження сценарію
+QUEST_LOAD_ERROR_CANNOT_OPEN,Не вдалося відкрити «{0}».
+QUEST_LOAD_ERROR_DETAIL,Файл сценарію пошкоджений або недійсний. Примітка: файли сценарію не повинні перевищувати 100 МБ.
+QUEST_LOAD_ERROR_REDOWNLOAD,Завантажити сценарій знову
+QUEST_LOAD_ERROR_REPORT,Повідомити про помилку видавцю сценарію
+QUEST_LOAD_ERROR_RETURN,Повернутися до вибору сценарію
 QUOTA,Квота
 RECOVER,Відновити
 INVESTIGATOR_ATTACKS,Дослідник атакує

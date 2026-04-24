@@ -50,6 +50,14 @@ catch {
 }
 
 if ($Paths.Count -gt 0) {
+    # Fetch default branch once; used both for admin URL block and integrity checks
+    $DefaultBranch = "master"
+    try {
+        $RepoInfoResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/$Owner/$Repo" -Headers $Headers -Method Get
+        $DefaultBranch = $RepoInfoResponse.default_branch
+    }
+    catch { }
+
     # ------------------------------------------------------------------
     # Generic presence checks
     # ------------------------------------------------------------------
@@ -214,16 +222,6 @@ if ($Paths.Count -gt 0) {
                         else {
                             $Results += "- ✅ $TargetTag ID '$ScenarioId' is unique for $Type."
                             
-                            $DefaultBranch = ""
-                            try {
-                                $RepoInfoUrl = "https://api.github.com/repos/$Owner/$Repo"
-                                $RepoInfoResponse = Invoke-RestMethod -Uri $RepoInfoUrl -Headers $Headers -Method Get
-                                $DefaultBranch = $RepoInfoResponse.default_branch
-                            }
-                            catch {
-                                $DefaultBranch = "master"
-                            }
-                            
                             $Results += "`n---`n💡 **For Valkyrie Admins:** You can copy the following block to add this $TargetTag for Valkyrie $TargetTag repository:`n"
                             $Results += "``````ini`n[$ScenarioId]`nexternal=https://raw.githubusercontent.com/$Owner/$Repo/$DefaultBranch/`n```````n"
                             $Results += "[👉 Quick Edit $ManifestDirType $TargetManifest](https://github.com/NPBruce/valkyrie-store/edit/master/$ManifestDirType/$TargetManifest)`n---"
@@ -256,6 +254,61 @@ if ($Paths.Count -gt 0) {
         $Base = [System.IO.Path]::GetFileName($ValkPath)
         if ($Base -match "(?i)EditorScenario|EditorScenariusz") {
             $Results += "- ⚠️ Container file '$ValkPath' has a generic filename; please rename it"
+        }
+    }
+
+    # ------------------------------------------------------------------
+    # Container file integrity checks (size + ZIP magic bytes)
+    # ------------------------------------------------------------------
+    $ValkyrieBlobs = @($TreeResponse.tree | Where-Object {
+        $_.type -eq "blob" -and (
+            $_.path.ToLower().EndsWith(".valkyrie") -or
+            $_.path.ToLower().EndsWith(".valkyriecontentpack")
+        )
+    })
+
+    foreach ($blob in $ValkyrieBlobs) {
+        $ValkPath = $blob.path
+        $ValkSize = $blob.size
+
+        # --- Size checks ---
+        if ($ValkSize -lt 1024) {
+            $Results += "- ❌ '$ValkPath': file is only $ValkSize bytes. This is almost certainly an unresolved Git LFS pointer or an empty file — users will not be able to open this scenario. Commit the file as a regular git object (not via LFS)."
+            continue
+        }
+
+        if ($ValkSize -gt 100MB) {
+            $SizeMB = [Math]::Round($ValkSize / 1MB, 1)
+            $Results += "- ❌ '$ValkPath': file is ${SizeMB} MB, which exceeds GitHub's 100 MB raw-serving limit. Users will not be able to download it. Remove or compress large assets."
+            continue
+        }
+
+        $SizeMB = [Math]::Round($ValkSize / 1MB, 2)
+
+        # --- ZIP magic-byte check via HTTP Range request ---
+        $RawUrl = "https://raw.githubusercontent.com/$Owner/$Repo/$DefaultBranch/$ValkPath"
+        try {
+            $RangeHeaders = @{} + $Headers
+            $RangeHeaders["Range"] = "bytes=0-7"
+            $ByteResp = Invoke-WebRequest -Uri $RawUrl -Headers $RangeHeaders -Method Get -ErrorAction Stop
+
+            [byte[]]$Magic = if ($ByteResp.Content -is [byte[]]) {
+                $ByteResp.Content[0..[Math]::Min(7, $ByteResp.Content.Length - 1)]
+            } else {
+                [System.Text.Encoding]::UTF8.GetBytes($ByteResp.Content)[0..7]
+            }
+
+            if ($Magic.Length -ge 4 -and $Magic[0] -eq 0x50 -and $Magic[1] -eq 0x4B -and $Magic[2] -eq 0x03 -and $Magic[3] -eq 0x04) {
+                $Results += "- ✅ '$ValkPath': valid ZIP archive (${SizeMB} MB)"
+            } elseif ($Magic.Length -ge 7 -and [System.Text.Encoding]::ASCII.GetString($Magic[0..6]) -eq "version") {
+                $Results += "- ❌ '$ValkPath': file header reads 'version ...' — this is a Git LFS pointer served instead of the real file. Ensure *.valkyrie files are not tracked by Git LFS."
+            } else {
+                $Hex = ($Magic | ForEach-Object { '{0:X2}' -f $_ }) -join ' '
+                $Results += "- ❌ '$ValkPath': not a valid ZIP archive — unexpected file header bytes: [$Hex] (expected: 50 4B 03 04). The file may be corrupt."
+            }
+        }
+        catch {
+            $Results += "- ⚠️ '$ValkPath': could not verify ZIP integrity (${SizeMB} MB): $_"
         }
     }
 }

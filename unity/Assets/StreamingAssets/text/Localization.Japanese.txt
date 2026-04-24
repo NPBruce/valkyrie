@@ -1,4 +1,4 @@
-.,Japanese
+﻿.,Japanese
 //Heroes,
 
 ALYS_RAINE,アリス・レイン
@@ -268,6 +268,12 @@ QUEST_NAME_EDITOR,{0}を編集
 EDITOR_ANDROID_NOT_SUPPORTED,クエスト/シナリオエディターはAndroidでは利用できません。\nWindowsまたはMac、Linux版のValkyrieをご利用ください。
 EDITOR,編集
 QUEST_NAME_UPDATE,  [更新] {0}
+QUEST_LOAD_ERROR_TITLE,クエスト読み込みエラー
+QUEST_LOAD_ERROR_CANNOT_OPEN,「{0}」を開けませんでした。
+QUEST_LOAD_ERROR_DETAIL,シナリオファイルが破損しているか無効です。注意：シナリオファイルは 100 MB を超えてはいけません。
+QUEST_LOAD_ERROR_REDOWNLOAD,シナリオを再ダウンロード
+QUEST_LOAD_ERROR_REPORT,エラーをシナリオ発行者に報告
+QUEST_LOAD_ERROR_RETURN,シナリオ選択に戻る
 QUOTA,クォータ
 RECOVER,回復
 INVESTIGATOR_ATTACKS,探究者攻擊

@@ -1,4 +1,4 @@
-.,Polish
+﻿.,Polish
 // ICONS
 CUSTOM_IMAGE,Własny obraz
 ORIGINAL,Oryginalny
@@ -171,6 +171,12 @@ QUEST_NAME_EDITOR,Edytor Scenariuszy
 EDITOR_ANDROID_NOT_SUPPORTED,Edytor questów/scenariuszy nie jest dostępny na Androidzie.\nProszę użyć wersji Windows, Mac lub Linux Valkyrie.
 EDITOR,Edytor
 QUEST_NAME_UPDATE,  [Aktualizacja] {0}
+QUEST_LOAD_ERROR_TITLE,Błąd ładowania scenariusza
+QUEST_LOAD_ERROR_CANNOT_OPEN,Nie można otworzyć „{0}".
+QUEST_LOAD_ERROR_DETAIL,Plik scenariusza jest uszkodzony lub nieprawidłowy. Uwaga: pliki scenariusza nie mogą przekraczać 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Pobierz scenariusz ponownie
+QUEST_LOAD_ERROR_REPORT,Zgłoś błąd wydawcy scenariusza
+QUEST_LOAD_ERROR_RETURN,Powrót do wyboru scenariusza
 QUOTA,Wartość testu
 RECOVER,Wyzdrowieć
 

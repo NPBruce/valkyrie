@@ -1,4 +1,4 @@
-.,Czech
+﻿.,Czech
 // Version 1.001, Last correction/Posledni oprava: ententeak 09.08.2022, text format UTF-8
 // ICONS
 CUSTOM_IMAGE,Vlastní obrázek
@@ -203,6 +203,12 @@ QUEST_NAME_EDITOR,Editor úkolů
 EDITOR_ANDROID_NOT_SUPPORTED,Editor úkolů/scénářů není na Androidu dostupný.\nProsím použijte verzi Valkyrie pro Windows, Mac nebo Linux.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Aktualizace] {0}
+QUEST_LOAD_ERROR_TITLE,Chyba při načítání scénáře
+QUEST_LOAD_ERROR_CANNOT_OPEN,Nelze otevřít „{0}".
+QUEST_LOAD_ERROR_DETAIL,Soubor scénáře je poškozen nebo neplatný. Poznámka: soubory scénáře nesmí překročit 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Stáhnout scénář znovu
+QUEST_LOAD_ERROR_REPORT,Nahlásit chybu vydavateli scénáře
+QUEST_LOAD_ERROR_RETURN,Zpět na výběr scénáře
 QUOTA,Kvóta
 RECOVER,Obnovit
 INVESTIGATOR_ATTACKS,Vyšetřovatel útočí

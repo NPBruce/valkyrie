@@ -1,4 +1,4 @@
-.,Italian
+﻿.,Italian
 // ICONS
 CUSTOM_IMAGE,Immagine personalizzata
 ORIGINAL,Originale
@@ -142,6 +142,12 @@ QUEST_NAME_EDITOR,{0} Editor
 EDITOR_ANDROID_NOT_SUPPORTED,L'editor di quest/scenari non è disponibile su Android.\nUtilizza la versione Windows, Mac o Linux di Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Aggiorna] {0}
+QUEST_LOAD_ERROR_TITLE,Errore nel caricamento dello scenario
+QUEST_LOAD_ERROR_CANNOT_OPEN,Impossibile aprire "{0}".
+QUEST_LOAD_ERROR_DETAIL,Il file dello scenario è corrotto o non valido. Nota: i file dello scenario non devono superare i 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Scarica di nuovo lo scenario
+QUEST_LOAD_ERROR_REPORT,Segnala l'errore all'editore dello scenario
+QUEST_LOAD_ERROR_RETURN,Torna alla selezione dello scenario
 QUOTA,Quota
 RECOVER,Recupera
 

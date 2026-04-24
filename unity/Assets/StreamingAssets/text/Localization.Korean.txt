@@ -1,4 +1,4 @@
-.,Korean
+﻿.,Korean
 // ICONS
 CUSTOM_IMAGE,사용자 지정 이미지
 ORIGINAL,원본
@@ -201,6 +201,12 @@ QUEST_NAME_EDITOR,{0} 에디터
 EDITOR_ANDROID_NOT_SUPPORTED,퀘스트/시나리오 에디터는 Android에서 사용할 수 없습니다.\nValkyrie의 Windows, Mac 또는 Linux 버전을 사용하세요.
 EDITOR,에디터
 QUEST_NAME_UPDATE,  [업데이트] {0}
+QUEST_LOAD_ERROR_TITLE,퀘스트 로드 오류
+QUEST_LOAD_ERROR_CANNOT_OPEN,"{0}"을(를) 열 수 없습니다.
+QUEST_LOAD_ERROR_DETAIL,시나리오 파일이 손상되었거나 유효하지 않습니다. 참고: 시나리오 파일은 100 MB를 초과할 수 없습니다.
+QUEST_LOAD_ERROR_REDOWNLOAD,시나리오 다시 다운로드
+QUEST_LOAD_ERROR_REPORT,시나리오 게시자에게 오류 보고
+QUEST_LOAD_ERROR_RETURN,시나리오 선택으로 돌아가기
 QUOTA,몫
 RECOVER,리커버
 INVESTIGATOR_ATTACKS,조사자 공격
