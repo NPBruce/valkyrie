@@ -1,4 +1,4 @@
-.,Spanish
+﻿.,Spanish
 // ICONS
 CUSTOM_IMAGE,Imagen personalizada
 ACTUAL,Real
@@ -176,6 +176,12 @@ QUEST_NAME_EDITOR,Editar {0}
 EDITOR_ANDROID_NOT_SUPPORTED,El editor de quests/escenarios no está disponible en Android.\nUtilice la versión de Windows, Mac o Linux de Valkyrie.
 EDITOR,Editar
 QUEST_NAME_UPDATE,  [Actualizar] {0}
+QUEST_LOAD_ERROR_TITLE,Error al cargar el escenario
+QUEST_LOAD_ERROR_CANNOT_OPEN,No se pudo abrir "{0}".
+QUEST_LOAD_ERROR_DETAIL,El archivo del escenario está corrupto o no es válido. Nota: los archivos de escenario no deben superar los 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Descargar el escenario de nuevo
+QUEST_LOAD_ERROR_REPORT,Informar el error al editor del escenario
+QUEST_LOAD_ERROR_RETURN,Volver a la selección de escenario
 QUOTA,Cuota
 RECOVER,Recupear
 

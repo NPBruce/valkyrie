@@ -197,6 +197,12 @@ QUEST_NAME_EDITOR,{0} Editor
 EDITOR_ANDROID_NOT_SUPPORTED,The Quest/Scenario Editor is not available on Android.\nPlease use the Windows, Mac or Linux version of Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
+QUEST_LOAD_ERROR_TITLE,Error Loading Quest
+QUEST_LOAD_ERROR_CANNOT_OPEN,Could not open "{0}".
+QUEST_LOAD_ERROR_DETAIL,The scenario file is corrupt or invalid. Note: scenario files must not exceed 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Download scenario again
+QUEST_LOAD_ERROR_REPORT,Report error to scenario publisher
+QUEST_LOAD_ERROR_RETURN,Return to quest selection
 QUOTA,Quota
 RECOVER,Recover
 INVESTIGATOR_ATTACKS,Investigator Attacks

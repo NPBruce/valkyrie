@@ -1,4 +1,4 @@
-.,German
+﻿.,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
 // ICONS
 CUSTOM_IMAGE,Benutzerdefiniertes Bild
@@ -170,6 +170,12 @@ QUEST_NAME_EDITOR,{0}-Editor
 EDITOR_ANDROID_NOT_SUPPORTED,Der Quest-/Szenario-Editor ist auf Android nicht verfügbar.\nBitte verwende die Windows-, Mac- oder Linux-Version von Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
+QUEST_LOAD_ERROR_TITLE,Fehler beim Laden des Szenarios
+QUEST_LOAD_ERROR_CANNOT_OPEN,„{0}" konnte nicht geöffnet werden.
+QUEST_LOAD_ERROR_DETAIL,Die Szenariodatei ist beschädigt oder ungültig. Hinweis: Szenariodateien dürfen 100 MB nicht überschreiten.
+QUEST_LOAD_ERROR_REDOWNLOAD,Szenario erneut herunterladen
+QUEST_LOAD_ERROR_REPORT,Fehler dem Szenario-Autor melden
+QUEST_LOAD_ERROR_RETURN,Zurück zur Szenarioauswahl
 QUOTA,Zitat
 RECOVER,Erholen
 INVESTIGATOR_ATTACKS,Emittler greifen an
