@@ -159,9 +159,10 @@ jobs:
         run: |
               C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "platforms;android-29"
               C:/Android/android-sdk/cmdline-tools/latest/bin/sdkmanager.bat "build-tools;28.0.3" "build-tools;29.0.2" "cmdline-tools;latest" "tools"
-      - uses: repolevedavaj/install-nsis@v1.0.3
-        with:
-          nsis-version: '3.10'
+      - name: Install NSIS
+        run: |
+          choco install nsis -y
+          echo "C:\Program Files (x86)\NSIS" >> $env:GITHUB_PATH
 
       - name: Install NuGet
         run: winget install -q Microsoft.NuGet -l "$env:localappdata\NuGet" --accept-source-agreements --accept-package-agreements
