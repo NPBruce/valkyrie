@@ -108,16 +108,7 @@ namespace Assets.Scripts.UI
 
         public override void SetButton(UnityEngine.Events.UnityAction call)
         {
-            buttonCall = call;
-            if (input != null)
-            {
-                input.GetComponent<PanCancelInputField>().onEndEdit.AddListener(delegate {
-                    if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-                    {
-                        if (buttonCall != null) buttonCall();
-                    }
-                });
-            }
+            base.SetButton(call);
             UpdateIconState();
         }
     }
