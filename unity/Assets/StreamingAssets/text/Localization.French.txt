@@ -1,4 +1,4 @@
-.,French
+﻿.,French
 // ICONS
 CUSTOM_IMAGE,Image personnalisée
 ORIGINAL,Original
@@ -172,6 +172,12 @@ QUEST_NAME_EDITOR,Éditeur de {0}
 EDITOR_ANDROID_NOT_SUPPORTED,L'éditeur de quêtes/scénarios n'est pas disponible sur Android.\nVeuillez utiliser la version Windows, Mac ou Linux de Valkyrie.
 EDITOR,Éditeur
 QUEST_NAME_UPDATE,  [Mise à jour] {0}
+QUEST_LOAD_ERROR_TITLE,Erreur de chargement du scénario
+QUEST_LOAD_ERROR_CANNOT_OPEN,Impossible d'ouvrir « {0} ».
+QUEST_LOAD_ERROR_DETAIL,Le fichier de scénario est corrompu ou invalide. Remarque : les fichiers de scénario ne doivent pas dépasser 100 Mo.
+QUEST_LOAD_ERROR_REDOWNLOAD,Télécharger à nouveau le scénario
+QUEST_LOAD_ERROR_REPORT,Signaler l'erreur à l'éditeur du scénario
+QUEST_LOAD_ERROR_RETURN,Retourner à la sélection de scénario
 QUOTA,Quota
 RECOVER,Récupérer
 INVESTIGATOR_ATTACKS,Attaques de l'investigateur

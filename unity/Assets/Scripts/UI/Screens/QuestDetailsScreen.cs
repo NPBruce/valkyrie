@@ -9,6 +9,13 @@ namespace Assets.Scripts.UI.Screens
     {
         public QuestDetailsScreen(QuestData.Quest q)
         {
+            if (q == null)
+            {
+                ValkyrieDebug.Log("ERROR: QuestDetailsScreen received null quest, returning to quest list");
+                GameStateManager.Quest.List();
+                return;
+            }
+
             Game game = Game.Get();
             LocalizationRead.RemoveDictionary("qst");
             LocalizationRead.AddDictionary("qst", q.localizationDict);

@@ -1,4 +1,4 @@
-.,Portuguese
+﻿.,Portuguese
 
 // ICONS
 CUSTOM_IMAGE,Imagem personalizada
@@ -179,6 +179,12 @@ QUEST_NAME_EDITOR,{0} Editor
 EDITOR_ANDROID_NOT_SUPPORTED,O editor de quests/cenários não está disponível no Android.\nPor favor use a versão Windows, Mac ou Linux do Valkyrie.
 EDITOR,Editor
 QUEST_NAME_UPDATE,  [Update] {0}
+QUEST_LOAD_ERROR_TITLE,Erro ao carregar o cenário
+QUEST_LOAD_ERROR_CANNOT_OPEN,Não foi possível abrir "{0}".
+QUEST_LOAD_ERROR_DETAIL,O arquivo do cenário está corrompido ou inválido. Nota: os arquivos de cenário não devem exceder 100 MB.
+QUEST_LOAD_ERROR_REDOWNLOAD,Baixar o cenário novamente
+QUEST_LOAD_ERROR_REPORT,Reportar erro ao editor do cenário
+QUEST_LOAD_ERROR_RETURN,Voltar à seleção de cenário
 QUOTA,Cota
 RECOVER,Recuperar
 INVESTIGATOR_ATTACKS,Ataques do investigador
