@@ -1,4 +1,4 @@
-﻿.,Ukrainian
+.,Ukrainian
 
 // TEXTS
 ABILITY,Здібність
@@ -556,3 +556,6 @@ FALLBACK_LANG,Мова запасного варіанту
 
 LANGUAGE,Мова
 REPORT_ISSUE,Повідомити про проблему
+
+SUCCESS,Успіх
+IMPORT_SUCCESS,Імпорт успішно завершено.

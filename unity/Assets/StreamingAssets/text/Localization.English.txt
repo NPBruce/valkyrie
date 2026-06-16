@@ -722,3 +722,6 @@ FALLBACK_LANG,Fallback language
 
 LANGUAGE,Language
 REPORT_ISSUE,Report an issue
+
+SUCCESS,Success
+IMPORT_SUCCESS,Import successfully completed.

@@ -1,4 +1,4 @@
-﻿.,Italian
+.,Italian
 // ICONS
 CUSTOM_IMAGE,Immagine personalizzata
 ORIGINAL,Originale
@@ -499,3 +499,6 @@ NONE,Nessuno
 
 LANGUAGE,Lingua
 REPORT_ISSUE,Segnala un problema
+
+SUCCESS,Successo
+IMPORT_SUCCESS,Importazione completata con successo.

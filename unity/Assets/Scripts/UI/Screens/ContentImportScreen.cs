@@ -162,8 +162,7 @@ namespace Assets.Scripts.UI.Screens
             }
             else
             {
-                Game.Get().contentImport = null;
-                Game.Get().gameSelect.Draw();
+                ShowImportSuccess();
             }
         }
 
@@ -198,6 +197,44 @@ namespace Assets.Scripts.UI.Screens
             ui.SetFontSize(UIScaler.GetSmallFont());
             ui.SetButton(delegate {
                 ImportManager.importError = null;
+                Game.Get().contentImport = null;
+                Game.Get().gameSelect.Draw();
+            });
+            new UIElementBorder(ui);
+        }
+
+        private void ShowImportSuccess()
+        {
+            Destroyer.Dialog();
+
+            // Dark background panel
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-15), UIScaler.GetVCenter(-8), 30, 16);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            new UIElementBorder(ui);
+
+            // Success heading
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-7), 28, 2);
+            ui.SetText(new StringKey("val", "SUCCESS"), Color.green);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Success detail
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-4.5f), 28, 8);
+            ui.SetText(new StringKey("val", "IMPORT_SUCCESS"), Color.white);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetSmallFont());
+
+            // Continue button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-6), UIScaler.GetVCenter(4.5f), 12, 2);
+            ui.SetText(CommonStringKeys.CONTINUE);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+            ui.SetButton(delegate {
                 Game.Get().contentImport = null;
                 Game.Get().gameSelect.Draw();
             });

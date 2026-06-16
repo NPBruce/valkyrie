@@ -1,4 +1,4 @@
-﻿.,French
+.,French
 // ICONS
 CUSTOM_IMAGE,Image personnalisée
 ORIGINAL,Original
@@ -555,3 +555,6 @@ FALLBACK_LANG,Langue de repli
 
 LANGUAGE,Langue
 REPORT_ISSUE,Signaler un problème
+
+SUCCESS,Succès
+IMPORT_SUCCESS,Importation terminée avec succès.

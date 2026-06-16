@@ -220,9 +220,6 @@ namespace FFGAppImport
 
                 // Write log
                 WriteImportLog();
-
-                // Find any streaming asset files
-                ImportStreamAssets();
             }
             catch (Exception ex)
             {
@@ -608,59 +605,6 @@ namespace FFGAppImport
             return false;
         }
         
-        private void ImportStreamAssets()
-        {
-            string streamDir = Path.Combine(finder.location, "StreamingAssets");
-            if (Directory.Exists(streamDir))
-            {
-                var streamFiles = Directory.GetFiles(streamDir, "*", SearchOption.AllDirectories).ToList();
-                // sort it because Directory.GetFiles() is not guaranteed to return it sorted
-                streamFiles.Sort();
-                ImportStreamAssets(streamFiles);
-            }
-            else
-            {
-                ValkyrieDebug.Log("StreamingAssets dir '" + streamDir + "' not found");
-            }
-        }
-
-        /// <summary>
-        /// Find asset bundles and create a list of them in a file.  Invalid files ignored.
-        /// </summary>
-        /// <param name="streamFiles"></param>
-        protected void ImportStreamAssets(IEnumerable<string> streamFiles)
-        {
-            if (streamFiles == null) throw new ArgumentNullException("streamFiles");
-            var bundles = new List<string>();
-
-            foreach (string file in streamFiles)
-            {
-                try
-                {
-                    string header = null;
-                    using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read))
-                    {
-                        byte[] buffer = new byte[8];
-                        fs.Read(buffer, 0, buffer.Length);
-                        header = System.Text.Encoding.Default.GetString(buffer);
-                    }
-                    if (header.StartsWith("UnityFS"))
-                    {
-                        bundles.Add(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ValkyrieDebug.Log("ImportStreamAssets on file '" + file + "' caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
-                    continue;
-                }
-            }
-
-            // We can't extract these here because this isn't the main thread and unity doesn't handle that
-            string bundlesFile = Path.Combine(contentPath, "bundles.txt");
-            ValkyrieDebug.Log("Writing '" + bundlesFile + "' containing " + bundles.Count + " items");
-            File.WriteAllLines(bundlesFile, bundles.ToArray());
-        }
 
         private static bool IsAvailableFileName(string fileCandidate, string extension)
         {

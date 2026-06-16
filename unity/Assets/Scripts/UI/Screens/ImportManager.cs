@@ -13,6 +13,8 @@ namespace Assets.Scripts.UI.Screens
     public static class ImportManager
     {
         public static string importError = null;
+        private static volatile string lastLogMessage = null;
+        private static LoadingScreen loadingScreen;
         private static FFGImport fcD2E;
         private static FFGImport fcMoM;
         private static Thread importThread;
@@ -101,14 +103,19 @@ namespace Assets.Scripts.UI.Screens
             importError = null;
             onComplete = callback;
             Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
+            loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
+            
+            lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             importThread = null;
             if (type.Equals(ValkyrieConstants.typeDescent))
                 importThread = new Thread(() => { try { fcD2E.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
             else if (type.Equals(ValkyrieConstants.typeMom))
                 importThread = new Thread(() => { try { fcMoM.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
+            
+            if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
         }
 
@@ -122,8 +129,11 @@ namespace Assets.Scripts.UI.Screens
             importError = null;
             onComplete = callback;
             Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
+            loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
+
+            lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
             if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
@@ -172,79 +182,57 @@ namespace Assets.Scripts.UI.Screens
                     UnityEngine.Debug.LogException(ex);
                 }
             });
+            
+            if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
+        }
+
+        private static void CleanTempImport()
+        {
+            string tempDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
+            if (!Directory.Exists(tempDir)) return;
+
+            try
+            {
+                Directory.Delete(tempDir, true);
+            }
+            catch (Exception ex)
+            {
+                ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
+                UnityEngine.Debug.LogException(ex);
+            }
+        }
+
+        private static void OnLogMessage(string message)
+        {
+            // Discard overly long messages to prevent UI overflow or exceptions
+            if (message != null && message.Length < 200)
+            {
+                lastLogMessage = message;
+            }
         }
 
         public static void Update()
         {
             if (importThread == null) return;
-            if (importThread.IsAlive) return;
-            importThread = null;
-            
-            // Only attempt to extract bundles if there were no errors during import
-            if (string.IsNullOrEmpty(importError))
+            if (importThread.IsAlive)
             {
-                ExtractBundles();
+                if (lastLogMessage != null && loadingScreen != null)
+                {
+                    loadingScreen.UpdateDisplay(lastLogMessage);
+                    lastLogMessage = null;
+                }
+                loadingScreen?.UpdateIndicator(UnityEngine.Time.time);
+                return;
             }
+            importThread = null;
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
+            loadingScreen = null;
             
             Action action = onComplete;
             onComplete = null;
             action?.Invoke();
         }
 
-        private static void ExtractBundles()
-        {
-            try
-            {
-                string importDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
-                string bundlesFile = Path.Combine(importDir, "bundles.txt");
-                if (File.Exists(bundlesFile))
-                {
-                    ValkyrieDebug.Log("Loading all bundles from '" + bundlesFile + "'");
-                    string[] bundles = File.ReadAllLines(bundlesFile);
-                    foreach (string file in bundles)
-                    {
-                        if (!File.Exists(file))
-                        {
-                            ValkyrieDebug.Log("Bundle file not found: '" + file + "', skipping.");
-                            continue;
-                        }
-
-                        // Skip audio bundles as they don't contain text assets and often use incompatible formats
-                        if (file.Replace('\\', '/').Contains("/audio/"))
-                        {
-                            continue;
-                        }
-
-                        try
-                        {
-                            AssetBundle bundle = AssetBundle.LoadFromFile(file);
-                            if (bundle == null) continue;
-                            ValkyrieDebug.Log("Loading assets from '" + file + "'");
-                            foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
-                            {
-                                string textDir = Path.Combine(importDir, "text");
-                                Directory.CreateDirectory(textDir);
-                                string f = Path.Combine(importDir, Path.Combine(textDir, asset.name + ".txt"));
-                                ValkyrieDebug.Log("Writing text asset to '" + f + "'");
-                                File.WriteAllText(f, asset.ToString());
-                            }
-                            bundle.Unload(false);
-                        }
-                        catch (Exception bundleEx)
-                        {
-                            ValkyrieDebug.Log("Failed to extract bundle '" + file + "': " + bundleEx.Message);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                importError = ex.Message;
-                ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
-                UnityEngine.Debug.LogException(ex);
-            }
-            importType = "";
-        }
     }
 }

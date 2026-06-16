@@ -1,4 +1,4 @@
-﻿.,Polish
+.,Polish
 // ICONS
 CUSTOM_IMAGE,Własny obraz
 ORIGINAL,Oryginalny
@@ -531,3 +531,6 @@ FALLBACK_LANG,Język alternatywny
 
 LANGUAGE,Język
 REPORT_ISSUE,Zgłoś problem
+
+SUCCESS,Sukces
+IMPORT_SUCCESS,Import zakończony sukcesem.

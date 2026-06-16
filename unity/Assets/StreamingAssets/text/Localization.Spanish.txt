@@ -1,4 +1,4 @@
-﻿.,Spanish
+.,Spanish
 // ICONS
 CUSTOM_IMAGE,Imagen personalizada
 ACTUAL,Real
@@ -558,3 +558,6 @@ FALLBACK_LANG,Idioma alternativo
 
 LANGUAGE,Idioma
 REPORT_ISSUE,Notificar error
+
+SUCCESS,Éxito
+IMPORT_SUCCESS,Importación completada con éxito.

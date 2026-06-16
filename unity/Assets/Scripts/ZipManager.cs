@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
@@ -134,7 +134,14 @@ public class ZipManager : MonoBehaviour
 
             if (mode == Extract_mode.ZIPMANAGER_EXTRACT_FULL)
             {
-                zip.ExtractAll(target_path, ExtractExistingFileAction.OverwriteSilently);
+                int i = 0;
+                foreach (ZipEntry e in zip.Entries)
+                {
+                    int percentage = (int)(((i + 1) * 100f) / zip.Entries.Count);
+                    ValkyrieDebug.Log($"Extracting zip ({percentage}%): {e.FileName}");
+                    e.Extract(target_path, ExtractExistingFileAction.OverwriteSilently);
+                    i++;
+                }
             }
 
             if (mode == Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT || mode == Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC)

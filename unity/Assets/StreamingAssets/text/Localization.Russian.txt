@@ -1,4 +1,4 @@
-﻿.,Russian
+.,Russian
 
 // ICONS
 CUSTOM_IMAGE,Пользовательское изображение
@@ -555,3 +555,6 @@ FALLBACK_LANG,Резервный язык
 
 LANGUAGE,Язык
 REPORT_ISSUE,Сообщить об ошибке
+
+SUCCESS,Успех
+IMPORT_SUCCESS,Импорт успешно завершен.

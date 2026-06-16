@@ -64,6 +64,8 @@ namespace AssetStudio
             //use a for loop because list size can change
             for (var i = 0; i < importFiles.Count; i++)
             {
+                int percentage = (int)(((i + 1) * 100f) / importFiles.Count);
+                ValkyrieDebug.Log($"Loading files ({percentage}%): {importFiles[i]}");
                 LoadFile(importFiles[i]);
                 Progress.Report(i + 1, importFiles.Count);
             }
@@ -82,13 +84,16 @@ namespace AssetStudio
         private void LoadFile(string fullName)
         {
             var reader = new FileReader(fullName);
-            ValkyrieDebug.Log("Loadings file: " + fullName);
             LoadFile(reader);
         }
 
         private void LoadFile(FileReader reader)
         {
-            ValkyrieDebug.Log("AssetStudio loading file type: " + reader.FileType);
+            if (reader.FileType == FileType.ResourceFile || reader.FileType == FileType.ZipFile) {
+                ValkyrieDebug.Log("AssetStudio skipping " + reader.FileType + ": " + reader.FileName);
+            } else {
+                ValkyrieDebug.Log("AssetStudio loading " + reader.FileType + ": " + reader.FileName);
+            }
             switch (reader.FileType)
             {
                 case FileType.AssetsFile:
@@ -409,7 +414,8 @@ namespace AssetStudio
                 foreach (var objectInfo in assetsFile.m_Objects)
                 {
                     var objectReader = new ObjectReader(assetsFile.reader, assetsFile, objectInfo);
-                    ValkyrieDebug.Log("Reading object type: " + objectReader.type);
+                    int percentage = progressCount == 0 ? 100 : (int)(((i + 1) * 100f) / progressCount);
+                    ValkyrieDebug.Log($"Reading object ({percentage}%): " + objectReader.type);
                     try
                     {
                         //For Valkyrie we already interested in Audio, Texture2D, Text and Fonts.
