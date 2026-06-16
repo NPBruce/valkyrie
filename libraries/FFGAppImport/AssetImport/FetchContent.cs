@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using AssetStudio;
 using System;
 using System.Linq;
@@ -227,6 +227,7 @@ namespace FFGAppImport
             catch (Exception ex)
             {
                 ValkyrieDebug.Log("Import caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
+                throw;
             }
         }
 
