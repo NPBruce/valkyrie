@@ -107,6 +107,7 @@ namespace Assets.Scripts.UI.Screens
             importType = type;
             
             lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
             ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             importThread = null;
@@ -133,6 +134,7 @@ namespace Assets.Scripts.UI.Screens
             importType = type;
 
             lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
             ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
@@ -187,21 +189,7 @@ namespace Assets.Scripts.UI.Screens
             importThread?.Start();
         }
 
-        private static void CleanTempImport()
-        {
-            string tempDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
-            if (!Directory.Exists(tempDir)) return;
 
-            try
-            {
-                Directory.Delete(tempDir, true);
-            }
-            catch (Exception ex)
-            {
-                ValkyrieDebug.Log("Warning: Unable to remove temporary files.");
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
 
         private static void OnLogMessage(string message)
         {
