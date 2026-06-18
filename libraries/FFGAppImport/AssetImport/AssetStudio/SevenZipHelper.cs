@@ -60,12 +60,13 @@ namespace AssetStudio
             {
                 if (m_decompressedSize > 0)
                 {
-                    int percentage = (int)((outSize * 100) / m_decompressedSize);
-                    // To prevent logging 100 times a second, we only log when the percentage changes
-                    if (percentage != lastPercentage)
+                    int percentage10000 = (int)((outSize * 10000) / m_decompressedSize);
+                    // To prevent logging thousands of times a second, we only log when the percentage changes by 0.01%
+                    if (percentage10000 != lastPercentage)
                     {
-                        lastPercentage = percentage;
-                        ValkyrieTools.ValkyrieDebug.Log($"Decompressing bundle block ({percentage}%)...");
+                        lastPercentage = percentage10000;
+                        float percentage = percentage10000 / 100f;
+                        ValkyrieTools.ValkyrieDebug.Log($"Decompressing bundle block ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%)...");
                     }
                 }
             }

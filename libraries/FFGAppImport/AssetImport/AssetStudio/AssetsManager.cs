@@ -64,8 +64,8 @@ namespace AssetStudio
             //use a for loop because list size can change
             for (var i = 0; i < importFiles.Count; i++)
             {
-                int percentage = (int)(((i + 1) * 100f) / importFiles.Count);
-                ValkyrieDebug.Log($"Loading files ({percentage}%): {importFiles[i]}");
+                float percentage = (((i + 1) * 100f) / importFiles.Count);
+                ValkyrieDebug.Log($"Loading files ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): {importFiles[i]}");
                 LoadFile(importFiles[i]);
                 Progress.Report(i + 1, importFiles.Count);
             }
@@ -416,8 +416,10 @@ namespace AssetStudio
                 foreach (var objectInfo in assetsFile.m_Objects)
                 {
                     var objectReader = new ObjectReader(assetsFile.reader, assetsFile, objectInfo);
-                    int percentage = progressCount == 0 ? 100 : (int)(((i + 1) * 100f) / progressCount);
-                    ValkyrieDebug.Log($"Reading object ({percentage}%): " + objectReader.type);
+                    float percentage = progressCount == 0 ? 100f : (((i + 1) * 100f) / progressCount);
+                    ValkyrieDebug.Log($"Reading object ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): " + objectReader.type);
+                    i++;
+                    Progress.Report(i, progressCount);
                     try
                     {
                         //For Valkyrie we already interested in Audio, Texture2D, Text and Fonts.
@@ -534,8 +536,6 @@ namespace AssetStudio
                             .Append(e);
                         Logger.Error(sb.ToString());
                     }
-
-                    Progress.Report(++i, progressCount);
                 }
             }
         }

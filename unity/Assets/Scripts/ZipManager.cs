@@ -137,8 +137,8 @@ public class ZipManager : MonoBehaviour
                 int i = 0;
                 foreach (ZipEntry e in zip.Entries)
                 {
-                    int percentage = (int)(((i + 1) * 100f) / zip.Entries.Count);
-                    ValkyrieDebug.Log($"Extracting zip ({percentage}%): {e.FileName}");
+                    float percentage = (((i + 1) * 100f) / zip.Entries.Count);
+                    ValkyrieDebug.Log($"Extracting zip ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): {e.FileName}");
                     e.Extract(target_path, ExtractExistingFileAction.OverwriteSilently);
                     i++;
                 }
