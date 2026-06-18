@@ -92,7 +92,9 @@ namespace AssetStudio
             if (reader.FileType == FileType.ResourceFile || reader.FileType == FileType.ZipFile) {
                 ValkyrieDebug.Log("AssetStudio skipping " + reader.FileType + ": " + reader.FileName);
             } else {
-                ValkyrieDebug.Log("AssetStudio loading " + reader.FileType + ": " + reader.FileName);
+                bool isLargeBundle = reader.FileType == FileType.BundleFile && reader.BaseStream.Length > 10000000;
+                string suffix = isLargeBundle ? " (Loading large bundle files may take a while...)" : "";
+                ValkyrieDebug.Log("AssetStudio loading " + reader.FileType + ": " + reader.FileName + suffix);
             }
             switch (reader.FileType)
             {

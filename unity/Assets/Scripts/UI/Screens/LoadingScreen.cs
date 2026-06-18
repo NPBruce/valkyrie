@@ -116,6 +116,8 @@ namespace Assets.Scripts.UI.Screens
 
             // Fix horizontal overflow by allowing Unity to wrap at directory separators
             display = display.Replace("\\", "\u200B\\").Replace("/", "\u200B/");
+            // Repair broken rich text closing tags caused by the slash replacement
+            display = display.Replace("<\u200B/", "</");
             
             float textWidth = UIScaler.GetWidthUnits() - 5.5f;
 

@@ -14,7 +14,7 @@ namespace Assets.Scripts.UI.Screens
     {
         public static string importError = null;
         private static volatile string lastLogMessage = null;
-        private static LoadingScreen loadingScreen;
+        public static LoadingScreen loadingScreen;
         private static FFGImport fcD2E;
         private static FFGImport fcMoM;
         private static Thread importThread;
@@ -141,13 +141,14 @@ namespace Assets.Scripts.UI.Screens
             string fileName = Path.GetFileName(zipPath);
             bool validName = false;
             string expectedFileName = "";
+            bool isAndroid = Application.platform == RuntimePlatform.Android;
             if (type.Equals(ValkyrieConstants.typeDescent))
             {
                 if (fileName.Equals(DESCENT_DESKTOP_ZIP, StringComparison.OrdinalIgnoreCase) ||
                     fileName.Equals(DESCENT_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
                     validName = true;
                 else
-                    expectedFileName = DESCENT_DESKTOP_ZIP + " / " + DESCENT_ANDROID_ZIP;
+                    expectedFileName = isAndroid ? DESCENT_ANDROID_ZIP : DESCENT_DESKTOP_ZIP;
             }
             else if (type.Equals(ValkyrieConstants.typeMom))
             {
@@ -155,7 +156,7 @@ namespace Assets.Scripts.UI.Screens
                     fileName.Equals(MOM_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
                     validName = true;
                 else
-                    expectedFileName = MOM_DESKTOP_ZIP + " / " + MOM_ANDROID_ZIP;
+                    expectedFileName = isAndroid ? MOM_ANDROID_ZIP : MOM_DESKTOP_ZIP;
             }
 
             if (!validName && !string.IsNullOrEmpty(expectedFileName))
@@ -266,7 +267,6 @@ namespace Assets.Scripts.UI.Screens
             }
             importThread = null;
             ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
-            loadingScreen = null;
 
             Action action = onComplete;
             onComplete = null;
