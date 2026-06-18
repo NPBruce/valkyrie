@@ -558,3 +558,5 @@ REPORT_ISSUE,Signaler un problème
 
 SUCCESS,Succès
 IMPORT_SUCCESS,Importation terminée avec succès.
+ERROR_INVALID_ZIP_NAME,Nom de fichier ZIP invalide. Attendu : {0}
+ERROR_MISSING_IMPORT_INI,Le fichier import.ini requis est manquant dans le fichier ZIP.

@@ -534,3 +534,5 @@ REPORT_ISSUE,Zgłoś problem
 
 SUCCESS,Sukces
 IMPORT_SUCCESS,Import zakończony sukcesem.
+ERROR_INVALID_ZIP_NAME,Nieprawidłowa nazwa pliku ZIP. Oczekiwano: {0}
+ERROR_MISSING_IMPORT_INI,W pliku ZIP brakuje wymaganego pliku import.ini.

@@ -729,3 +729,5 @@ REPORT_ISSUE,Nahlásit problém
 
 SUCCESS,Úspěch
 IMPORT_SUCCESS,Import úspěšně dokončen.
+ERROR_INVALID_ZIP_NAME,Neplatný název souboru ZIP. Očekáváno: {0}
+ERROR_MISSING_IMPORT_INI,V souboru ZIP chybí požadovaný soubor import.ini.

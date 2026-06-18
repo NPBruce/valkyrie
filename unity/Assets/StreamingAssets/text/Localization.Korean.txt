@@ -722,3 +722,5 @@ PROVIDE_FEEDBACK,피드백 제공
 
 SUCCESS,성공
 IMPORT_SUCCESS,가져오기가 성공적으로 완료되었습니다.
+ERROR_INVALID_ZIP_NAME,잘못된 ZIP 파일 이름입니다. 예상: {0}
+ERROR_MISSING_IMPORT_INI,ZIP 파일에 필수 import.ini 파일이 누락되었습니다.

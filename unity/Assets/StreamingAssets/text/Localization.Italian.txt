@@ -502,3 +502,5 @@ REPORT_ISSUE,Segnala un problema
 
 SUCCESS,Successo
 IMPORT_SUCCESS,Importazione completata con successo.
+ERROR_INVALID_ZIP_NAME,Nome file ZIP non valido. Previsto: {0}
+ERROR_MISSING_IMPORT_INI,Manca il file import.ini richiesto nel file ZIP.

@@ -559,3 +559,5 @@ REPORT_ISSUE,Повідомити про проблему
 
 SUCCESS,Успіх
 IMPORT_SUCCESS,Імпорт успішно завершено.
+ERROR_INVALID_ZIP_NAME,Недійсне ім'я файлу ZIP. Очікувалося: {0}
+ERROR_MISSING_IMPORT_INI,У файлі ZIP відсутній необхідний файл import.ini.

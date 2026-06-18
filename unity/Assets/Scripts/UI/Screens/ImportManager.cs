@@ -23,6 +23,11 @@ namespace Assets.Scripts.UI.Screens
 
         private static readonly StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
 
+        private const string DESCENT_DESKTOP_ZIP = "ImportDesktop_Descent.zip";
+        private const string DESCENT_ANDROID_ZIP = "ImportAndroid_Descent.zip";
+        private const string MOM_DESKTOP_ZIP = "ImportDesktop_MansionsOfMadnessImport.zip";
+        private const string MOM_ANDROID_ZIP = "ImportAndroid_MansionsOfMadness.zip";
+
         public static void Inspect()
         {
             if (fcD2E != null && fcMoM != null) return;
@@ -105,7 +110,7 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
-            
+
             lastLogMessage = null;
             ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
             ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
@@ -115,7 +120,7 @@ namespace Assets.Scripts.UI.Screens
                 importThread = new Thread(() => { try { fcD2E.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
             else if (type.Equals(ValkyrieConstants.typeMom))
                 importThread = new Thread(() => { try { fcMoM.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
-            
+
             if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
         }
@@ -132,6 +137,52 @@ namespace Assets.Scripts.UI.Screens
             Destroyer.Destroy();
             loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
+
+            string fileName = Path.GetFileName(zipPath);
+            bool validName = false;
+            string expectedFileName = "";
+            if (type.Equals(ValkyrieConstants.typeDescent))
+            {
+                if (fileName.Equals(DESCENT_DESKTOP_ZIP, StringComparison.OrdinalIgnoreCase) ||
+                    fileName.Equals(DESCENT_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
+                    validName = true;
+                else
+                    expectedFileName = DESCENT_DESKTOP_ZIP + " / " + DESCENT_ANDROID_ZIP;
+            }
+            else if (type.Equals(ValkyrieConstants.typeMom))
+            {
+                if (fileName.Equals(MOM_DESKTOP_ZIP, StringComparison.OrdinalIgnoreCase) ||
+                    fileName.Equals(MOM_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
+                    validName = true;
+                else
+                    expectedFileName = MOM_DESKTOP_ZIP + " / " + MOM_ANDROID_ZIP;
+            }
+
+            if (!validName && !string.IsNullOrEmpty(expectedFileName))
+            {
+                importError = string.Format(new StringKey("val", "ERROR_INVALID_ZIP_NAME").Translate(), expectedFileName);
+                callback?.Invoke();
+                return;
+            }
+
+            try
+            {
+                using (Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(zipPath))
+                {
+                    if (!zip.ContainsEntry("import.ini"))
+                    {
+                        importError = new StringKey("val", "ERROR_MISSING_IMPORT_INI").Translate();
+                        callback?.Invoke();
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                importError = ex.Message;
+                callback?.Invoke();
+                return;
+            }
 
             lastLogMessage = null;
             ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
@@ -184,7 +235,7 @@ namespace Assets.Scripts.UI.Screens
                     UnityEngine.Debug.LogException(ex);
                 }
             });
-            
+
             if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
         }
@@ -216,7 +267,7 @@ namespace Assets.Scripts.UI.Screens
             importThread = null;
             ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
             loadingScreen = null;
-            
+
             Action action = onComplete;
             onComplete = null;
             action?.Invoke();
