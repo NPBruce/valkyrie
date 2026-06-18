@@ -387,16 +387,17 @@ if ($Config.BuildAndroid -eq "true") {
     Write-Log "Processing APK..."
     Invoke-CommandChecked { 7z -tzip d $ApkPath META-INF } "7z failed to delete META-INF"
 
-    Write-Log "Signing APK..."
-    $Keystore = Join-Path $UnityProject "user.keystore"
-    Invoke-CommandChecked {
-        jarsigner -keystore $Keystore -storepass valkyrie -keypass valkyrie $ApkPath com.bruce.valkyrie
-    } "Jarsigner failed"
-    Invoke-CommandChecked { jarsigner -verify -verbose -certs $ApkPath } "Jarsigner verify failed"
-
     Write-Log "Aligning APK..."
     $AlignedApk = "$BuildDir\Valkyrie-android-$OutputVersion.apk"
-    Invoke-CommandChecked { zipalign -v 4 $ApkPath $AlignedApk } "Zipalign failed"
+    Invoke-CommandChecked { zipalign -p -v 4 $ApkPath $AlignedApk } "Zipalign failed"
+
+    Write-Log "Signing APK with apksigner (v2 signature required)..."
+    $Keystore = Join-Path $UnityProject "user.keystore"
+    $ApkSignerCmd = if ($IsWindows) { "apksigner.bat" } else { "apksigner" }
+    Invoke-CommandChecked {
+        & $ApkSignerCmd sign --ks $Keystore --ks-pass pass:valkyrie --key-pass pass:valkyrie $AlignedApk
+    } "Apksigner failed"
+    
     Write-Log "Android post-processing complete."
 }
 
