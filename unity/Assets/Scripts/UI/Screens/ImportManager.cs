@@ -211,7 +211,7 @@ namespace Assets.Scripts.UI.Screens
                             fcD2E.Import(tempPath);
                         else
                         {
-                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy. This may take a while...");
                             string destPath = fcD2E.path;
                             if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
                             ZipManager.CopyDirectory(tempPath, destPath);
@@ -223,7 +223,7 @@ namespace Assets.Scripts.UI.Screens
                             fcMoM.Import(tempPath);
                         else
                         {
-                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy. This may take a while...");
                             string destPath = fcMoM.path;
                             if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
                             ZipManager.CopyDirectory(tempPath, destPath);

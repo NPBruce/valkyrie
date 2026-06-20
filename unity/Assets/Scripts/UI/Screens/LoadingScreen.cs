@@ -118,7 +118,7 @@ namespace Assets.Scripts.UI.Screens
             display = display.Replace("\\", "\u200B\\").Replace("/", "\u200B/");
             // Repair broken rich text closing tags caused by the slash replacement
             display = display.Replace("<\u200B/", "</");
-            
+
             float textWidth = UIScaler.GetWidthUnits() - 5.5f;
 
             if (logLineStrings.Count >= 50)
@@ -126,7 +126,7 @@ namespace Assets.Scripts.UI.Screens
                 // Recycle the oldest UIElement
                 logLineStrings.RemoveAt(0);
                 logLineHeights.RemoveAt(0);
-                
+
                 UIElement oldUi = logLineUIs[0];
                 logLineUIs.RemoveAt(0);
                 logLineUIs.Add(oldUi);
@@ -141,13 +141,13 @@ namespace Assets.Scripts.UI.Screens
                 ui.SetBGColor(Color.clear);
                 logLineUIs.Add(ui);
             }
-            
+
             UIElement newUi = logLineUIs[logLineUIs.Count - 1];
             float h = newUi.GetStringHeight(display + "\n...", textWidth);
-            
+
             logLineStrings.Add(display);
             logLineHeights.Add(h);
-            
+
             float offset = 0f;
             for (int i = 0; i < logLineStrings.Count; i++)
             {
@@ -155,17 +155,17 @@ namespace Assets.Scripts.UI.Screens
                 logLineUIs[i].SetText(logLineStrings[i], Color.black);
                 offset += logLineHeights[i];
             }
-            
+
             if (offset < 22) offset = 22;
             scrollArea.SetScrollSize(offset);
-            
+
             UnityEngine.UI.ScrollRect sr = scrollArea.GetScrollTransform().parent.GetComponent<UnityEngine.UI.ScrollRect>();
             if (sr != null)
             {
                 sr.movementType = UnityEngine.UI.ScrollRect.MovementType.Clamped;
                 sr.verticalNormalizedPosition = 0f;
             }
-            
+
             UpdateIndicator(UnityEngine.Time.time);
         }
 
@@ -176,10 +176,10 @@ namespace Assets.Scripts.UI.Screens
         public void UpdateIndicator(float time)
         {
             if (scrollArea == null || logLineStrings.Count == 0) return;
-            
+
             int dots = (int)(time * 2f) % 4;
             string indicator = new string('.', dots);
-            
+
             int lastIdx = logLineUIs.Count - 1;
             logLineUIs[lastIdx].SetText(logLineStrings[lastIdx] + "\n" + indicator, Color.black);
         }
