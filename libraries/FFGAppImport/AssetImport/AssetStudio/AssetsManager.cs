@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using static AssetStudio.ImportHelper;
@@ -115,7 +114,6 @@ namespace AssetStudio
                     break;
                 case FileType.ZipFile:
                     //Not supported.
-                    //LoadZipFile(reader);
                     break;
             }
         }
@@ -273,114 +271,7 @@ namespace AssetStudio
             }
         }
 
-        private void LoadZipFile(FileReader reader)
-        {
-            Logger.Info("Loading " + reader.FileName);
-            try
-            {
-                using (ZipArchive archive = new ZipArchive(reader.BaseStream, ZipArchiveMode.Read))
-                {
-                    List<string> splitFiles = new List<string>();
-                    // register all files before parsing the assets so that the external references can be found
-                    // and find split files
-                    foreach (ZipArchiveEntry entry in archive.Entries)
-                    {
-                        if (entry.Name.Contains(".split"))
-                        {
-                            string baseName = Path.GetFileNameWithoutExtension(entry.Name);
-                            string basePath = Path.Combine(Path.GetDirectoryName(entry.FullName), baseName);
-                            if (!splitFiles.Contains(basePath))
-                            {
-                                splitFiles.Add(basePath);
-                                importFilesHash.Add(baseName);
-                            }
-                        }
-                        else
-                        {
-                            importFilesHash.Add(entry.Name);
-                        }
-                    }
 
-                    // merge split files and load the result
-                    foreach (string basePath in splitFiles)
-                    {
-                        try
-                        {
-                            Stream splitStream = new MemoryStream();
-                            int i = 0;
-                            while (true)
-                            {
-                                string path = $"{basePath}.split{i++}";
-                                ZipArchiveEntry entry = archive.GetEntry(path);
-                                if (entry == null)
-                                    break;
-                                using (Stream entryStream = entry.Open())
-                                {
-                                    entryStream.CopyTo(splitStream);
-                                }
-                            }
-                            splitStream.Seek(0, SeekOrigin.Begin);
-                            FileReader entryReader = new FileReader(basePath, splitStream);
-                            LoadFile(entryReader);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.Error($"Error while reading zip split file {basePath}", e);
-                        }
-                    }
-
-                    // load all entries
-                    foreach (ZipArchiveEntry entry in archive.Entries)
-                    {
-                        try
-                        {
-                            string basePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName));
-                            if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !basePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
-                                basePath += Path.DirectorySeparatorChar;
-                            
-                            string dummyPath = Path.GetFullPath(Path.Combine(basePath, entry.FullName));
-                            if (!dummyPath.StartsWith(basePath))
-                            {
-                                Logger.Error($"Zip Slip vulnerability detected in zip entry {entry.FullName}");
-                                continue;
-                            }
-                            // create a new stream
-                            // - to store the deflated stream in
-                            // - to keep the data for later extraction
-                            Stream streamReader = new MemoryStream();
-                            using (Stream entryStream = entry.Open())
-                            {
-                                entryStream.CopyTo(streamReader);
-                            }
-                            streamReader.Position = 0;
-
-                            FileReader entryReader = new FileReader(dummyPath, streamReader);
-                            LoadFile(entryReader);
-                            if (entryReader.FileType == FileType.ResourceFile)
-                            {
-                                entryReader.Position = 0;
-                                if (!resourceFileReaders.ContainsKey(entry.Name))
-                                {
-                                    resourceFileReaders.Add(entry.Name, entryReader);
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.Error($"Error while reading zip entry {entry.FullName}", e);
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Error while reading zip file {reader.FileName}", e);
-            }
-            finally
-            {
-                reader.Dispose();
-            }
-        }
 
         public void CheckStrippedVersion(SerializedFile assetsFile)
         {
