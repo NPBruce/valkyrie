@@ -64,6 +64,8 @@ namespace AssetStudio
             //use a for loop because list size can change
             for (var i = 0; i < importFiles.Count; i++)
             {
+                float percentage = (((i + 1) * 100f) / importFiles.Count);
+                ValkyrieDebug.Log($"Loading files ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): {importFiles[i]}");
                 LoadFile(importFiles[i]);
                 Progress.Report(i + 1, importFiles.Count);
             }
@@ -82,13 +84,18 @@ namespace AssetStudio
         private void LoadFile(string fullName)
         {
             var reader = new FileReader(fullName);
-            ValkyrieDebug.Log("Loadings file: " + fullName);
             LoadFile(reader);
         }
 
         private void LoadFile(FileReader reader)
         {
-            ValkyrieDebug.Log("AssetStudio loading file type: " + reader.FileType);
+            if (reader.FileType == FileType.ResourceFile || reader.FileType == FileType.ZipFile) {
+                ValkyrieDebug.Log("AssetStudio skipping " + reader.FileType + ": " + reader.FileName);
+            } else {
+                bool isLargeBundle = reader.FileType == FileType.BundleFile && reader.BaseStream.Length > 10000000;
+                string suffix = isLargeBundle ? " (Loading large bundle files may take a while...)" : "";
+                ValkyrieDebug.Log("AssetStudio loading " + reader.FileType + ": " + reader.FileName + suffix);
+            }
             switch (reader.FileType)
             {
                 case FileType.AssetsFile:
@@ -327,7 +334,16 @@ namespace AssetStudio
                     {
                         try
                         {
-                            string dummyPath = Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName, entry.FullName);
+                            string basePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName));
+                            if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !basePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                                basePath += Path.DirectorySeparatorChar;
+                            
+                            string dummyPath = Path.GetFullPath(Path.Combine(basePath, entry.FullName));
+                            if (!dummyPath.StartsWith(basePath))
+                            {
+                                Logger.Error($"Zip Slip vulnerability detected in zip entry {entry.FullName}");
+                                continue;
+                            }
                             // create a new stream
                             // - to store the deflated stream in
                             // - to keep the data for later extraction
@@ -409,7 +425,10 @@ namespace AssetStudio
                 foreach (var objectInfo in assetsFile.m_Objects)
                 {
                     var objectReader = new ObjectReader(assetsFile.reader, assetsFile, objectInfo);
-                    ValkyrieDebug.Log("Reading object type: " + objectReader.type);
+                    float percentage = progressCount == 0 ? 100f : (((i + 1) * 100f) / progressCount);
+                    ValkyrieDebug.Log($"Reading object ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): " + objectReader.type);
+                    i++;
+                    Progress.Report(i, progressCount);
                     try
                     {
                         //For Valkyrie we already interested in Audio, Texture2D, Text and Fonts.
@@ -526,8 +545,6 @@ namespace AssetStudio
                             .Append(e);
                         Logger.Error(sb.ToString());
                     }
-
-                    Progress.Report(++i, progressCount);
                 }
             }
         }

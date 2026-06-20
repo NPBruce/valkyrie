@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ValkyrieTools
 {
@@ -22,6 +22,11 @@ namespace ValkyrieTools
         }
 
         /// <summary>
+        /// Event fired when a message is logged
+        /// </summary>
+        public static event System.Action<string> OnLog;
+
+        /// <summary>
         /// logs message to debug logger
         /// </summary>
         /// <param name="message">message to log</param>
@@ -30,6 +35,7 @@ namespace ValkyrieTools
             if (enabled)
             {
                 Debug.Log(message);
+                OnLog?.Invoke(message?.ToString());
             }
         }
 
@@ -43,6 +49,7 @@ namespace ValkyrieTools
             if (enabled)
             {
                 Debug.Log(message, context);
+                OnLog?.Invoke(message?.ToString());
             }
         }
     }

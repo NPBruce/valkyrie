@@ -722,3 +722,8 @@ FALLBACK_LANG,Fallback language
 
 LANGUAGE,Language
 REPORT_ISSUE,Report an issue
+
+SUCCESS,Success
+IMPORT_SUCCESS,Import successfully completed.
+ERROR_INVALID_ZIP_NAME,Invalid ZIP file name. Expected: {0}
+ERROR_MISSING_IMPORT_INI,The ZIP file is missing the required import.ini file.
