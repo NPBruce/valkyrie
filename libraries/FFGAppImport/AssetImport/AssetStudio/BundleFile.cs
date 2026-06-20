@@ -1,4 +1,4 @@
-﻿using K4os.Compression.LZ4;
+using K4os.Compression.LZ4;
 using System;
 using System.IO;
 using System.Linq;
@@ -203,7 +203,15 @@ namespace AssetStudio
                     file.stream = memoryMappedFile.CreateViewStream();*/
                     var extractPath = path + "_unpacked" + Path.DirectorySeparatorChar;
                     Directory.CreateDirectory(extractPath);
-                    file.stream = new FileStream(extractPath + file.fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    var fullExtractPath = Path.GetFullPath(extractPath);
+                    if (!fullExtractPath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !fullExtractPath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                        fullExtractPath += Path.DirectorySeparatorChar;
+                    var outputPath = Path.GetFullPath(Path.Combine(fullExtractPath, file.fileName));
+                    if (!outputPath.StartsWith(fullExtractPath, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException($"Entry is outside the target dir: {outputPath}");
+                    }
+                    file.stream = new FileStream(outputPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                 }
                 else
                 {
