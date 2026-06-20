@@ -1,4 +1,4 @@
-﻿.,Japanese
+.,Japanese
 //Heroes,
 
 ALYS_RAINE,アリス・レイン
@@ -756,3 +756,8 @@ FALLBACK_LANG,代替言語
 
 LANGUAGE,言語
 REPORT_ISSUE,問題を報告する
+
+SUCCESS,成功
+IMPORT_SUCCESS,インポートが正常に完了しました。
+ERROR_INVALID_ZIP_NAME,無効なZIPファイル名です。予想：{0}
+ERROR_MISSING_IMPORT_INI,ZIPファイルに必要なimport.iniファイルがありません。

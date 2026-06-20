@@ -1,4 +1,4 @@
-﻿.,Portuguese
+.,Portuguese
 
 // ICONS
 CUSTOM_IMAGE,Imagem personalizada
@@ -558,3 +558,8 @@ FALLBACK_LANG,Idioma alternativo
 
 LANGUAGE,Idioma
 REPORT_ISSUE,Reportar um problema
+
+SUCCESS,Sucesso
+IMPORT_SUCCESS,Importação concluída com sucesso.
+ERROR_INVALID_ZIP_NAME,Nome de arquivo ZIP inválido. Esperado: {0}
+ERROR_MISSING_IMPORT_INI,Falta o arquivo import.ini obrigatório no arquivo ZIP.

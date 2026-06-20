@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
@@ -134,7 +134,25 @@ public class ZipManager : MonoBehaviour
 
             if (mode == Extract_mode.ZIPMANAGER_EXTRACT_FULL)
             {
-                zip.ExtractAll(target_path, ExtractExistingFileAction.OverwriteSilently);
+                string basePath = Path.GetFullPath(target_path);
+                if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !basePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                    basePath += Path.DirectorySeparatorChar;
+
+                int i = 0;
+                foreach (ZipEntry e in zip.Entries)
+                {
+                    string destinationPath = Path.GetFullPath(Path.Combine(basePath, e.FileName));
+                    if (!destinationPath.StartsWith(basePath))
+                    {
+                        ValkyrieDebug.Log($"Warning: Path traversal attempt blocked for entry: {e.FileName}");
+                        continue;
+                    }
+
+                    float percentage = (((i + 1) * 100f) / zip.Entries.Count);
+                    ValkyrieDebug.Log($"Extracting zip ({percentage.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}%): {e.FileName}");
+                    e.Extract(target_path, ExtractExistingFileAction.OverwriteSilently);
+                    i++;
+                }
             }
 
             if (mode == Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT || mode == Extract_mode.ZIPMANAGER_EXTRACT_INI_TXT_PIC)

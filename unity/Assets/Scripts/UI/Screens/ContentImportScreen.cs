@@ -155,8 +155,76 @@ namespace Assets.Scripts.UI.Screens
 
         private void OnImportComplete()
         {
-            Game.Get().contentImport = null;
-            Game.Get().gameSelect.Draw();
+            if (!string.IsNullOrEmpty(ImportManager.importError))
+            {
+                Destroyer.Dialog(); // Destroy LoadingScreen if any
+                ShowImportError(ImportManager.importError);
+            }
+            else
+            {
+                ShowImportSuccess();
+            }
+        }
+
+        private void ShowImportError(string error)
+        {
+            // Dark background panel
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-15), UIScaler.GetVCenter(-8), 30, 16);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            new UIElementBorder(ui);
+
+            // Error heading
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-7), 28, 2);
+            ui.SetText(new StringKey("val", "ERROR"), Color.red);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetMediumFont());
+
+            // Error detail
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-14), UIScaler.GetVCenter(-4.5f), 28, 8);
+            ui.SetText(error, Color.white);
+            ui.SetBGColor(Color.clear);
+            ui.SetFontSize(UIScaler.GetSmallFont());
+
+            // Return button
+            ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-6), UIScaler.GetVCenter(4.5f), 12, 2);
+            ui.SetText(CommonStringKeys.BACK);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+            ui.SetButton(delegate {
+                ImportManager.importError = null;
+                Game.Get().contentImport = null;
+                Game.Get().gameSelect.Draw();
+            });
+            new UIElementBorder(ui);
+        }
+
+        private void ShowImportSuccess()
+        {
+            if (ImportManager.loadingScreen != null)
+            {
+                string successMessage = new StringKey("val", "IMPORT_SUCCESS").Translate();
+                ImportManager.loadingScreen.UpdateDisplay($"<color=#008800><b>{successMessage}</b></color>");
+            }
+
+            // Continue button
+            UIElement ui = new UIElement();
+            ui.SetLocation(UIScaler.GetHCenter(-6), 27f, 12, 2);
+            ui.SetText(CommonStringKeys.CONTINUE);
+            ui.SetBGColor(new Color(0.03f, 0.0f, 0f));
+            ui.SetFont(Game.Get().gameType.GetHeaderFont());
+            ui.SetFontSize(UIScaler.GetSmallFont());
+            ui.SetButton(delegate {
+                Destroyer.Dialog();
+                ImportManager.loadingScreen = null;
+                Game.Get().contentImport = null;
+                Game.Get().gameSelect.Draw();
+            });
+            new UIElementBorder(ui);
         }
 
         private string GetGameName()

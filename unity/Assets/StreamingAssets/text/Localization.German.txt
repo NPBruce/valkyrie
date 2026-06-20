@@ -1,4 +1,4 @@
-﻿.,German
+.,German
 // Last correction, Letzte Korrektur: Kinea_KT 29.11.2020 
 // ICONS
 CUSTOM_IMAGE,Benutzerdefiniertes Bild
@@ -551,3 +551,8 @@ CUSTOM_IMAGE,Benutzerdefiniertes Bild
 FALLBACK_LANG,Ausweichsprache
 LANGUAGE,Sprache
 REPORT_ISSUE,Problem melden
+
+SUCCESS,Erfolg
+IMPORT_SUCCESS,Import erfolgreich abgeschlossen.
+ERROR_INVALID_ZIP_NAME,Ungültiger ZIP-Dateiname. Erwartet: {0}
+ERROR_MISSING_IMPORT_INI,In der ZIP-Datei fehlt die erforderliche import.ini-Datei.

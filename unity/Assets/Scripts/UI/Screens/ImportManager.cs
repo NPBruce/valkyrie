@@ -12,6 +12,9 @@ namespace Assets.Scripts.UI.Screens
 {
     public static class ImportManager
     {
+        public static string importError = null;
+        private static volatile string lastLogMessage = null;
+        public static LoadingScreen loadingScreen;
         private static FFGImport fcD2E;
         private static FFGImport fcMoM;
         private static Thread importThread;
@@ -19,6 +22,11 @@ namespace Assets.Scripts.UI.Screens
         private static Action onComplete;
 
         private static readonly StringKey CONTENT_IMPORTING = new StringKey("val", "CONTENT_IMPORTING");
+
+        private const string DESCENT_DESKTOP_ZIP = "ImportDesktop_Descent.zip";
+        private const string DESCENT_ANDROID_ZIP = "ImportAndroid_Descent.zip";
+        private const string MOM_DESKTOP_ZIP = "ImportDesktop_MansionsOfMadnessImport.zip";
+        private const string MOM_ANDROID_ZIP = "ImportAndroid_MansionsOfMadness.zip";
 
         public static void Inspect()
         {
@@ -97,16 +105,23 @@ namespace Assets.Scripts.UI.Screens
 
         public static void Import(string type, string path, Action callback)
         {
+            importError = null;
             onComplete = callback;
             Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
+            loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
+
+            lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
+            ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             importThread = null;
             if (type.Equals(ValkyrieConstants.typeDescent))
-                importThread = new Thread(() => fcD2E.Import(path));
+                importThread = new Thread(() => { try { fcD2E.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
             else if (type.Equals(ValkyrieConstants.typeMom))
-                importThread = new Thread(() => fcMoM.Import(path));
+                importThread = new Thread(() => { try { fcMoM.Import(path); } catch (Exception ex) { importError = ex.Message; UnityEngine.Debug.LogException(ex); } });
+
+            if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
         }
 
@@ -117,10 +132,62 @@ namespace Assets.Scripts.UI.Screens
 
         private static void ImportZipFromPath(string zipPath, string type, Action callback)
         {
+            importError = null;
             onComplete = callback;
             Destroyer.Destroy();
-            new LoadingScreen(CONTENT_IMPORTING.Translate());
+            loadingScreen = new LoadingScreen(CONTENT_IMPORTING.Translate());
             importType = type;
+
+            string fileName = Path.GetFileName(zipPath);
+            bool validName = false;
+            string expectedFileName = "";
+            bool isAndroid = Application.platform == RuntimePlatform.Android;
+            if (type.Equals(ValkyrieConstants.typeDescent))
+            {
+                if (fileName.Equals(DESCENT_DESKTOP_ZIP, StringComparison.OrdinalIgnoreCase) ||
+                    fileName.Equals(DESCENT_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
+                    validName = true;
+                else
+                    expectedFileName = isAndroid ? DESCENT_ANDROID_ZIP : DESCENT_DESKTOP_ZIP;
+            }
+            else if (type.Equals(ValkyrieConstants.typeMom))
+            {
+                if (fileName.Equals(MOM_DESKTOP_ZIP, StringComparison.OrdinalIgnoreCase) ||
+                    fileName.Equals(MOM_ANDROID_ZIP, StringComparison.OrdinalIgnoreCase))
+                    validName = true;
+                else
+                    expectedFileName = isAndroid ? MOM_ANDROID_ZIP : MOM_DESKTOP_ZIP;
+            }
+
+            if (!validName && !string.IsNullOrEmpty(expectedFileName))
+            {
+                importError = string.Format(new StringKey("val", "ERROR_INVALID_ZIP_NAME").Translate(), expectedFileName);
+                callback?.Invoke();
+                return;
+            }
+
+            try
+            {
+                using (Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(zipPath))
+                {
+                    if (!zip.ContainsEntry("import.ini"))
+                    {
+                        importError = new StringKey("val", "ERROR_MISSING_IMPORT_INI").Translate();
+                        callback?.Invoke();
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                importError = ex.Message;
+                callback?.Invoke();
+                return;
+            }
+
+            lastLogMessage = null;
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
+            ValkyrieTools.ValkyrieDebug.OnLog += OnLogMessage;
 
             string tempPath = Path.Combine(Application.temporaryCachePath, "import_extract");
             if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
@@ -128,82 +195,83 @@ namespace Assets.Scripts.UI.Screens
 
             importThread = new Thread(() =>
             {
-                ZipManager.ExtractZipAsync(tempPath, zipPath, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
-                ZipManager.Wait4PreviousSave();
-
-                string resourcesAssets = Path.Combine(tempPath, "resources.assets");
-                bool rawAssetsFound = File.Exists(resourcesAssets);
-                if (!rawAssetsFound)
-                    rawAssetsFound = Directory.GetFiles(tempPath, "*.obb", SearchOption.AllDirectories).Length > 0;
-
-                if (type.Equals(ValkyrieConstants.typeDescent))
+                try
                 {
-                    if (rawAssetsFound)
-                        fcD2E.Import(tempPath);
-                    else
+                    ZipManager.ExtractZipAsync(tempPath, zipPath, ZipManager.Extract_mode.ZIPMANAGER_EXTRACT_FULL);
+                    ZipManager.Wait4PreviousSave();
+
+                    string resourcesAssets = Path.Combine(tempPath, "resources.assets");
+                    bool rawAssetsFound = File.Exists(resourcesAssets);
+                    if (!rawAssetsFound)
+                        rawAssetsFound = Directory.GetFiles(tempPath, "*.obb", SearchOption.AllDirectories).Length > 0;
+
+                    if (type.Equals(ValkyrieConstants.typeDescent))
                     {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcD2E.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
+                        if (rawAssetsFound)
+                            fcD2E.Import(tempPath);
+                        else
+                        {
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy. This may take a while...");
+                            string destPath = fcD2E.path;
+                            if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
+                            ZipManager.CopyDirectory(tempPath, destPath);
+                        }
+                    }
+                    if (type.Equals(ValkyrieConstants.typeMom))
+                    {
+                        if (rawAssetsFound)
+                            fcMoM.Import(tempPath);
+                        else
+                        {
+                            ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy. This may take a while...");
+                            string destPath = fcMoM.path;
+                            if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
+                            ZipManager.CopyDirectory(tempPath, destPath);
+                        }
                     }
                 }
-                if (type.Equals(ValkyrieConstants.typeMom))
+                catch (Exception ex)
                 {
-                    if (rawAssetsFound)
-                        fcMoM.Import(tempPath);
-                    else
-                    {
-                        ValkyrieDebug.Log("ZIP Import: Raw assets not found, performing direct copy.");
-                        string destPath = fcMoM.path;
-                        if (Directory.Exists(destPath)) Directory.Delete(destPath, true);
-                        ZipManager.CopyDirectory(tempPath, destPath);
-                    }
+                    importError = ex.Message;
+                    UnityEngine.Debug.LogException(ex);
                 }
             });
+
+            if (importThread != null) importThread.IsBackground = true;
             importThread?.Start();
+        }
+
+
+
+        private static void OnLogMessage(string message)
+        {
+            // Discard overly long messages to prevent UI overflow or exceptions
+            if (message != null && message.Length < 200)
+            {
+                lastLogMessage = message;
+            }
         }
 
         public static void Update()
         {
             if (importThread == null) return;
-            if (importThread.IsAlive) return;
+            if (importThread.IsAlive)
+            {
+                if (lastLogMessage != null && loadingScreen != null)
+                {
+                    loadingScreen.UpdateDisplay(lastLogMessage);
+                    lastLogMessage = null;
+                }
+                loadingScreen?.UpdateIndicator(UnityEngine.Time.time);
+                return;
+            }
             importThread = null;
-            ExtractBundles();
+            ValkyrieTools.ValkyrieDebug.OnLog -= OnLogMessage;
+
             Action action = onComplete;
             onComplete = null;
             action?.Invoke();
         }
 
-        private static void ExtractBundles()
-        {
-            try
-            {
-                string importDir = Path.Combine(Game.AppData(), importType + Path.DirectorySeparatorChar + "import");
-                string bundlesFile = Path.Combine(importDir, "bundles.txt");
-                ValkyrieDebug.Log("Loading all bundles from '" + bundlesFile + "'");
-                string[] bundles = File.ReadAllLines(bundlesFile);
-                foreach (string file in bundles)
-                {
-                    AssetBundle bundle = AssetBundle.LoadFromFile(file);
-                    if (bundle == null) continue;
-                    ValkyrieDebug.Log("Loading assets from '" + file + "'");
-                    foreach (TextAsset asset in bundle.LoadAllAssets<TextAsset>())
-                    {
-                        string textDir = Path.Combine(importDir, "text");
-                        Directory.CreateDirectory(textDir);
-                        string f = Path.Combine(importDir, Path.Combine(textDir, asset.name + ".txt"));
-                        ValkyrieDebug.Log("Writing text asset to '" + f + "'");
-                        File.WriteAllText(f, asset.ToString());
-                    }
-                    bundle.Unload(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                ValkyrieDebug.Log("ExtractBundles caused " + ex.GetType().Name + ": " + ex.Message + " " + ex.StackTrace);
-            }
-            importType = "";
-        }
     }
 }
