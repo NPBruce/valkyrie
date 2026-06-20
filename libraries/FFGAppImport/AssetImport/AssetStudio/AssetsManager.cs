@@ -281,6 +281,10 @@ namespace AssetStudio
                 using (ZipArchive archive = new ZipArchive(reader.BaseStream, ZipArchiveMode.Read))
                 {
                     List<string> splitFiles = new List<string>();
+                    string zipBasePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName));
+                    if (!zipBasePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !zipBasePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                        zipBasePath += Path.DirectorySeparatorChar;
+
                     // register all files before parsing the assets so that the external references can be found
                     // and find split files
                     foreach (ZipArchiveEntry entry in archive.Entries)
@@ -288,10 +292,18 @@ namespace AssetStudio
                         if (entry.Name.Contains(".split"))
                         {
                             string baseName = Path.GetFileNameWithoutExtension(entry.Name);
-                            string basePath = Path.Combine(Path.GetDirectoryName(entry.FullName), baseName);
-                            if (!splitFiles.Contains(basePath))
+                            string rawBasePath = Path.Combine(Path.GetDirectoryName(entry.FullName) ?? string.Empty, baseName);
+                            string fullBasePath = Path.GetFullPath(Path.Combine(zipBasePath, rawBasePath));
+                            if (!fullBasePath.StartsWith(zipBasePath, StringComparison.Ordinal))
                             {
-                                splitFiles.Add(basePath);
+                                Logger.Error($"Zip Slip vulnerability detected in zip split entry {entry.FullName}");
+                                continue;
+                            }
+
+                            string normalizedRelativeBasePath = fullBasePath.Substring(zipBasePath.Length).Replace(Path.DirectorySeparatorChar, '/');
+                            if (!splitFiles.Contains(normalizedRelativeBasePath))
+                            {
+                                splitFiles.Add(normalizedRelativeBasePath);
                                 importFilesHash.Add(baseName);
                             }
                         }
@@ -320,7 +332,13 @@ namespace AssetStudio
                                 }
                             }
                             splitStream.Seek(0, SeekOrigin.Begin);
-                            FileReader entryReader = new FileReader(basePath, splitStream);
+                            string splitDummyPath = Path.GetFullPath(Path.Combine(zipBasePath, basePath));
+                            if (!splitDummyPath.StartsWith(zipBasePath, StringComparison.Ordinal))
+                            {
+                                Logger.Error($"Zip Slip vulnerability detected in merged split path {basePath}");
+                                continue;
+                            }
+                            FileReader entryReader = new FileReader(splitDummyPath, splitStream);
                             LoadFile(entryReader);
                         }
                         catch (Exception e)

@@ -145,7 +145,15 @@ namespace AssetStudio
             {
                 /*var memoryMappedFile = MemoryMappedFile.CreateNew(null, uncompressedSizeSum);
                 assetsDataStream = memoryMappedFile.CreateViewStream();*/
-                blocksStream = new FileStream(path + ".temp", FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
+                var baseDir = Path.GetFullPath(Path.GetDirectoryName(path) ?? Directory.GetCurrentDirectory());
+                if (!baseDir.EndsWith(Path.DirectorySeparatorChar.ToString()) && !baseDir.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                    baseDir += Path.DirectorySeparatorChar;
+                var tempPath = Path.GetFullPath(path + ".temp");
+                if (!tempPath.StartsWith(baseDir, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException($"Invalid temp path outside of target directory: {tempPath}");
+                }
+                blocksStream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
             }
             else
             {
@@ -203,7 +211,15 @@ namespace AssetStudio
                     file.stream = memoryMappedFile.CreateViewStream();*/
                     var extractPath = path + "_unpacked" + Path.DirectorySeparatorChar;
                     Directory.CreateDirectory(extractPath);
-                    file.stream = new FileStream(extractPath + file.fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    var fullExtractPath = Path.GetFullPath(extractPath);
+                    if (!fullExtractPath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !fullExtractPath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                        fullExtractPath += Path.DirectorySeparatorChar;
+                    var outputPath = Path.GetFullPath(Path.Combine(fullExtractPath, file.fileName));
+                    if (!outputPath.StartsWith(fullExtractPath, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException($"Entry is outside the target dir: {outputPath}");
+                    }
+                    file.stream = new FileStream(outputPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                 }
                 else
                 {
