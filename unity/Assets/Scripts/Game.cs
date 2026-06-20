@@ -269,6 +269,13 @@ public class Game : MonoBehaviour
                     if (!e.FileName.StartsWith("assets")) continue;
                     if (e.FileName.StartsWith("assets/bin")) continue;
 
+                    string basePath = Path.GetFullPath(ContentData.ContentPath() + "../..");
+                    if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !basePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                        basePath += Path.DirectorySeparatorChar;
+                    string destinationPath = Path.GetFullPath(Path.Combine(basePath, e.FileName));
+                    if (!destinationPath.StartsWith(basePath))
+                        continue;
+
                     e.Extract(ContentData.ContentPath() + "../..", ExtractExistingFileAction.OverwriteSilently);
                 }
             }

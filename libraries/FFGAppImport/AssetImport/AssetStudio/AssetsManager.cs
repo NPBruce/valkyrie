@@ -334,7 +334,16 @@ namespace AssetStudio
                     {
                         try
                         {
-                            string dummyPath = Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName, entry.FullName);
+                            string basePath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(reader.FullPath), reader.FileName));
+                            if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()) && !basePath.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+                                basePath += Path.DirectorySeparatorChar;
+                            
+                            string dummyPath = Path.GetFullPath(Path.Combine(basePath, entry.FullName));
+                            if (!dummyPath.StartsWith(basePath))
+                            {
+                                Logger.Error($"Zip Slip vulnerability detected in zip entry {entry.FullName}");
+                                continue;
+                            }
                             // create a new stream
                             // - to store the deflated stream in
                             // - to keep the data for later extraction
