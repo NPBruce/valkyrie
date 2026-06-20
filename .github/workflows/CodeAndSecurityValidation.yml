@@ -15,6 +15,8 @@ description: |
 run-name: Code and security validation triggered by ${{ github.actor }}
 
 on:
+  push:
+    branches: [master]
   pull_request:
     branches: [master]
   workflow_dispatch:
@@ -45,9 +47,10 @@ jobs:
 
       # Initialize CodeQL
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: csharp
+          build-mode: manual
 
       # Setup Unity & Build Dependencies
       - name: Add msbuild to PATH
@@ -89,7 +92,7 @@ jobs:
         run: . ./workflowScripts/workflowHelper.ps1; Run-UnityTests
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:csharp"
 

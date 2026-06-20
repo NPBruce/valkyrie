@@ -1,4 +1,4 @@
-﻿namespace OggVorbisEncoder.Setup
+namespace OggVorbisEncoder.Setup
 {
     public class MappingTemplate : IMappingTemplate
     {
@@ -10,7 +10,5 @@
             ResidueTemplate = residueTemplate;
         }
 
-        public Mapping[] Mapping;
-        public IResidueTemplate[] ResidueTemplate;
     }
 }
